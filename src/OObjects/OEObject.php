@@ -8,8 +8,12 @@
 
 namespace GraphicObjectTemplating\OObjects;
 
+use GraphicObjectTemplating\OObjects\OObject;
 
 class OEObject extends OObject
 {
-
+    public function __construct($id, $pathConfig, $className)
+    {
+        parent::__construct($id);
+    }
 }
