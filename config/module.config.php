@@ -1,5 +1,7 @@
 <?php
 
+namespace GraphicObjectTemplating;
+
 return [
 
 ];

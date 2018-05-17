@@ -4,6 +4,8 @@ namespace GraphicObjectTemplating\OObjects;
 
 
 use Zend\Session\Container;
+use GraphicObjectTemplating\OObjects\OSContainer;
+use GraphicObjectTemplating\OObjects\OESContainer;
 
 class OObject
 {

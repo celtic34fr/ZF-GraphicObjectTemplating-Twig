@@ -1,6 +1,6 @@
 {
   "name": "celtic34fr/ZF-GraphicObjectTemplating-Twig",
-  "description": "templating en,gine oriented object",
+  "description": "templating engine oriented object",
   "type": "project",
   "license": "BSD-3-Clause",
   "keywords": [
@@ -9,13 +9,21 @@
     "twig",
     "zf"
   ],
+  "authors": [
+    {
+      "name":      "Gilbert ARMENGAUD",
+      "email":     "gilbert.armengaud@gmail.com",
+      "role":      "Project Leader"
+    }
+  ],
   "homepage": "http://girthub.com/celtic34fr/ZF-GraphicObjectTeplating-wig",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
     "php": "^5.6 || ^7.0",
     "zendframework/zend-component-installer": "^1.0 || ^0.7 || ^1.0.0-dev@dev",
-    "zendframework/zend-session": "2.8.5"
+    "zendframework/zend-session": "2.8.5",
+    "kokspflanze/zfc-twig": "2.2.0"
   },
   "autoload": {
     "psr-4": {
