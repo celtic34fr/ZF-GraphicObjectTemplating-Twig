@@ -125,7 +125,7 @@ class OObject
         return false;
     }
 
-    public static function clearObnjects()
+    public static function clearObjects()
     {
         $now        = new \DateTime();
         $gotObjList = self::validateSession();
