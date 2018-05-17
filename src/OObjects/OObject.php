@@ -12,6 +12,7 @@ class OObject
     private $id;
     private $name;
     private $properties;
+    private $lastAccess;
 
     public function __construct($id, $pathObjArray)
     {
@@ -131,5 +132,71 @@ class OObject
         $gotObjList->offsetSet('objects', []);
         $gotObjList->offsetSet('lastAccess', $now->format("Y-m-d H:i:s"));
         return true;
+    }
+
+    public function getProperties()
+    {
+        if (null !== $this->id) {
+            if (OObject::existObject($this->id)) {
+                $gotObjList = OObject::validateSession();
+                $lastAccessS = new \DateTime($gotObjList->offsetGet('lastAccess'));
+                $lastAccessO = new \DateTime($this->lastAccess);
+                $interval = $lastAccessO->diff($lastAccessS);
+                if ((int) $interval->format('%s') > 2) {
+                    $objects            = $gotObjList->offsetGet('objects');
+                    $properties         = unserialize($objects[$this->id]);
+                    $this->properties   = $properties;
+                    $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
+                    $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+                    return $properties;
+                } else {
+                    return $this->properties;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function setProperties($properties)
+    {
+        if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
+            $gotObjList         = OObject::validateSession();
+            $objects            = $gotObjList->offsetGet('objects');
+            $objects[$this->id] = serialize($properties);
+
+            $gotObjList->offsetSet('objects', $objects);
+            $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
+            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+            $this->properties   = $properties;
+
+            return $this;
+        }
+        return false;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        if (null !== $this->id) {
+            $gotObjList         = OObject::validateSession();
+            $objects            = $gotObjList->offsetGet('objects');
+            $properties         = unserialize($objects[$this->id]);
+
+            $properties['id']   = $id;
+            unset($objects[$this->id]);
+            $objects[$id]       = serialize($properties);
+
+            $gotObjList->offsetSet('objects', $objects);
+            $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
+            $this->properties   = $properties;
+            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+
+            return $this;
+        }
+        return false;
     }
 }
