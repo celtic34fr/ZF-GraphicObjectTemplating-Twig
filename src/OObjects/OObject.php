@@ -2,6 +2,32 @@
 
 namespace GraphicObjectTemplating\OObjects;
 
+/**
+ * classe initiale de création d'objet G.O.T.
+ *
+ * attributs
+ * ---------
+ * id
+ * name
+ * properties
+ * lastAcces
+ *
+ * méthodes
+ * --------
+ * __construct($id, $pathObjArray)
+ * static function validateSession()
+ * static function existObject($id)
+ * static function buildObject($id, $valeur = null)
+ * static function destroyObject($id)
+ * static function clearObjects()
+ *
+ * getProperties()
+ * setProperties(array $properties)
+ * getId()
+ * setId(string $id)
+ * getName()
+ * setName(string $name)
+ */
 
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\OSContainer;
@@ -157,7 +183,7 @@ class OObject
         return false;
     }
 
-    public function setProperties($properties)
+    public function setProperties(array $properties)
     {
         if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
             $gotObjList         = OObject::validateSession();
@@ -179,7 +205,7 @@ class OObject
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId(string $id)
     {
         if (null !== $this->id) {
             $gotObjList         = OObject::validateSession();
@@ -206,7 +232,7 @@ class OObject
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName(string $name)
     {
         if (null !== $this->id) {
             $gotObjList         = OObject::validateSession();
