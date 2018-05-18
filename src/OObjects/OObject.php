@@ -194,6 +194,7 @@ class OObject
             $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
             $this->properties   = $properties;
             $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+            $this->id           = $id;
 
             return $this;
         }
