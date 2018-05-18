@@ -40,6 +40,13 @@ class OObject
     private $properties;
     private $lastAccess;
 
+    private $const_display;
+
+    const DISPLAY_NONE    = 'none';
+    const DISPLAY_BLOCK   = 'block';
+    const DISPLAY_INLINE  = 'inline';
+    const DISPLAY_INBLOCK = 'inline-block';
+
     public function __construct($id, $pathObjArray)
     {
         $obj = self::buildObject($id);
@@ -251,5 +258,49 @@ class OObject
             return $this;
         }
         return false;
+    }
+
+    public function setDisplay($display = OObject::DISPLAY_BLOCK)
+    {
+        $displays = $this->getDisplayConstants();
+        if (!in_array($display, $displays, true)) { $display = OObject::DISPLAY_BLOCK; }
+        $properties = $this->getProperties();
+        $properties['display'] = $display;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getDisplay()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('display', $properties) ? $properties['display'] : false;
+    }
+
+
+
+
+    protected function getConstants()
+    {
+        $ref = new \ReflectionClass($this);
+        return $ref->getConstants();
+    }
+
+    private function getDisplayConstants()
+    {
+        $retour = [];
+        if (empty($this->const_display)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'DISPLAY');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_display = $retour;
+        } else {
+            $retour = $this->const_display;
+        }
+
+        return $retour;
     }
 }
