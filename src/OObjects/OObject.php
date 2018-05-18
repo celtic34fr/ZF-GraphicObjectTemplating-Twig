@@ -23,10 +23,10 @@ class OObject
                 $path .= '/../../view/graphic-object-templating/' . trim($pathArrayData);
                 $objProperties = include $path;
             }
-            $objProperties['id'] = $id;
-            $this->id = $id;
-            $objProperties['name'] = $id;
-            $this->name = $id;
+            $objProperties['id']    = $id;
+            $objProperties['name']  = $id;
+            $this->id               = $id;
+            $this->name             = $id;
 
 
             if (array_key_exists('typeObj', $objProperties)) {
@@ -195,6 +195,32 @@ class OObject
             $this->properties   = $properties;
             $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
             $this->id           = $id;
+
+            return $this;
+        }
+        return false;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        if (null !== $this->id) {
+            $gotObjList         = OObject::validateSession();
+            $objects            = $gotObjList->offsetGet('objects');
+            $properties         = unserialize($objects[$this->id]);
+
+            $properties['name'] = $name;
+            $objects[$this->id] = serialize($properties);
+
+            $gotObjList->offsetSet('objects', $objects);
+            $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
+            $this->properties   = $properties;
+            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+            $this->name         = $name;
 
             return $this;
         }
