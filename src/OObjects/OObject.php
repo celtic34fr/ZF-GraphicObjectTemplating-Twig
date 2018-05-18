@@ -276,6 +276,49 @@ class OObject
         return array_key_exists('display', $properties) ? $properties['display'] : false;
     }
 
+    public function setWidthBT(string $widthBT)
+    {
+        $retour = '';
+        if (!empty($widthBT)) {
+            switch (true) {
+                case (is_numeric($widthBT)):
+                    $retour .= 'WL'.$widthBT.':WM'.$widthBT.':WS'.$widthBT.':WX'.$widthBT;
+                    break;
+                case (strpos($widthBT, ':') !== false):
+                    $widthBTs = explode(':', $widthBT);
+                    foreach ($widthBTs as $item) {
+                        switch (true) {
+                            case ((int) substr($item, 1) > 0):
+                                $val = substr($item, 1);
+                                if (substr($item, 0,1) == 'W') {
+                                    $retour .= 'WL'.$val.':WM'.$val.':WS'.$val.':WX'.$val;
+                                }
+                                if (substr($item, 0,1) == 'O') {
+                                    $retour .= 'OL'.$val.':OM'.$val.':OS'.$val.':OX'.$val;
+                                }
+                                break;
+                            case ((int) substr($widthBT, 1) == 0):
+                                $retour .= $item;
+                                break;
+                        }
+                    }
+                    break;
+            }
+
+            $properties = $this->getProperties();
+            $properties['widthBT'] = $retour;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getWidthBT()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('widthBT', $properties) ? $properties['widthBT'] : false;
+    }
+
 
 
 
