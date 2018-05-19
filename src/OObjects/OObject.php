@@ -91,7 +91,6 @@ class OObject
     {
         $now        = new \DateTime();
         $gotObjList = new Container('gotObnjList');
-        $lastAccess = '';
         $lastAccess = new \DateTime($gotObjList->offsetGet('lastAccess'));
 
         if ($lastAccess) {
@@ -449,6 +448,272 @@ class OObject
     {
         $properties = $this->getProperties();
         return array_key_exists('classes', $properties) ? $properties['classes'] : false;
+    }
+
+    public function addCssFile($nameFile, $pathFile)
+    {
+        if (!empty($nameFile) && !empty($pathFile)) {
+            if (file_exists($pathFile)) {
+                $properties = $this->getProperties();
+                if (!array_key_exists('resources', $properties)) { $properties['resources'] = []; }
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $resources['css'] = [];
+                    $resources['css']['enable'] = [];
+                }
+                $css        = $resources['css'];
+                $css[$nameFile] = $pathFile;
+                $css['enable'][] = $nameFile;
+
+                $resources['css'] = $css;
+                $properties['resources'] = $resources;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function removeCssFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $css        = $resources['css'];
+                    if (array_key_exists($nameFile, $css)) {
+                        unset($css[$nameFile]);
+                        if (in_array($nameFile, $css['enable'])) {
+                            unset($css['enable'][array_search($nameFile, $css['enable'])]);
+                        }
+                        $resources['css'] = $css;
+                        $properties['resources'] = $resources;
+                        $this->setProperties($properties);
+                        return $this;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getPathCssFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $css        = $resources['css'];
+                    if (array_key_exists($nameFile, $css)) {
+                        return $css[$nameFile];
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function enaCssFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $css        = $resources['css'];
+                    if (array_key_exists($nameFile, $css)) {
+                        if (!in_array($nameFile, $css['enable'])) {
+                            $css['enable'][] = $nameFile;
+                            $resources['css'] = $css;
+                            $properties['resources'] = $resources;
+                            $this->setProperties($properties);
+                            return $this;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function disCssFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $css        = $resources['css'];
+                    if (array_key_exists($nameFile, $css)) {
+                        if (in_array($nameFile, $css['enable'])) {
+                            unset($css['enable'][array_search($nameFile, $css['enable'])]);
+                            $resources['css'] = $css;
+                            $properties['resources'] = $resources;
+                            $this->setProperties($properties);
+                            return $this;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getCssFileStatus($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $css        = $resources['css'];
+                    if (array_key_exists($nameFile, $css)) {
+                        if (in_array($nameFile, $css['enable'])) {
+                            return 'enable';
+                        } else {
+                            return 'disable';
+                        }
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public function addJsFile($nameFile, $pathFile)
+    {
+        if (!empty($nameFile) && !empty($pathFile)) {
+            if (file_exists($pathFile)) {
+                $properties = $this->getProperties();
+                if (!array_key_exists('resources', $properties)) { $properties['resources'] = []; }
+                $resources  = $properties['resources'];
+                if (!array_key_exists('js', $resources)) {
+                    $resources['js'] = [];
+                    $resources['js']['enable'] = [];
+                }
+                $js             = $resources['js'];
+                $js[$nameFile]  = $pathFile;
+                $js['enable'][] = $nameFile;
+
+                $resources['js'] = $js;
+                $properties['resources'] = $resources;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function removeJsFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('js', $resources)) {
+                    $js        = $resources['js'];
+                    if (array_key_exists($nameFile, $js)) {
+                        unset($js[$nameFile]);
+                        if (in_array($nameFile, $js['enable'])) {
+                            unset($js['enable'][array_search($nameFile, $js['enable'])]);
+                        }
+                        $resources['js'] = $js;
+                        $properties['resources'] = $resources;
+                        $this->setProperties($properties);
+                        return $this;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getPathJsFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('css', $resources)) {
+                    $css        = $resources['css'];
+                    if (array_key_exists($nameFile, $css)) {
+                        return $css[$nameFile];
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function enaJsFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('js', $resources)) {
+                    $js        = $resources['js'];
+                    if (array_key_exists($nameFile, $js)) {
+                        if (!in_array($nameFile, js['enable'])) {
+                            $js['enable'][] = $nameFile;
+                            $resources['js'] = $js;
+                            $properties['resources'] = $resources;
+                            $this->setProperties($properties);
+                            return $this;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function disJsFile($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('js', $resources)) {
+                    $js        = $resources['js'];
+                    if (array_key_exists($nameFile, $js)) {
+                        if (in_array($nameFile, $js['enable'])) {
+                            unset($js['enable'][array_search($nameFile, $js['enable'])]);
+                            $resources['js'] = $js;
+                            $properties['resources'] = $resources;
+                            $this->setProperties($properties);
+                            return $this;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getJsFileStatus($nameFile)
+    {
+        if (!empty($nameFile)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('resources', $properties)) {
+                $resources  = $properties['resources'];
+                if (!array_key_exists('js', $resources)) {
+                    $js        = $resources['js'];
+                    if (array_key_exists($nameFile, $js)) {
+                        if (in_array($nameFile, $js['enable'])) {
+                            return 'enable';
+                        } else {
+                            return 'disable';
+                        }
+                    }
+                }
+            }
+
+        }
+        return false;
     }
 
 
