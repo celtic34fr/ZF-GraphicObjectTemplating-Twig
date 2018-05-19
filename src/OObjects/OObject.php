@@ -357,6 +357,99 @@ class OObject
         return array_key_exists('template', $properties) ? $properties['template'] : false;
     }
 
+    public function setObject(string $object = null)
+    {
+        if (!empty($object)) {
+            $properties = $this->getProperties();
+            $properties['object'] = strtolower($object);
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getObject()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('object', $properties) ? $properties['object'] : false;
+    }
+
+    public function setTypeObj(string $typeObj = null)
+    {
+        if (!empty($typeObj)) {
+            $properties = $this->getProperties();
+            $properties['typeObj'] = strtolower($typeObj);
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getTypeObj()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('typeObj', $properties) ? $properties['typeObj'] : false;
+    }
+
+    public function getLastAccess()
+    {
+        return $this->lastAccess;
+    }
+
+    public function setClasses($classes = null)
+    {
+        if (!empty($classes)) {
+            if (is_array($classes)) { $classes = implode(' ', $classes); }
+            if (is_string($classes)) {
+                $properties = $this->getProperties();
+                $properties['classes'] = strtolower($classes);
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function addClass($class = null)
+    {
+        if (!empty($class)) {
+            if (is_string($class)) {
+                $properties = $this->getProperties();
+                $classes    = $properties['classes'];
+                if (!in_array($class, $classes)) {
+                    $classes .= ' '.$class;
+                    $properties['classes'] = $classes;
+                    $this->setProperties($properties);
+                    return $this;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function removeClass($class = null)
+    {
+        if (!empty($class)) {
+            if (is_string($class)) {
+                $properties = $this->getProperties();
+                $classes    = $properties['classes'];
+                if (in_array($class, $classes)) {
+                    $pos    = strpos($classes, $class);
+                    $classes = substr($classes, 0, $pos) . substr($classes, $pos + strlen($class));
+                    $properties['classes'] = $classes;
+                    $this->setProperties($properties);
+                    return $this;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getClasses()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('classes', $properties) ? $properties['classes'] : false;
+    }
 
 
     protected function getConstants()
