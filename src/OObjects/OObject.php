@@ -319,6 +319,43 @@ class OObject
         return array_key_exists('widthBT', $properties) ? $properties['widthBT'] : false;
     }
 
+    public function setClassName(string $className = null)
+    {
+        if (!empty($className)) {
+            if (class_exists($className)) {
+                $properties = $this->getProperties();
+                $properties['className'] = $className;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function getClassName()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('className', $properties) ? $properties['className'] : false;
+    }
+
+    public function setTemplate(string $template = null)
+    {
+        if (!empty($template)) {
+            if (file_exists($template)) {
+                $properties = $this->getProperties();
+                $properties['template'] = $template;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function getTemplate()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('template', $properties) ? $properties['template'] : false;
+    }
 
 
 
