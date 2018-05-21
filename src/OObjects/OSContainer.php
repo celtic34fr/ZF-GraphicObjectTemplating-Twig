@@ -10,12 +10,19 @@ namespace GraphicObjectTemplating\OObjects;
  * children
  * form
  *
- *
  * méthodes
  * --------
  * __construct($id, $pathObjArray)
+ * getValue()
  * setForm($form = null)
  * getForm()
+ * addChild(OObject $child, $mode =self::MODE_LAST, $params=null)
+ * setChild(OObject $child, $value = null)
+ * removeChild(OObject $child)
+ * isChild(string $child)
+ * hasChild()
+ * countChildren()
+ * getChildren()
  */
 
 use GraphicObjectTemplating\OObjects\OObject;
