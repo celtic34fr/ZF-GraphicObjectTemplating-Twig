@@ -42,6 +42,12 @@ class OSContainer extends OObject
         return $this;
     }
 
+    public function getValue()
+    {
+        $properties = $this->getProperties();
+        return $properties['children'];
+    }
+
     public function setForm($form = null)
     {
         if (!empty($form)) {
