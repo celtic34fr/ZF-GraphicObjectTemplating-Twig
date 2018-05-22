@@ -57,7 +57,7 @@ class OSForm extends OSContainer
     public function countChildren()
     {
         $properties = $this->getProperties();
-        return (int) sizeof($properties['fileds']);
+        return (int) sizeof($properties['fields']);
     }
 
     public function getChildren()

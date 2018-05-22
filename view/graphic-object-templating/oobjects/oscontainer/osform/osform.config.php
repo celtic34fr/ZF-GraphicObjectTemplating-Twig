@@ -5,7 +5,7 @@ return [
     'typeObj'   => 'oscontainer',
     'template'  => 'osform.twig',
 
-    'fileds'    => [],
+    'fields'    => [],
     'validateMethod'    => [
         'classObj'  => '',
         'methodObj' => '',
