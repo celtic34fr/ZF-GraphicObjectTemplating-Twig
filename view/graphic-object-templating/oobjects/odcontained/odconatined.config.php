@@ -1,6 +1,7 @@
 <?php
 
 return [
-    'value' => '',
-    'form'  => '',
+    'value'     => '',
+    'form'      => '',
+    'default'   => '',
 ];

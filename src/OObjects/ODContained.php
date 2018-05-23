@@ -9,7 +9,7 @@ namespace GraphicObjectTemplating\OObjects;
  * ---------
  * value
  * form
- *
+ * default
  *
  * méthodes
  * --------
@@ -18,6 +18,8 @@ namespace GraphicObjectTemplating\OObjects;
  * getValue()
  * setForm($form = null)
  * getForm()
+ * setDefult($default ) null)
+ * getDefault()
  */
 use GraphicObjectTemplating\OObjects\OObject;
 
@@ -69,5 +71,22 @@ class ODContained extends OObject
     {
         $properties = $this->getProperties();
         return array_key_exists('form', $properties) ? $properties['form'] : false;
+    }
+
+    public function setDefault($default = null)
+    {
+        if (!empty($default)) {
+            $properties = $this->getProperties();
+            $properties['default'] = $default;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getDefault()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('default', $properties) ? $properties['default'] : false;
     }
 }
