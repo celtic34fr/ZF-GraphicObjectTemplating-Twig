@@ -37,6 +37,7 @@ class OSForm extends OSContainer
     {
         parent::removeChild($child);
         $this->removeField($child);
+        return $this;
     }
 
     public function isChild(string $child)
