@@ -11,4 +11,9 @@ return [
         'methodObj' => '',
     ],
     'formDatas' => [],
+    'resources' => [
+		'js'		=> [
+			'osform.js' => 'js/osform/osform.js',
+		],
+    ],
 ];
