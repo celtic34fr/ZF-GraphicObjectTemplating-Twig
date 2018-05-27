@@ -12,6 +12,15 @@ class OSForm extends OSContainer
     public function __construct($id)
     {
         parent::__construct($id, "oobjects/oscontainer/osform/osform.config.php");
+
+        $reset = new ODButton($id.'Reset');
+        if ($reset instanceof ODButton) {
+            $properties = $this->getProperties();
+            $properties['reset'] = $id.'Reset';
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     public function addNewField(OObject $child, bool $require, $mode =self::MODE_LAST, $params=null)
