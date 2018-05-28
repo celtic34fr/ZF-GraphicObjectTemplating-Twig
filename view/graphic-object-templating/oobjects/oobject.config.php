@@ -12,6 +12,7 @@ return [
     'template'      => '',
     'widthBT'       => '',
     'lastAccess'    => '',
+    'state'         => true,
 
     'resources'     => [
         'css'           => [],

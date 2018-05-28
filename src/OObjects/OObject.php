@@ -56,6 +56,9 @@ namespace GraphicObjectTemplating\OObjects;
  * enaJsFile($nameFile)
  * disJsFile($nameFile)
  * getJsFileStatus($nameFile)
+ * enable()
+ * disable()
+ * getState()
  */
 
 use Zend\Session\Container;
@@ -75,6 +78,9 @@ class OObject
     const DISPLAY_BLOCK   = 'block';
     const DISPLAY_INLINE  = 'inline';
     const DISPLAY_INBLOCK = 'inline-block';
+
+    const STATE_ENABLE    = true;
+    const STATE_DISABLE   = false;
 
     public function __construct($id, $pathObjArray)
     {
@@ -743,6 +749,28 @@ class OObject
 
         }
         return false;
+    }
+
+    public function enable()
+    {
+        $properties = $this->getProperties();
+        $properties['state'] = self::STATE_ENABLE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disable()
+    {
+        $properties = $this->getProperties();
+        $properties['state'] = self::STATE_DISABLE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getState()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('state', $properties) ? $properties['state'] : false;
     }
 
 
