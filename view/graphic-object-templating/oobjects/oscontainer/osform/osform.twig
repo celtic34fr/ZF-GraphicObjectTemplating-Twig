@@ -1,1 +1,25 @@
 {# template de l'objet OSForm #}
+{% set objClass = gotBootstrap(objet.widthBT) %}
+
+<div id="{{ objet.id }}"
+        {% if objet.classes is not empty %}
+            {% set objClass = objClass ~ " " ~ objet.classes  %}
+        {% endif %}
+        {% if objClass is not empty %} class="{{ objClass }}" {% endif %}
+>
+
+    <style>
+        #{{ objet.id }} {
+            display: {{ objet.display }}
+        }
+    </style>
+
+    {{ content | raw }}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {% for submitId in objet.submits %}
+            {{ gotRender(submitId) }}
+        {% endfor %}
+        {{ gotRender(objet.reset) }}
+    </div>
+
+</div>

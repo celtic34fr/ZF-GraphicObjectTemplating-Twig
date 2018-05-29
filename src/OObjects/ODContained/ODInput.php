@@ -13,8 +13,9 @@ use GraphicObjectTemplating\OObjects\ODContained;
 
 class ODInput extends ODContained
 {
+    const INPUTTYPE_HIDDEN = 'hidden';
     const INPUTTYPE_TEXT = 'text';
-    const INPUTTYPE_PASSWORD = 'passwd';
+    const INPUTTYPE_PASSWORD = 'password';
 
     public function __construct($id)
     {
