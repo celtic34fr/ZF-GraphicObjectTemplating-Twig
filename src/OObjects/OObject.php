@@ -156,7 +156,7 @@ class OObject
     {
         if (!empty($id)) {
             $objects = self::existObject($id);
-            if ($objects) {
+            if (!empty($objects) && is_array($objects)) {
                 $properties = unserialize($objects[$id]);
                 if (!empty($properties)) {
                     $object = new $properties['className']($id);
@@ -164,7 +164,7 @@ class OObject
                     $object->setValue($valeur);
                     return $object;
                 }
-                throw new \Exception('objet dans atrribut, identifiant '.$id);
+                throw new \Exception('objet sans atrribut, identifiant '.$id);
             }
         }
         return false;
@@ -174,7 +174,7 @@ class OObject
     {
         $now        = new \DateTime();
         $objet = self::buildObject($id);
-        if ($objet) {
+        if (!empty($objet) && $objet instanceof OObject) {
             $objects = self::existObject($id);
             if ($objet instanceof OSContainer || $objet instanceof OESContainer) {
                 foreach ($objet->getChildren() as $child) {
