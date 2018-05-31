@@ -16,6 +16,7 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceManager;
+use ZfcTwig\View\TwigRenderer;
 
 class GotServicesFactory implements FactoryInterface
 {
@@ -35,6 +36,7 @@ class GotServicesFactory implements FactoryInterface
     {
         /** @var ServiceManager $serviceManager */
         $serviceManager =  $container->get('ServiceManager');
+        /** @var TwigRenderer $twigRender */
         $twigRender  = $container->get('ZfcTwigRenderer');
         return new GotServices($serviceManager, $twigRender);
     }
