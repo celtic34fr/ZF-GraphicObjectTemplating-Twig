@@ -1,0 +1,11 @@
+{# template de rendu de GotHeader #}
+
+{% set cssS    = scripts.css %}
+{% set jsS     = scripts.js %}
+
+{% for css in cssS %}
+    <link href="{{ basePath() }}/{{ css }}" rel="stylesheet" type="text/css">
+{% endfor %}
+{% for js in jsS %}
+    <script type="text/javascript" src="{{ basePath() }}/{{ js }}"></script>
+{% endfor %}
