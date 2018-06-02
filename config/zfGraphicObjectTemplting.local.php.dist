@@ -1,5 +1,7 @@
 <?php
 
+use GraphicObjectTemplating\Twig\Extension\LayoutExtension;
+
 return [
     'gotParameters' => [
         'sessionParms' => [
@@ -8,6 +10,18 @@ return [
             'gc_divisor' => 1,
             'use_cookies' => true,
             'cookie_httponly' => true,
+        ],
+    ],
+    'zfctwig' => [
+        'extensions' => [
+             // extension à activer pour avoir accès à la directive dump(var) de Twig
+            'debug'           => 'Twig_Extension_Debug',
+            /** Template Base Twig Extension  */
+            'layout'          => LayoutExtension::class,
+        ],
+        'environment_options' => [
+            'cache' => false, // pas de cache, tout modèle reconstruit à chaque affichage
+            'debug' => true,
         ],
     ],
 ];
