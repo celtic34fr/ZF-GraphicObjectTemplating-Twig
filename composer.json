@@ -16,7 +16,7 @@
       "role":      "Project Leader"
     }
   ],
-  "homepage": "http://girthub.com/celtic34fr/ZF-GraphicObjectTeplating-wig",
+  "homepage": "http://girthub.com/celtic34fr/ZF-GraphicObjectTeplating-Twig",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
