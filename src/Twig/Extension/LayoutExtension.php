@@ -18,7 +18,6 @@ class LayoutExtension extends \Twig_Extension
             new Twig_Function('getclass', array($this, 'twigFunction_getClass'), array('is_safe' => array('html'))),
             new Twig_Function('gettype', array($this, 'twigFunction_getType'), array('is_safe' => array('html'))),
             new Twig_Function('arrayexception', array($this, 'twigFunction_arrayException'), array('is_safe' => array('html'))),
-            new Twig_Function('checkBoolean', array($this, 'twigFunction_isBoolean'), array('is_safe' => array('html'))), // KALANTwigExtension @author LAURE
             new Twig_Function('substr', array($this, 'twigFunction_subString'), array('is_safe' => array('html'))),
             new Twig_Function('strpos', array($this, 'twigFunction_strPos'), array('is_safe' => array('html'))),
             new Twig_Function('instring', array($this, 'twigFunction_inString'), array('is_safe' => array('html'))),
@@ -123,12 +122,6 @@ class LayoutExtension extends \Twig_Extension
      * => permet le test sur le type d'un champs dans un template
      * @author LAURE
      */
-    public function twigFunction_isBoolean($var)
-    {
-        return is_bool($var);
-    }
-
-
     public function twigTest_typeOf($var, $type_test = null)
     {
 
