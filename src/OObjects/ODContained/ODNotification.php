@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OEObject;
+use GraphicObjectTemplating\OObjects\OObject;
 
 /**
  * Class ODNotification

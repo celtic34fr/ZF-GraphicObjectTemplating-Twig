@@ -7,6 +7,19 @@
         #{{ objet.id }} .navBtn .btn {
             margin: 0.8em 0 !important;
         }
+
+        div#{{ objet.id }} table,
+        div#{{ objet.id }} table tr,
+        div#{{ objet.id }} table tr td,
+        div#{{ objet.id }} table tr th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        div#{{ objet.id }} table tr td,
+        div#{{ objet.id }} table tr th {
+            padding: 0.3em;
+        }
     </style>
     {% if objet.pagination %}
     <div class="length col-lg-12 col-md-12 col-sm-12 col-xs-12">
