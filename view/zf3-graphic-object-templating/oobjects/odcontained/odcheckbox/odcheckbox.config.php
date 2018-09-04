@@ -1,6 +1,6 @@
 <?php
 
-use ZF3_GOT\OObjects\ODContained\ODCheckbox;
+use GraphicObjectTemplating\OObjects\ODContained\ODCheckbox;
 
 return [
     'object'        => 'odcheckbox',

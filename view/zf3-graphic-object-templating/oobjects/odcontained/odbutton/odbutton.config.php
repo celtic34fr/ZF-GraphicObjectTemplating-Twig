@@ -1,6 +1,6 @@
 <?php
 
-use ZF3_GOT\OObjects\ODContained\ODButton;
+use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 
 return [
     'object'        => 'odbutton',

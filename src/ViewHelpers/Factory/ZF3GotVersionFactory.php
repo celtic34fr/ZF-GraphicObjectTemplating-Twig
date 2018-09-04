@@ -1,8 +1,8 @@
 <?php
 
-namespace ZF3_GOT\ViewHelpers\Factory;
+namespace GraphicObjectTemplating\ViewHelpers\Factory;
 
-use ZF3_GOT\ViewHelpers\ZF3GotVersion;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotVersion;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;

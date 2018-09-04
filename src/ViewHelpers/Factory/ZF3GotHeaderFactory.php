@@ -1,10 +1,10 @@
 <?php
 
-namespace ZF3_GOT\ViewHelpers\Factory;
+namespace GraphicObjectTemplating\ViewHelpers\Factory;
 
 
-use ZF3_GOT\Service\ZF3GotServices;
-use ZF3_GOT\ViewHelpers\ZF3GotHeader;
+use GraphicObjectTemplating\Service\ZF3GotServices;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotHeader;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;

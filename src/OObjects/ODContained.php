@@ -21,7 +21,7 @@ namespace GraphicObjectTemplating\OObjects;
  * setDefult($default ) null)
  * getDefault()
  */
-use ZF3_GOT\OObjects\OObject;
+use GraphicObjectTemplating\OObjects\OObject;
 
 class ODContained extends OObject
 {

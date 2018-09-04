@@ -19,14 +19,16 @@
     }
 </style>
 
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-widthbt="{{ objet.widthBT }}"
-        {% if objet.type != 'reset' and objet.type != 'link' %}
-        {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
-        {% endif %}
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}"
+    {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+
+    {% if objet.type != 'reset' and objet.type != 'link' %}
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+    {% endif %}
 >
-    <button id="{{ objet.id }}Button" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
-            class="{{ objet.nature }}" style="width: 100%;"
-        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    <button id="{{ objet.id }}Button" data-objet="{{ objet.object }}" class="{{ objet.nature }}" style="width: 100%;"
         {% if objet.type == 'link' %} onclick="location.href='{{ routeUrl }}'" {% endif %}
         {% if objet.value is defined and objet.value is not empty %}
             data-value="{{ objet.value }}"

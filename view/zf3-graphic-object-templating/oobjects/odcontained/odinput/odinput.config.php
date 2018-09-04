@@ -1,6 +1,6 @@
 <?php
 
-use ZF3_GOT\OObjects\ODContained\ODInput;
+use GraphicObjectTemplating\OObjects\ODContained\ODInput;
 
 return [
     'object'        => 'odinput',

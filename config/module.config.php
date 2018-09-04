@@ -4,16 +4,16 @@ namespace GraphicObjectTemplating;
 
 use GraphicObjectTemplating\Controller\Factory\MainControllerFactory;
 use GraphicObjectTemplating\Controller\MainController;
-use GraphicObjectTemplating\Service\Factory\ZF2GotServicesFactory;
+use GraphicObjectTemplating\Service\Factory\ZF3GotServicesFactory;
 use GraphicObjectTemplating\Service\ZF3GotServices;
-use GraphicObjectTemplating\View\Helper\Factory\ZF3GotBootstrapFactory;
-use GraphicObjectTemplating\View\Helper\Factory\ZF3GotHeaderFactory;
-use GraphicObjectTemplating\View\Helper\Factory\ZF3GotRenderFactory;
-use GraphicObjectTemplating\View\Helper\Factory\ZF3GotZendVersionFactory;
-use GraphicObjectTemplating\View\Helper\ZF3GotBootstrap;
-use GraphicObjectTemplating\View\Helper\ZF3GotHeader;
-use GraphicObjectTemplating\View\Helper\ZF3GotRender;
-use GraphicObjectTemplating\View\Helper\ZF3GotZendVersion;
+use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotBootstrapFactory;
+use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotHeaderFactory;
+use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotRenderFactory;
+use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotVersionFactory;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotBootstrap;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotHeader;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotRender;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotVersion;
 use Zend\Router\Http\Literal;
 
 return [

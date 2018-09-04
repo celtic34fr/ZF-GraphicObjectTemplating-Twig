@@ -1,8 +1,8 @@
 <?php
 
-namespace ZF3_GOT\TwigExtensions;
+namespace GraphicObjectTemplating\TwigExtensions;
 
-use ZF3_GOT\TwigExtensions\TokenParser\TokenParserSwitch;
+use GraphicObjectTemplating\TwigExtensions\TokenParser\TokenParserSwitch;
 
 class SwitchExtension extends \Twig_Extension
 {

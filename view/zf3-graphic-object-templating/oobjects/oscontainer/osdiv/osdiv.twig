@@ -5,15 +5,15 @@
      {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
 >
 
-    {% if objet.codeCss is defined and objet.codeCss is not empty %}
     <style>
-        {% include 'graphic-object-templating/oobjects/oscontainer/style.twig'  with { id:objet.id, codeCss:objet.codeCss} %}
-    </style>
-    {% endif %}
+        {% if objet.codeCss is defined and objet.codeCss is not empty %}
+        {% include 'zf3-graphic-object-templating/oobjects/oscontainer/style.twig'  with { id:objet.id, codeCss:objet.codeCss} %}
+        {% endif %}
 
-    {% if objet.autoCenter %}
-    {% include 'graphic-object-templating/oobjects/autoCenter.twig' with {id:objet.id, ac:objet.autoCenter, acPx:objet.acPx, acPy:objet.acPy } %}
-    {% endif %}
+        {% if objet.autoCenter %}
+        {% include 'zf3-graphic-object-templating/oobjects/autoCenter.twig' with {id:objet.id, ac:objet.autoCenter, acPx:objet.acPx, acPy:objet.acPy } %}
+        {% endif %}
+    </style>
 
     {{ content | raw }}
 

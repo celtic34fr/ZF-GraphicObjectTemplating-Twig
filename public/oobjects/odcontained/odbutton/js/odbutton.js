@@ -3,8 +3,8 @@ function odbutton(obj) {
     let button  = obj.find('button');
 
     this.value  = button.data('value');
-    this.form   = button.data('form');
-    this.data   = button.data();
+    this.form   = obj.data('form');
+    this.data   = obj.data();
 }
 
 odbutton.prototype = {

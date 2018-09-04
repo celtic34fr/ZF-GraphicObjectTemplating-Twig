@@ -1,6 +1,6 @@
 <?php
 
-namespace ZF3_GOT\TwigExtensions\TokenParser;
+namespace GraphicObjectTemplating\TwigExtensions\TokenParser;
 
 //To be added under Twig/TokenParser/
 
@@ -13,7 +13,7 @@ namespace ZF3_GOT\TwigExtensions\TokenParser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use ZF3_GOT\TwigExtensions\Node\NodeSwitch;
+use GraphicObjectTemplating\TwigExtensions\Node\NodeSwitch;
 use Twig_Error_Syntax;
 use Twig_Node;
 use Twig_Token;

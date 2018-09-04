@@ -1,6 +1,6 @@
 <?php
 
-namespace ZF3_GOT\TwigExtensions;
+namespace GraphicObjectTemplating\TwigExtensions;
 
 use Exception;
 use Traversable;

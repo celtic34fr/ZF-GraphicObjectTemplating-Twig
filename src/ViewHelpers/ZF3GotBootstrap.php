@@ -1,8 +1,8 @@
 <?php
 
-namespace ZF3_GOT\ViewHelpers;
+namespace GraphicObjectTemplating\ViewHelpers;
 
-use ZF3_GOT\Service\ZF3GotServices;
+use GraphicObjectTemplating\Service\ZF3GotServices;
 use Zend\View\Helper\AbstractHelper;
 
 class ZF3GotBootstrap extends AbstractHelper

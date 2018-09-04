@@ -1,6 +1,6 @@
 <?php
 
-use ZF3_GOT\OObjects\OObject;
+use GraphicObjectTemplating\OObjects\OObject;
 
 return [
     'id'            => '',

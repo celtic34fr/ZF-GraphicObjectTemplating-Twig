@@ -1,6 +1,6 @@
 <?php
 
-namespace ZF3_GOT\TwigExtensions\Node;
+namespace GraphicObjectTemplating\TwigExtensions\Node;
 
 //To be added under Twig/Node/Switch.php
 

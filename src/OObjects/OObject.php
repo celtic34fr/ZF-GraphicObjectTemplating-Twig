@@ -133,7 +133,7 @@ class OObject
                 $templateName .= '/' . $objProperties['object'] . '/' . $objProperties['template'];
                 $objProperties['template'] = $templateName;
 
-                $objName = 'ZF3_GOT/OObjects/';
+                $objName = 'GraphicObjectTemplating/OObjects/';
                 $objName .= strtoupper(substr($objProperties['typeObj'], 0, 3));
                 $objName .= strtolower(substr($objProperties['typeObj'], 3)) . '/';
                 $objName .= strtoupper(substr($objProperties['object'], 0, 3));

@@ -1,6 +1,6 @@
 <?php
 
-namespace ZF3_GOT\ViewHelpers;
+namespace GraphicObjectTemplating\ViewHelpers;
 
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceManager;

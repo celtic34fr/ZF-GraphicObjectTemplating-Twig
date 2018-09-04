@@ -1,14 +1,14 @@
 <?php
 
-namespace ZF3_GOT\ViewHelpers\Factory;
+namespace GraphicObjectTemplating\ViewHelpers\Factory;
 
-use ZF3_GOT\Service\ZF3GotServices;
+use GraphicObjectTemplating\Service\ZF3GotServices;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use ZF3_GOT\ViewHelpers\ZF3GotRender;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotRender;
 
 class ZF3GotRenderFactory implements FactoryInterface
 {
