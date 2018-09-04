@@ -1,0 +1,18 @@
+{# template pour l'ajout de la gestion des évènements à tout objet #}
+{# l'event 'dummy' permet de programmer manuellement un évènement JavaScript sans déclenchement de callback #}
+
+{% for evt, event in events %}
+    {% if event is not empty %}
+        {% if event.class != "dummy" %}
+            $('#{{ objet.id }}').{{ evt }}(function (e) {
+            {% switch(event.class) %}
+            {% case 'javascript:' %}
+                {{ event.method | raw }};
+            {% default %}
+                let {{ objet.id }} = new {{ objet.object }}($('#{{ objet.id }}'));
+                invokeAjax({{ objet.id }}.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
+            {% endswitch %}
+            });
+        {% endif %}
+    {% endif %}
+{% endfor %}

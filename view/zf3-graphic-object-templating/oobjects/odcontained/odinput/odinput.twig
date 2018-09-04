@@ -1,0 +1,30 @@
+{# template de l'objet ODInput #}
+
+<br>
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}"
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+    <label for="{{ objet.id }}Input"
+    {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+    >{{ objet.label }}</label>
+    <input id="{{ objet.id }}Input" name="{{ objet.name }}" type="{{ objet.type }}"
+    {% if objet.value is not empty %} value="{{ objet.value }}" {% endif %}
+    {% if objet.size is not empty %} size="{{ objet.size }}" {% endif %}
+    {% if objet.maxlength is not empty %} maxlength="{{ objet.maxlength }}" {% endif %}
+    {% if objet.state == false %} disabled {% endif %}
+    {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    >
+
+    <script>
+        $(document).ready(function (e) {
+            setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
+            setBtClasses("#{{ objet.id }} input", $("#{{ objet.id }} input").data("widthbt"));
+
+            {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
+            {% endif %}
+        })
+    </script>
+</div>

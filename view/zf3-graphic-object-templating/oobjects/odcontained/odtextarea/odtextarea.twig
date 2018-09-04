@@ -1,0 +1,42 @@
+{# template de l'objet ODTextarea #}
+
+{% set labelClass = labelClass ~ gotBootstrap(substr(labelWidth, 0, labelWidth|length - 1)) %}
+{% set textareaClass = textareaClass ~ gotBootstrap(textareaWidth) %}
+
+<div id="{{ objet.id }}"
+     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+    {%  if objet.label is not empty or objet.icon is not empty %}
+    <label for="{{ objet.id }}Textarea"
+        {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+    >
+        {% if objet.icon is defined %} <i class="{{ objet.icon }}"></i> {% endif %}
+        {{ objet.label }}
+    </label>
+    {% endif %}
+    <textarea id="{{ objet.id }}Textarea"
+        {% if objet.cols is not empty %} cols="{{ objet.cols }}" {% endif %}
+        {% if objet.rows is not empty %} rows="{{ objet.rows }}" {% endif %}
+        {% if objet.maxLength is not empty %} maxlength="{{ objet.maxLength }}" {% endif %}
+        {% if textareaClass is not empty %} class="{{ textareaClass }}" {% endif %}
+        {% if objet.placeholder is not empty %} placeholder="{{ objet.placeholder }}" {% endif %}
+        {% if objet.textareaWidthBT is not empty %} data-widthbt="{{ objet.textareaWidthBT }}" {% endif %}
+    >
+        {{ objet.text | raw }}
+    </textarea>
+
+
+    <script>
+        $(document).ready(function (e) {
+            setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
+            setBtClasses("#{{ objet.id }} textarea", $("#{{ objet.id }} textarea").data("widthbt"));
+
+            {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
+            {% endif %}
+        })
+    </script>
+</div>

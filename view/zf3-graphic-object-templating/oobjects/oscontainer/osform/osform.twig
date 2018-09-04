@@ -1,0 +1,49 @@
+{# template de l'objet OSForm #}
+
+<div id="{{ objet.id }}" class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
+    {% if objet.display is not empty %}data-display="{{ objet.display }}"{% endif %}
+    {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
+>
+    <style>
+    {% if objet.codeCss is defined and objet.codeCss is not empty %}
+        {% include 'zf3-graphic-object-templating/oobjects/oscontainer/style.twig'  with objet.codeCss %}
+    {% endif %}
+    {% if objet.autoCenter %}
+        {% include 'zf3-graphic-object-templating/oobjects/autoCenter.twig' with {id:objet.id, acPx:objet.acPx, acPy:objet.acPy } %}
+    {% endif %}
+    </style>
+
+    <div class="formBody">
+        {{ content | raw }}
+    </div>
+    <div class="formControls col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {% for ord, objID in objet.btnControls.ord %}
+            {{ gotRender(objID) }}
+        {% endfor %}
+    </div>
+
+    {# ###########################################################################################################
+        ATTENTION : tout champ permettant une saisie d'information devra avoir une balise HTML label
+        ceci pour permettre la mise en place de l'étoile rouge à gauche du texte inclus pour indiquer l'ensemble
+        des champs obligatoires pour valider la saisie du formulaire
+    ########################################################################################################### #}
+    {% if objet.fields is not empty %}
+    <script>
+        $(document).ready(function () {
+            let require = '<p style="color:red;float:left;";>*&nbsp;</p>';
+            let topRequire = false;
+            {% for ident, bool in objet.fields %}
+            {% if bool %}
+            $("#{{ ident }}").addClass('require');
+            $("#{{ ident }} label:first").html(require+$("#{{ ident }} label:first").html());
+            if (!topRequire) {topRequire = true;}
+            {% endif %}
+            {% endfor %}
+
+            if (topRequire) {
+                $("#{{ objet.id }}").append('<h4 class="require col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</h4>');
+            }
+        });
+    </script>
+    {% endif %}
+</div>

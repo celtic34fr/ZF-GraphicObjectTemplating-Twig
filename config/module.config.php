@@ -2,38 +2,69 @@
 
 namespace GraphicObjectTemplating;
 
-use GraphicObjectTemplating\Service\Factory\GotServicesFactory;
-use GraphicObjectTemplating\Service\GotServices;
-use GraphicObjectTemplating\View\Helper\Factory\GotBootstrapFactory;
-use GraphicObjectTemplating\View\Helper\Factory\GotHeaderFactory;
-use GraphicObjectTemplating\View\Helper\Factory\GotRenderFactory;
-use GraphicObjectTemplating\View\Helper\GotBootstrap;
-use GraphicObjectTemplating\View\Helper\GotHeader;
-use GraphicObjectTemplating\View\Helper\GotRender;
-use GraphicObjectTemplating\View\Helper\GotZendVersion;
+use GraphicObjectTemplating\Controller\Factory\MainControllerFactory;
+use GraphicObjectTemplating\Controller\MainController;
+use GraphicObjectTemplating\Service\Factory\ZF2GotServicesFactory;
+use GraphicObjectTemplating\Service\ZF3GotServices;
+use GraphicObjectTemplating\View\Helper\Factory\ZF3GotBootstrapFactory;
+use GraphicObjectTemplating\View\Helper\Factory\ZF3GotHeaderFactory;
+use GraphicObjectTemplating\View\Helper\Factory\ZF3GotRenderFactory;
+use GraphicObjectTemplating\View\Helper\Factory\ZF3GotZendVersionFactory;
+use GraphicObjectTemplating\View\Helper\ZF3GotBootstrap;
+use GraphicObjectTemplating\View\Helper\ZF3GotHeader;
+use GraphicObjectTemplating\View\Helper\ZF3GotRender;
+use GraphicObjectTemplating\View\Helper\ZF3GotZendVersion;
+use Zend\Router\Http\Literal;
 
 return [
 
-    'service_manager' => array(
-        'factories' => array(
-            GotServices::class                      => GotServicesFactory::class,
-            'graphic.object.templating.services'    => GotServicesFactory::class,
-        )
-    ),
+    'router' => [
+        'routes' => [
+            'gotDispatch' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/gotDispatch',
+                    'defaults' => [
+                        'controller' => MainController::class,
+                        'action'     => 'gotDispatch',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'controllers' => [
+        'factories' => [
+            MainController::class => MainControllerFactory::class,
+        ],
+    ],
+
+    'service_manager' => [
+        'factories' => [
+            ZF3GotServices::class => ZF3GotServicesFactory::class,
+        ],
+        'aliases' => [
+            'graphic.object.templating.services' => ZF3GotServices::class,
+        ]
+    ],
 
     'view_helpers' => [
         'factories' => [
-            GotRender::class     => GotRenderFactory::class,
-            GotBootstrap::class  => GotBootstrapFactory::class,
-            GotHeader::class     => GotHeaderFactory::class,
-            'zfVersion'    => function($sm) {
-                return new GotZendVersion();
-            }
+            ZF3GotRender::class     => ZF3GotRenderFactory::class,
+            ZF3GotBootstrap::class  => ZF3GotBootstrapFactory::class,
+            ZF3GotHeader::class     => ZF3GotHeaderFactory::class,
+            ZF3GotVersion::class    => ZF3GotVersionFactory::class,
         ],
         'aliases' => [
-            'gotRender'     => GotRender::class,
-            'gotBootstrap'  => GotBootstrap::class,
-            'gotHeader'     => GotHeader::class,
+            'gotRender'     => ZF3GotRender::class,
+            'gotBootstrap'  => ZF3GotBootstrap::class,
+            'gotHeader'     => ZF3GotHeader::class,
+            'gotversion'    => ZF3GotVersion::class,
+        ],
+    ],
+    'view_manager' => [
+        'template_path_stack' => [
+            __DIR__ . '/../view',
         ],
     ],
 ];

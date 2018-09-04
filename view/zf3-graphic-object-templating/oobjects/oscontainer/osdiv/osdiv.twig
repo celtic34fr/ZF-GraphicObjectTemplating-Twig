@@ -1,0 +1,20 @@
+{# template de l'objet OSDiv #}
+
+<div id="{{ objet.id }}" class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
+     data-display="{{ objet.display }}"
+     {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
+>
+
+    {% if objet.codeCss is defined and objet.codeCss is not empty %}
+    <style>
+        {% include 'graphic-object-templating/oobjects/oscontainer/style.twig'  with { id:objet.id, codeCss:objet.codeCss} %}
+    </style>
+    {% endif %}
+
+    {% if objet.autoCenter %}
+    {% include 'graphic-object-templating/oobjects/autoCenter.twig' with {id:objet.id, ac:objet.autoCenter, acPx:objet.acPx, acPy:objet.acPy } %}
+    {% endif %}
+
+    {{ content | raw }}
+
+</div>

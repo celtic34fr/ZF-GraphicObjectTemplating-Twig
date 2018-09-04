@@ -1,0 +1,71 @@
+{# template de l'objet ODTable  #}
+
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}"
+     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
+>
+    <style>
+        #{{ objet.id }} .navBtn .btn {
+            margin: 0.8em 0 !important;
+        }
+    </style>
+    {% if objet.pagination %}
+    <div class="length col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {{ gotRender(objet.objLength) }}
+    </div>
+    {% endif %}
+    <table id="{{ objet.id }}_table"  style="width: 100% !important;" class="lno0 cno0 {{ objClass }}" data-lno="0" data-cno="0"
+    >
+        {% if objet.title is not empty %}
+            <caption>{{ objet.title }}</caption>
+        {% endif %}
+        <thead>
+        <tr class="line">
+            {% for col in objet.cols %}
+                {% if col.view == true %}
+                    <th class="col cno{{ loop.index }}" data-col="{{ loop.index }}">{{ col.libel | trim }}</th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% if objet.datas is empty %}
+            <tr class="line lno1" data-lno="1">
+                <td colspan="{{ objet.cols|length }}" style="text-align: center">No data to show</td>
+            </tr>
+        {% else %}
+            {% for lno, data in objet.datas %}
+                {% if data['view'] == true %}
+                    {% set key = 'line' ~ lno %}
+                    {% set lineClasses = objet.classesTab[key] %}
+                    <tr class="line lno{{ lno }} {{ lineClasses }}" data-lno="{{ lno }}"
+                            {% if objet.isRow %} id="{{ objet.data[0] }}" {% endif %}
+                    >
+                        {% for cno, col in data %}
+                            {% if cno > 0 %}
+                                {% if objet.cols[cno].view == true %}
+                                    {% set key = 'col' ~ cno %}
+                                    {% set colClasses = objet.classesTab[key] %}
+                                    <td class="col cno{{ cno }} {{ colClasses }}" data-cno="{{ cno }}">{{ col | trim | raw }}</td>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+    {% if objet.pagination %}
+    <div class="navigation col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {{ gotRender(objet.navbarBtns) }}
+    </div>
+    {% endif %}
+
+    {% if objet.event is not empty %}
+    <script>
+        $(document).ready(function (e) {
+            {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
+        })
+    </script>
+    {% endif %}
+</div>

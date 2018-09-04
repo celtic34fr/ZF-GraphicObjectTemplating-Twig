@@ -23,9 +23,14 @@ namespace GraphicObjectTemplating\OObjects;
  * hasChild()
  * countChildren()
  * getChildren()
- */
-
-use GraphicObjectTemplating\OObjects\OObject;
+ * removeChildren()
+ * addCodeCss($selector, $code)
+ * setCodeCss($selector, $code)
+ * rmCodeCss($selector)
+ * getCodeCss($selector)
+ * setAllCss(array $allCss)
+ * getAllCss()
+*/
 
 class OSContainer extends OObject
 {
@@ -40,7 +45,7 @@ class OSContainer extends OObject
         parent::__construct($id, $pathObjArray);
 
         /** ajout des attributs spécifiques à l'objet */
-        $properties = include __DIR__ . '/../../view/graphic-object-templating/oobjects/oscontainer/oscontainer.config.php';
+        $properties = include __DIR__ . '/../../view/zf3-graphic-object-templating/oobjects/oscontainer/oscontainer.config.php';
         foreach ($this->getProperties() as $key => $objProperty) {
             $properties[$key] = $objProperty;
         }
@@ -77,7 +82,7 @@ class OSContainer extends OObject
         if (!empty($child)) {
             $properties = $this->getProperties();
             $children   = $properties['children'];
-            if (array_key_exists($child->getId(), $children)) {
+            if (!array_key_exists($child->getId(), $children)) {
                 switch ($mode) {
                     case self::MODE_LAST:
                         $children[$child->getId()] = $child->getValue();
@@ -172,12 +177,107 @@ class OSContainer extends OObject
         $enfants = [];
         $properties = $this->getProperties();
         $children   = $properties['children'];
-        /** @var OObject $child */
+        $sessionObj = OObject::validateSession();
         foreach ($children as $id => $valeur) {
-            $objet = OObject::buildObject($child->getId());
-            if (!empty($valeur)) { $objet->setValue($valeur); }
+            /** @var OObject $objet */
+            $objet = OObject::buildObject($id, $sessionObj);
+//            if ($objet instanceof ODContained || $objet instanceof OEDContained) {
+            if ($objet instanceof ODContained) {
+                if (!empty($valeur)) {
+                    $objet->setValue($valeur);
+                }
+            }
             $enfants[] = $objet;
         }
         return $enfants;
+    }
+
+    public function removeChildren()
+    {
+        $properties = $this->getProperties();
+        $properties['children'] = [];
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function addCodeCss($selector, $code)
+    {
+        $selector = (string) $selector;
+        $code     = (string) $code;
+        if (!empty($selector) && !empty($code)) {
+            if ($selector == 'self') { $selector = ''; }
+            $properties = $this->getProperties();
+            $codeCss    = $properties['codeCss'];
+            if (!empty($code) && !array_key_exists($selector, $codeCss)) {
+                $codeCss[$selector] = $code;
+                $properties['codeCss'] = $codeCss;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function setCodeCss($selector, $code)
+    {
+        $selector = (string) $selector;
+        $code     = (string) $code;
+        if (!empty($selector) && !empty($codeCss)) {
+            $properties = $this->getProperties();
+            $codeCss    = $properties['codeCss'];
+            if (!empty($codeCss) && array_key_exists($selector, $codeCss)) {
+                $codeCss[$selector] = $code;
+                $properties['codeCss'] = $codeCss;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function rmCodeCss($selector)
+    {
+        $selector = (string) $selector;
+        if (!empty($selector) && !empty($codeCss)) {
+            $properties = $this->getProperties();
+            $codeCss    = $properties['codeCss'];
+            if (!empty($codeCss) && array_key_exists($selector, $codeCss)) {
+                unset($codeCss[$selector]);
+                $properties['codeCss'] = $codeCss;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function getCodeCss($selector)
+    {
+        $selector = (string) $selector;
+        if (!empty($selector) && !empty($codeCss)) {
+            $properties = $this->getProperties();
+            $codeCss    = $properties['codeCss'];
+            if (!empty($codeCss) && array_key_exists($selector, $codeCss)) {
+                return $codeCss[$selector];
+            }
+        }
+        return false;
+    }
+
+    public function setAllCss(array $allCss)
+    {
+        if (!empty($allCss)) {
+            $properties = $this->getProperties();
+            $properties['codeCss'] = $allCss;
+            $this->setProperties($properties);
+            return $this;
+    }
+        return false;
+    }
+
+    public function getAllCss()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('codeCss', $properties) ? $properties['codeCss'] : false;
     }
 }

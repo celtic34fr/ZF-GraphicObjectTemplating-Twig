@@ -1,0 +1,64 @@
+{# template de l'objet ODNotification #}
+
+{% if objet.action == 'init' %}
+    <div id="{{ objet.id }}_div">
+        {# initialisation à mettre au niveau du header de la page #}
+        <script>
+            var {{ objet.id }}Lobibox = Lobibox;
+            $(document).ready(
+                    {{ objet.id }}Lobibox.notify.DEFAULTS = $.extend({}, {{ objet.id }}Lobibox.notify.DEFAULTS, {
+                        title: true,
+                        size: '{{ objet.size }}',
+                        showClass: 'zoomIn',
+                        hideClass: 'zoomOut',
+                        icon: true,
+                        msg: '',
+                        img: null,
+                        closable: true,
+                        delay: {{ objet.delay }},
+                        delayIndicator: true,
+                        closeOnClick: true,
+                        width: 400,
+                        position: "{{ objet.position }}",
+                        iconSource: "bootstrap",
+                        sound: {{ (objet.sound) ? 'true' : 'false' }},
+                        {% if objet.sound %}
+                        soundPath: '{{ objet.soundPath }}',
+                        soundExt: '.ogg',
+                        {% endif %}
+                    })
+            );
+        </script>
+        <input id="{{ objet.id }}ListLength" type="hidden" name="listLength" value="0"/>
+        <script id="{{ objet.id }}" type="text/javascript">
+        </script>
+    </div>
+{% endif %}
+
+{% if objet.action == 'send' %}
+    <script id='{{ objet.id }}' type="text/javascript">
+        if ( {{ objet.id }}Lobibox.notify.list.length == 0) {
+            {{ objet.id }}Lobibox.notify('{{ objet.type }}', {
+                showAfterPrevious: {{ objet.showAfterPrevious ? 'true' : 'false' }},
+                {% if objet.title is not empty %} title: '{{ objet.title }}', {% endif %}
+                {% if objet.sound == false %} sound: false, {% endif %}
+                delay: {{ objet.delay }},
+                msg: '{{ objet.body }}'
+            });
+            $('#{{ objet.id }}ListLength').val(1);
+        } else {
+            var listLength = parseInt($('#{{ objet.id }}ListLength').val());
+            var delayTime  =  {{ objet.delayMessage }} * listLength;
+            setTimeout(function () {
+                {{ objet.id }}Lobibox.notify('{{ objet.type }}', {
+                    showAfterPrevious: {{ objet.showAfterPrevious ? 'true' : 'false' }},
+                    {% if objet.title is not empty %} title: '{{ objet.title }}', {% endif %}
+                    {% if objet.sound == false %} sound: false, {% endif %}
+                    delay: {{ objet.delay }},
+                    msg: '{{ objet.body }}'
+                });
+            }, delayTime );
+            $('#{{ objet.id }}ListLength').val(listLength + 1);
+        }
+    </script>
+{% endif %}

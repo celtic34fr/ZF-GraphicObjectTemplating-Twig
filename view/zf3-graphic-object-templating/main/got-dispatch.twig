@@ -1,0 +1,3 @@
+{% for item in content %}
+    {{ item|json_encode()|raw }}
+{% endfor %}

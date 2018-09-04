@@ -1,0 +1,28 @@
+
+.display-none { display: none !important; }
+.display-block { display: block; }
+.display-inline { display: inline; }
+.display-inline-block { display: inline-block; }
+
+.ospaddingV01 { padding: 0.1em 0; }
+.ospaddingV02 { padding: 0.2em 0; }
+.ospaddingV05 { padding: 0.5em 0; }
+.ospaddingV10 { padding:   1em 0; }
+.ospaddingV20 { padding:   2em 0; }
+
+.ospaddingH01 { padding: 0 0.1em; }
+.ospaddingH02 { padding: 0 0.2em; }
+.ospaddingH05 { padding: 0 0.5em; }
+.ospaddingH10 { padding:   0 1em; }
+.ospaddingH20 { padding:   0 2em; }
+
+.ospadding01  { padding:   0.1em; }
+.ospadding02  { padding:   0.2em; }
+.ospadding05  { padding:   0.5em; }
+.ospadding10  { padding:     1em; }
+.ospadding20  { padding:     2em; }
+
+body {
+        margin: 0 !important;
+        height: 100% !important;
+}

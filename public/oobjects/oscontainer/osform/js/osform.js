@@ -12,11 +12,11 @@ osform.prototype = {
             if (object != null && object.substring(object.length - 6, object.length) !== 'button') {
                 var evalString = "new "+object+'($("#'+selection.getAttribute('id')+'"));';
                 var instance = eval(evalString);
-                var datas = instance.getData('click');
+                var datas = instance.getData('');
 
                 if (datas.length > 0) {
-                    datas = datas.replaceAll("&", "§");
-                    datas = datas.replaceAll("\'", "*");
+                    datas = datas.replace(/\&/g, '§');
+                    datas = datas.replace(/\'/g, '*');
                     formData = formData + "|" + datas;
                 }
             }

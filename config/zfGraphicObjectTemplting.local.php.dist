@@ -1,6 +1,7 @@
 <?php
 
 use GraphicObjectTemplating\Twig\Extension\LayoutExtension;
+use GraphicObjectTemplating\Twig\Extension\SwitchExtension;
 
 return [
     'gotParameters' => [
@@ -11,6 +12,8 @@ return [
             'use_cookies' => true,
             'cookie_httponly' => true,
         ],
+        "version"   => "V0.2",
+        "ref"       => "201808",
     ],
     'zfctwig' => [
         'extensions' => [
@@ -18,6 +21,8 @@ return [
             'debug'           => 'Twig_Extension_Debug',
             /** Template Base Twig Extension  */
             'layout'          => LayoutExtension::class,
+            /** extension tag Switch refusé par F.Pontencier */
+            'switch'          => SwitchExtension::class,
         ],
         'environment_options' => [
             'cache' => false, // pas de cache, tout modèle reconstruit à chaque affichage

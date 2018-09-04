@@ -16,10 +16,13 @@ namespace GraphicObjectTemplating\OObjects;
  * --------
  * __construct($id, $pathObjArray)
  * static function validateSession()
- * static function existObject($id)
+ * static function existObject($id, $sessionObj)
  * static function buildObject($id, $valeur = null)
  * static function destroyObject($id)
  * static function clearObjects()
+ * static function cloneObject($object)
+ * static function formatBootstrap($widthBT)
+ * static function formatRetour($idSource, $idCible, $mode, $code = null)
  *
  * getProperties()
  * setProperties(array $properties)
@@ -59,9 +62,31 @@ namespace GraphicObjectTemplating\OObjects;
  * enable()
  * disable()
  * getState()
+ * enaAutoCenter()
+ * disAutoCenter()
+ * getStateAC()
+ * setACWidth($width)
+ * getACWidth()
+ * setACHeight($height)
+ * getACHeight()
+ * setACWidthHeight($width, $height)
+ * getACWidthHeight()
+ * setEvent($event, $class, $method, $stopEvent = false)
+ * getEvent($event)
+ * getEvents()
+ * disEvent($event)
+ * saveProperties()
+ *
+ * méthodes privées de la classe
+ * -----------------------------
+ * getConstants()
+ * getDisplayConstants()
+ * getStateConstants()
+ *
  */
 
 use Zend\Session\Container;
+use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 use GraphicObjectTemplating\OObjects\OSContainer;
 use GraphicObjectTemplating\OObjects\OESContainer;
 
@@ -73,6 +98,7 @@ class OObject
     private $lastAccess;
 
     private $const_display;
+    private $const_state;
 
     const DISPLAY_NONE    = 'none';
     const DISPLAY_BLOCK   = 'block';
@@ -84,11 +110,16 @@ class OObject
 
     public function __construct($id, $pathObjArray)
     {
-        $obj = self::buildObject($id);
-        if (!$obj) {
-            if (!empty($pathArrayData)) {
+        if (empty($id)) {
+            $id     = 'dummy';
+            OObject::destroyObject($id, false);
+        }
+        $sessionObj = self::validateSession();
+        $object = $sessionObj->objects;
+        if (!$object || !array_key_exists($id, $object)) {
+            if (!empty($pathObjArray)) {
                 $path  = __DIR__ ;
-                $path .= '/../../view/graphic-object-templating/' . trim($pathArrayData);
+                $path .= '/../../view/zf3-graphic-object-templating/' . trim($pathObjArray);
                 $objProperties = include $path;
             }
             $objProperties['id']    = $id;
@@ -98,11 +129,11 @@ class OObject
 
 
             if (array_key_exists('typeObj', $objProperties)) {
-                $templateName = 'graphic-object-templating/oobjects/' . $objProperties['typeObj'];
+                $templateName = 'zf3-graphic-object-templating/oobjects/' . $objProperties['typeObj'];
                 $templateName .= '/' . $objProperties['object'] . '/' . $objProperties['template'];
                 $objProperties['template'] = $templateName;
 
-                $objName = 'GraphicObjectTemplating/OObjects/';
+                $objName = 'ZF3_GOT/OObjects/';
                 $objName .= strtoupper(substr($objProperties['typeObj'], 0, 3));
                 $objName .= strtolower(substr($objProperties['typeObj'], 3)) . '/';
                 $objName .= strtoupper(substr($objProperties['object'], 0, 3));
@@ -112,21 +143,29 @@ class OObject
             }
 
             /** ajout des attributs de base à l'objet */
-            $properties = include __DIR__ . '/../../view/graphic-object-templating/oobjects/oobject.config.php';
+            $properties = include __DIR__ . '/../../view/zf3-graphic-object-templating/oobjects/oobject.config.php';
             foreach ($objProperties as $key => $objProperty) {
                 $properties[$key] = $objProperty;
             }
-
-            $obj->setProperties($properties);
-            return $this;
+            $this->setProperties($properties);
+        } else {
+            $this->id = $id;
+            $properties = unserialize($object[$id]);
+            $this->properties = $properties;
         }
+        $this->saveProperties();
+        return $this;
     }
+
+    /** **************************************************************************************************
+     * méthodes statiques                                                                                *
+     * *************************************************************************************************** */
 
     public static function validateSession()
     {
         $now        = new \DateTime();
-        $gotObjList = new Container('gotObnjList');
-        $lastAccess = new \DateTime($gotObjList->offsetGet('lastAccess'));
+        $gotObjList = new Container('gotObjList');
+        $lastAccess = new \DateTime($gotObjList->lastAccess);
 
         if ($lastAccess) {
             $interval   = $lastAccess->diff($now);
@@ -135,91 +174,228 @@ class OObject
                 $gotObjList = new Container('gotObjList');
             }
         }
-        $gotObjList->offsetSet('lastAccess', $now->format("Y-m-d H:i:s"));
+        $gotObjList->lastAccess = $now->format("Y-m-d H:i:s");
         return $gotObjList;
     }
 
-    public static function existObject($id)
+    public static function existObject($id, Container $sessionObj)
     {
         if (!empty($id)) {
-            /** @var Container $gotObjList */
-            $gotObjList = self::validateSession();
-            if ($gotObjList->offsetExists('objects')) {
-                $objects = $gotObjList->offsetGet('objects');
-                if (array_key_exists($id, $objects)) { return $objects; }
-            }
+            /** @var Container $sessionObj */
+            $objects = $sessionObj->objects;
+            return (array_key_exists($id, $objects));
         }
         return false;
     }
 
-    public static function buildObject($id, $valeur = null)
+    public static function buildObject($id, Container $sessionObj, $valeur = null)
     {
         if (!empty($id)) {
-            $objects = self::existObject($id);
-            if (!empty($objects) && is_array($objects)) {
-                $properties = unserialize($objects[$id]);
-                if (!empty($properties)) {
-                    $object = new $properties['className']($id);
-                    $object->setProperties($properties);
+            $objects = $sessionObj->objects;
+            $properties = unserialize($objects[$id]);
+            if (!empty($properties)) {
+                // TODO: pb boucle sans fin sur création de l'instance de l'objet
+                $object = new $properties['className']($id);
+                $object->setProperties($properties);
+                if ($object instanceof ODContained && !empty($value)) {
                     $object->setValue($valeur);
-                    return $object;
                 }
-                throw new \Exception('objet sans atrribut, identifiant '.$id);
+                return $object;
             }
+            throw new \Exception('objet sans atrribut, identifiant '.$id);
         }
         return false;
     }
 
-    public static function destroyObject($id)
+    public static function cloneObject(OObject $object)
     {
-        $now        = new \DateTime();
-        $objet = self::buildObject($id);
-        if (!empty($objet) && $objet instanceof OObject) {
-            $objects = self::existObject($id);
-            if ($objet instanceof OSContainer || $objet instanceof OESContainer) {
-                foreach ($objet->getChildren() as $child) {
-                    $ret = self::destroyObject($child->getId());
-                    if (!$ret) { break; }
-                }
-                return $ret;
-            }
-            unset($objects[$id]);
-            $gotObjList = new Container('gotObjList');
-            $gotObjList->offsetSet('objets', $objects);
-            $gotObjList->offsetSet('lastAccess', $now->format("Y-m-d H:i:s"));
-            return true;
+        $sessionObj = self::validateSession();
+        if (self::existObject($object->getId(), $sessionObj)) {
+            $tmpObj = clone $object;
+            $properties = $tmpObj->getProperties();
+            $tmpObj->id = 'tmpObj';
+            $properties['id'] = 'tmpObj';
+            $tmpObj->setProperties($properties);
+            return $tmpObj;
         }
-        return false;
+    }
+
+    public static function destroyObject($id, $session = false)
+    {
+        $now    = new \DateTime();
+        $sessionObj = self::validateSession();
+
+        if ($session) {
+            $sessionObj->objects = [];
+            $sessionObj->resources = [];
+            $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
+            return true;
+        } else {
+            if (self::existObject($id, $sessionObj)) {
+                $objects = $sessionObj->objects;
+                $properties = unserialize($objects[$id]);
+                if ($properties['type'] == 'oscontainer') {
+                    $objet = self::buildObject($id, $sessionObj);
+                    $children = $objet->getChildren();
+                    foreach ($children as $child) {
+                        self::destroyObject($child->getId(), $session);
+                    }
+                }
+                $objects = $sessionObj->objects;
+                unset($objects[$id]);
+                $sessionObj->objects = $objects;
+                $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
+                return true;
+            }
+            return false;
+        }
     }
 
     public static function clearObjects()
     {
         $now        = new \DateTime();
         $gotObjList = self::validateSession();
-        $gotObjList->offsetSet('objects', []);
-        $gotObjList->offsetSet('lastAccess', $now->format("Y-m-d H:i:s"));
+        unset($gotObjList->objects);
+        $gotObjList->objects = [];
+        $gotObjList->lastAccess = $now->format("Y-m-d H:i:s");
         return true;
     }
+
+    public static function formatBootstrap($widthBT)
+    {
+        if (!empty($widthBT)) {
+            $retour = '';
+            switch (true) {
+                case (is_numeric($widthBT)):
+                    $retour .= 'WL' . $widthBT . ':WM' . $widthBT . ':WS' . $widthBT . ':WX' . $widthBT;
+                    break;
+                case (strpos($widthBT, ':') !== false):
+                    $widthBTs = explode(':', $widthBT);
+                    foreach ($widthBTs as $item) {
+                        switch (true) {
+                            case ((int)substr($item, 1) > 0):
+                                $val = substr($item, 1);
+                                if (substr($item, 0, 1) == 'W') {
+                                    if (!empty($retour)) {
+                                        $retour .= ':';
+                                    }
+                                    $retour .= 'WL' . $val . ':WM' . $val . ':WS' . $val . ':WX' . $val;
+                                }
+                                if (substr($item, 0, 1) == 'O') {
+                                    if (!empty($retour)) {
+                                        $retour .= ':';
+                                    }
+                                    $retour .= 'OL' . $val . ':OM' . $val . ':OS' . $val . ':OX' . $val;
+                                }
+                                break;
+                            case ((int)substr($widthBT, 1) == 0):
+                                $retour .= $item;
+                                break;
+                        }
+                    }
+                    break;
+            }
+            return $retour;
+        }
+        return false;
+    }
+
+    public static function formatLabelBT($labelWidthBT)
+    {
+        $lxs = $lsm = $lmd = $llg = 0;
+        $ixs = $ism = $imd = $ilg = 0;
+        if (is_numeric($labelWidthBT)) {
+            $lxs = $lsm = $lmd = $llg = (int) $labelWidthBT;
+            $ixs = $ism = $imd = $ilg = 12 - (int) $labelWidthBT;
+        } else { // $labelWidthBT nb'est pas numérique
+            $labelWidthBT = explode(':', $labelWidthBT);
+            foreach ($labelWidthBT as $item) {
+                $key = strtoupper($item);
+                switch (substr($key, 0,2)) {
+                    case 'WX' :
+                        $lxs = (int) substr($key, 2);
+                        $ixs = 12 - $lxs;
+                        break;
+                    case 'WS' :
+                        $lsm = (int) substr($key, 2);
+                        $ism = 12 - $lsm;
+                        break;
+                    case 'WM' :
+                        $lmd = (int) substr($key, 2);
+                        $imd = 12 - $lmd;
+                        break;
+                    case 'WX' :
+                        $llg = (int) substr($key, 2);
+                        $ilg = 12 - $llg;
+                        break;
+                    default:
+                        if (substr($key, 0, 1) == 'W') {
+                            $lxs = $lsm = $lmd = $llg = (int) $key;
+                            $ixs = $ism = $imd = $ilg = 12 - (int) $key;
+                        }
+                }
+            }
+        }
+        if (!empty($lxs)) {
+            $lxs = 'WX'.$lxs.':';
+            $ixs = 'WX'.$ixs.':';
+        } else {
+            $lxs = '';
+            $ixs = '';
+        }
+        if (!empty($lsm)) {
+            $lsm = 'WS'.$lsm.':';
+            $ism = 'WS'.$ism.':';
+        } else {
+            $lsm = '';
+            $ism = '';
+        }
+        if (!empty($lmd)) {
+            $lmd = 'WM'.$lmd.':';
+            $imd = 'WM'.$imd.':';
+        } else {
+            $lmd = '';
+            $imd = '';
+        }
+        if (!empty($llg)) {
+            $llg = 'WL'.$llg.':';
+            $ilg = 'WL'.$ilg.':';
+        } else {
+            $llg = '';
+            $ilg = '';
+        }
+        $labelWBT   = $llg.$lmd.$lsm.$lxs;
+        if (strlen($labelWBT) > 0) { $labelWBT = substr($labelWBT, 0, strlen($labelWBT) - 1); }
+        $inputWBT   = $ilg.$imd.$ism.$ixs;
+        if (strlen($inputWBT) > 0) { $inputWBT = substr($inputWBT, 0, strlen($inputWBT) - 1); }
+
+        $retour['labelWidthBT'] = $labelWBT;
+        $retour['inputWidthBT'] = $inputWBT;
+
+        return $retour;
+    }
+
+    /**
+     * static public function formatRetour
+     * @param type string $idSource
+     * @param type string $idCible
+     * @param type string $mode
+     * @param type string $code
+     * @return type array
+     */
+    static public function formatRetour($idSource, $idCible, $mode, $code = null) {
+        if (empty($idCible)) { $idCible = $idSource; }
+        return ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
+    }
+
+    /** **************************************************************************************************
+     * méthodes de l'objet proprement dites                                                              *
+     * *************************************************************************************************** */
 
     public function getProperties()
     {
         if (null !== $this->id) {
-            if (OObject::existObject($this->id)) {
-                $gotObjList = OObject::validateSession();
-                $lastAccessS = new \DateTime($gotObjList->offsetGet('lastAccess'));
-                $lastAccessO = new \DateTime($this->lastAccess);
-                $interval = $lastAccessO->diff($lastAccessS);
-                if ((int) $interval->format('%s') > 2) {
-                    $objects            = $gotObjList->offsetGet('objects');
-                    $properties         = unserialize($objects[$this->id]);
-                    $this->properties   = $properties;
-                    $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
-                    $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
-                    return $properties;
-                } else {
-                    return $this->properties;
-                }
-            }
+            return $this->properties;
         }
         return false;
     }
@@ -227,15 +403,7 @@ class OObject
     public function setProperties(array $properties)
     {
         if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
-            $gotObjList         = OObject::validateSession();
-            $objects            = $gotObjList->offsetGet('objects');
-            $objects[$this->id] = serialize($properties);
-
-            $gotObjList->offsetSet('objects', $objects);
-            $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
-            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
             $this->properties   = $properties;
-
             return $this;
         }
         return false;
@@ -250,15 +418,15 @@ class OObject
     {
         if (null !== $this->id) {
             $gotObjList         = OObject::validateSession();
-            $objects            = $gotObjList->offsetGet('objects');
+            $objects            = $gotObjList->objects;
             $properties         = unserialize($objects[$this->id]);
 
             $properties['id']   = $id;
             unset($objects[$this->id]);
             $objects[$id]       = serialize($properties);
 
-            $gotObjList->offsetSet('objects', $objects);
-            $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
+            $gotObjList->objects = $objects;
+            $gotObjList->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
             $this->properties   = $properties;
             $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
             $this->id           = $id;
@@ -277,14 +445,14 @@ class OObject
     {
         if (null !== $this->id) {
             $gotObjList         = OObject::validateSession();
-            $objects            = $gotObjList->offsetGet('objects');
+            $objects            = $gotObjList->objects;
             $properties         = unserialize($objects[$this->id]);
 
             $properties['name'] = $name;
             $objects[$this->id] = serialize($properties);
 
-            $gotObjList->offsetSet('objects', $objects);
-            $gotObjList->offsetSet('lastAccess', (new \DateTime())->format('Y-m-d H:i:s'));
+            $gotObjList->objects = $objects;
+            $gotObjList->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
             $this->properties   = $properties;
             $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
             $this->name         = $name;
@@ -312,33 +480,8 @@ class OObject
 
     public function setWidthBT(string $widthBT)
     {
-        $retour = '';
         if (!empty($widthBT)) {
-            switch (true) {
-                case (is_numeric($widthBT)):
-                    $retour .= 'WL'.$widthBT.':WM'.$widthBT.':WS'.$widthBT.':WX'.$widthBT;
-                    break;
-                case (strpos($widthBT, ':') !== false):
-                    $widthBTs = explode(':', $widthBT);
-                    foreach ($widthBTs as $item) {
-                        switch (true) {
-                            case ((int) substr($item, 1) > 0):
-                                $val = substr($item, 1);
-                                if (substr($item, 0,1) == 'W') {
-                                    $retour .= 'WL'.$val.':WM'.$val.':WS'.$val.':WX'.$val;
-                                }
-                                if (substr($item, 0,1) == 'O') {
-                                    $retour .= 'OL'.$val.':OM'.$val.':OS'.$val.':OX'.$val;
-                                }
-                                break;
-                            case ((int) substr($widthBT, 1) == 0):
-                                $retour .= $item;
-                                break;
-                        }
-                    }
-                    break;
-            }
-
+            $retour = self::formatBootstrap($widthBT);
             $properties = $this->getProperties();
             $properties['widthBT'] = $retour;
             $this->setProperties($properties);
@@ -436,7 +579,7 @@ class OObject
             if (is_array($classes)) { $classes = implode(' ', $classes); }
             if (is_string($classes)) {
                 $properties = $this->getProperties();
-                $properties['classes'] = strtolower($classes);
+                $properties['classes'] = $classes;
                 $this->setProperties($properties);
                 return $this;
             }
@@ -450,7 +593,7 @@ class OObject
             if (is_string($class)) {
                 $properties = $this->getProperties();
                 $classes    = $properties['classes'];
-                if (!in_array($class, $classes)) {
+                if (!strpos($classes, $class)) {
                     $classes .= ' '.$class;
                     $properties['classes'] = $classes;
                     $this->setProperties($properties);
@@ -773,6 +916,170 @@ class OObject
         return array_key_exists('state', $properties) ? $properties['state'] : false;
     }
 
+    public function enaAutoCenter()
+    {
+        $properties = $this->getProperties();
+        $properties['autoCenter'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disAutoCenter()
+    {
+        $properties = $this->getProperties();
+        $properties['autoCenter'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getStateAC()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('autoCenter', $properties) ? $properties['autoCenter'] : false;
+    }
+
+    public function setACWidth($width)
+    {
+        $width = (string) $width;
+        $properties = $this->getProperties();
+        $properties['acPx'] = $width;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getACWidth()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('acPx', $properties) ? $properties['acPx'] : false;
+    }
+
+    public function setACHeight($height)
+    {
+        $height = (string) $height;
+        $properties = $this->getProperties();
+        $properties['acPy'] = $height;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getACHeight()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('acPy', $properties) ? $properties['acPy'] : false;
+    }
+
+    public function setACWidthHeight($width, $height)
+    {
+        $width = (string) $width;
+        $height = (string) $height;
+        $properties = $this->getProperties();
+        $properties['acPx'] = $width;
+        $properties['acPy'] = $height;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getACWidthHeight()
+    {
+        $properties = $this->getProperties();
+        $acPx       = (array_key_exists('acPx', $properties) ? $properties['acPx'] : false);
+        $acPy       = (array_key_exists('acPy', $properties) ? $properties['acPy'] : false);
+        return ['width' => $acPx, 'height' => $acPy];
+    }
+
+    public function setEvent($event, $class, $method, $stopEvent = false)
+    {
+        if (!empty($event) && !empty($class) && !empty($method)) {
+            $properties = $this->getProperties();
+            if (!array_key_exists('event', $properties)) { $properties['event'] = []; }
+            $events = $properties['event'];
+            if (!array_key_exists($event, $events)) { $events[$event] = []; }
+            $evtDef = $events[$event];
+
+            switch (true) {
+                case (class_exists($class)) :
+                    $obj = new $class();
+                    if (method_exists($obj, $method)) {
+                        $evtDef['class']        = $class;
+                        $evtDef['method']       = $method;
+                        $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                    }
+                    break;
+                case ($class == "javascript:") :
+                    $evtDef['class']        = $class;
+                    $evtDef['method']       = $method;
+                    $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                    break;
+                case ($properties['object'] == 'odbutton' && $properties['type'] == ODButton::BUTTONTYPE_LINK):
+                    $params = [];
+                    if ($method != 'none') {
+                        $method = explode('|', $method);
+                        foreach ($method as $item) {
+                            $item = explode(':', $item);
+                            $params[$item[0]] = $item[1];
+                        }
+                    }
+                    $evtDef['class']        = $class;
+                    $evtDef['method']       = $params;
+                    $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+            }
+            $events[$event]         = $evtDef;
+            $properties['event'] = $events;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getEvent($event = null)
+    {
+        if (!empty($event)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('event', $properties) && !empty($properties['event'])) {
+                return array_key_exists($event, $properties['event']) ? $properties['event'][$event] : false;
+            }
+        }
+        return false;
+    }
+
+    public function getEvents()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('event', $properties) ? $properties['event'] : false;
+    }
+
+    public function disEvent($event)
+    {
+        if (!empty($event)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('event', $properties)) {
+                $events = $properties['event'];
+                if (array_key_exists($event, $events)) {
+                    unset($events[$event]);
+                    $properties['event'] = $events;
+                    $this->setProperties($properties);
+                    return $this;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function saveProperties()
+    {
+        $sessionObj = OObject::validateSession();
+        $objects    = $sessionObj->objects;
+        $objects[$this->id] = serialize($this->properties);
+        $sessionObj->objects = $objects;
+
+        $sessionObj->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
+        $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+
+    }
+
+    /** **************************************************************************************************
+     * méthodes privées de la classe                                                                     *
+     * *************************************************************************************************** */
 
     protected function getConstants()
     {
@@ -798,4 +1105,25 @@ class OObject
 
         return $retour;
     }
+
+    public function getStateConstants()
+    {
+        $retour = [];
+        if (empty($this->const_state)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'STATE');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_state = $retour;
+        } else {
+            $retour = $this->const_state;
+        }
+
+        return $retour;
+    }
+
+
 }

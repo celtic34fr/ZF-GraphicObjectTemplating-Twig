@@ -21,7 +21,7 @@ namespace GraphicObjectTemplating\OObjects;
  * setDefult($default ) null)
  * getDefault()
  */
-use GraphicObjectTemplating\OObjects\OObject;
+use ZF3_GOT\OObjects\OObject;
 
 class ODContained extends OObject
 {
@@ -30,9 +30,9 @@ class ODContained extends OObject
         parent::__construct($id, $pathObjArray);
 
         /** ajout des attributs spécifiques à l'objet */
-        $properties = include __DIR__ . '/../../view/graphic-object-templating/oobjects/odcontained/odcontained.config.php';
+        $properties = include __DIR__ . '/../../view/zf3-graphic-object-templating/oobjects/odcontained/odcontained.config.php';
         foreach ($this->getProperties() as $key => $objProperty) {
-            $properties[$key] = $objProperty;
+            if (!array_key_exists($key, $properties)) { $properties[$key] = $objProperty; }
         }
 
         $this->setProperties($properties);
@@ -41,13 +41,10 @@ class ODContained extends OObject
 
     public function setValue($value = null)
     {
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $properties['value'] = $value;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
+        $properties = $this->getProperties();
+        $properties['value'] = $value;
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function getValue()

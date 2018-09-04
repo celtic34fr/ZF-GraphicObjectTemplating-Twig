@@ -1,0 +1,5 @@
+{% if events is not empty %}
+    {% for evt, callback in events %}
+        data-{{ evt }}-stopevt ="{{ callback.stopEvent }}"
+    {% endfor %}
+{% endif %}

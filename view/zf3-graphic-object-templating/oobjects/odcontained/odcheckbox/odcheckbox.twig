@@ -1,0 +1,64 @@
+{# template de l'objet ODCheckbox #}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
+     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
+    {% if objet.state == false %} checkbox disabled {% endif %}"
+    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    {% if objet.state == false %} disabled {% endif %}
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+    <style>
+        {% if objet.placement == "right" %}
+        #{{ objet.id }} label {
+            padding-left: 2em;
+        }
+        {% endif %}
+    </style>
+
+    {% if objet.label is not empty or objet.options|length > 1 %}
+    <label {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}>
+        {{ objet.label }}
+    </label>
+    {% endif %}
+    <div class="checkboxes {% if objet.options|length == 1 %}col-lg-12 col-md-12 col-sm-12 col-xs-12{% endif %}"
+        {% if objet.inputWidthBT is not empty and objet.label is not empty and objet.options|length > 1 %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    >
+        {% for options in objet.options %}
+            <div class="{{ options.type }} {% if objet.options|length == 1 %}col-lg-12 col-md-12 col-sm-12 col-xs-12{% endif %}">
+                {% if objet.placement != "right" %}
+                    <label for="{{ objet.id ~ loop.index0 }}"
+                    {% if objet.options|length == 1 and objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+                    >
+                        {{ options.libel }}
+                    </label>
+                {% endif %}
+                <input id="{{ objet.id ~ loop.index0 }}" type="checkbox" value="{{ options.value }}"
+                {% if options.state == false or objet.state == false %} disabled {% endif %}
+                {% if options.check == 'check' %}checked {% endif %}
+                {% if objet.options|length == 1 and objet.inputWidthBT is not empty %} data-widthbt="WL1:WM1:WS1:WX1" {% endif %}
+                >
+                {% if objet.placement == "right" %}
+                <label for="{{ objet.id ~ loop.index0 }}"
+                {% if objet.options|length == 1 and objet.labelWidthBT is not empty %} data-widthbt="{{ labelWidthBT }}" {% endif %}
+                >
+                    {{ options.libel }}
+                </label>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <script id="{{ objet.id }}Script" type="text/javascript">
+        $("#{{ objet.id }} label").each(function () { setBtClasses($(this), $(this).data("widthbt")); });
+        $("#{{ objet.id }} input").each(function () { setBtClasses($(this), $(this).data("widthbt")); });
+
+        {% if objet.event is not empty %}
+        $(document).ready(function () {
+            {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
+        });
+        {% endif %}
+    </script>
+</div>
+

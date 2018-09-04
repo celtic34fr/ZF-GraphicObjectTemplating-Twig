@@ -1,0 +1,46 @@
+{# template de l'objet ODButton #}
+
+{% if objet.type == 'link' %}
+    {% if objet.event.click is defined %}
+        {% set route  = objet.event.click.class %}
+        {% set params = objet.event.click.method %}
+        {% if params is empty %}
+            {% set routeUrl = ( url(route|lower) ) %}
+        {% else %}
+            {% set routeUrl = ( url(route|lower, params) ) %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<style>
+    #{{ objet.id }} {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+</style>
+
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-widthbt="{{ objet.widthBT }}"
+        {% if objet.type != 'reset' and objet.type != 'link' %}
+        {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+        {% endif %}
+>
+    <button id="{{ objet.id }}Button" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
+            class="{{ objet.nature }}" style="width: 100%;"
+        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+        {% if objet.type == 'link' %} onclick="location.href='{{ routeUrl }}'" {% endif %}
+        {% if objet.value is defined and objet.value is not empty %}
+            data-value="{{ objet.value }}"
+        {% endif %}
+        {% if objet.state == false %} disabled {% endif %}
+    >
+        {% if objet.icon is not empty %}<i class="{{ objet.icon }}"></i>{% endif %}{{ objet.label }}
+    </button>
+
+    {% if objet.type != 'link' and objet.event is not empty %}
+    <script>
+        $(document).ready(function (e) {
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with {'events':objet.event} %}
+        });
+    </script>
+    {% endif %}
+</div>
