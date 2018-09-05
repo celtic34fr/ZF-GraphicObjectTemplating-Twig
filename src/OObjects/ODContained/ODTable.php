@@ -708,10 +708,15 @@ class ODTable extends ODContained
     {
         $nCol   = (int) $nCol;
         $lines  = $this->getLines();
+        $properties = $this->getProperties();
+        $nbCols = sizeof($properties['cols']);
+        if ($nCol < 1 || $nCol > $nbCols) return false;
+
+        $rslt   = [];
         foreach ($lines as $noLine => $line) {
-            if ($line[$nCol] == $value) { return $noLine; }
+            if ($line[$nCol] == $value) { $rslt[] = $noLine; }
         }
-        return false;
+        return $rslt;
     }
 
     public function enaPagination()
@@ -963,6 +968,27 @@ class ODTable extends ODContained
         $properties['navbarBtns'] = $navbarBtns->getId();
         $this->setProperties($properties);
         return $this;
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion de retour de callback                                                         *
+     * *************************************************************************************************** */
+
+    public function returnAppendLine($idTable, $code)
+    {
+        return OObject::formatRetour($idTable, $idTable." tbody", 'append', $code);
+    }
+
+    public function returnUpdateLine($idTable, $noLine, $code)
+    {
+        $idTarget = $idTable." .lno".$noLine;
+        return OObject::formatRetour($idTable, $idTarget, 'update', $code);
+    }
+
+    public function returnUpdateCell($idTable, $noLine, $noCol, $code)
+    {
+        $idTarget = $idTable." .lno".$noLine." .cno".$noCol;
+        return OObject::formatRetour($idTable, $idTarget, 'update', $code);
     }
 
     /** **************************************************************************************************
