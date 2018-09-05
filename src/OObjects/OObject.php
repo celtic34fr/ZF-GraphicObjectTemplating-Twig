@@ -207,15 +207,15 @@ class OObject
         return false;
     }
 
-    public static function cloneObject(OObject $object)
+    public static function cloneObject(OObject $object, Container $sessionObj)
     {
-        $sessionObj = self::validateSession();
         if (self::existObject($object->getId(), $sessionObj)) {
             $tmpObj = clone $object;
             $properties = $tmpObj->getProperties();
             $tmpObj->id = 'tmpObj';
             $properties['id'] = 'tmpObj';
             $tmpObj->setProperties($properties);
+            $tmpObj->saveProperties();
             return $tmpObj;
         }
     }
