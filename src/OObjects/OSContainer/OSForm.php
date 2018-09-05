@@ -469,6 +469,7 @@ class OSForm extends OSDiv
         foreach ($formDatas as $key => $formData) {
             if ($fields[$key]) {
                 $valid = $valid && (!empty($formData));
+                if (!$valid) { break; }
             }
         }
 

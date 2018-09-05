@@ -20,7 +20,7 @@ class ObjectGotModel extends OSDiv
             /** destroy all objects in session */
             OObject::destroyObject('', true);
         }
-        parent::__construct('G7U_Dashboard');
+        parent::__construct('ObjectGotModel');
     }
 
     /** method use to initialize all children fields */

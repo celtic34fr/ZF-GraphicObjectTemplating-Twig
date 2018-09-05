@@ -27,7 +27,7 @@ return [
 
     'objLength'     => '',
     'objNavbar'     => '',
-    'c'    => '',
+    'c'             => '',
 
     'resources' => [
         'js'		=> [
