@@ -80,7 +80,7 @@ class OSForm extends OSDiv
         $templateName .= '/' . $properties['object'] . '/' . $properties['template'];
         $properties['template'] = $templateName;
 
-        $objName = 'ZF3_GOT/OObjects/';
+        $objName = 'GraphicObjectTemplating/OObjects/';
         $objName .= strtoupper(substr($properties['typeObj'], 0, 3));
         $objName .= strtolower(substr($properties['typeObj'], 3)) . '/';
         $objName .= strtoupper(substr($properties['object'], 0, 3));
@@ -238,7 +238,7 @@ class OSForm extends OSDiv
             if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {
                 return false;
             }
-            $bouton = new ODButton($this->getId().$name);
+            $bouton = new ODButton($name.$this->getId());
             $bouton->setLabel($label);
             $bouton->setType($type);
             $bouton->setNature($nature);
