@@ -120,7 +120,10 @@ function invokeAjax(datas, idSource, event, e) {
                 $.globalEval(script);
                 break;
             case "redirect": // redirection HTML
-                $(location).attr('href', code);
+                id = parseInt(id); // delay d'attente pour exécution de la resirection
+                setTimeout(function () {
+                    $(location).attr('href', code);
+                }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
                 let evt = code.substr(0, strpos(code, '|'));
