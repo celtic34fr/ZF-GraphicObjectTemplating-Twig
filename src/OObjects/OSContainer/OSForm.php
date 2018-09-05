@@ -224,7 +224,7 @@ class OSForm extends OSDiv
         }
     }
 
-    public function addBtn($name, $label, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
+    public function addBtn($name, $label, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
         $name           = (string) $name;
         $type           = (string) $type;
@@ -242,6 +242,7 @@ class OSForm extends OSDiv
             $bouton->setLabel($label);
             $bouton->setType($type);
             $bouton->setNature($nature);
+            $bouton->setValue($value);
             $bouton->setForm($this->getId());
             if ($type == ODButton::BUTTONTYPE_RESET && (empty($class) || empty($method))){
                 $bouton->evtClick('javascript:', 'resetFormDatas('.$this->getId().')', true);
