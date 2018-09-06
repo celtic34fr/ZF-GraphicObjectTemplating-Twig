@@ -486,8 +486,10 @@ class ODTable extends ODContained
         $nbLines = sizeof($properties['datas']);
         if ($nbLines == 0) return false;
         if ($nLine == 0 || $nLine > $nbLines) return false;
+        $line = $properties['datas'][$nLine];
+        unset($line['view']);
 
-        return $properties['datas'][$nLine];
+        return $line;
     }
 
     public function getLines()
@@ -981,14 +983,17 @@ class ODTable extends ODContained
 
     public function returnUpdateLine($idTable, $noLine, $code)
     {
+        /** ***************************************************************************************
+         * ATTENTION -> voir comment sera rendu la ligne pour choisir entre update ou innerUpdate *
+         ****************************************************************************************** */
         $idTarget = $idTable." .lno".$noLine;
-        return OObject::formatRetour($idTable, $idTarget, 'update', $code);
+        return OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
     }
 
     public function returnUpdateCell($idTable, $noLine, $noCol, $code)
     {
-        $idTarget = $idTable." .lno".$noLine." .cno".$noCol;
-        return OObject::formatRetour($idTable, $idTarget, 'update', $code);
+        $idTarget   = $idTable." .lno".$noLine." .cno".$noCol;
+        return OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
     }
 
     /** **************************************************************************************************
