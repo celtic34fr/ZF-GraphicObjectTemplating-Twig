@@ -766,6 +766,7 @@ class ODTable extends ODContained
                 return $this;
             }
         }
+        return false;
     }
 
     public function getNoPage()
@@ -994,7 +995,6 @@ class ODTable extends ODContained
     public function returnUpdateLine($idTable, $noLine)
     {
         $line   = $this->getLine($noLine);
-        $ret    = [];
         $code   = '';
         $idTarget   = $idTable.' .lno'.$noLine;
         foreach ($line as $noCol => $valCol) {
