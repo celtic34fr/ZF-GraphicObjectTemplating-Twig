@@ -5,6 +5,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
+use Zend\Session\Container;
 
 /**
  * Class ODTable
@@ -809,11 +810,12 @@ class ODTable extends ODContained
         $navbarBtns = new OSDiv($id.'NavbarBtns');
         $maxPage    = $this->getMaxPage();
         $noPage     = $this->getNoPage();
+        $sessionObj = self::validateSession();
 
         /** @var ODButton $btnFirst */
-        /** @var ODButton $btnFirst1 */
-        $btnFirst = OObject::buildObject($id.'BtnFirst');
-        $btnFirstF = OObject::cloneObject($btnFirst);
+        /** @var ODButton $btnFirstF */
+        $btnFirst = OObject::buildObject($id.'BtnFirst', $sessionObj);
+        $btnFirstF = OObject::cloneObject($btnFirst, $sessionObj);
         $btnFirstF->setId($id.'BtnF');
         $btnFirstF->setValue(1);
         $btnFirstF->setDisplay(OObject::DISPLAY_BLOCK);
@@ -822,9 +824,9 @@ class ODTable extends ODContained
         $navbarBtns->addChild($btnFirstF);
 
         /** @var ODButton $btnPrev */
-        /** @var ODButton $btnPrev2 */
-        $btnPrev    = OObject::buildObject($id.'BtnPrev');
-        $btnPrevP   = OObject::cloneObject($btnPrev);
+        /** @var ODButton $btnPrevP */
+        $btnPrev    = OObject::buildObject($id.'BtnPrev', $sessionObj);
+        $btnPrevP   = OObject::cloneObject($btnPrev, $sessionObj);
         $btnPrevP->setId($id.'BtnP');
         $btnPrevP->setDisplay(OObject::DISPLAY_BLOCK);
         $btnPrevP->disable();
@@ -836,14 +838,14 @@ class ODTable extends ODContained
 
         /** @var ODButton $btnPage */
         /** @var ODButton $btnPageP */
-        $btnPage = OObject::buildObject($id.'BtnPage');
+        $btnPage = OObject::buildObject($id.'BtnPage', $sessionObj);
         if ((int) $maxPage < 6) {
             // cas 1 : nbPage < 6 :
             //        btnPrev & btnSuiv inactif
             //        dessin d'autant de bouton page que maxPage
             //        mise de la page idPage en actif (fondBleu)
             for ($ind =1; $ind <= $maxPage ; $ind++) {
-                $btnPageP = OObject::cloneObject($btnPage);
+                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                 $btnPageP->setId($id.'btnPage'.$ind);
                 $btnPageP->setLabel($ind);
                 $btnPageP->setValue($ind);
@@ -862,7 +864,7 @@ class ODTable extends ODContained
                 //         dessin du bouton page 5 avec '...' inactif, visible
                 //         mise de la page noPage en actif (fondBleu)
                 for ($ind = 1; $ind < 5; $ind++ ) {
-                    $btnPageP = OObject::cloneObject($btnPage);
+                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                     $btnPageP->setId($id.'btnPage'.$ind);
                     $btnPageP->setValue($ind);
                     $btnPageP->setLabel($ind);
@@ -873,7 +875,7 @@ class ODTable extends ODContained
 
                     $navbarBtns->addChild($btnPageP);
                 }
-                $btnPageP = OObject::cloneObject($btnPage);
+                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                 $btnPageP->setId($id.'btnPage5');
                 $btnPageP->setLabel('...');
                 $btnPageP->setValue('');
@@ -885,7 +887,7 @@ class ODTable extends ODContained
                 //         dessin du bouton page 1 avec '...' inactif, visible
                 //         dessin des boutons page de 2 à 5 avec valeur & label de maxPage - 3 ' à maxPage
                 //         mise de la page noPage en actif (fondBleu)
-                $btnPageP = OObject::cloneObject($btnPage);
+                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                 $btnPageP->setId($id.'btnPage1');
                 $btnPageP->setLabel('...');
                 $btnPageP->setValue('');
@@ -894,7 +896,7 @@ class ODTable extends ODContained
                 $navbarBtns->addChild($btnPageP);
 
                 for ($ind = 1; $ind < 5; $ind++ ) {
-                    $btnPageP = OObject::cloneObject($btnPage);
+                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                     $btnPageP->setId($id.'btnPage'.($ind + 1));
                     $btnPageP->setValue($maxPage - 4 + $ind);
                     $btnPageP->setLabel($maxPage - 4 + $ind);
@@ -911,7 +913,7 @@ class ODTable extends ODContained
                 //          dessin des boutons 2 à 4 avec valeur & label de noPage - 1 à noPage + 1
                 //          dessin du bouton page 5 avec '...' inactif, visible
                 //          mise de la page noPage en actif (fondBleu)
-                $btnPageP = OObject::cloneObject($btnPage);
+                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                 $btnPageP->setId($id.'btnPage1');
                 $btnPageP->setLabel('...');
                 $btnPageP->setValue('');
@@ -920,7 +922,7 @@ class ODTable extends ODContained
                 $navbarBtns->addChild($btnPageP);
 
                 for ($ind = 1; $ind < 4; $ind++ ) {
-                    $btnPageP = OObject::cloneObject($btnPage);
+                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                     $btnPageP->setId($id.'btnPage'.($ind + 1));
                     $btnPageP->setValue($noPage - 2 + $ind);
                     $btnPageP->setLabel($noPage - 2 + $ind);
@@ -932,7 +934,7 @@ class ODTable extends ODContained
                     $navbarBtns->addChild($btnPageP);
                 }
 
-                $btnPageP = OObject::cloneObject($btnPage);
+                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
                 $btnPageP->setId($id.'btnPage5');
                 $btnPageP->setLabel('...');
                 $btnPageP->setValue('');
@@ -944,8 +946,8 @@ class ODTable extends ODContained
 
         /** @var ODButton $btnSuiv */
         /** @var ODButton $btnSuivS */
-        $btnSuiv    = OObject::buildObject($id.'BtnSuiv');
-        $btnSuivS   = OObject::cloneObject($btnSuiv);
+        $btnSuiv    = OObject::buildObject($id.'BtnSuiv', $sessionObj);
+        $btnSuivS   = OObject::cloneObject($btnSuiv, $sessionObj);
         $btnSuivS->setId($id.'BtnS');
         $btnSuivS->setDisplay(OObject::DISPLAY_BLOCK);
         $btnSuivS->disable();
@@ -957,8 +959,8 @@ class ODTable extends ODContained
 
         /** @var ODButton $btnLast */
         /** @var ODButton $btnLastL */
-        $btnLast    = OObject::buildObject($id.'BtnLast');
-        $btnLastL   = OObject::cloneObject($btnLast);
+        $btnLast    = OObject::buildObject($id.'BtnLast', $sessionObj);
+        $btnLastL   = OObject::cloneObject($btnLast, $sessionObj);
         $btnLastL->setId($id.'BtnL');
         $btnLastL->setValue($maxPage);
         $btnLastL->setDisplay(OObject::DISPLAY_BLOCK);
@@ -976,17 +978,30 @@ class ODTable extends ODContained
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
-    public function returnAppendLine($idTable, $code)
+    public function returnAppendLine($idTable, $noLine)
     {
+        $line   = $this->getLine($noLine);
+        $code   = '<tr class="line lno'.$noLine.'" data-lno="'.$noLine.'">';
+        foreach ($line as $noCol => $valCol) {
+            $code .= '<td class="col cno'.$noCol.'" data-cno="'.$noCol.'">';
+            $code .= $valCol;
+            $code .= '</td>';
+        }
+        $code  .= "</tr>";
         return OObject::formatRetour($idTable, $idTable." tbody", 'append', $code);
     }
 
-    public function returnUpdateLine($idTable, $noLine, $code)
+    public function returnUpdateLine($idTable, $noLine)
     {
-        /** ***************************************************************************************
-         * ATTENTION -> voir comment sera rendu la ligne pour choisir entre update ou innerUpdate *
-         ****************************************************************************************** */
-        $idTarget = $idTable." .lno".$noLine;
+        $line   = $this->getLine($noLine);
+        $ret    = [];
+        $code   = '';
+        $idTarget   = $idTable.' .lno'.$noLine;
+        foreach ($line as $noCol => $valCol) {
+            $code .= '<td class="col cno'.$noCol.'" data-cno="'.$noCol.'">';
+            $code .= $valCol;
+            $code .= '</td>';
+        }
         return OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
     }
 
