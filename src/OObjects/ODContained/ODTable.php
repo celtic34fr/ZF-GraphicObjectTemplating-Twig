@@ -989,7 +989,7 @@ class ODTable extends ODContained
             $code .= '</td>';
         }
         $code  .= "</tr>";
-        return OObject::formatRetour($idTable, $idTable." tbody", 'append', $code);
+        return [OObject::formatRetour($idTable, $idTable." tbody", 'append', $code)];
     }
 
     public function returnUpdateLine($idTable, $noLine)
@@ -1002,13 +1002,13 @@ class ODTable extends ODContained
             $code .= $valCol;
             $code .= '</td>';
         }
-        return OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
+        return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
     }
 
     public function returnUpdateCell($idTable, $noLine, $noCol, $code)
     {
         $idTarget   = $idTable." .lno".$noLine." .cno".$noCol;
-        return OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
+        return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
     }
 
     /** **************************************************************************************************
