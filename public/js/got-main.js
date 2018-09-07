@@ -130,6 +130,9 @@ function invokeAjax(datas, idSource, event, e) {
                 let flg = code.substr(strpos(code, '|') + 1);
                 $('#'+id).attr('data-'+evt+'-stopevt', flg);
                 break;
+            case 'updCols': // mise à jour colonne ODTable
+                updateCol(id, code);
+                break;
         }
     });
 }

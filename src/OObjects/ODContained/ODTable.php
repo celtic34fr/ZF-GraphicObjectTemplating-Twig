@@ -352,8 +352,8 @@ class ODTable extends ODContained
 
         $datas = $properties['datas'];
         $cols  = [];
-        foreach ($datas as $data) {
-            $cols[sizeof($cols) + 1] = $data[$nCol];
+        foreach ($datas as $nLine => $data) {
+            $cols[$nLine] = $data[$nCol];
         }
         return $cols;
     }
@@ -1009,6 +1009,15 @@ class ODTable extends ODContained
     {
         $idTarget   = $idTable." .lno".$noLine." .cno".$noCol;
         return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
+    }
+
+    public function returnUpdateCol($noCol)
+    {
+        $idTable            = $this->getId();
+        $cols               = $this->getColValues($noCol);
+        $params['col']      = $noCol;
+        $params['datas']    = $cols;
+        return [OObject::formatRetour($idTable, $idTable, 'updCols'), $params];
     }
 
     /** **************************************************************************************************
