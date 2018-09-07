@@ -28,11 +28,9 @@
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
     {% endif %}
 >
-    <button id="{{ objet.id }}Button" data-objet="{{ objet.object }}" class="{{ objet.nature }}" style="width: 100%;"
+    <button data-objet="{{ objet.object }}" class="{{ objet.nature }}" style="width: 100%;"
         {% if objet.type == 'link' %} onclick="location.href='{{ routeUrl }}'" {% endif %}
-        {% if objet.value is defined and objet.value is not empty %}
-            data-value="{{ objet.value }}"
-        {% endif %}
+        {% if objet.value is defined and objet.value is not empty %} data-value="{{ objet.value }}" {% endif %}
         {% if objet.state == false %} disabled {% endif %}
     >
         {% if objet.icon is not empty %}<i class="{{ objet.icon }}"></i>{% endif %}{{ objet.label }}

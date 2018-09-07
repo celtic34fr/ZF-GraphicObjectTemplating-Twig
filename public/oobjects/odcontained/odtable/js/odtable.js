@@ -13,9 +13,10 @@ odtable.prototype = {
 
 function rmLineUpdate(noLine, maxLine) {
     for (var idx = (noLine + 1); idx <= maxLine; idx++) {
-        let tmp = $("#tabListParamsG7PP .lno"+idx);
-        tmp.data("lno", (idx - 1));
-        tmp.removeClass("lno"+idx).addClass("lno"+(idx-1));
+        let tmp     = $("#tabListParamsG7PP .lno"+idx);
+        let pIdx    = idx - 1;
+        tmp.attr("data-lno", pIdx);
+        tmp.removeClass("lno"+idx).addClass("lno"+pIdx);
     };
 }
 
