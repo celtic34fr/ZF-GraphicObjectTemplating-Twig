@@ -502,15 +502,17 @@ class ODTable extends ODContained
     public function removeLine($nLine)
     {
         $properties = $this->getProperties();
-        $nbLines = sizeof($properties['datas']);
+        $datas      = $properties['datas'];
+        $nbLines = sizeof($datas);
         if ($nbLines == 0) return false;
         if ($nLine == 0 || $nLine > $nbLines) return false;
 
         /* remise en séquence des lignes restantes */
-        for ($i = $nLine; $i < $nbLines - 1; $i++) {
-            $properties['datas'][$i] = $properties['datas'][$i + 1];
+        for ($i = $nLine; $i < $nbLines; $i++) {
+            $datas[$i] = $datas[$i + 1];
         }
-        unset($properties['datas'][$nbLines]);
+        unset($datas[$nbLines]);
+        $properties['datas'] = $datas;
         $this->setProperties($properties);
         return $this;
     }

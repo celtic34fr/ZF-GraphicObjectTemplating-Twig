@@ -12,9 +12,10 @@ odtable.prototype = {
 };
 
 function rmLineUpdate(noLine, maxLine) {
-    for (var idx = (noLine + 1); idx <= (maxLine + 1); idx++) {
-        $("#tabListParamsG7PP .lno"+idx).data("lno", (idx - 1));
-        $("#tabListParamsG7PP .lno"+idx).removeClass("lno"+idx).addClass("lno"+(idx-1));
+    for (var idx = (noLine + 1); idx <= maxLine; idx++) {
+        let tmp = $("#tabListParamsG7PP .lno"+idx);
+        tmp.data("lno", (idx - 1));
+        tmp.removeClass("lno"+idx).addClass("lno"+(idx-1));
     };
 }
 
@@ -22,7 +23,8 @@ function updateCol(idTable, params) {
     let col = params['col'];
     let datas = params['datas'];
 
-    datas.each(function (key, val) {
+    $.each(datas,function (key, val) {
         $("#"+idTable+" .lno"+key+" .cno"+col).html(val);
     });
 }
+
