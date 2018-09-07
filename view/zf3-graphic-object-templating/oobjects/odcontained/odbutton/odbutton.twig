@@ -12,14 +12,7 @@
     {% endif %}
 {% endif %}
 
-<style>
-    #{{ objet.id }} {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-</style>
-
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}"
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-objet="{{ objet.object }}"
     {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
     {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
@@ -28,7 +21,7 @@
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
     {% endif %}
 >
-    <button data-objet="{{ objet.object }}" class="{{ objet.nature }}" style="width: 100%;"
+    <button class="{{ objet.nature }}" style="width: 100%;"
         {% if objet.type == 'link' %} onclick="location.href='{{ routeUrl }}'" {% endif %}
         {% if objet.value is defined and objet.value is not empty %} data-value="{{ objet.value }}" {% endif %}
         {% if objet.state == false %} disabled {% endif %}

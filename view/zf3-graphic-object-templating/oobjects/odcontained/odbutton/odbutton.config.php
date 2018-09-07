@@ -13,6 +13,9 @@ return [
     'nature'        => ODButton::BUTTONNATURE_DEFAULT,
 
     'resources' => [
+        'css'		=> [
+            'odbutton.css' => 'css/odbutton.css',
+        ],
         'js'		=> [
             'odbutton.js' => 'js/odbutton.js',
         ],

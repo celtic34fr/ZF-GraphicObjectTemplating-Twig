@@ -20,6 +20,12 @@
         div#{{ objet.id }} table tr th {
             padding: 0.3em;
         }
+
+        {% for col in objet.cols %}
+            {% if col.width is defined and col.width is not empty %}
+        div#{{ objet.id }} table .cno{{ loop.index }} { width: {{ col.width }}; }
+            {% endif %}
+        {% endfor %}
     </style>
     {% if objet.pagination %}
     <div class="length col-lg-12 col-md-12 col-sm-12 col-xs-12">
