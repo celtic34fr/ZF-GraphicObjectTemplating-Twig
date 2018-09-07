@@ -208,7 +208,7 @@ function updateForm(formId) {
     let topRequire = false;
     $('#'+formId+" .gotObject").each(function () {
         let id = $(this).attr('id');
-        let htmlCode = $("#"+id+" label").html();
+        let htmlCode = $("#"+id+" label:first").html();
         htmlCode = require + htmlCode;
         $("#"+id+" label:first").html(htmlCode);
     })
