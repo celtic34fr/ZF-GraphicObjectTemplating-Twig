@@ -206,8 +206,10 @@ function updatePage() {
 function updateForm(formId) {
     let require = '<p style="color:red;float:left;";>*&nbsp;</p>';
     let topRequire = false;
-    $('#'+form+" gotObject").each(function () {
+    $('#'+formId+" .gotObject").each(function () {
         let id = $(this).attr('id');
-        $(id+" label:first").html(require+$(id+" label:first").html());
+        let htmlCode = $("#"+id+" label").html();
+        htmlCode = require + htmlCode;
+        $("#"+id+" label:first").html(htmlCode);
     })
 }
