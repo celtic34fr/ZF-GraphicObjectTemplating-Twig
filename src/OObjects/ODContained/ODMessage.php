@@ -28,10 +28,25 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * setMsgType($msgType = self::ODMESSAGETYPE_CONFIRM)
  * getMsgType()
  *
- * méthodes de gestion du type de message confirmation
- * ---------------------------------------------------
+ * méthodes de gestion du type de message confirmation ou alerte
+ * -------------------------------------------------------------
  * setTitle($title)
  * getTitle()
+ *
+ * méthodes de gestion du type de message prompt
+ * ---------------------------------------------
+ * setType($type = self::ODMESSAGEPROMPT_TEXT)
+ * getType()
+ * enaMultiline()
+ * disMultiline()
+ * setLineNumber($lineNumber = 1);
+ * getLineNumber()
+ * setLabel($label)
+ * getLabel()
+ * enaRequired()
+ * disRequired()
+ * setErrorMessage($errorMessage = '')
+ * getErrorMessage()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -283,6 +298,111 @@ class ODMessage extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('title', $properties) ? $properties['title'] : false;
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion du type de message prompt                                                     *
+     * *************************************************************************************************** */
+
+    public function setType($type = self::ODMESSAGEPROMPT_TEXT)
+    {
+        $types  = $this->getPromptsContants();
+        $type   = (string) $type;
+        if (!in_array($type, $types)) { $type = self::ODMESSAGEPROMPT_TEXT; }
+
+        $properties = $this->getProperties();
+        $properties['type'] = $type;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getType()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('type', $properties) ? $properties['type'] : false;
+    }
+    
+    public function enaMultiline()
+    {
+        $properties = $this->getProperties();
+        $properties['multiline'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disMultiline()
+    {
+        $properties = $this->getProperties();
+        $properties['multiline'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setLineNumber($lineNumber = 1)
+    {
+        $properties = $this->getProperties();
+        if ($properties['multiline']) {
+            $lineNumber = (int) $lineNumber;
+            if ($lineNumber == 0) { $lineNumber = 1; }
+
+            $properties = $this->getProperties();
+            $properties['lines'] = $lineNumber;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getLineNumber()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('lines', $properties) ? $properties['lines'] : false;
+    }
+
+    public function setLabel($label)
+    {
+        $label = (string) $label;
+        $properties = $this->getProperties();
+        $properties['label'] = $label;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getLabel()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('label', $properties) ? $properties['label'] : false;
+    }
+
+    public function enaRequired()
+    {
+        $properties = $this->getProperties();
+        $properties['required'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disRequired()
+    {
+        $properties = $this->getProperties();
+        $properties['required'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setErrorMessage($errorMessage = '')
+    {
+        $errorMessage = (string) $errorMessage;
+        $properties = $this->getProperties();
+        $properties['errorMessage'] = $errorMessage;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getErrorMessage()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('errorMessage', $properties) ? $properties['errorMessage'] : false;
     }
 
     /** **************************************************************************************************
