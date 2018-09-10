@@ -39,6 +39,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  * getWidth()
  * setHeight($height)
  * getHeight()
+ * enaCloseOnClick()
+ * disCloseOnClick()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -279,6 +281,22 @@ class ODNotification extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('height', $properties) ? $properties['height'] : false;
+    }
+
+    public function enaCloseOnClick()
+    {
+        $properties = $this->getProperties();
+        $properties['closeOnClick'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disCloseOnClick()
+    {
+        $properties = $this->getProperties();
+        $properties['closeOnClick'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
 

@@ -7,23 +7,33 @@
             var {{ objet.id }}Lobibox = Lobibox;
             $(document).ready(
                     {{ objet.id }}Lobibox.base.DEFAULTS = $.extend({}, {{ objet.id }}Lobibox.base.DEFAULTS, {
-                        horizontalOffset: 5,
-                        verticalOffset: 5,
-                        width: 600,
-                        height: 'auto',
-                        closeButton: true,
+                        horizontalOffset: {{ objet.horizontalOffset }},
+                        verticalOffset: {{ objet.verticalOffset }},
+                        width: {{ objet.width }},
+                        height: {{ objet.height }},
+                        closeButton: {{ objet.closeButton }},
                         draggable: false,
                         customBtnClass: 'lobibox-btn lobibox-btn-default',
                         modal: true,
                         debug: false,
-                        buttonsAlign: 'center',             // Position where buttons should be aligned
-                        closeOnEsc: true,                   // Close messagebox on Esc press
-                        delayToRemove: 200,                 // Time after which lobibox will be removed after remove call. (This option is for hide animation to finish)
-                        delay: false,                       // Time to remove lobibox after shown
-                        baseClass: 'animated-super-fast',   // Base class to add all messageboxes
-                        showClass: 'zoomIn',                // Show animation class
-                        hideClass: 'zoomOut',               // Hide animation class
-                        iconSource: 'bootstrap',            // "bootstrap" or "fontAwesome" the library which will be used for icons
+                        buttonsAlign: {{ objet.buttonAlifgn }},
+                        closeOnEsc: {{ closeOnEsc }},
+                        delayToRemove: {{ objet.delaytoRemove }},
+                        delay: {{ objet.delay }},
+                        baseClass: 'animated-super-fast',
+                        showClass: 'zoomIn',
+                        hideClass: 'zoomOut',
+                        iconSource: 'bootstrap',
+            {% switch(objet.msgType) %}
+                {% case 'confirm' %}
+                {% case 'alert' %}
+                    {% if objet.title is defined and objet.title is not empty %}
+                        title: {{ objet.title }},
+                    {% endif %}
+                {% case 'prompt' %}
+                {% case 'progress' %}
+                {% case 'window' %}
+            {% endswitch %}
                      })
             );
         </script>

@@ -20,6 +20,9 @@ return [
     'showClass'         => 'zoomIn',
     'hideClass'         => 'zoomOut',
     'icon'              => true,
+    'width'             => 600,
+    'height'            => 'auto',
+    'closeOnClick'      => true,
 
     'resources' => [
         'css' => [

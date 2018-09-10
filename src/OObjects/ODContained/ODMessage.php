@@ -13,6 +13,25 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getHorizontalOffset()
  * setVerticalOffset($offset = 5)
  * getVerticalOffset()
+ * enaCloseButton()
+ * disCloseButton()
+ * setButtonAlign($buttonAlign = self::ODMESSAGEBTNALIGN_CENTER)
+ * getButtonAlign()
+ * enaCloseOnEsc()
+ * disCloseOnEsc()
+ * setDelayToRemove($delayToRemove = 200)
+ * getDelayToRemove()
+ * enaDelay()
+ * disDelay()
+ * setIconSource($iconSource = self::ODMESSAGEICON_BOOTSTRAP)
+ * getIconSource()
+ * setMsgType($msgType = self::ODMESSAGETYPE_CONFIRM)
+ * getMsgType()
+ *
+ * méthodes de gestion du type de message confirmation
+ * ---------------------------------------------------
+ * setTitle($title)
+ * getTitle()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -126,6 +145,144 @@ class ODMessage extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('height', $properties) ? $properties['height'] : false;
+    }
+
+    public function enaCloseButton()
+    {
+        $properties = $this->getProperties();
+        $properties['closeButton'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disCloseButton()
+    {
+        $properties = $this->getProperties();
+        $properties['closeButton'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setButtonAlign($buttonAlign = self::ODMESSAGEBTNALIGN_CENTER)
+    {
+        $buttonsAlign   = $this->getBtnAlignsContants();
+        $buttonAlign    = (string) $buttonAlign;
+        if (!in_array($buttonAlign, $buttonsAlign)) { $buttonAlign = self::ODMESSAGEBTNALIGN_CENTER; }
+
+        $properties = $this->getProperties();
+        $properties['buttonAlign'] = $buttonAlign;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getButtonAlign()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('buttonAlign', $properties) ? $properties['buttonAlign'] : false;
+    }
+
+    public function enaCloseOnEsc()
+    {
+        $properties = $this->getProperties();
+        $properties['closeOnEsc'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disCloseOnEsc()
+    {
+        $properties = $this->getProperties();
+        $properties['closeOnEsc'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setDelayToRemove($delayToRemove = 200)
+    {
+        $delayToRemove = (int) $delayToRemove;
+        if ($delayToRemove == 0) { $delayToRemove = 200; }
+
+        $properties = $this->getProperties();
+        $properties['delayToRemove'] = $delayToRemove;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getDelayToRemove()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('delayToRemove', $properties) ? $properties['delayToRemove'] : false;
+    }
+
+    public function enaDelay()
+    {
+        $properties = $this->getProperties();
+        $properties['delay'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disDelay()
+    {
+        $properties = $this->getProperties();
+        $properties['delay'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setIconSource($iconSource = self::ODMESSAGEICON_BOOTSTRAP)
+    {
+        $iconsSource    = $this->getIconsContants();
+        $iconSource     = (string) $iconSource;
+        if (!in_array($iconSource, $iconsSource)) { $iconSource = self::ODMESSAGEICON_BOOTSTRAP; }
+
+        $properties = $this->getProperties();
+        $properties['iconSource'] = $iconSource;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIconSource()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('iconSource', $properties) ? $properties['iconSource'] : false;
+    }
+
+    public function setMsgType($msgType = self::ODMESSAGETYPE_CONFIRM)
+    {
+        $msgTypes  = $this->getTypesContants();
+        $msgType   = (string) $msgType;
+        if (!in_array($msgType, $msgTypes)) { $msgType = self::ODMESSAGETYPE_CONFIRM; }
+
+        $properties = $this->getProperties();
+        $properties['msgType'] = $msgType;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMsgType()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('msgType', $properties) ? $properties['msgType'] : false;
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion du type de message confirmation                                               *
+     * *************************************************************************************************** */
+
+    public function setTitle($title)
+    {
+        $title = (string) $title;
+        $properties = $this->getProperties();
+        $properties['title'] = $title;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('title', $properties) ? $properties['title'] : false;
     }
 
     /** **************************************************************************************************
