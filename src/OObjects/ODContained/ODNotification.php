@@ -35,6 +35,10 @@ use GraphicObjectTemplating\OObjects\OObject;
  * disDistinctMessage()
  * setDelayMessage($delayMessage = 2000)
  * getDelayMessage()
+ * setWidth($width)
+ * getWidth()
+ * setHeight($height)
+ * getHeight()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -255,6 +259,28 @@ class ODNotification extends ODContained
         $properties             = $this->getProperties();
         return (array_key_exists('delayMessage', $properties)) ? $properties['delayMessage'] : false ;
     }
+
+    public function getWidth()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('width', $properties) ? $properties['width'] : false;
+    }
+
+    public function setHeight($height)
+    {
+        if ($height != 'auto') { $height = ((int) $height > 0) ? (int) $height : 400; }
+        $properties = $this->getProperties();
+        $properties['height'] = $height;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getHeight()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('height', $properties) ? $properties['height'] : false;
+    }
+
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *

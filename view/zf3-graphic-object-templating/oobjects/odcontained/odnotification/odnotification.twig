@@ -24,7 +24,7 @@
                         sound: {{ (objet.sound) ? 'true' : 'false' }},
                         {% if objet.sound %}
                         soundPath: '{{ objet.soundPath }}',
-                        soundExt: '.ogg',
+                        soundExt: '{{ objet.soundExt }}',
                         {% endif %}
                     })
             );
