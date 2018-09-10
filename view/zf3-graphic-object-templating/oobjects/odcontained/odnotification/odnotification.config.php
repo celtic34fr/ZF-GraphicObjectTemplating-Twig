@@ -19,7 +19,7 @@ return [
 
     'resources' => [
         'css' => [
-            'lobibox.css' => 'css/lobibox.css'
+                'lobibox.css' => 'css/lobibox.css'
         ],
         'js'  => [
             'notifications.js' => 'js/lobibox.js'

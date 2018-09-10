@@ -192,7 +192,8 @@ class OObject
     {
         if (!empty($id)) {
             $objects = $sessionObj->objects;
-            $properties = unserialize($objects[$id]);
+            $pObj    = $objects[$id];
+            $properties = unserialize($pObj);
             if (!empty($properties)) {
                 // TODO: pb boucle sans fin sur création de l'instance de l'objet
                 $object = new $properties['className']($id);
