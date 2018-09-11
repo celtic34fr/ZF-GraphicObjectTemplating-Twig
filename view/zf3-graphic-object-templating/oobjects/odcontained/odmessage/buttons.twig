@@ -5,6 +5,9 @@
             'class': '{{ params.classes }}',
             text: '{{ params.label }}',
             closeOnClick: {{ params.close }},
+        {% if params.value is not empty %}
+            value: '{{ params.value }}',
+        {% endif %}
             },
     {% endfor %}
     },

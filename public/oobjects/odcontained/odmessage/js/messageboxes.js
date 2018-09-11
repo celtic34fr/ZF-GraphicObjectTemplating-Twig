@@ -154,6 +154,7 @@ var Lobibox = Lobibox || {};
             var btn = $('<button></button>')
                 .addClass(op['class'])
                 .attr('data-type', type)
+                .val(op['value'])
                 .html(op.text);
             if (me.$options.callback && typeof me.$options.callback === 'function') {
                 btn.on('click.lobibox', function (ev) {

@@ -777,13 +777,13 @@ class ODMessage extends ODContained
         return false;
     }
 
-    public function setYesButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+    public function setYesButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
         $classView      = (string) $classView;
         $closeOnClick   = ($closeOnClick && true);
 
-        return $this->setButton('yes', $label, $classView, $closeOnClick);
+        return $this->setButton('yes', $label, $value, $classView, $closeOnClick);
     }
 
     public function getYesButton()
@@ -796,13 +796,13 @@ class ODMessage extends ODContained
         return false;
     }
 
-    public function setNoButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+    public function setNoButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
         $classView      = (string) $classView;
         $closeOnClick   = ($closeOnClick && true);
 
-        return $this->setButton('no', $label, $classView, $closeOnClick);
+        return $this->setButton('no', $label, $value, $classView, $closeOnClick);
     }
 
     public function getNoButton()
@@ -815,13 +815,13 @@ class ODMessage extends ODContained
         return false;
     }
 
-    public function setCustomButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+    public function setCustomButton($label, $value, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
         $classView      = (string) $classView;
         $closeOnClick   = ($closeOnClick && true);
 
-        return $this->setButton('custom', $label, $classView, $closeOnClick);
+        return $this->setButton('custom', $label, $value = null, $classView, $closeOnClick);
     }
 
     public function getCustomButton()
@@ -966,7 +966,7 @@ class ODMessage extends ODContained
         return $retour;
     }
 
-    private function setButton($type, $label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+    private function setButton($type, $label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
         $classViews     = $this->getBtnClassesContants();
@@ -982,6 +982,8 @@ class ODMessage extends ODContained
         $btn['label']     = $label;
         $btn['classes']   = $classView;
         $btn['close']     = ($closeOnClick) ? self::BOOLEAN_TRUE : self::BOOLEAN_FALSE;
+        if (!empty($value)) { $btn['value']     = $value; }
+
         $properties['buttons'][$type] = $btn;
         $this->setProperties($properties);
         return $this;

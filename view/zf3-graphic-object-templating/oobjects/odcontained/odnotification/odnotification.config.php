@@ -29,7 +29,7 @@ return [
                 'lobibox.css' => 'css/lobibox.css'
         ],
         'js'  => [
-            'notifications.js' => 'js/lobibox.js'
+            'notifications.js' => 'js/notifications.js'
         ],
     ]
 ];
