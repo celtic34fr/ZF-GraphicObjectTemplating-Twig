@@ -307,7 +307,7 @@ class ODNotification extends ODContained
     private function getActionsContants()
     {
         $retour = [];
-        if (empty($this->const_mesAction)) {
+        if (empty($this->const_NotificationAction)) {
             $constants = $this->getConstants();
             foreach ($constants as $key => $constant) {
                 $pos = strpos($key, 'NOTIFICATIONACTION_');

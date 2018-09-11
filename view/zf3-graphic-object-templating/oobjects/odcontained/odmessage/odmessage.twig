@@ -4,7 +4,7 @@
     <div id="{{ objet.id }}_div">
         {# initialisation à mettre au niveau du header de la page #}
         <script>
-            var {{ objet.id }}Lobibox = Lobibox;
+            let {{ objet.id }}Lobibox = Lobibox;
             $(document).ready(
                     {{ objet.id }}Lobibox.base.DEFAULTS = $.extend({}, {{ objet.id }}Lobibox.base.DEFAULTS, {
                         horizontalOffset: {{ objet.horizontalOffset }},
@@ -47,7 +47,15 @@
                         errorMessage: '{{ objet.errorMessage }}',
                     {% endif %}
                 {% case 'progress' %}
+                        showProgressLabel: {{ objet.showProgressLabel }},
+                        progressTpl: false, // pas de tpl pour le moment
                 {% case 'window' %}
+                    {% if objet.content is not empty and objet.url is empty %}
+                        content: '{{ objet.content}}',
+                    {% else %}
+                        url: '{{ objet.url }}',
+                        autoload: {{ objet.autoload }}
+                    {% endif %}
             {% endswitch %}
                      })
             );
@@ -60,28 +68,36 @@
 
 {% if objet.action == 'send' %}
     <script id='{{ objet.id }}' type="text/javascript">
-        if ( {{ objet.id }}Lobibox.notify.list.length == 0) {
-            {{ objet.id }}Lobibox.notify('{{ objet.type }}', {
-                showAfterPrevious: {{ objet.showAfterPrevious ? 'true' : 'false' }},
-                {% if objet.title is not empty %} title: '{{ objet.title }}', {% endif %}
-                {% if objet.sound == false %} sound: false, {% endif %}
-                delay: {{ objet.delay }},
-                msg: '{{ objet.body }}'
-            });
-            $('#{{ objet.id }}ListLength').val(1);
-        } else {
-            var listLength = parseInt($('#{{ objet.id }}ListLength').val());
-            var delayTime  = {{ objet.delayMessage }} * listLength;
-            setTimeout(function () {
-                {{ objet.id }}Lobibox.notify('{{ objet.type }}', {
-                    showAfterPrevious: {{ objet.showAfterPrevious ? 'true' : 'false' }},
-                    {% if objet.title is not empty %} title: '{{ objet.title }}', {% endif %}
-                    {% if objet.sound == false %} sound: false, {% endif %}
-                    delay: {{ objet.delay }},
-                    msg: '{{ objet.body }}'
-                });
-            }, delayTime );
-            $('#{{ objet.id }}ListLength').val(listLength + 1);
-        }
+        let messageBoxes = '';
+        {% switch(objet.msgType) %}
+        {% case 'confirm' %}
+        messageBoxes = {{ objet.id }}Lobibox.confirm({
+            msg: {{ objet.title }},
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+        });
+        {% case 'alert' %}
+        messageBoxes = {{ objet.id }}Lobibox.alert({{ objet.nature }}, {
+            msg: {{ objet.title }},
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+        });
+        {% case 'prompt' %}
+        messageBoxes = {{ objet.id }}Lobibox.prompt('{{ objet.attrs.type }}', {
+            attrs: {
+            {% for attr, value in objet.attrs %}
+                {{ attr }}: '{{ value }}',
+            {% endfor %}
+            }
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+        });
+        {% case 'progress' %}
+        messageBoxes = {{ objet.id }}Lobibox.progress({
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+        });
+        {% case 'window' %}
+        messageBoxes = {{ objet.id }}Lobibox.window({
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+        });
+        {% endswitch %}
+        messageBoxes.show();
     </script>
 {% endif %}

@@ -7,19 +7,20 @@ return [
     'typeObj'       => 'odcontained',
     'template'      => 'odmessage.twig',
 
+    'action'            => ODMessage::ODMESSAGEACTION_INIT,
     'horizontalOffset'  => 5,
     'verticalOffset'    => 5,
     'width'             => '600',
     'height'            => 'auto',
     'closeButton'       => 'true',
-    'draggable'         => false,
+    'draggable'         => 'false',
     'customBtnClass'    => 'lobibox-btn lobibox-btn-default',
-    'modal'             => true,
-    'debug'             => false,
+    'modal'             => 'true',
+    'debug'             => 'false',
     'buttonAlign'       => ODMessage::ODMESSAGEBTNALIGN_CENTER,
-    'closeOnEsc'        => true,
+    'closeOnEsc'        => 'true',
     'delayToRemove'     => 200,
-    'delay'             => false,
+    'delay'             => 'false',
     'baseClass'         => 'animated-super-fast',
     'showClass'         => 'zoomIn',
     'hideClass'         => 'zoomOut',
@@ -29,24 +30,25 @@ return [
 
     /** confirm & alert attributes */
     'title'         => '',
+    'nature'        => ODMessage::ODMESSAGEMSGNATURE_INFO,
     /** prompt attributes */
     'attrs'         => [],
     'value'         => '',
-    'multiline'     => false,
+    'multiline'     => 'false',
     'lines'         => 1,
     'type'          => ODMessage::ODMESSAGEPROMPT_TEXT,
     'label'         => '',                                  // utilisé également par progress
-    'required'      => true,
+    'required'      => 'true',
     'errorMessage'  => '',
     /** progress attributes */
-    'showProgressLabel' => true,
-    'progressTpl'       => false,
+    'showProgressLabel' => 'true',
+    'progressTpl'       => 'false',
     /** windows attributes */
     'content'       => '',
     'url'           => '',
-    'autoload'      => true,
+    'autoload'      => 'true',
     'loadMethod'    => ODMessage::ODMESSAGEWINDOWLOAD_GET,
-    'showAfterLoad' => true,
+    'showAfterLoad' => 'true',
     'params'        => [],
 
 

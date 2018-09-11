@@ -1,0 +1,11 @@
+{% if buttons is defined and bottuons is not empty %}
+    buttons: {
+    {% for typeBtn, params in buttons %}
+        {{ typeBtn }}: {
+            'class': '{{ params.classes }}',
+            text: '{{ params.label }}',
+            closeOnClick: {{ params.close }},
+            },
+    {% endfor %}
+    },
+{% endif %}

@@ -108,6 +108,9 @@ class OObject
     const STATE_ENABLE    = true;
     const STATE_DISABLE   = false;
 
+    const BOOLEAN_TRUE    = 'true';
+    const BOOLEAN_FALSE   = 'false';
+
     public function __construct($id, $pathObjArray)
     {
         if (empty($id)) {
