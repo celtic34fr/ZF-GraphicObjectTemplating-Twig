@@ -6,58 +6,25 @@
         <script>
             let {{ objet.id }}Lobibox = Lobibox;
             $(document).ready(
-                    {{ objet.id }}Lobibox.base.DEFAULTS = $.extend({}, {{ objet.id }}Lobibox.base.DEFAULTS, {
-                        horizontalOffset: {{ objet.horizontalOffset }},
-                        verticalOffset: {{ objet.verticalOffset }},
-                        width: {{ objet.width }},
-                        height: {{ objet.height }},
-                        closeButton: {{ objet.closeButton }},
-                        draggable: false,
-                        customBtnClass: 'lobibox-btn lobibox-btn-default',
-                        modal: true,
-                        debug: false,
-                        buttonsAlign: {{ objet.buttonAlifgn }},
-                        closeOnEsc: {{ closeOnEsc }},
-                        delayToRemove: {{ objet.delaytoRemove }},
-                        delay: {{ objet.delay }},
-                        baseClass: 'animated-super-fast',
-                        showClass: 'zoomIn',
-                        hideClass: 'zoomOut',
-                        iconSource: 'bootstrap',
-            {% switch(objet.msgType) %}
-                {% case 'confirm' %}
-                {% case 'alert' %}
-                    {% if objet.title is defined and objet.title is not empty %}
-                        title: {{ objet.title }},
-                    {% endif %}
-                {% case 'prompt' %}
-                    {% if objet.value is defined and objet.value is not empty %}
-                        value: '{{ objet.value }}',
-                    {% endif %}
-                       multiline: {{ objet.multiline }},
-                    {% if objet.multiline %}
-                        lines: {{ objet.lines }},
-                    {% endif %}
-                        type: '{{ objet.type }}',
-                    {% if objet.label is defined and objet.label is not empty %}
-                        label: '{{ objet.label }}',
-                    {% endif %}
-                        required: {{ objet.required }},
-                    {% if objet.errorMessage is defined and objet.errorMessage is not empty %}
-                        errorMessage: '{{ objet.errorMessage }}',
-                    {% endif %}
-                {% case 'progress' %}
-                        showProgressLabel: {{ objet.showProgressLabel }},
-                        progressTpl: false, // pas de tpl pour le moment
-                {% case 'window' %}
-                    {% if objet.content is not empty and objet.url is empty %}
-                        content: '{{ objet.content}}',
-                    {% else %}
-                        url: '{{ objet.url }}',
-                        autoload: {{ objet.autoload }}
-                    {% endif %}
-            {% endswitch %}
-                     })
+                {{ objet.id }}Lobibox.base.DEFAULTS = $.extend({}, {{ objet.id }}Lobibox.base.DEFAULTS, {
+                    horizontalOffset: {{ objet.horizontalOffset }},
+                    verticalOffset: {{ objet.verticalOffset }},
+                    width: {{ objet.width }},
+                    height: {{ objet.height }},
+                    closeButton: {{ objet.closeButton }},
+                    draggable: false,
+                    customBtnClass: 'lobibox-btn lobibox-btn-default',
+                    modal: true,
+                    debug: false,
+                    buttonsAlign: {{ objet.buttonAlign }},
+                    closeOnEsc: {{ closeOnEsc }},
+                    delayToRemove: {{ objet.delaytoRemove }},
+                    delay: {{ objet.delay }},
+                    baseClass: 'animated-super-fast',
+                    showClass: 'zoomIn',
+                    hideClass: 'zoomOut',
+                    iconSource: 'bootstrap',
+                 })
             );
         </script>
         <input id="{{ objet.id }}ListLength" type="hidden" name="listLength" value="0"/>
@@ -72,30 +39,64 @@
         {% switch(objet.msgType) %}
         {% case 'confirm' %}
         messageBoxes = {{ objet.id }}Lobibox.confirm({
-            msg: {{ objet.title }},
+            title: {{ objet.title }},
+            msg: {{ objet.body }},
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
         {% case 'alert' %}
         messageBoxes = {{ objet.id }}Lobibox.alert({{ objet.nature }}, {
-            msg: {{ objet.title }},
+            title: {{ objet.title }},
+            msg: {{ objet.body }},
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
         {% case 'prompt' %}
-        messageBoxes = {{ objet.id }}Lobibox.prompt('{{ objet.attrs.type }}', {
+        messageBoxes = {{ objet.id }}Lobibox.prompt('{{ objet.type }}', {
+            multiline: {{ objet.multiline }},
+        {% if objet.multiline == 'true' %}
+            lines: {{ objet.lines }},
+        {% endif %}
+            title: {{ objet.title }},
+        {% if objet.label is not empty %}
+            label: {{ objet.label }},
+        {% endif %}
+            required: {{ objet.required }},
             attrs: {
-            {% for attr, value in objet.attrs %}
-                {{ attr }}: '{{ value }}',
+            {% for attr, val in objet.attrs %}
+                {{ attr }}: '{{ val }}',
             {% endfor %}
-            }
+            },
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
         {% case 'progress' %}
-        messageBoxes = {{ objet.id }}Lobibox.progress({
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+/*
+        messageBoxes = {#{ objet.id }}Lobibox.progress({
+            title: {{ objet.title }},
+            label: {{ objet.label }},
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %#}
         });
+*/
         {% case 'window' %}
         messageBoxes = {{ objet.id }}Lobibox.window({
+            title: {{ objet.title }},
+        {% if objet.content is not empty %}
+            content: {{ objet.content }},
+        {% endif %}
+        {% if objet.url is not empty %}
+            url: {{ objet.url }},
+        {% endif %}
+            autoload: {{ objet.autoload }},
+            showAfterLoad: {{ objet.showAfterLoad }},
+            loadMethod: {{ objet.loadMethod }},
+            params: {
+        {% for cle, val in objet.params %}
+                {{ cle }}: {{ val }},
+        {% endfor %}
+            },
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
         {% endswitch %}
         messageBoxes.show();

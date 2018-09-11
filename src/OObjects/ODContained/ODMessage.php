@@ -4,6 +4,8 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 
 use GraphicObjectTemplating\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\OObject;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class ODMessage
@@ -38,6 +40,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * -------------------------------------------------------------
  * setTitle($title)
  * getTitle()
+ * setBody($body)
+ * getBody()
  * setMsgNature($nature = self:ODMESSAGEMSGNATURE_INFO)
  * getMsgNature()
  *
@@ -75,6 +79,9 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getLoadMethod()
  * enaShowAfterLoad()
  * disShowAfterLoad()
+ * evtCallback($type, $class, $method, $stopEvent = false)
+ * disCallback($type)
+ * disCallbacks()
  *
  * méthodes de customisation des boutons
  * -------------------------------------
@@ -390,6 +397,21 @@ class ODMessage extends ODContained
         return array_key_exists('title', $properties) ? $properties['title'] : false;
     }
 
+    public function setBody($body)
+    {
+        $body = (string) $body;
+        $properties = $this->getProperties();
+        $properties['body'] = $body;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getBody()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('body', $properties) ? $properties['body'] : false;
+    }
+
     public function setNature($nature = self::ODMESSAGEMSGNATURE_INFO)
     {
         $natures    = $this->getMsgNatureContants();
@@ -406,6 +428,50 @@ class ODMessage extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('nature', $properties) ? $properties['nature'] : false;
+    }
+
+    public function evtCallback($type, $class, $method, $stopEvent = false)
+    {
+        $type       = (string) $type;
+        $class      = (string) $class;
+        $method     = (string) $method;
+
+        if (!empty($class) && !empty($method) && !empty($type)) {
+            $rslt = $this->setEvent('click', $class, $method, $stopEvent);
+            if ($rslt) {
+                $properties     = $this->getProperties();
+                $click          = $properties['event']['click'];
+                unset($properties['event']['click']);
+                if (!array_key_exists($type, $properties['event'])) { $properties['event'][$type] = []; }
+                $properties['event'][$type] = $click;
+
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function disCallback($type)
+    {
+        $properties     = $this->getProperties();
+        $event          = $properties['event'];
+        if (array_key_exists($type, $event)) {
+            unset($event[$type]);
+            $properties['event']    = $event;
+
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function disCallbacks()
+    {
+        $properties     = $this->getProperties();
+        $properties['event'] = [];
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************
@@ -764,6 +830,38 @@ class ODMessage extends ODContained
         if (array_key_exists('buttons', $properties)) {
             $buttons = $properties['buttons'];
             if (array_key_exists('custom', $buttons)) { return $buttons['cancel']; }
+        }
+        return false;
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion de retour de callback                                                         *
+     * *************************************************************************************************** */
+
+    public function dispatchEvents(ServiceManager $serviceManager, array $params)
+    {
+        $sessionObj     = OObject::validateSession();
+        /** @var ODMessage $message */
+        $message        = OObject::buildObject($params['id'], $sessionObj);
+        $type           = $params['type'];
+        $events         = $message->getEvents();
+        $ret            = [];
+        if (!empty($events)) {
+            if (array_key_exists($type, $events)) {
+                $event      = $events[$type];
+
+                $class      = (array_key_exists('class', $event)) ? $event['class'] : "";
+                $method     = (array_key_exists('method', $event)) ? $event['method'] : "";
+                if (!empty($class) && !empty($method)) {
+                    $callObj = new $class();
+                    $retCallObj = call_user_func_array([$callObj, $method], [$serviceManager, $params]);
+                    foreach ($retCallObj as $item) {
+                        array_push($ret, $item);
+                    }
+
+                    return $ret;
+                }
+            }
         }
         return false;
     }

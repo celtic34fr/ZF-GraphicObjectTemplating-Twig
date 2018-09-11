@@ -30,6 +30,7 @@ return [
 
     /** confirm & alert attributes */
     'title'         => '',
+    'body'          => '',
     'nature'        => ODMessage::ODMESSAGEMSGNATURE_INFO,
     /** prompt attributes */
     'attrs'         => [],

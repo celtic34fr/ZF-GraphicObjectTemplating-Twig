@@ -59,8 +59,16 @@ class MainController extends AbstractActionController
                     $params['form'] = $this->buildFormDatas($params['form'], $sessionObj);
                 }
 
-                // appel de la méthode de l'objet passée en paramètre
-                $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
+                switch ($callingObj->getObject()) {
+                    case 'odmessage':
+                    case 'odcheckbox':
+                        // appel de la méthode de l'objet passée en paramètre
+                        $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
+                    default:
+                        // appel de la méthode de l'objet passée en paramètre
+                        $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
+                        break;
+                }
                 $result  = [];
                 $rscs    = [];
                 $objects = [];
