@@ -77,6 +77,21 @@ namespace GraphicObjectTemplating\OObjects;
  * disEvent($event)
  * saveProperties()
  *
+ * méthodes de gestion des infobulles mis sur les objets
+ * -----------------------------------------------------
+ * enaIBAnimation()
+ * disIBAnimation()
+ * getIBAnimation()
+ * setIBDelay(array $delay = null)
+ * getIBDelay()
+ * enaHtml()
+ * disHtml()
+ * getIBHtml()
+ * setIBPlacement($IBplacement = self::IBPLACEMENT_TOP)
+ * getIBPlacement()
+ * setIBBody($body = null)
+ * getIBBody()
+ *
  * méthodes privées de la classe
  * -----------------------------
  * getConstants()
@@ -97,9 +112,6 @@ class OObject
     private $properties;
     private $lastAccess;
 
-    private $const_display;
-    private $const_state;
-
     const DISPLAY_NONE    = 'none';
     const DISPLAY_BLOCK   = 'block';
     const DISPLAY_INLINE  = 'inline';
@@ -107,6 +119,16 @@ class OObject
 
     const STATE_ENABLE    = true;
     const STATE_DISABLE   = false;
+
+    const IBPLACEMENT_TOP       = 'top';
+    const IBPLACEMENT_BOTTOM    = 'bottom';
+    const IBPLACEMENT_LEFT      = 'left';
+    const IBPLACEMENT_RIGHT     = 'right';
+    const IBPLACEMENT_AUTO      = 'auto';
+
+    private $const_display;
+    private $const_state;
+    private $const_IBplacement;
 
     const BOOLEAN_TRUE    = 'true';
     const BOOLEAN_FALSE   = 'false';
@@ -379,15 +401,7 @@ class OObject
         return $retour;
     }
 
-    /**
-     * static public function formatRetour
-     * @param type string $idSource
-     * @param type string $idCible
-     * @param type string $mode
-     * @param type string $code
-     * @return type array
-     */
-    static public function formatRetour($idSource, $idCible, $mode, $code = null) {
+    public static function formatRetour($idSource, $idCible, $mode, $code = null) {
         if (empty($idCible)) { $idCible = $idSource; }
         return ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
     }
@@ -1082,6 +1096,158 @@ class OObject
     }
 
     /** **************************************************************************************************
+     * méthodes de gestion des infobulles mis sur les objets                                             *
+     * *************************************************************************************************** */
+
+    public function enaIBAnimation()
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['animation'] = self::BOOLEAN_TRUE;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disIBAnimation()
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['animation'] = self::BOOLEAN_FALSE;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIBAnimation()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle = $properties['infoBulle'];
+            if (array_key_exists('animation', $infoBulle)) {
+                return $infoBulle['animation'];
+            }
+        }
+        return false;
+    }
+
+    public function setIBDelay(array $delay = null)
+    {
+        if (empty($delay)) {
+            $delay['show'] = 500; $delay['hide'] = 100;
+        } else {
+            if (!array_key_exists('show', $delay) || !array_key_exists('hide', $delay)) {
+                return false;
+            }
+        }
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['delay'] = $delay;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIBDelay()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('delay', $infoBulle)) {
+                return $infoBulle['delay'];
+            }
+        }
+        return false;
+    }
+
+    public function enaIBHtml()
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['html'] = self::BOOLEAN_TRUE;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disIBHtml()
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['html'] = self::BOOLEAN_FALSE;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIBHtml()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle = $properties['infoBulle'];
+            if (array_key_exists('html', $infoBulle)) {
+                return $infoBulle['html'];
+            }
+        }
+        return false;
+    }
+
+    public function setIBPlacement($IBplacement = self::IBPLACEMENT_TOP)
+    {
+        $IBplacements = $this->getIBPlacementConstants();
+        $IBplacement  = (string) $IBplacement;
+        if (!in_array($IBplacement, $IBplacements)) { $IBplacement = self::IBPLACEMENT_TOP; }
+
+        $properties     = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['placement'] = $IBplacement;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIBPlacement()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('placement', $infoBulle)) {
+                return $infoBulle['placement'];
+            }
+        }
+        return false;
+    }
+
+    public function setIBBody($IBbody = null)
+    {
+        $IBbody = (string) $IBbody;
+        if (!empty($IBbody)) {
+            $properties = $this->getProperties();
+            if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+            $infoBulle  = $properties['infoBulle'];
+            $infoBulle['body'] = $IBbody;
+        }
+    }
+
+    public function getIBBody()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle = $properties['infoBulle'];
+            if (array_key_exists('body', $infoBulle)) {
+                return $infoBulle['body'];
+            }
+        }
+        return false;
+    }
+
+    /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
@@ -1129,5 +1295,22 @@ class OObject
         return $retour;
     }
 
+    public function getIBPlacementConstants()
+    {
+        $retour = [];
+        if (empty($this->const_IBplacement)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'IBPLACEMENT_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_IBplacement = $retour;
+        } else {
+            $retour = $this->const_IBplacement;
+        }
 
+        return $retour;
+    }
 }

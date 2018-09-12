@@ -19,6 +19,17 @@ return [
     'acPx'          => '',
     'acPy'          => '',
 
+    'infoBulle'     => [
+        'animation'     => true,
+        'delay'         => [
+            'show'          => 500,
+            'hide'          => 100,
+        ],
+        'html'          => false,
+        'placement'     => OObject::IBPLACEMENT_TOP,
+        'body'          => '',
+    ],
+
     'resources'     => [
         'css'           => [],
         'js'            => [],

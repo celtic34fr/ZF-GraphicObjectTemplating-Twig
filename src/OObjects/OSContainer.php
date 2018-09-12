@@ -13,6 +13,7 @@ namespace GraphicObjectTemplating\OObjects;
  * méthodes
  * --------
  * __construct($id, $pathObjArray)
+ * __get($nameChild)
  * getValue()
  * setForm($form = null)
  * getForm()
@@ -52,6 +53,23 @@ class OSContainer extends OObject
 
         $this->setProperties($properties);
         return $this;
+    }
+
+    public function __get($nameChild) {
+        $sessionObj = OObject::validateSession();
+        $objects    = $sessionObj->objects;
+        $properties = $this->getProperties();
+
+        if (!empty($properties['children'])) {
+            foreach ($properties['children'] as $idChild => $child) {
+                $childProperties = unserialize($objects[$idChild]);
+                if ($childProperties['name'] == $nameChild || $idChild = $nameChild) {
+                    $obj = OObject::buildObject($idChild, $sessionObj);
+                    return $obj;
+                }
+            }
+        }
+        return false;
     }
 
     public function getValue()
