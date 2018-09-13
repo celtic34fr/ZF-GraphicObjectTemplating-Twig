@@ -1,0 +1,16 @@
+{% if infoBulle.setIB %}
+$("#{{ id }}").{{ infoBulle.type }}({
+    animation: {{ infoBulle.animation }},
+    html: {{ infoBulle.html }},
+    placement: '{{ infoBulle.placement }}',
+    delay: {
+        show: {{ infoBulle.delay.show }},
+        hide: {{ infoBulle.delay.hide }},
+    },
+    title: '{{ infoBulle.title }}{% if infoBulle.type == 'tooltip' and infoBulle.content is not empty %} {{ infoBulle.content }}{% endif %}',
+    {% if infoBulle.type == 'popover' %}
+    content: {{ infoBulle.content }},
+    {% endif %}
+    trigger: {{ infoBulle.trigger }}
+});
+{% endif %}

@@ -79,18 +79,24 @@ namespace GraphicObjectTemplating\OObjects;
  *
  * méthodes de gestion des infobulles mis sur les objets
  * -----------------------------------------------------
+ * setIBType($IBtype = self::IBTYPE_TOOLTIP)
+ * getIBType()
  * enaIBAnimation()
  * disIBAnimation()
  * getIBAnimation()
  * setIBDelay(array $delay = null)
  * getIBDelay()
- * enaHtml()
- * disHtml()
+ * enaIBHtml()
+ * disIBHtml()
  * getIBHtml()
  * setIBPlacement($IBplacement = self::IBPLACEMENT_TOP)
  * getIBPlacement()
- * setIBBody($body = null)
- * getIBBody()
+ * setIBTitle($title = null)
+ * getIBTitle()
+ * setIBContent($IBContent = null)
+ * getIBContent()
+ * setIBTrigger($IBtrigger = self::IBTRIGGER_HOVER)
+ * getIBTrigger()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -120,15 +126,25 @@ class OObject
     const STATE_ENABLE    = true;
     const STATE_DISABLE   = false;
 
+    const IBTYPE_TOOLTIP    = 'tooltip';
+    const IBTYPE_POPOVER    = 'popover';
+
     const IBPLACEMENT_TOP       = 'top';
     const IBPLACEMENT_BOTTOM    = 'bottom';
     const IBPLACEMENT_LEFT      = 'left';
     const IBPLACEMENT_RIGHT     = 'right';
     const IBPLACEMENT_AUTO      = 'auto';
 
+    const IBTRIGGER_CLICK       = 'click';
+    const IBTRIGGER_HOVER       = 'hover';
+    const IBTRIGGER_FOCUS       = 'focus';
+    const IBTRIGGER_MANUEL      = 'manuel';
+
     private $const_display;
     private $const_state;
+    private $const_IBtype;
     private $const_IBplacement;
+    private $const_IBtrigger;
 
     const BOOLEAN_TRUE    = 'true';
     const BOOLEAN_FALSE   = 'false';
@@ -1099,6 +1115,33 @@ class OObject
      * méthodes de gestion des infobulles mis sur les objets                                             *
      * *************************************************************************************************** */
 
+    public function setIBType($IBtype = self::IBTYPE_TOOLTIP)
+    {
+        $IBtypes    = $this->getIBTypeConstants();
+        $IBtype     = (string) $IBtype;
+        if (!in_array($IBtype, $IBtypes)) { $IBtype = self::IBTYPE_TOOLTIP; }
+
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['type'] = $IBtype;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIBType()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('type', $infoBulle)) {
+                return $infoBulle['type'];
+            }
+        }
+        return false;
+    }
+
     public function enaIBAnimation()
     {
         $properties = $this->getProperties();
@@ -1224,24 +1267,87 @@ class OObject
         return false;
     }
 
-    public function setIBBody($IBbody = null)
+    public function setIBTitle($IBtitle = null)
     {
-        $IBbody = (string) $IBbody;
+        $IBtitle = (string) $IBtitle;
         if (!empty($IBbody)) {
             $properties = $this->getProperties();
             if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
             $infoBulle  = $properties['infoBulle'];
-            $infoBulle['body'] = $IBbody;
+            $infoBulle['title'] = $IBtitle;
+            $infoBulle['setIB'] = true;
+
+            $properties['infoBulle'] = $infoBulle;
+            $this->setProperties($properties);
+            return $this;
         }
     }
 
-    public function getIBBody()
+    public function getIBTitle()
     {
         $properties = $this->getProperties();
         if (array_key_exists('infoBulle', $properties)) {
             $infoBulle = $properties['infoBulle'];
-            if (array_key_exists('body', $infoBulle)) {
-                return $infoBulle['body'];
+            if (array_key_exists('title', $infoBulle)) {
+                return $infoBulle['title'];
+            }
+        }
+        return false;
+    }
+
+    public function setIBContent($IBContent = null)
+    {
+        $IBContent = (string) $IBContent;
+        if (!empty($IBbody)) {
+            $properties = $this->getProperties();
+            if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+            $infoBulle  = $properties['infoBulle'];
+            $infoBulle['content'] = $IBContent;
+            $infoBulle['setIB'] = true;
+
+            $properties['infoBulle'] = $infoBulle;
+            $this->setProperties($properties);
+            return $this;
+        }
+    }
+
+    public function getIBContent()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle = $properties['infoBulle'];
+            if (array_key_exists('content', $infoBulle)) {
+                return $infoBulle['content'];
+            }
+        }
+        return false;
+    }
+
+    public function setIBTrigger($IBtrigger = self::IBTRIGGER_HOVER)
+    {
+        $IBtriggers = $this->getIBTriggerConstants();
+        $IBtrigger  = (string) $IBtrigger;
+        if (!in_array($IBtrigger, $IBtriggers)) { $IBtrigger = self::IBTRIGGER_HOVER; }
+        if ($this->getIBType() == self::IBTYPE_TOOLTIP && $IBtrigger == self::IBTRIGGER_MANUEL) {
+            $IBtrigger = self::IBTRIGGER_HOVER;
+        }
+
+        $properties     = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
+        $infoBulle['trigger'] = $IBtrigger;
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getIBTrigger()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('trigger', $infoBulle)) {
+                return $infoBulle['trigger'];
             }
         }
         return false;
@@ -1295,6 +1401,25 @@ class OObject
         return $retour;
     }
 
+    public function getIBTypeConstants()
+    {
+        $retour = [];
+        if (empty($this->const_IBtype)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'IBTYPE_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_IBtype= $retour;
+        } else {
+            $retour = $this->const_IBtype;
+        }
+
+        return $retour;
+    }
+
     public function getIBPlacementConstants()
     {
         $retour = [];
@@ -1309,6 +1434,25 @@ class OObject
             $this->const_IBplacement = $retour;
         } else {
             $retour = $this->const_IBplacement;
+        }
+
+        return $retour;
+    }
+
+    public function getIBTriggerConstants()
+    {
+        $retour = [];
+        if (empty($this->const_IBtrigger)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'IBTRIGGER_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_IBtrigger = $retour;
+        } else {
+            $retour = $this->const_IBtrigger;
         }
 
         return $retour;

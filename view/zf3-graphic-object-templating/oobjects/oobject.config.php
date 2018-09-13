@@ -20,6 +20,8 @@ return [
     'acPy'          => '',
 
     'infoBulle'     => [
+        'setIB'         => false,
+        'type'          => OObject::IBTYPE_TOOLTIP,
         'animation'     => true,
         'delay'         => [
             'show'          => 500,
@@ -27,7 +29,9 @@ return [
         ],
         'html'          => false,
         'placement'     => OObject::IBPLACEMENT_TOP,
-        'body'          => '',
+        'title'         => '',
+        'content'       => '',
+        'trigger'       => OObject::IBTRIGGER_HOVER,
     ],
 
     'resources'     => [
