@@ -1,3 +1,5 @@
-    callback: function ($this, type, evt) {
+    {% if objet.event is not empty %}
+    callback: function ($this, type, e) {
         invokeAjax("id='{{ objet.id }}'&type='"+type+"'", '{{ objet.id }}', 'click', e);
     },
+    {% endif %}

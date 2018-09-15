@@ -35,70 +35,72 @@
 
 {% if objet.action == 'send' %}
     <script id='{{ objet.id }}' type="text/javascript">
-        let messageBoxes = '';
+        $(document).ready(function (e) {
+            let messageBoxes = '';
         {% switch(objet.msgType) %}
             {% case 'confirm' %}
-        messageBoxes = {{ objet.id }}Lobibox.confirm({
-            title: '{{ objet.title }}',
-            msg: '{{ objet.body }}',
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
-        });
+            messageBoxes = {{ objet.id }}Lobibox.confirm({
+                title: '{{ objet.title }}',
+                msg: '{{ objet.body }}',
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
+            });
             {% case 'alert' %}
-        messageBoxes = {{ objet.id }}Lobibox.alert('{{ objet.nature }}', {
-            title: '{{ objet.title }}',
-            msg: '{{ objet.body }}',
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
-        });
+            messageBoxes = {{ objet.id }}Lobibox.alert('{{ objet.nature }}', {
+                title: '{{ objet.title }}',
+                msg: '{{ objet.body }}',
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
+            });
             {% case 'prompt' %}
-        messageBoxes = {{ objet.id }}Lobibox.prompt('{{ objet.type }}', {
-            multiline: {{ objet.multiline }},
-                {% if objet.multiline == 'true' %}
-            lines: {{ objet.lines }},
-                {% endif %}
-            title: '{{ objet.title }}',
-                {% if objet.label is not empty %}
-            label: '{{ objet.label }}',
-                {% endif %}
-            required: {{ objet.required }},
-            attrs: {
-            {% for attr, val in objet.attrs %}
-                {{ attr }}: '{{ val }}',
-            {% endfor %}
-            },
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
-        });
+            messageBoxes = {{ objet.id }}Lobibox.prompt('{{ objet.type }}', {
+                multiline: {{ objet.multiline }},
+                    {% if objet.multiline == 'true' %}
+                lines: {{ objet.lines }},
+                    {% endif %}
+                title: '{{ objet.title }}',
+                    {% if objet.label is not empty %}
+                label: '{{ objet.label }}',
+                    {% endif %}
+                required: {{ objet.required }},
+                attrs: {
+                {% for attr, val in objet.attrs %}
+                    {{ attr }}: '{{ val }}',
+                {% endfor %}
+                },
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
+            });
             {#% case 'progress' %#}
 /*
-        messageBoxes = {#{ objet.id }}Lobibox.progress({
-            title: {{ objet.title }},
-            label: {{ objet.label }},
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %#}
-        });
+            messageBoxes = {#{ objet.id }}Lobibox.progress({
+                title: {{ objet.title }},
+                label: {{ objet.label }},
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %#}
+            });
 */
             {% case 'window' %}
-        messageBoxes = {{ objet.id }}Lobibox.window({
-            title: '{{ objet.title }}',
-                {% if objet.content is not empty %}
-            content: '{{ objet.content }}',
-                {% endif %}
-                {% if objet.url is not empty %}
-            url: '{{ objet.url }}',
-                {% endif %}
-            autoload: {{ objet.autoload }},
-            showAfterLoad: {{ objet.showAfterLoad }},
-            loadMethod: '{{ objet.loadMethod }}',
-            params: {
-                {% for cle, val in objet.params %}
-                '{{ cle }}': '{{ val }}',
-                {% endfor %}
-            },
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
-            {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
-        });
+            messageBoxes = {{ objet.id }}Lobibox.window({
+                title: '{{ objet.title }}',
+                    {% if objet.content is not empty %}
+                content: '{{ objet.content }}',
+                    {% endif %}
+                    {% if objet.url is not empty %}
+                url: '{{ objet.url }}',
+                    {% endif %}
+                autoload: {{ objet.autoload }},
+                showAfterLoad: {{ objet.showAfterLoad }},
+                loadMethod: '{{ objet.loadMethod }}',
+                params: {
+                    {% for cle, val in objet.params %}
+                    '{{ cle }}': '{{ val }}',
+                    {% endfor %}
+                },
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
+                {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
+            });
         {% endswitch %}
-        messageBoxes.show();
+            messageBoxes.show();
+        });
     </script>
 {% endif %}

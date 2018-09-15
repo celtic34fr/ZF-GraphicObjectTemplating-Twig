@@ -49,22 +49,23 @@ class MainController extends AbstractActionController
                 $sessionObj = OObject::validateSession();
                 /** @var OObject $callingObj */
                 $callingObj = OObject::buildObject($params['id'], $sessionObj);
-                $event      = $callingObj->getEvent($params['event']);
-                $object     = $this->buildObject($event['class']);
-                $objMethod  = $event['method'];
-
-                // traitement en cas de formulaire
-                if (strlen($params['form']) > 2) {
-                    /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                    $params['form'] = $this->buildFormDatas($params['form'], $sessionObj);
-                }
 
                 switch ($callingObj->getObject()) {
-                    case 'odmessage':
                     case 'odcheckbox':
+                    case 'odmessage':
                         // appel de la méthode de l'objet passée en paramètre
                         $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
+                        break;
                     default:
+                        $event      = $callingObj->getEvent($params['event']);
+                        $object     = $this->buildObject($event['class']);
+                        $objMethod  = $event['method'];
+
+                        // traitement en cas de formulaire
+                        if (strlen($params['form']) > 2) {
+                            /** reformatage et mise à jour des données du formulaire niveau objets de la page */
+                            $params['form'] = $this->buildFormDatas($params['form'], $sessionObj);
+                        }
                         // appel de la méthode de l'objet passée en paramètre
                         $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
                         break;

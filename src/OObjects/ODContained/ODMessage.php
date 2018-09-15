@@ -85,10 +85,17 @@ use Zend\ServiceManager\ServiceManager;
  *
  * méthodes de customisation des boutons
  * -------------------------------------
- * setOkButton($label, $classView, $closeOnClick = true)
+ * setOkButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
  * getOkButton()
- * setCancelButton($label, $classView, $closeOnClick = true)
+ * setCancelButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
  * getCancelButton()
+ * setYesButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+ * getYesButton()
+ * setNoButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+ * setNoButton()
+ * setCustomButton($label, $value, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+ * getCustomButton()
+ * setButton($type, $label, $classView, $closeOnClick = true)
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -98,7 +105,6 @@ use Zend\ServiceManager\ServiceManager;
  * getBtnAlignsContants()
  * getWindowLoadsContants()
  * getIconsContants()
- * setButton($type, $label, $classView, $closeOnClick = true)
  * getBtnClassesContants()
  * getMsgNatureConstants()
  */
@@ -834,6 +840,30 @@ class ODMessage extends ODContained
         return false;
     }
 
+    public function setButton($type, $label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+    {
+        $label          = (string) $label;
+        $classViews     = $this->getBtnClassesContants();
+        $classView      = (string) $classView;
+        if (!in_array($classView, $classViews)) { $classView = self::ODMESSAGEBTNCLASSES_DEFAULT; }
+        $closeOnClick   = ($closeOnClick && true);
+
+        $properties = $this->getProperties();
+        if (!array_key_exists('buttons', $properties)) { $properties['buttons'] = []; }
+        if (!array_key_exists($type, $properties['buttons'])) { $properties['buttons'][$type] = []; }
+
+        $btn              = $properties['buttons'][$type];
+        $btn['label']     = $label;
+        $btn['classes']   = $classView;
+        $btn['close']     = ($closeOnClick) ? self::BOOLEAN_TRUE : self::BOOLEAN_FALSE;
+        if (!empty($value)) { $btn['value']     = $value; }
+
+        $properties['buttons'][$type] = $btn;
+        $this->setProperties($properties);
+        return $this;
+
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -964,30 +994,6 @@ class ODMessage extends ODContained
             $retour = $this->const_icon;
         }
         return $retour;
-    }
-
-    private function setButton($type, $label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
-    {
-        $label          = (string) $label;
-        $classViews     = $this->getBtnClassesContants();
-        $classView      = (string) $classView;
-        if (!in_array($classView, $classViews)) { $classView = self::ODMESSAGEBTNCLASSES_DEFAULT; }
-        $closeOnClick   = ($closeOnClick && true);
-
-        $properties = $this->getProperties();
-        if (!array_key_exists('buttons', $properties)) { $properties['buttons'] = []; }
-        if (!array_key_exists($type, $properties['buttons'])) { $properties['buttons'][$type] = []; }
-
-        $btn              = $properties['buttons'][$type];
-        $btn['label']     = $label;
-        $btn['classes']   = $classView;
-        $btn['close']     = ($closeOnClick) ? self::BOOLEAN_TRUE : self::BOOLEAN_FALSE;
-        if (!empty($value)) { $btn['value']     = $value; }
-
-        $properties['buttons'][$type] = $btn;
-        $this->setProperties($properties);
-        return $this;
-
     }
 
     private function getBtnClassesContants()
