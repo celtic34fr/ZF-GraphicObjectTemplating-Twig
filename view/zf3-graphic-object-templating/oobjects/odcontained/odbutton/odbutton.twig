@@ -18,7 +18,7 @@
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
 
     {% if objet.type != 'reset' and objet.type != 'link' %}
-    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+        {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
     {% endif %}
 >
     <button class="{{ objet.nature }}" style="width: 100%;"
@@ -36,4 +36,6 @@
         });
     </script>
     {% endif %}
+
+    {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'events':objet.infoBulle} %}
 </div>

@@ -1270,17 +1270,20 @@ class OObject
     public function setIBTitle($IBtitle = null)
     {
         $IBtitle = (string) $IBtitle;
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
         if (!empty($IBbody)) {
-            $properties = $this->getProperties();
-            if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
-            $infoBulle  = $properties['infoBulle'];
             $infoBulle['title'] = $IBtitle;
             $infoBulle['setIB'] = true;
-
-            $properties['infoBulle'] = $infoBulle;
-            $this->setProperties($properties);
-            return $this;
+        } else {
+            if (!$this->getIBContent()) {
+                $infoBulle['setIB'] = false;
+            }
         }
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function getIBTitle()
@@ -1298,17 +1301,20 @@ class OObject
     public function setIBContent($IBContent = null)
     {
         $IBContent = (string) $IBContent;
+        $properties = $this->getProperties();
+        if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
+        $infoBulle  = $properties['infoBulle'];
         if (!empty($IBbody)) {
-            $properties = $this->getProperties();
-            if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
-            $infoBulle  = $properties['infoBulle'];
             $infoBulle['content'] = $IBContent;
             $infoBulle['setIB'] = true;
-
-            $properties['infoBulle'] = $infoBulle;
-            $this->setProperties($properties);
-            return $this;
+        } else {
+            if (!$this->getIBTitle()) {
+                $infoBulle['setIB'] = false;
+            }
         }
+        $properties['infoBulle'] = $infoBulle;
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function getIBContent()
