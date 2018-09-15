@@ -27,7 +27,7 @@ return [
             'show'          => 500,
             'hide'          => 100,
         ],
-        'html'          => false,
+        'html'          => OObject::BOOLEAN_FALSE,
         'placement'     => OObject::IBPLACEMENT_TOP,
         'title'         => '',
         'content'       => '',
