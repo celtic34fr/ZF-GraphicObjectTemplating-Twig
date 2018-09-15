@@ -37,30 +37,30 @@
     <script id='{{ objet.id }}' type="text/javascript">
         let messageBoxes = '';
         {% switch(objet.msgType) %}
-        {% case 'confirm' %}
+            {% case 'confirm' %}
         messageBoxes = {{ objet.id }}Lobibox.confirm({
-            title: {{ objet.title }},
-            msg: {{ objet.body }},
+            title: '{{ objet.title }}',
+            msg: '{{ objet.body }}',
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
-        {% case 'alert' %}
-        messageBoxes = {{ objet.id }}Lobibox.alert({{ objet.nature }}, {
-            title: {{ objet.title }},
-            msg: {{ objet.body }},
+            {% case 'alert' %}
+        messageBoxes = {{ objet.id }}Lobibox.alert('{{ objet.nature }}', {
+            title: '{{ objet.title }}',
+            msg: '{{ objet.body }}',
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
-        {% case 'prompt' %}
+            {% case 'prompt' %}
         messageBoxes = {{ objet.id }}Lobibox.prompt('{{ objet.type }}', {
             multiline: {{ objet.multiline }},
-        {% if objet.multiline == 'true' %}
+                {% if objet.multiline == 'true' %}
             lines: {{ objet.lines }},
-        {% endif %}
-            title: {{ objet.title }},
-        {% if objet.label is not empty %}
-            label: {{ objet.label }},
-        {% endif %}
+                {% endif %}
+            title: '{{ objet.title }}',
+                {% if objet.label is not empty %}
+            label: '{{ objet.label }}',
+                {% endif %}
             required: {{ objet.required }},
             attrs: {
             {% for attr, val in objet.attrs %}
@@ -70,7 +70,7 @@
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}
         });
-        {% case 'progress' %}
+            {#% case 'progress' %#}
 /*
         messageBoxes = {#{ objet.id }}Lobibox.progress({
             title: {{ objet.title }},
@@ -78,22 +78,22 @@
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %#}
         });
 */
-        {% case 'window' %}
+            {% case 'window' %}
         messageBoxes = {{ objet.id }}Lobibox.window({
-            title: {{ objet.title }},
-        {% if objet.content is not empty %}
-            content: {{ objet.content }},
-        {% endif %}
-        {% if objet.url is not empty %}
-            url: {{ objet.url }},
-        {% endif %}
+            title: '{{ objet.title }}',
+                {% if objet.content is not empty %}
+            content: '{{ objet.content }}',
+                {% endif %}
+                {% if objet.url is not empty %}
+            url: '{{ objet.url }}',
+                {% endif %}
             autoload: {{ objet.autoload }},
             showAfterLoad: {{ objet.showAfterLoad }},
-            loadMethod: {{ objet.loadMethod }},
+            loadMethod: '{{ objet.loadMethod }}',
             params: {
-        {% for cle, val in objet.params %}
-                {{ cle }}: {{ val }},
-        {% endfor %}
+                {% for cle, val in objet.params %}
+                '{{ cle }}': '{{ val }}',
+                {% endfor %}
             },
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/buttons.twig" with {'buttons':objet.buttons} %}
             {% include "zf3-graphic-object-templating/oobjects/odcontained/odmessage/callback.twig" with {'callback':objet.callback} %}

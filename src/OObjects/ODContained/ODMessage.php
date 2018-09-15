@@ -135,8 +135,8 @@ class ODMessage extends ODContained
     const ODMESSAGEBTNCLASSES_DEFAULT   = 'btn btn-default';
 
     const ODMESSAGEMSGNATURE_INFO       = 'info';
-    const ODMESSAGEMSGNATURE_SUCCESS    = 'succes';
-    const ODMESSAGEMSGNATURE_DANGER     = 'danger';
+    const ODMESSAGEMSGNATURE_SUCCESS    = 'success';
+    const ODMESSAGEMSGNATURE_ERROR      = 'error';
     const ODMESSAGEMSGNATURE_WARNING    = 'warning';
 
     const ODMESSAGEPROMPTATTRIBUTES     = ['label', 'placeholder', 'type', 'size', 'maxlength'];

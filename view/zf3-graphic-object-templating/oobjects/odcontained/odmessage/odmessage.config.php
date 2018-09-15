@@ -3,15 +3,15 @@
 use GraphicObjectTemplating\OObjects\ODContained\ODMessage;
 
 return [
-    'object'        => 'odmessage',
-    'typeObj'       => 'odcontained',
-    'template'      => 'odmessage.twig',
+    'object'            => 'odmessage',
+    'typeObj'           => 'odcontained',
+    'template'          => 'odmessage.twig',
 
     'action'            => ODMessage::ODMESSAGEACTION_INIT,
     'horizontalOffset'  => 5,
     'verticalOffset'    => 5,
     'width'             => '600',
-    'height'            => '\'auto\'',
+    'height'            => "'auto'",
     'closeButton'       => ODMessage::BOOLEAN_TRUE,
     'draggable'         => ODMessage::BOOLEAN_FALSE,
     'customBtnClass'    => 'lobibox-btn lobibox-btn-default',
@@ -29,29 +29,28 @@ return [
     'msgType'           => ODMessage::ODMESSAGETYPE_CONFIRM,
 
     /** confirm & alert attributes */
-    'title'         => '',
-    'body'          => '',
-    'nature'        => ODMessage::ODMESSAGEMSGNATURE_INFO,
+    'title'             => '',
+    'body'              => '',
+    'nature'            => ODMessage::ODMESSAGEMSGNATURE_INFO,
     /** prompt attributes */
-    'attrs'         => [],
-    'value'         => '',
-    'multiline'     => 'false',
-    'lines'         => 1,
-    'type'          => ODMessage::ODMESSAGEPROMPT_TEXT,
-    'label'         => '',                                  // utilisé également par progress
-    'required'      => 'true',
-    'errorMessage'  => '',
+    'attrs'             => [],
+    'value'             => '',
+    'multiline'         => ODMessage::BOOLEAN_FALSE,
+    'lines'             => 1,
+    'type'              => ODMessage::ODMESSAGEPROMPT_TEXT,
+    'label'             => '',                                  // utilisé également par progress
+    'required'          => ODMessage::BOOLEAN_TRUE,
+    'errorMessage'      => '',
     /** progress attributes */
-    'showProgressLabel' => 'true',
-    'progressTpl'       => 'false',
+    'showProgressLabel' => ODMessage::BOOLEAN_TRUE,
+    'progressTpl'       => ODMessage::BOOLEAN_FALSE,
     /** windows attributes */
-    'content'       => '',
-    'url'           => '',
-    'autoload'      => 'true',
-    'loadMethod'    => ODMessage::ODMESSAGEWINDOWLOAD_GET,
-    'showAfterLoad' => 'true',
-    'params'        => [],
-
+    'content'           => '',
+    'url'               => '',
+    'autoload'          => ODMessage::BOOLEAN_TRUE,
+    'loadMethod'        => ODMessage::ODMESSAGEWINDOWLOAD_GET,
+    'showAfterLoad'     => ODMessage::BOOLEAN_TRUE,
+    'params'            => [],
 
     'resources' => [
         'css' => [
