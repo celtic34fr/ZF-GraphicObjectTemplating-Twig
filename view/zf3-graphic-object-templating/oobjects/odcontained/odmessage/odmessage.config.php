@@ -57,7 +57,8 @@ return [
             'lobibox.css' => 'css/lobibox.css'
         ],
         'js'  => [
-            'messageboxes.js' => 'js/messageboxes.js'
+            'messageboxes.js'   => 'js/messageboxes.js',
+            'odmessage.js'      => 'js/odmessage.js',
         ],
     ]
 ];

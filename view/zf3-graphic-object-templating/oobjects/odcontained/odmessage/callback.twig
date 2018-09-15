@@ -1,5 +1,7 @@
     {% if objet.event is not empty %}
     callback: function ($this, type, e) {
-        invokeAjax("id='{{ objet.id }}'&type='"+type+"'", '{{ objet.id }}', 'click', e);
+        let {{ objet.id }} = new {{ objet.object }}($('#{{ objet.id }}'));
+        invokeAjax({{ objet.id }}.getData(type), '{{ objet.id }}', 'click', e);
+        $this.hide();
     },
     {% endif %}
