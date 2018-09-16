@@ -12,12 +12,12 @@ odtable.prototype = {
     rmLineUpdate(params) {
         let noLine  = params['noLine'];
         let maxLine = params['maxLine'];
-        for (var idx = (noLine + 1); idx <= maxLine; idx++) {
+        for (let idx = (noLine + 1); idx <= maxLine; idx++) {
             let tmp     = $("#"+this.id+" .lno"+idx);
             let pIdx    = idx - 1;
             tmp.attr("data-lno", pIdx);
             tmp.removeClass("lno"+idx).addClass("lno"+pIdx);
-        };
+        }
     },
     updateCol(params) {
         let col = params['col'];
