@@ -24,7 +24,7 @@ odtable.prototype = {
         let datas = params['datas'];
 
         $.each(datas,function (key, val) {
-            $("#"+idTable+" .lno"+key+" .cno"+col).html(val);
+            $("#"+this.id+" .lno"+key+" .cno"+col).html(val);
         });
     },
 };

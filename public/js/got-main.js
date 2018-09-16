@@ -70,6 +70,7 @@ function invokeAjax(datas, idSource, event, e) {
         });
 
         let updId = "";
+        let table = "";
         switch (mode) {
             case 'rscs': //extraction des ressources CSS / Js avec injection
                 loadResources(id, code);
@@ -131,11 +132,11 @@ function invokeAjax(datas, idSource, event, e) {
                 $('#'+id).attr('data-'+evt+'-stopevt', flg);
                 break;
             case 'updCols': // mise à jour colonne ODTable
-                let table = new odtable($('#'+id));
+                table = new odtable($('#'+id));
                 table.updateCol(code);
                 break;
             case 'rmLineUpd': // mise à jour colonne ODTable
-                let table = new odtable($('#'+id));
+                table = new odtable($('#'+id));
                 table.rmLineUpdate(code);
                 break;
         }

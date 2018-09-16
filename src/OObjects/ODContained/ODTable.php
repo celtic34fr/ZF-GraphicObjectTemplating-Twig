@@ -1050,7 +1050,7 @@ class ODTable extends ODContained
     {
         $idTable            = $this->getId();
         $params['noLine']   = $noLine;
-        $params['maxLine']  = sizeof($this->getLines() + 1);
+        $params['maxLine']  = sizeof($this->getLines() ) + 1;
         return [OObject::formatRetour($idTable, $idTable, 'rmLineUpd', $params)];
     }
 
