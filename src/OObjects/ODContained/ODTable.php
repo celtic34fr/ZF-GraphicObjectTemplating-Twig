@@ -76,6 +76,7 @@ use Zend\Session\Container;
  *                          recherche le numéro de ligne sur une valeur de colonne
  * enaPagination()          activation de la pagination
  * disPagination()          dé-activation de la pagination
+ * getPagination()          retourne si la pagination est activé ou non
  * setMaxPage(int $maxPage) affecte le nombre maximal de page pour la pagination (navigation)
  * getMaxPage()
  * setNoPage(int $noPage)   affecte le numéro de la page affichée pour la pagination (navigation)
@@ -114,67 +115,6 @@ class ODTable extends ODContained
         $width = $this->getWidthBT();
         if (!is_array($width) || empty($width)) $this->setWidthBT(12);
         $this->enable();
-
-        $properties = $this->getProperties();
-
-        $objLength  = new ODSelect($id.'Length');
-        $lengths    = $this->getLengthConstants();
-        foreach ($lengths as $length) {
-            $objLength->addOption($length, $length);
-        }
-        $objLength->selectOption(self::ODTABLELENGTH_10);
-        $objLength->setWidthBT('O8:W4');
-        $objLength->setLabel('Par ');
-        $objLength->setLabelWidthBT(4);
-        $objLength->setClasses('bouton navBtn');
-        $properties['objLength'] = $objLength->getId();
-
-        $objNavbar  = new OSDiv($id.'Navbar');
-        $objNavbar->setWidthBT("O1:W11");
-
-        $btnPage    = new ODButton($id.'BtnPage');
-        $btnPage->setLabel('');
-        $btnPage->setWidthBT(1);
-        $btnPage->setDisplay(OObject::DISPLAY_NONE);
-        $btnPage->setClasses('bouton navBtn');
-
-        $btnFirst   = new ODButton($id.'BtnFirst');
-        $btnFirst->setLabel('');
-        $btnFirst->setIcon('fa fa-angle-double-left');
-        $btnFirst->setWidthBT(1);
-        $btnFirst->setDisplay(OObject::DISPLAY_NONE);
-        $btnFirst->setClasses('bouton navBtn');
-
-        $btnPrev    = new ODButton($id.'BtnPrev');
-        $btnPrev->setLabel('');
-        $btnPrev->setIcon('fa fa-angle-left');
-        $btnPrev->setWidthBT(1);
-        $btnPrev->setDisplay(OObject::DISPLAY_NONE);
-        $btnPrev->setClasses('bouton navBtn');
-
-        $btnSuiv    = new ODButton($id.'BtnSuiv');
-        $btnSuiv->setLabel('');
-        $btnSuiv->setIcon('fa fa-angle-right');
-        $btnSuiv->setWidthBT(1);
-        $btnSuiv->setDisplay(OObject::DISPLAY_NONE);
-        $btnSuiv->setClasses('bouton navBtn');
-
-        $btnLast    = new ODButton($id.'BtnLast');
-        $btnLast->setLabel('');
-        $btnLast->setIcon('fa fa-angle-double-right');
-        $btnLast->setWidthBT(1);
-        $btnLast->setDisplay(OObject::DISPLAY_NONE);
-        $btnLast->setClasses('bouton navBtn');
-
-        $objNavbar->addChild($btnFirst);
-        $objNavbar->addChild($btnPrev);
-        $objNavbar->addChild($btnPage);
-        $objNavbar->addChild($btnSuiv);
-        $objNavbar->addChild($btnLast);
-
-        $properties['objNavbar'] = $objNavbar->getId();
-
-        $this->setProperties($properties);
 
         return $this;
     }
@@ -728,6 +668,65 @@ class ODTable extends ODContained
     {
         $properties = $this->getProperties();
         $properties['pagination'] = true;
+
+        $id         = $this->getId();
+        $objLength  = new ODSelect($id.'Length');
+        $lengths    = $this->getLengthConstants();
+        foreach ($lengths as $length) {
+            $objLength->addOption($length, $length);
+        }
+        $objLength->selectOption(self::ODTABLELENGTH_10);
+        $objLength->setWidthBT('O8:W4');
+        $objLength->setLabel('Par ');
+        $objLength->setLabelWidthBT(4);
+        $objLength->setClasses('bouton navBtn');
+        $properties['objLength'] = $objLength->getId();
+
+        $objNavbar  = new OSDiv($id.'Navbar');
+        $objNavbar->setWidthBT("O1:W11");
+
+        $btnPage    = new ODButton($id.'BtnPage');
+        $btnPage->setLabel('');
+        $btnPage->setWidthBT(1);
+        $btnPage->setDisplay(OObject::DISPLAY_NONE);
+        $btnPage->setClasses('bouton navBtn');
+
+        $btnFirst   = new ODButton($id.'BtnFirst');
+        $btnFirst->setLabel('');
+        $btnFirst->setIcon('fa fa-angle-double-left');
+        $btnFirst->setWidthBT(1);
+        $btnFirst->setDisplay(OObject::DISPLAY_NONE);
+        $btnFirst->setClasses('bouton navBtn');
+
+        $btnPrev    = new ODButton($id.'BtnPrev');
+        $btnPrev->setLabel('');
+        $btnPrev->setIcon('fa fa-angle-left');
+        $btnPrev->setWidthBT(1);
+        $btnPrev->setDisplay(OObject::DISPLAY_NONE);
+        $btnPrev->setClasses('bouton navBtn');
+
+        $btnSuiv    = new ODButton($id.'BtnSuiv');
+        $btnSuiv->setLabel('');
+        $btnSuiv->setIcon('fa fa-angle-right');
+        $btnSuiv->setWidthBT(1);
+        $btnSuiv->setDisplay(OObject::DISPLAY_NONE);
+        $btnSuiv->setClasses('bouton navBtn');
+
+        $btnLast    = new ODButton($id.'BtnLast');
+        $btnLast->setLabel('');
+        $btnLast->setIcon('fa fa-angle-double-right');
+        $btnLast->setWidthBT(1);
+        $btnLast->setDisplay(OObject::DISPLAY_NONE);
+        $btnLast->setClasses('bouton navBtn');
+
+        $objNavbar->addChild($btnFirst);
+        $objNavbar->addChild($btnPrev);
+        $objNavbar->addChild($btnPage);
+        $objNavbar->addChild($btnSuiv);
+        $objNavbar->addChild($btnLast);
+
+        $properties['objNavbar'] = $objNavbar->getId();
+
         $this->setProperties($properties);
         return $this;
     }
@@ -735,14 +734,27 @@ class ODTable extends ODContained
     public function disPagination()
     {
         $properties = $this->getProperties();
-        $properties['pagination'] = false;
+        $properties['pagination']   = false;
+
+        OObject::destroyObject($properties['objLength']);
+        OObject::destroyObject($properties['objNavbar']);
+
+        $properties['objLength']    = "";
+        $properties['objNavbar']    = "";
+
         $this->setProperties($properties);
         return $this;
     }
 
+    public function getPagination()
+    {
+        $properties = $this->getProperties();
+        return (array_key_exists('pagination', $properties) ? $properties['pagination'] : false);
+    }
+
     public function setMaxPage(int $maxPage)
     {
-        if ($maxPage > 0) {
+        if ($maxPage > 0 && $this->getPagination()) {
             $properties = $this->getProperties();
             $properties['maxPage'] = $maxPage;
             $this->setProperties($properties);
@@ -753,13 +765,16 @@ class ODTable extends ODContained
 
     public function getMaxPage()
     {
-        $properties = $this->getProperties();
-        return (array_key_exists('maxPage', $properties) ? $properties['maxPage'] : false);
+        if ($this->getPagination()) {
+            $properties = $this->getProperties();
+            return (array_key_exists('maxPage', $properties) ? $properties['maxPage'] : false);
+        }
+        return false;
     }
 
     public function setNoPage(int $noPage)
     {
-        if ($noPage > 0) {
+        if ($noPage > 0 && $this->getPagination()) {
             $maxPage = $this->getMaxPage();
             if (!empty($maxPage) && $maxPage > 0 && $noPage <= $maxPage) {
                 $properties = $this->getProperties();
@@ -773,24 +788,33 @@ class ODTable extends ODContained
 
     public function getNoPage()
     {
-        $properties = $this->getProperties();
-        return (array_key_exists('noPage', $properties) ? $properties['noPage'] : false);
+        if ($this->getPagination()) {
+            $properties = $this->getProperties();
+            return (array_key_exists('noPage', $properties) ? $properties['noPage'] : false);
+        }
+        return false;
     }
 
     public function setLength(int $length = self::ODTABLELENGTH_10)
     {
-        $lengths = $this->getLengthConstants();
-        if (!in_array($length, $lengths)) { $length = self::ODTABLELENGTH_10; }
-        $properties = $this->getProperties();
-        $properties['length'] = $length;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->getPagination()) {
+            $lengths = $this->getLengthConstants();
+            if (!in_array($length, $lengths)) { $length = self::ODTABLELENGTH_10; }
+            $properties = $this->getProperties();
+            $properties['length'] = $length;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     public function getLength()
     {
-        $properties = $this->getProperties();
-        return (array_key_exists('length', $properties) ? $properties['length'] : false);
+        if ($this->getPagination()) {
+            $properties = $this->getProperties();
+            return (array_key_exists('length', $properties) ? $properties['length'] : false);
+        }
+        return false;
     }
 
     public function setStart(int $start = 0)
