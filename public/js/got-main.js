@@ -131,7 +131,12 @@ function invokeAjax(datas, idSource, event, e) {
                 $('#'+id).attr('data-'+evt+'-stopevt', flg);
                 break;
             case 'updCols': // mise à jour colonne ODTable
-                updateCol(id, code);
+                let table = new odtable($('#'+id));
+                table.updateCol(code);
+                break;
+            case 'rmLineUpd': // mise à jour colonne ODTable
+                let table = new odtable($('#'+id));
+                table.rmLineUpdate(code);
                 break;
         }
     });

@@ -1019,7 +1019,15 @@ class ODTable extends ODContained
         $cols               = $this->getColValues($noCol);
         $params['col']      = $noCol;
         $params['datas']    = $cols;
-        return [OObject::formatRetour($idTable, $idTable, 'updCols'), $params];
+        return [OObject::formatRetour($idTable, $idTable, 'updCols', $params)];
+    }
+
+    public function returnRmLine($noLine)
+    {
+        $idTable            = $this->getId();
+        $params['noLine']   = $noLine;
+        $params['maxLine']  = sizeof($this->getLines() + 1);
+        return [OObject::formatRetour($idTable, $idTable, 'rmLineUpd', $params)];
     }
 
     /** **************************************************************************************************
