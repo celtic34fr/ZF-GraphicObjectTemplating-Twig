@@ -94,22 +94,23 @@ use Zend\Session\Container;
  */
 class ODTable extends ODContained
 {
-    const ODTABLETITLEPOS_TOP_LEFT      = "top_left";
-    const ODTABLETITLEPOS_TOP_CENTER    = "top_center";
-    const ODTABLETITLEPOS_TOP_RIGHT     = "opt_right";
-    const ODTABLETITLEPOS_BOTTOM_LEFT   = "bottom_left";
+    const ODTABLETITLEPOS_TOP_LEFT = "top_left";
+    const ODTABLETITLEPOS_TOP_CENTER = "top_center";
+    const ODTABLETITLEPOS_TOP_RIGHT = "opt_right";
+    const ODTABLETITLEPOS_BOTTOM_LEFT = "bottom_left";
     const ODTABLETITLEPOS_BOTTOM_CENTER = "bottom_center";
-    const ODTABLETITLEPOS_BOTTOM_RIGHT  = "bottom_right";
+    const ODTABLETITLEPOS_BOTTOM_RIGHT = "bottom_right";
 
-    const ODTABLELENGTH_10              = 10;
-    const ODTABLELENGTH_20              = 20;
-    const ODTABLELENGTH_50              = 50;
-    const ODTABLELENGTH_100             = 100;
+    const ODTABLELENGTH_10 = 10;
+    const ODTABLELENGTH_20 = 20;
+    const ODTABLELENGTH_50 = 50;
+    const ODTABLELENGTH_100 = 100;
 
     private $const_titlePos;
     private $const_length;
 
-    public function __construct($id) {
+    public function __construct($id)
+    {
         parent::__construct($id, "oobjects/odcontained/odtable/odtable.config.php");
         $this->setDisplay();
         $width = $this->getWidthBT();
@@ -122,7 +123,7 @@ class ODTable extends ODContained
     public function setTitle($title, $position = self::ODTABLETITLEPOS_BOTTOM_CENTER)
     {
         $title = (string)$title;
-        $positions  = $this->getTitlePosConstants();
+        $positions = $this->getTitlePosConstants();
         if (!in_array($position, $positions)) $position = self::ODTABLETITLEPOS_BOTTOM_CENTER;
 
         $properties = $this->getProperties();
@@ -141,7 +142,7 @@ class ODTable extends ODContained
     public function setTitlePosition($position = self::ODTABLETITLEPOS_BOTTOM_CENTER)
     {
         $properties = $this->getProperties();
-        $positions  = $this->getTitlePosConstants();
+        $positions = $this->getTitlePosConstants();
         if (!in_array($position, $positions)) $position = self::ODTABLETITLEPOS_BOTTOM_CENTER;
 
         $properties['titlePos'] = $position;
@@ -157,16 +158,16 @@ class ODTable extends ODContained
 
     public function addTitleStyle($style)
     {
-        $style = (string) $style;
+        $style = (string)$style;
         $properties = $this->getProperties();
-        $properties['titleStyle'] .= " " .$style;
+        $properties['titleStyle'] .= " " . $style;
         $this->setProperties($properties);
         return $this;
     }
 
     public function setTitleStyle($style)
     {
-        $style = (string) $style;
+        $style = (string)$style;
         $properties = $this->getProperties();
         $properties['titleStyle'] = $style;
         $this->setProperties($properties);
@@ -187,7 +188,7 @@ class ODTable extends ODContained
         foreach ($cols as $col) {
             $item = [];
             $item['libel'] = $col;
-            $item['view']  = true;
+            $item['view'] = true;
             $colsTab[sizeof($colsTab) + 1] = $item;
         }
         $properties['cols'] = $colsTab;
@@ -241,7 +242,7 @@ class ODTable extends ODContained
     public function removeColHead($nCol)
     {
         $properties = $this->getProperties();
-        $nbCols     = sizeof($properties['cols']);
+        $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
 
         /* suppression de l'entête */
@@ -287,11 +288,11 @@ class ODTable extends ODContained
     public function getColValues($nCol)
     {
         $properties = $this->getProperties();
-        $nbCols     = sizeof($properties['cols']);
+        $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
 
         $datas = $properties['datas'];
-        $cols  = [];
+        $cols = [];
         foreach ($datas as $nLine => $data) {
             $cols[$nLine] = $data[$nCol];
         }
@@ -313,8 +314,8 @@ class ODTable extends ODContained
 
     public function setColWidth($nCol, $width)
     {
-        $nCol = (int) $nCol;
-        $width = (string) $width;
+        $nCol = (int)$nCol;
+        $width = (string)$width;
         $properties = $this->getProperties();
         $nbCols = sizeof($properties['cols']);
         if ($nCol < 1 || $nCol > $nbCols) return false;
@@ -327,8 +328,8 @@ class ODTable extends ODContained
     public function getColsWith()
     {
         $properties = $this->getProperties();
-        $cols       = $properties['cols'];
-        $retColsWd  = [];
+        $cols = $properties['cols'];
+        $retColsWd = [];
 
         foreach ($cols as $nCol => $col) {
             if ($nCol > 0) {
@@ -340,7 +341,7 @@ class ODTable extends ODContained
 
     public function getColWidth($nCol)
     {
-        $nCol = (int) $nCol;
+        $nCol = (int)$nCol;
         if ($nCol > 0) {
             $properties = $this->getProperties();
             $nbCols = sizeof($properties['cols']);
@@ -356,11 +357,15 @@ class ODTable extends ODContained
         $properties = $this->getProperties();
         $nbCols = sizeof($properties['cols']);
         $caCols = sizeof($line) + (int)$properties['isIdRow'];
-        if ($nbCols != $caCols) { return false; }
+        if ($nbCols != $caCols) {
+            return false;
+        }
 
         /* remise en séquence des champs de la ligne */
         $tmp = [];
-        foreach ($line as $col) { $tmp[sizeof($tmp) + (int)$properties['isIdRow'] + 1] = $col; }
+        foreach ($line as $col) {
+            $tmp[sizeof($tmp) + (int)$properties['isIdRow'] + 1] = $col;
+        }
         $tmp['view'] = true;
         $properties['datas'][sizeof($properties['datas']) + 1] = $tmp;
         $this->setProperties($properties);
@@ -442,7 +447,7 @@ class ODTable extends ODContained
     public function removeLine($nLine)
     {
         $properties = $this->getProperties();
-        $datas      = $properties['datas'];
+        $datas = $properties['datas'];
         $nbLines = sizeof($datas);
         if ($nbLines == 0) return false;
         if ($nLine == 0 || $nLine > $nbLines) return false;
@@ -468,10 +473,10 @@ class ODTable extends ODContained
     public function clearTable()
     {
         $properties = $this->getProperties();
-        $properties['cols']   = [];
-        $properties['datas']  = [];
+        $properties['cols'] = [];
+        $properties['datas'] = [];
         $properties['styles'] = [];
-        $properties['events']  = [];
+        $properties['events'] = [];
         $this->setProperties($properties);
         return $this;
     }
@@ -479,7 +484,7 @@ class ODTable extends ODContained
     public function setCell($nCol, $nLine, $val)
     {
         $properties = $this->getProperties();
-        $nbCols     = sizeof($properties['cols']);
+        $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
         $nbLines = sizeof($properties['datas']);
         if ($nbLines == 0) return false;
@@ -493,7 +498,7 @@ class ODTable extends ODContained
     public function getCell($nCol, $nLine)
     {
         $properties = $this->getProperties();
-        $nbCols     = sizeof($properties['cols']);
+        $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
         $nbLines = sizeof($properties['datas']);
         if ($nbLines == 0) return false;
@@ -591,16 +596,16 @@ class ODTable extends ODContained
 
     public function evtCellClick($nCol, $nLine, $class, $method, $stopEvent = true)
     {
-        $class                  = (string)$class;
-        $method                 = (string)$method;
-        $properties             = $this->getProperties();
-        $nbCols                 = sizeof($properties['cols']);
+        $class = (string)$class;
+        $method = (string)$method;
+        $properties = $this->getProperties();
+        $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
-        $nbLines                = sizeof($properties['datas']);
+        $nbLines = sizeof($properties['datas']);
         if ($nLine > $nbLines || $nLine < 1) return false;
 
-        if(!isset($properties['events'])) $properties['events'] = [];
-        if(!is_array($properties['events'])) $properties['events'] = [];
+        if (!isset($properties['events'])) $properties['events'] = [];
+        if (!is_array($properties['events'])) $properties['events'] = [];
         if (!isset($properties['events'][$nLine])) $properties['events'][$nLine] = [];
 
         $properties['events'][$nLine][$nCol] = [];
@@ -614,10 +619,10 @@ class ODTable extends ODContained
 
     public function disCellClick($nCol, $nLine)
     {
-        $properties             = $this->getProperties();
-        $nbCols                 = sizeof($properties['cols']);
+        $properties = $this->getProperties();
+        $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
-        $nbLines                = sizeof($properties['datas']);
+        $nbLines = sizeof($properties['datas']);
         if ($nLine > $nbLines || $nLine < 1) return false;
 
         if (isset($properties['events'][$nLine][$nCol])) unset($properties['events'][$nLine][$nCol]);
@@ -627,7 +632,7 @@ class ODTable extends ODContained
 
     public function showCol($nCol)
     {
-        $nCol = (int) $nCol;
+        $nCol = (int)$nCol;
         $properties = $this->getProperties();
         $nbCols = sizeof($properties['cols']);
         if ($nCol < 1 || $nCol > $nbCols) return false;
@@ -639,7 +644,7 @@ class ODTable extends ODContained
 
     public function hideCol($nCol)
     {
-        $nCol = (int) $nCol;
+        $nCol = (int)$nCol;
         $properties = $this->getProperties();
         $nbCols = sizeof($properties['cols']);
         if ($nCol < 1 || $nCol > $nbCols) return false;
@@ -651,15 +656,17 @@ class ODTable extends ODContained
 
     public function findNolineOnColValue($nCol, $value)
     {
-        $nCol   = (int) $nCol;
-        $lines  = $this->getLines();
+        $nCol = (int)$nCol;
+        $lines = $this->getLines();
         $properties = $this->getProperties();
         $nbCols = sizeof($properties['cols']);
         if ($nCol < 1 || $nCol > $nbCols) return false;
 
-        $rslt   = [];
+        $rslt = [];
         foreach ($lines as $noLine => $line) {
-            if ($line[$nCol] == $value) { $rslt[] = $noLine; }
+            if ($line[$nCol] == $value) {
+                $rslt[] = $noLine;
+            }
         }
         return $rslt;
     }
@@ -667,11 +674,11 @@ class ODTable extends ODContained
     public function enaPagination()
     {
         $properties = $this->getProperties();
-        $properties['pagination'] = true;
+        $properties['pagination'] = self::BOOLEAN_TRUE;
 
-        $id         = $this->getId();
-        $objLength  = new ODSelect($id.'Length');
-        $lengths    = $this->getLengthConstants();
+        $id = $this->getId();
+        $objLength = new ODSelect($id . 'Length');
+        $lengths = $this->getLengthConstants();
         foreach ($lengths as $length) {
             $objLength->addOption($length, $length);
         }
@@ -682,37 +689,37 @@ class ODTable extends ODContained
         $objLength->setClasses('bouton navBtn');
         $properties['objLength'] = $objLength->getId();
 
-        $objNavbar  = new OSDiv($id.'Navbar');
+        $objNavbar = new OSDiv($id . 'Navbar');
         $objNavbar->setWidthBT("O1:W11");
 
-        $btnPage    = new ODButton($id.'BtnPage');
+        $btnPage = new ODButton($id . 'BtnPage');
         $btnPage->setLabel('');
         $btnPage->setWidthBT(1);
         $btnPage->setDisplay(OObject::DISPLAY_NONE);
         $btnPage->setClasses('bouton navBtn');
 
-        $btnFirst   = new ODButton($id.'BtnFirst');
+        $btnFirst = new ODButton($id . 'BtnFirst');
         $btnFirst->setLabel('');
         $btnFirst->setIcon('fa fa-angle-double-left');
         $btnFirst->setWidthBT(1);
         $btnFirst->setDisplay(OObject::DISPLAY_NONE);
         $btnFirst->setClasses('bouton navBtn');
 
-        $btnPrev    = new ODButton($id.'BtnPrev');
+        $btnPrev = new ODButton($id . 'BtnPrev');
         $btnPrev->setLabel('');
         $btnPrev->setIcon('fa fa-angle-left');
         $btnPrev->setWidthBT(1);
         $btnPrev->setDisplay(OObject::DISPLAY_NONE);
         $btnPrev->setClasses('bouton navBtn');
 
-        $btnSuiv    = new ODButton($id.'BtnSuiv');
+        $btnSuiv = new ODButton($id . 'BtnSuiv');
         $btnSuiv->setLabel('');
         $btnSuiv->setIcon('fa fa-angle-right');
         $btnSuiv->setWidthBT(1);
         $btnSuiv->setDisplay(OObject::DISPLAY_NONE);
         $btnSuiv->setClasses('bouton navBtn');
 
-        $btnLast    = new ODButton($id.'BtnLast');
+        $btnLast = new ODButton($id . 'BtnLast');
         $btnLast->setLabel('');
         $btnLast->setIcon('fa fa-angle-double-right');
         $btnLast->setWidthBT(1);
@@ -734,13 +741,13 @@ class ODTable extends ODContained
     public function disPagination()
     {
         $properties = $this->getProperties();
-        $properties['pagination']   = false;
+        $properties['pagination'] = self::BOOLEAN_FALSE;
 
         OObject::destroyObject($properties['objLength']);
         OObject::destroyObject($properties['objNavbar']);
 
-        $properties['objLength']    = "";
-        $properties['objNavbar']    = "";
+        $properties['objLength'] = "";
+        $properties['objNavbar'] = "";
 
         $this->setProperties($properties);
         return $this;
@@ -754,7 +761,7 @@ class ODTable extends ODContained
 
     public function setMaxPage(int $maxPage)
     {
-        if ($maxPage > 0 && $this->getPagination()) {
+        if ($maxPage > 0 && $this->getPagination() == self::BOOLEAN_TRUE) {
             $properties = $this->getProperties();
             $properties['maxPage'] = $maxPage;
             $this->setProperties($properties);
@@ -765,7 +772,7 @@ class ODTable extends ODContained
 
     public function getMaxPage()
     {
-        if ($this->getPagination()) {
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
             $properties = $this->getProperties();
             return (array_key_exists('maxPage', $properties) ? $properties['maxPage'] : false);
         }
@@ -774,7 +781,7 @@ class ODTable extends ODContained
 
     public function setNoPage(int $noPage)
     {
-        if ($noPage > 0 && $this->getPagination()) {
+        if ($noPage > 0 && $this->getPagination() == self::BOOLEAN_TRUE) {
             $maxPage = $this->getMaxPage();
             if (!empty($maxPage) && $maxPage > 0 && $noPage <= $maxPage) {
                 $properties = $this->getProperties();
@@ -788,7 +795,7 @@ class ODTable extends ODContained
 
     public function getNoPage()
     {
-        if ($this->getPagination()) {
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
             $properties = $this->getProperties();
             return (array_key_exists('noPage', $properties) ? $properties['noPage'] : false);
         }
@@ -797,9 +804,11 @@ class ODTable extends ODContained
 
     public function setLength(int $length = self::ODTABLELENGTH_10)
     {
-        if ($this->getPagination()) {
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
             $lengths = $this->getLengthConstants();
-            if (!in_array($length, $lengths)) { $length = self::ODTABLELENGTH_10; }
+            if (!in_array($length, $lengths)) {
+                $length = self::ODTABLELENGTH_10;
+            }
             $properties = $this->getProperties();
             $properties['length'] = $length;
             $this->setProperties($properties);
@@ -810,7 +819,7 @@ class ODTable extends ODContained
 
     public function getLength()
     {
-        if ($this->getPagination()) {
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
             $properties = $this->getProperties();
             return (array_key_exists('length', $properties) ? $properties['length'] : false);
         }
@@ -819,186 +828,207 @@ class ODTable extends ODContained
 
     public function setStart(int $start = 0)
     {
-        $properties = $this->getProperties();
-        $properties['start'] = $start;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
+            $properties = $this->getProperties();
+            $properties['start'] = $start;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     public function getStart()
     {
-        $properties = $this->getProperties();
-        return (array_key_exists('start', $properties) ? $properties['start'] : false);
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
+            $properties = $this->getProperties();
+            return (array_key_exists('start', $properties) ? $properties['start'] : false);
+        }
+        return false;
     }
 
     public function buildNavbar()
     {
-        $id         = $this->getId();
-        $navbarBtns = new OSDiv($id.'NavbarBtns');
-        $maxPage    = $this->getMaxPage();
-        $noPage     = $this->getNoPage();
-        $sessionObj = self::validateSession();
+        if ($this->getPagination() == self::BOOLEAN_TRUE) {
+            $id = $this->getId();
+            $navbarBtns = new OSDiv($id . 'NavbarBtns');
+            $maxPage = $this->getMaxPage();
+            $noPage = $this->getNoPage();
+            $sessionObj = self::validateSession();
 
-        /** @var ODButton $btnFirst */
-        /** @var ODButton $btnFirstF */
-        $btnFirst = OObject::buildObject($id.'BtnFirst', $sessionObj);
-        $btnFirstF = OObject::cloneObject($btnFirst, $sessionObj);
-        $btnFirstF->setId($id.'BtnF');
-        $btnFirstF->setValue(1);
-        $btnFirstF->setDisplay(OObject::DISPLAY_BLOCK);
-        $btnFirstF->disable();
-        if ((int) $noPage > 1) { $btnFirstF->enable(); }
-        $navbarBtns->addChild($btnFirstF);
-
-        /** @var ODButton $btnPrev */
-        /** @var ODButton $btnPrevP */
-        $btnPrev    = OObject::buildObject($id.'BtnPrev', $sessionObj);
-        $btnPrevP   = OObject::cloneObject($btnPrev, $sessionObj);
-        $btnPrevP->setId($id.'BtnP');
-        $btnPrevP->setDisplay(OObject::DISPLAY_BLOCK);
-        $btnPrevP->disable();
-        if ((int) $noPage > 1) {
-            $btnPrevP->setValue((int) $noPage - 1);
-            $btnPrevP->enable();
-        }
-        $navbarBtns->addChild($btnPrevP);
-
-        /** @var ODButton $btnPage */
-        /** @var ODButton $btnPageP */
-        $btnPage = OObject::buildObject($id.'BtnPage', $sessionObj);
-        if ((int) $maxPage < 6) {
-            // cas 1 : nbPage < 6 :
-            //        btnPrev & btnSuiv inactif
-            //        dessin d'autant de bouton page que maxPage
-            //        mise de la page idPage en actif (fondBleu)
-            for ($ind =1; $ind <= $maxPage ; $ind++) {
-                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                $btnPageP->setId($id.'btnPage'.$ind);
-                $btnPageP->setLabel($ind);
-                $btnPageP->setValue($ind);
-                $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                $btnPageP->enable();
-
-                if ($ind == $noPage) { $btnPageP->disable(); }
-
-                $navbarBtns->addChild($btnPageP);
+            /** @var ODButton $btnFirst */
+            /** @var ODButton $btnFirstF */
+            $btnFirst = OObject::buildObject($id . 'BtnFirst', $sessionObj);
+            $btnFirstF = OObject::cloneObject($btnFirst, $sessionObj);
+            $btnFirstF->setId($id . 'BtnF');
+            $btnFirstF->setValue(1);
+            $btnFirstF->setDisplay(OObject::DISPLAY_BLOCK);
+            $btnFirstF->disable();
+            if ((int)$noPage > 1) {
+                $btnFirstF->enable();
             }
-        } else {
-            // cas 2 : maxPage > 5
-            if ($noPage < 3) {
-                //cas 2.1 : noPage < 3 :
-                //         dessin des boutons page de 1 à 4
-                //         dessin du bouton page 5 avec '...' inactif, visible
-                //         mise de la page noPage en actif (fondBleu)
-                for ($ind = 1; $ind < 5; $ind++ ) {
+            $navbarBtns->addChild($btnFirstF);
+
+            /** @var ODButton $btnPrev */
+            /** @var ODButton $btnPrevP */
+            $btnPrev = OObject::buildObject($id . 'BtnPrev', $sessionObj);
+            $btnPrevP = OObject::cloneObject($btnPrev, $sessionObj);
+            $btnPrevP->setId($id . 'BtnP');
+            $btnPrevP->setDisplay(OObject::DISPLAY_BLOCK);
+            $btnPrevP->disable();
+            if ((int)$noPage > 1) {
+                $btnPrevP->setValue((int)$noPage - 1);
+                $btnPrevP->enable();
+            }
+            $navbarBtns->addChild($btnPrevP);
+
+            /** @var ODButton $btnPage */
+            /** @var ODButton $btnPageP */
+            $btnPage = OObject::buildObject($id . 'BtnPage', $sessionObj);
+            if ((int)$maxPage < 6) {
+                // cas 1 : nbPage < 6 :
+                //        btnPrev & btnSuiv inactif
+                //        dessin d'autant de bouton page que maxPage
+                //        mise de la page idPage en actif (fondBleu)
+                for ($ind = 1; $ind <= $maxPage; $ind++) {
                     $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                    $btnPageP->setId($id.'btnPage'.$ind);
-                    $btnPageP->setValue($ind);
+                    $btnPageP->setId($id . 'btnPage' . $ind);
                     $btnPageP->setLabel($ind);
+                    $btnPageP->setValue($ind);
                     $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
                     $btnPageP->enable();
 
-                    if ($ind == $noPage) { $btnPageP->disable(); }
-
-                    $navbarBtns->addChild($btnPageP);
-                }
-                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                $btnPageP->setId($id.'btnPage5');
-                $btnPageP->setLabel('...');
-                $btnPageP->setValue('');
-                $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                $btnPageP->disable();
-                $navbarBtns->addChild($btnPageP);
-            } else if ($noPage > ($maxPage - 4)) {
-                //cas 2.2 : noPage > (maxPage - 4)
-                //         dessin du bouton page 1 avec '...' inactif, visible
-                //         dessin des boutons page de 2 à 5 avec valeur & label de maxPage - 3 ' à maxPage
-                //         mise de la page noPage en actif (fondBleu)
-                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                $btnPageP->setId($id.'btnPage1');
-                $btnPageP->setLabel('...');
-                $btnPageP->setValue('');
-                $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                $btnPageP->disable();
-                $navbarBtns->addChild($btnPageP);
-
-                for ($ind = 1; $ind < 5; $ind++ ) {
-                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                    $btnPageP->setId($id.'btnPage'.($ind + 1));
-                    $btnPageP->setValue($maxPage - 4 + $ind);
-                    $btnPageP->setLabel($maxPage - 4 + $ind);
-                    $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                    $btnPageP->enable();
-
-                    if (($maxPage - 4 + $ind) == $noPage) { $btnPageP->disable(); }
+                    if ($ind == $noPage) {
+                        $btnPageP->disable();
+                    }
 
                     $navbarBtns->addChild($btnPageP);
                 }
             } else {
-                //cas 2.3 : noPage > 2 && noPage < (maxPage - 3)
-                //          dessin du bouton page 1 avec '...' inactif, visible
-                //          dessin des boutons 2 à 4 avec valeur & label de noPage - 1 à noPage + 1
-                //          dessin du bouton page 5 avec '...' inactif, visible
-                //          mise de la page noPage en actif (fondBleu)
-                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                $btnPageP->setId($id.'btnPage1');
-                $btnPageP->setLabel('...');
-                $btnPageP->setValue('');
-                $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                $btnPageP->disable();
-                $navbarBtns->addChild($btnPageP);
+                // cas 2 : maxPage > 5
+                if ($noPage < 3) {
+                    //cas 2.1 : noPage < 3 :
+                    //         dessin des boutons page de 1 à 4
+                    //         dessin du bouton page 5 avec '...' inactif, visible
+                    //         mise de la page noPage en actif (fondBleu)
+                    for ($ind = 1; $ind < 5; $ind++) {
+                        $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
+                        $btnPageP->setId($id . 'btnPage' . $ind);
+                        $btnPageP->setValue($ind);
+                        $btnPageP->setLabel($ind);
+                        $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
+                        $btnPageP->enable();
 
-                for ($ind = 1; $ind < 4; $ind++ ) {
+                        if ($ind == $noPage) {
+                            $btnPageP->disable();
+                        }
+
+                        $navbarBtns->addChild($btnPageP);
+                    }
                     $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                    $btnPageP->setId($id.'btnPage'.($ind + 1));
-                    $btnPageP->setValue($noPage - 2 + $ind);
-                    $btnPageP->setLabel($noPage - 2 + $ind);
+                    $btnPageP->setId($id . 'btnPage5');
+                    $btnPageP->setLabel('...');
+                    $btnPageP->setValue('');
                     $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                    $btnPageP->enable();
+                    $btnPageP->disable();
+                    $navbarBtns->addChild($btnPageP);
+                } else if ($noPage > ($maxPage - 4)) {
+                    //cas 2.2 : noPage > (maxPage - 4)
+                    //         dessin du bouton page 1 avec '...' inactif, visible
+                    //         dessin des boutons page de 2 à 5 avec valeur & label de maxPage - 3 ' à maxPage
+                    //         mise de la page noPage en actif (fondBleu)
+                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
+                    $btnPageP->setId($id . 'btnPage1');
+                    $btnPageP->setLabel('...');
+                    $btnPageP->setValue('');
+                    $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
+                    $btnPageP->disable();
+                    $navbarBtns->addChild($btnPageP);
 
-                    if ($ind == 2) { $btnPageP->disable(); }
+                    for ($ind = 1; $ind < 5; $ind++) {
+                        $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
+                        $btnPageP->setId($id . 'btnPage' . ($ind + 1));
+                        $btnPageP->setValue($maxPage - 4 + $ind);
+                        $btnPageP->setLabel($maxPage - 4 + $ind);
+                        $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
+                        $btnPageP->enable();
 
+                        if (($maxPage - 4 + $ind) == $noPage) {
+                            $btnPageP->disable();
+                        }
+
+                        $navbarBtns->addChild($btnPageP);
+                    }
+                } else {
+                    //cas 2.3 : noPage > 2 && noPage < (maxPage - 3)
+                    //          dessin du bouton page 1 avec '...' inactif, visible
+                    //          dessin des boutons 2 à 4 avec valeur & label de noPage - 1 à noPage + 1
+                    //          dessin du bouton page 5 avec '...' inactif, visible
+                    //          mise de la page noPage en actif (fondBleu)
+                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
+                    $btnPageP->setId($id . 'btnPage1');
+                    $btnPageP->setLabel('...');
+                    $btnPageP->setValue('');
+                    $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
+                    $btnPageP->disable();
+                    $navbarBtns->addChild($btnPageP);
+
+                    for ($ind = 1; $ind < 4; $ind++) {
+                        $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
+                        $btnPageP->setId($id . 'btnPage' . ($ind + 1));
+                        $btnPageP->setValue($noPage - 2 + $ind);
+                        $btnPageP->setLabel($noPage - 2 + $ind);
+                        $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
+                        $btnPageP->enable();
+
+                        if ($ind == 2) {
+                            $btnPageP->disable();
+                        }
+
+                        $navbarBtns->addChild($btnPageP);
+                    }
+
+                    $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
+                    $btnPageP->setId($id . 'btnPage5');
+                    $btnPageP->setLabel('...');
+                    $btnPageP->setValue('');
+                    $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
+                    $btnPageP->disable();
                     $navbarBtns->addChild($btnPageP);
                 }
-
-                $btnPageP = OObject::cloneObject($btnPage, $sessionObj);
-                $btnPageP->setId($id.'btnPage5');
-                $btnPageP->setLabel('...');
-                $btnPageP->setValue('');
-                $btnPageP->setDisplay(OObject::DISPLAY_BLOCK);
-                $btnPageP->disable();
-                $navbarBtns->addChild($btnPageP);
             }
+
+            /** @var ODButton $btnSuiv */
+            /** @var ODButton $btnSuivS */
+            $btnSuiv = OObject::buildObject($id . 'BtnSuiv', $sessionObj);
+            $btnSuivS = OObject::cloneObject($btnSuiv, $sessionObj);
+            $btnSuivS->setId($id . 'BtnS');
+            $btnSuivS->setDisplay(OObject::DISPLAY_BLOCK);
+            $btnSuivS->disable();
+            if ($noPage < $maxPage && $maxPage > 1) {
+                $btnSuivS->setValue((int)$noPage + 1);
+                $btnSuivS->enable();
+            }
+            $navbarBtns->addChild($btnSuivS);
+
+            /** @var ODButton $btnLast */
+            /** @var ODButton $btnLastL */
+            $btnLast = OObject::buildObject($id . 'BtnLast', $sessionObj);
+            $btnLastL = OObject::cloneObject($btnLast, $sessionObj);
+            $btnLastL->setId($id . 'BtnL');
+            $btnLastL->setValue($maxPage);
+            $btnLastL->setDisplay(OObject::DISPLAY_BLOCK);
+            $btnLastL->disable();
+            if ($noPage < $maxPage) {
+                $btnLastL->enable();
+            }
+            $navbarBtns->addChild($btnLastL);
+
+            $properties = $this->getProperties();
+            $properties['navbarBtns'] = $navbarBtns->getId();
+            $this->setProperties($properties);
+            return $this;
         }
-
-        /** @var ODButton $btnSuiv */
-        /** @var ODButton $btnSuivS */
-        $btnSuiv    = OObject::buildObject($id.'BtnSuiv', $sessionObj);
-        $btnSuivS   = OObject::cloneObject($btnSuiv, $sessionObj);
-        $btnSuivS->setId($id.'BtnS');
-        $btnSuivS->setDisplay(OObject::DISPLAY_BLOCK);
-        $btnSuivS->disable();
-        if ($noPage < $maxPage && $maxPage > 1) {
-            $btnSuivS->setValue((int) $noPage + 1);
-            $btnSuivS->enable();
-        }
-        $navbarBtns->addChild($btnSuivS);
-
-        /** @var ODButton $btnLast */
-        /** @var ODButton $btnLastL */
-        $btnLast    = OObject::buildObject($id.'BtnLast', $sessionObj);
-        $btnLastL   = OObject::cloneObject($btnLast, $sessionObj);
-        $btnLastL->setId($id.'BtnL');
-        $btnLastL->setValue($maxPage);
-        $btnLastL->setDisplay(OObject::DISPLAY_BLOCK);
-        $btnLastL->disable();
-        if ($noPage < $maxPage) { $btnLastL->enable(); }
-        $navbarBtns->addChild($btnLastL);
-
-        $properties = $this->getProperties();
-        $properties['navbarBtns'] = $navbarBtns->getId();
-        $this->setProperties($properties);
-        return $this;
+        return false;
     }
 
     /** **************************************************************************************************
@@ -1007,24 +1037,24 @@ class ODTable extends ODContained
 
     public function returnAppendLine($idTable, $noLine)
     {
-        $line   = $this->getLine($noLine);
-        $code   = '<tr class="line lno'.$noLine.'" data-lno="'.$noLine.'">';
+        $line = $this->getLine($noLine);
+        $code = '<tr class="line lno' . $noLine . '" data-lno="' . $noLine . '">';
         foreach ($line as $noCol => $valCol) {
-            $code .= '<td class="col cno'.$noCol.'" data-cno="'.$noCol.'">';
+            $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
             $code .= $valCol;
             $code .= '</td>';
         }
-        $code  .= "</tr>";
-        return [OObject::formatRetour($idTable, $idTable." tbody", 'append', $code)];
+        $code .= "</tr>";
+        return [OObject::formatRetour($idTable, $idTable . " tbody", 'append', $code)];
     }
 
     public function returnUpdateLine($idTable, $noLine)
     {
-        $line   = $this->getLine($noLine);
-        $code   = '';
-        $idTarget   = $idTable.' .lno'.$noLine;
+        $line = $this->getLine($noLine);
+        $code = '';
+        $idTarget = $idTable . ' .lno' . $noLine;
         foreach ($line as $noCol => $valCol) {
-            $code .= '<td class="col cno'.$noCol.'" data-cno="'.$noCol.'">';
+            $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
             $code .= $valCol;
             $code .= '</td>';
         }
@@ -1033,24 +1063,24 @@ class ODTable extends ODContained
 
     public function returnUpdateCell($idTable, $noLine, $noCol, $code)
     {
-        $idTarget   = $idTable." .lno".$noLine." .cno".$noCol;
+        $idTarget = $idTable . " .lno" . $noLine . " .cno" . $noCol;
         return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
     }
 
     public function returnUpdateCol($noCol)
     {
-        $idTable            = $this->getId();
-        $cols               = $this->getColValues($noCol);
-        $params['col']      = $noCol;
-        $params['datas']    = $cols;
+        $idTable = $this->getId();
+        $cols = $this->getColValues($noCol);
+        $params['col'] = $noCol;
+        $params['datas'] = $cols;
         return [OObject::formatRetour($idTable, $idTable, 'updCols', $params)];
     }
 
     public function returnRmLine($noLine)
     {
-        $idTable            = $this->getId();
-        $params['noLine']   = $noLine;
-        $params['maxLine']  = sizeof($this->getLines() ) + 1;
+        $idTable = $this->getId();
+        $params['noLine'] = $noLine;
+        $params['maxLine'] = sizeof($this->getLines()) + 1;
         return [OObject::formatRetour($idTable, $idTable, 'rmLineUpd', $params)];
     }
 
@@ -1067,7 +1097,7 @@ class ODTable extends ODContained
                 $pos = strpos($key, 'ODTABLETITLEPOS_');
                 if ($pos !== false) $retour[$key] = $constant;
             }
-            $this->const_titlePos= $retour;
+            $this->const_titlePos = $retour;
         } else {
             $retour = $this->const_titlePos;
         }

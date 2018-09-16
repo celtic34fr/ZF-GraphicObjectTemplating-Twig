@@ -18,7 +18,7 @@ return [
     'select'        => [],
     'event'         => [],
     'idRow'         => false,
-    'pagination'    => false,
+    'pagination'    => ODTable::BOOLEAN_FALSE,
     'search'        => false,
     'length'        => ODTable::ODTABLELENGTH_10,
     'start'         => 0,

@@ -1,5 +1,6 @@
 function odtable(obj) {
-    this.id = obj.attr('id');
+    this.id     = obj.attr('id');
+    this.pager  = obj.data('pager');
 }
 
 odtable.prototype = {
@@ -26,6 +27,17 @@ odtable.prototype = {
         $.each(datas,function (key, val) {
             $("#"+this.id+" .lno"+key+" .cno"+col).html(val);
         });
+    },
+    filterSearch(search) {
+        if (!this.pager) {
+            $("#"+this.id+" tr").each(function () {
+                this.find("td").each(function () {
+                    if(this.html().indexOf(search) != -1){
+                        $(this).parent().addClass('hide');
+                    }
+                });
+            });
+        }
     },
 };
 
