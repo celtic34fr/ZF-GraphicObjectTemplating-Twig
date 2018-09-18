@@ -219,3 +219,12 @@ function updateForm(formId) {
         $("#"+id+" label:first").html(htmlCode);
     })
 }
+
+
+function showHideTableNodata(id, nbrLines) {
+    if (nbrLines < 1) {
+        $("#"+id+" tr.line.nodata").removeClass('hide');
+    } else {
+        $("#"+id+" tr.line.nodata").removeClass('hide').addClass('hide');
+    }
+}
