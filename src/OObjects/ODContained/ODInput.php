@@ -35,13 +35,13 @@ use GraphicObjectTemplating\OObjects\OObject;
  *                          déclaration et paramétrage de l'évènement onChange sur la zone de saisie
  * getChange()              récupération des paramètres de l'évènement onChange sur la zone de saisie
  * disChange()              suppression / déactivation de l'évènement onChange sur la zone de saisie
- *
- * méthodes privées
- * getTypeConstants()       récupération des constantes 'BUTTONTYPE_*' dans un tableau associatif
+ * enaAutoFocus()
+ * disAutoFocus()
+ * getAutoFocus()
  *
  * méthodes privées de la classe
  * -----------------------------
- * getTypeConstants()
+ * getTypeConstants()       récupération des constantes 'BUTTONTYPE_*' dans un tableau associatif
  */
 class ODInput extends ODContained
 {
@@ -262,6 +262,28 @@ class ODInput extends ODContained
             }
         }
         return false;*/
+    }
+
+    public function enaAutoFocus()
+    {
+        $properties = $this->getProperties();
+        $properties['autoFocus'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disAutoFocus()
+    {
+        $properties = $this->getProperties();
+        $properties['autoFocus'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getAutoFocus()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('autoFocus', $properties) ? $properties['autoFocus'] : false;
     }
 
     /** **************************************************************************************************

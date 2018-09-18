@@ -16,6 +16,7 @@ return [
     'inputWidthBT'  => '',
     'errMessage'    => '',
     'icon'          => '',
+    'autoFocus'     => false,
 
     'resources' => [
         'js'		=> [

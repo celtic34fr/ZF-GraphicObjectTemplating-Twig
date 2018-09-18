@@ -14,6 +14,7 @@
     {% if objet.maxlength is not empty %} maxlength="{{ objet.maxlength }}" {% endif %}
     {% if objet.state == false %} disabled {% endif %}
     {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    {% if objet.autoFocus %} autofocus {% endif %}
     >
 
     <script>
