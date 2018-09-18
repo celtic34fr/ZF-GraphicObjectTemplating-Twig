@@ -23,7 +23,7 @@
             setBtClasses("#{{ objet.id }} input", $("#{{ objet.id }} input").data("widthbt"));
 
             {% if objet.event is not empty %}
-            {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
             {% endif %}
         })
     </script>

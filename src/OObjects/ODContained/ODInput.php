@@ -35,6 +35,10 @@ use GraphicObjectTemplating\OObjects\OObject;
  *                          déclaration et paramétrage de l'évènement onChange sur la zone de saisie
  * getChange()              récupération des paramètres de l'évènement onChange sur la zone de saisie
  * disChange()              suppression / déactivation de l'évènement onChange sur la zone de saisie
+ * evtKeyup($class, $method, $stopEvent = false)
+ *                          déclaration et paramétrage de l'évènement onKeyup sur la zone de saisie
+ * getKeyup()               récupération des paramètres de l'évènement onKeyup sur la zone de saisie
+ * disKeyup()               suppression / déactivation de l'évènement onKeyup sur la zone de saisie
  * enaAutoFocus()
  * disAutoFocus()
  * getAutoFocus()
@@ -210,25 +214,6 @@ class ODInput extends ODContained
     {
         if (!empty($class) && !empty($method)) {
             return $this->setEvent('change', $class, $method, $stopEvent);
-/*
-            $properties = $this->getProperties();
-            if (!array_key_exists('event', $properties)) { $properties['event'] = []; }
-            $event = $properties['event'];
-            if (!array_key_exists('change', $event)) { $event['change'] = []; }
-            $change = $event['change'];
-            if (class_exists($class)) {
-                $obj = new $class();
-                if (method_exists($obj, $method)) {
-                    $change['class'] = $class;
-                    $change['method'] = $method;
-                    $change['stopEvent'] = ($stopEvent) ? 'OUI' : 'NON';
-
-                    $event['change'] = $change;
-                    $properties['event'] = $event;
-                    $this->setProperties($properties);
-                    return $this;
-                }
-            }*/
         }
         return false;
     }
@@ -236,32 +221,31 @@ class ODInput extends ODContained
     public function getChange()
     {
         return $this->getEvent('change');
-
-/*        $properties = $this->getProperties();
-        if (array_key_exists('event', $properties)) {
-            $event = $properties['event'];
-            if (array_key_exists('change', $event)) {
-                return $event['change'];
-            }
-        }
-        return false;*/
     }
 
     public function disChange()
     {
         return $this->disEvent('change');
 
-/*        $properties = $this->getProperties();
-        if (array_key_exists('event', $properties)) {
-            $event = $properties['event'];
-            if (array_key_exists('change', $event)) {
-                unset($event['change']);
-                $properties['event'] = $event;
-                $this->setProperties($properties);
-                return $this;
-            }
+    }
+
+    public function evtKeyup($class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('keyup', $class, $method, $stopEvent);
         }
-        return false;*/
+        return false;
+    }
+
+    public function getKeyup()
+    {
+        return $this->getEvent('keyup');
+    }
+
+    public function disKeyup()
+    {
+        return $this->disEvent('keyup');
+
     }
 
     public function enaAutoFocus()
