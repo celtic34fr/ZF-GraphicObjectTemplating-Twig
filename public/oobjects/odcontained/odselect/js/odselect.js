@@ -1,6 +1,5 @@
 function odselect(obj) {
     this.id     = obj.attr('id');
-    this.events = obj.data('events');
     this.form   = obj.data('form');
 }
 
@@ -10,7 +9,7 @@ odselect.prototype = {
         $('#'+this.id+' option:selected').each(function () {
             selected += $(this).val() + "-"
         });
-        let chps = "id=" + this.id + "&value='" + selected + "'";
+        let chps = "id=" + this.id + "&value='" + selected + "'&event='change'";
         return chps;
     },
     setData: function (data) {
