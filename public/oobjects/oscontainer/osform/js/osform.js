@@ -22,7 +22,7 @@ osform.prototype = {
             }
         });
         if (formData.length > 0) {
-            formData = formData.substr(1);
+            formData = formData.substring(1);
         }
         return formData;
     },
@@ -36,17 +36,17 @@ osform.prototype = {
             dataObj = $(this).split("§");
             dataObj.each(function () {
                 var pos = $(this).indexOf("=");
-                var attr = $(this).substr(0, pos);
+                var attr = $(this).substring(0, pos);
 
                 switch (attr) {
                     case "id":
-                        id = $(this).substr(pos +1);
+                        id = $(this).substring(pos +1);
                         break;
                     case "value":
-                        value = $(this).substr(pos +1);
+                        value = $(this).substring(pos +1);
                         break;
                     case "type":
-                        type = $(this).substr(pos +1);
+                        type = $(this).substring(pos +1);
                         break;
                 }
             });

@@ -127,8 +127,8 @@ function invokeAjax(datas, idSource, event, e) {
                 }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
-                let evt = code.substr(0, strpos(code, '|'));
-                let flg = code.substr(strpos(code, '|') + 1);
+                let evt = code.substring(0, strpos(code, '|'));
+                let flg = code.substring(strpos(code, '|') + 1);
                 $('#'+id).attr('data-'+evt+'-stopevt', flg);
                 break;
             case 'updCols': // mise à jour colonne ODTable
@@ -170,8 +170,8 @@ function buildBootstrapClasses(widthbt) {
     if (widthbt != undefined) {
         widthbt = widthbt.split(':');
         $.each(widthbt, function (idx, val) {
-            let typs = val.substr(0,2);
-            let cols = val.substr(2);
+            let typs = val.substring(0,2);
+            let cols = val.substring(2);
             switch (typs) {
                 case "WL" :
                     btClasses = btClasses + 'col-lg-' + cols + ' '; break;

@@ -9,7 +9,7 @@ odselect.prototype = {
         $('#'+this.id+' option:selected').each(function () {
             selected += $(this).val() + "-"
         });
-        selected = selected.substr(0, selected.length - 1);
+        selected = selected.substring(0, selected.length - 1);
         let chps = "id=" + this.id + "&value='" + selected + "'&event='change'";
         return chps;
     },
