@@ -1,0 +1,46 @@
+{# template objet ODMenu #}
+{% import _self as menusMacro %}
+
+{% macro afficheLeaf(menu, side) %}
+    {% if menu.float == side %}
+        {% set active = (menu.active) ? 'active' : '' %}
+        {% if menu.dropdown is not defined or menu.dropDown is empty %}
+            <li {% if active is not empty %}class="active"{% endif %}>
+                <a href="{{ menu.link | escape }}">{{ menu.label }}</a>
+            </li>
+        {% else %}
+            <li class="dropdown {% if active is not empty %}active{% endif %}">';
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">';
+                    {{ menu.label | escape }}<b class="caret"></b>
+                    <ul class="dropdown-menu">
+                        {{ menusMacro.afficheLeaf(menu.dropdown, side) }}
+                    </ul>
+                </a>
+            </li>
+        {% endif %}
+    {% endif %}
+{% endmacro afficheLeaf %}
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+            {% for menus in objet.dataTree %}
+                {{ menusMacro.afficheLeaf(menus, "left") }}
+            {% endfor %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% for menus in objet.dataTree %}
+                {{ menusMacro.afficheLeaf(menus, "right") }}
+            {% endfor %}
+        </ul>
+    </div>
+</nav>

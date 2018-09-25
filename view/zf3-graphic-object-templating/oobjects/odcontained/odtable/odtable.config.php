@@ -24,6 +24,7 @@ return [
     'start'         => 0,
     'noPage'        => 0,
     'maxPage'       => 0,
+    'isIdRow'       => false,
 
     'objLength'     => '',
     'objNavbar'     => '',

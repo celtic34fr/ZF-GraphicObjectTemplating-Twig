@@ -1,0 +1,19 @@
+<?php
+
+use GraphicObjectTemplating\Objects\ODContained\ODMenu;
+
+return [
+    'object'        => 'odmenu',
+    'typeObj'       => 'odcontained',
+    'template'      => 'odmenu.twig',
+
+    'dataTree'		=> [],
+    'dataPath'		=> [],
+    'activeMenu'    => false,
+    'mode'          => ODMenu::ODMENUMODE_CLICK,
+
+    'resources' => [
+        'css' => ['odmenu.css' => 'css/odmenu.css'],
+        'js'  => [],
+    ]
+];
