@@ -29,7 +29,7 @@
     {% endif %}
 {% endmacro %}
 
-<div id={{ objet.id }}>
+<div id="{{ objet.id }}">
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
@@ -99,7 +99,7 @@
     <script>
         $(document).ready(function () {
             {#% if objet.mode == 'click' % pas autre que pas click pour le moment #}
-            $('ul.dropdown-menu [datat-toggle=dropdown]').on('click', function (event) {
+            $('#{{ objet.id }} ul.dropdown-menu [datat-toggle=dropdown]').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 $(this).parent().siblings().removeClass('open');
