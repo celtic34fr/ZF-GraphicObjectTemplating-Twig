@@ -1,9 +1,9 @@
 <?php
 
-namespace GraphicObjectTemplating\Objects\ODContained;
+namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
-use Zend\Session\Container;
+use GraphicObjectTemplating\OObjects\OObject;
 
 /**
  * Class ODMenu
@@ -50,14 +50,17 @@ class ODMenu extends ODContained
 
     public function __construct($id)
     {
-        $session = new Container($id);
-        if ($session->offsetExists('properties')) {
-            $properties = unserialize($session->offsetGet('properties'));
-            $this->setProperties($properties);
-        } else {
-            parent::__construct($id, "oobject/odcontained/odmenu/odmenu.config.phtml");
+        parent::__construct($id, "oobjects/odcontained/odmenu/odmenu.config.phtml");
+
+        $properties = $this->getProperties();
+        if ($properties['id'] != 'dummy') {
+            if (!$this->getWidthBT() || empty($this->getWidthBT())) {
+                $this->setWidthBT(12);
+            }
+            $this->setDisplay(OObject::DISPLAY_BLOCK);
+            $this->enable();
         }
-        $this->setDisplay();
+        return $this;
     }
 
     /**
