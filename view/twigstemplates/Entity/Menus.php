@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  link        : url de la page sur laquelle pointe l'option de menu
  *  authorize   : niveau d'autorisation pour déterminer l'affichage de l'option suivant l'utilisateur
  *  ord         : numéro d'ordre de présentation de l'option de menu dans son niveau
+ *  target      : mode de traitement de link, par défaut '_self'
  *
  *  liens vers d'autre(s) table(s)
  *  parent      : lien n à 1 table Menus (menu de niveau supérieur)
@@ -31,6 +32,12 @@ class Menus
     const OPTIONTYPE_LINK_URL       = 'link_url';
     const OPTIONTYPE_TEMPLATE       = 'template';
 
+    const ODMENUTARGET_SELF         = '_self';
+    const ODMENUTARGET_BLANK        = '_blank';
+    const ODMENUTARGET_PARENT       = '_parent';
+    const ODMENUTARGET_TOP          = '_Top';
+
+    private $const_target;
 
     /**
      * @ORM\Id
@@ -67,6 +74,11 @@ class Menus
      * @ORM\Column(name="ORD", type="integer", nullable=false)
      */
     protected $ord;
+
+    /** @var  string $target
+     * @ORM\Column(name="TARGET", type="string", length=255, nullable=false)
+     */
+    protected $target;
 
 
     /**
@@ -245,6 +257,34 @@ class Menus
     }
 
     /**
+     * Set target.
+     *
+     * @param string $ord
+     *
+     * @return Menus
+     */
+    public function setTarget($target = self::ODMENUTARGET_SELF)
+    {
+        $targets    = $this->getTargetConstants();
+        $target     = (string) $target;
+        if (!in_array($target, $targets)) { $target = self::ODMENUTARGET_SELF; }
+
+        $this->target = $target;
+
+        return $this;
+    }
+
+    /**
+     * Get target.
+     *
+     * @return string
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
      * Set parent.
      *
      * @param Menus|null $parent
@@ -303,4 +343,35 @@ class Menus
     {
         return $this->children ?? null;
     }
+
+
+    /** **************************************************************************************************
+     * méthodes privées de la classe                                                                     *
+     * *************************************************************************************************** */
+
+    private function getConstants()
+    {
+        $ref = new \ReflectionClass($this);
+        return $ref->getConstants();
+    }
+
+    private function getTargetConstants()
+    {
+        $retour = [];
+        if (empty($this->const_target)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'ODMENUTARGET_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_target = $retour;
+        } else {
+            $retour = $this->const_target;
+        }
+
+        return $retour;
+    }
+
 }

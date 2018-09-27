@@ -10,7 +10,7 @@ use GraphicObjectTemplating\OObjects\OObject;
  * @package GraphicObjectTemplating\Objects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * addLeaf($id, $label, $link, $float=self::ODMENUPOSITION_LEFT, $parent = NULL, $enable = true)
+ * addLeaf($id, $label, $link, $float=self::ODMENUPOSITION_LEFT, $parent = NULL, $target = self;;ODMENUTARGET_SELF, $enable = true)
  * deactiveAll()
  * active($id)
  * getActive()
@@ -41,14 +41,20 @@ use GraphicObjectTemplating\OObjects\OObject;
  */
 class ODMenu extends ODContained
 {
-    const ODMENUPOSITION_LEFT  = "left";
-    const ODMENUPOSITION_RIGHT = "right";
+    const ODMENUPOSITION_LEFT   = "left";
+    const ODMENUPOSITION_RIGHT  = "right";
 
-    const ODMENUMODE_CLICK  = 'click';
-    const ODMENUMODE_HOVER  = 'hover';
+    const ODMENUMODE_CLICK      = 'click';
+    const ODMENUMODE_HOVER      = 'hover';
+
+    const ODMENUTARGET_SELF     = '_self';
+    const ODMENUTARGET_BLANK    = '_blank';
+    const ODMENUTARGET_PARENT   = '_parent';
+    const ODMENUTARGET_TOP      = '_Top';
 
     private $const_position;
     private $const_mode;
+    private $const_target;
 
     public function __construct($id)
     {
@@ -75,11 +81,15 @@ class ODMenu extends ODContained
      *
      * @return $this|bool   : objet menu ou false si erreur
      */
-    public function addLeaf($id, $label, $link, $float=self::ODMENUPOSITION_LEFT, $parent = NULL, $enable = true)
+    public function addLeaf($id, $label, $link, $float=self::ODMENUPOSITION_LEFT, $parent = NULL, $target = self::ODMENUTARGET_SELF, $enable = true)
     {
         $floats = $this->getPositionConstants();
         $float  = (string) $float;
         if (!in_array($float, $floats)) { $float = self::ODMENUPOSITION_LEFT; }
+
+        $targets    = $this->getTargetConstants();
+        $target     = (string) $target;
+        if (!in_array($target, $targets)) { $target = self::ODMENUTARGET_SELF; }
 
         $properties     = $this->getProperties();
         $id             = (string) $id;
@@ -94,6 +104,7 @@ class ODMenu extends ODContained
         $item['label']  = $label;
         $item['link']   = $link;
         $item['float']  = $float;
+        $item['target'] = $target;
         $item['enable'] = $enable;
         $item['active'] = false;
 
@@ -444,6 +455,25 @@ class ODMenu extends ODContained
         } else {
             $retour = $this->const_mode;
         }
+        return $retour;
+    }
+
+    private function getTargetConstants()
+    {
+        $retour = [];
+        if (empty($this->const_target)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'ODMENUTARGET_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_target = $retour;
+        } else {
+            $retour = $this->const_target;
+        }
+
         return $retour;
     }
 }

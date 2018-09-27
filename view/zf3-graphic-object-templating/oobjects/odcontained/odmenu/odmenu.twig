@@ -9,7 +9,7 @@
         {% if menus.dropdown is not defined or menus.dropdown |length == 0 %}
     <li>
             {% if menus.link is defined and menus.link is not empty %}
-            <a href="{{ menus.link | raw }}">{{ menus.label }}</a>
+            <a href="{{ menus.link | raw }}" target="{{ menus.target }}">{{ menus.label }}</a>
             {% else %}
             <span>{{ menus.label }}</span>
             {% endif %}
@@ -47,7 +47,7 @@
                     {% if menu.dropdown is not defined or menu.dropdown |length == 0 %}
                         <li>
                             {% if menu.link is defined and menu.link is not empty %}
-                                <a href="{{ menu.link | raw }}">{{ menu.label }}</a>
+                                <a href="{{ menu.link | raw }}" target="{{ menu.target }}">{{ menu.label }}</a>
                             {% else %}
                                 <span>{{ menu.label }}</span>
                             {% endif %}
@@ -73,7 +73,7 @@
                     {% if menu.dropdown is not defined or menu.dropdown |length == 0 %}
                         <li>
                             {% if menu.link is defined and menu.link is not empty %}
-                                <a href="{{ menu.link | raw }}">{{ menu.label }}</a>
+                                <a href="{{ menu.link | raw }}" target="{{ menu.target }}">{{ menu.label }}</a>
                             {% else %}
                                 <span>{{ menu.label }}</span>
                             {% endif %}
