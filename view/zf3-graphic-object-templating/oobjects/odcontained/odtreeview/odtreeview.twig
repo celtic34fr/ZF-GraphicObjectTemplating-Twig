@@ -1,0 +1,19 @@
+{# template de l'objet ODTreeview #}
+
+{% import _self as treeviewMacros %}
+
+{% macro drawLeaf() %}
+    {% import _self as treeviewMacros %}
+{% endmacro %}
+
+<div id="{{ objet.id }}">
+    <ul>
+
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function (e) {
+        $('#{{ objet.id }}').jstree();
+    })
+</script>
