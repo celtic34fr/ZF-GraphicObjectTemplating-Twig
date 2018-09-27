@@ -24,6 +24,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  * getDataTree()
  * setMode($mode = self::ODMENUMODE_CLICK)
  * getMode()
+ * setTitle($title)
+ * getTitle()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -277,6 +279,21 @@ class ODMenu extends ODContained
     {
         $properties                 = $this->getProperties();
         return (isset($properties['mode'])) ? $properties['mode'] : false;
+    }
+
+    public function setTitle($title)
+    {
+        $title                      = (string) $title;
+        $properties                 = $this->getProperties();
+        $properties['title']        = $title;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        $properties                 = $this->getProperties();
+        return (isset($properties['title'])) ? $properties['title'] : false;
     }
 
     /** **************************************************************************************************
