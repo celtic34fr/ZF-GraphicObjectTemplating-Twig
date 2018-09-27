@@ -23,6 +23,9 @@
 .ospadding20  { padding:     2em; }
 
 body {
-        margin: 0 !important;
-        height: 100% !important;
+    margin: 0 !important;
+    height: 100% !important;
+    padding-top: 1em;
+    padding-bottom: 1.5em;
 }
+

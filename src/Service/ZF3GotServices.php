@@ -2,10 +2,12 @@
 
 namespace GraphicObjectTemplating\Service;
 
+use Application\Entity\Menus;
+use Doctrine\ORM\EntityManager;
+use GraphicObjectTemplating\OObjects\ODContained\ODMenu;
 use Zend\ServiceManager\ServiceManager;
 use Zend\View\Model\ViewModel;
 use GraphicObjectTemplating\OObjects\OObject;
-use GraphicObjectTemplating\OObjects\OSContainer;
 use ZfcTwig\View\TwigRenderer;
 
 class ZF3GotServices
@@ -205,4 +207,19 @@ class ZF3GotServices
         return false;
     }
 
+    public function loadMainMenu($menuRef, $menuTableRef)
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager  = $this->_serviceManager->get('doctrine.entitymanager.orm_default');
+        $menuGlobal = new ODMenu('menuGlobal');
+        $menuGlobal->setTitle('Personal Test');
+        $menus      = $entityManager->getRepository($menuTableRef)->findBy(['menuRef' => $menuRef], ['parent' => 'ASC', 'ord' => 'ASC']);
+        /** @var Menus $menu */
+        foreach ($menus as $menu) {
+            $parent     = $menu->getParent();
+            if (!empty($parent)) { $parent = $parent->getId(); }
+            $menuGlobal->addLeaf($menu->getId(), $menu->getLabel(), $menu->getLink(), null, $parent);
+        }
+        $menuGlobal->saveProperties();
+    }
 }
