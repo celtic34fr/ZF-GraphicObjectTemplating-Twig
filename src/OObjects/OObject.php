@@ -106,6 +106,7 @@ namespace GraphicObjectTemplating\OObjects;
  *
  */
 
+use GraphicObjectTemplating\OObjects\ODContained\ODMenu;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 use GraphicObjectTemplating\OObjects\OSContainer;
@@ -268,9 +269,18 @@ class OObject
         $sessionObj = self::validateSession();
 
         if ($session) {
+            $objects    = $sessionObj->objects;
+            if (array_key_exists('menuGlobal', $objects)) {
+                $menuGlobal = $objects['menuGlobal'];
+            }
             $sessionObj->objects = [];
             $sessionObj->resources = [];
             $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
+            if (isset($menuGlobal)) {
+                $menu = new ODMenu('menuGlobal');
+                $menu->setProperties(unserialize($menuGlobal));
+                $menu->saveProperties();
+            }
             return true;
         } else {
             if (self::existObject($id, $sessionObj)) {
