@@ -2,8 +2,20 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
-
 use GraphicObjectTemplating\OObjects\ODContained;
+
+/**
+ * Class ODTreeview
+ * @package GraphicObjectTemplating\OObjects\ODContained
+ *
+ * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
+ * addLeaf($id, $label, $link, $target = self::ODTREEVIEWTARGET_SELF, $icon = '',$parent = NULL, $open = true, $disable = false, $select = false)
+ *
+ * méthodes privées de la classe
+ * -----------------------------
+ * getTargetConstants()
+ * function insertLeaf($tree, $path, $item, $parent = null)
+ */
 
 class ODTreeview extends ODContained
 {
@@ -28,6 +40,18 @@ class ODTreeview extends ODContained
         return $this;
     }
 
+    /**
+     * @param $id               : identifiant de la feuille
+     * @param $label            : texte à présenter
+     * @param $link             : lien hypertexte (pas pour les feuilles portant feuilles)
+     * @param string $target    : mode ouverture du lient (cible)
+     * @param string $icon      : icone à présenter (glyphicon, font aweresome icon ou image)
+     * @param null $parent      : identifiant de la feuille parent
+     * @param bool $open        : pour les feuille portant feuille ouvert (true) ou non (false)
+     * @param bool $disable     : feuille activée (false) ou désactivée (true)
+     * @param bool $select      : feuille sélectionnée (true) ou non (false)
+     * @return $this|bool
+     */
     public function addLeaf($id, $label, $link, $target = self::ODTREEVIEWTARGET_SELF, $icon = '',$parent = NULL, $open = true, $disable = false, $select = false)
     {
         $targets            = $this->getTargetConstants();
@@ -92,19 +116,28 @@ class ODTreeview extends ODContained
         return $retour;
     }
 
+    /**
+     * @param $tree         : arbre en cours de traitement
+     * @param $path         : chemin à parcourir
+     * @param $item         : feuille à insérer
+     * @param null $parent  : identifiant de la feuille parent
+     * @return $tree        : arbre retravaillé (feuille insérée)
+     */
     private function insertLeaf($tree, $path, $item, $parent = null)
     {
         switch (true) {
             case ($parent == null) :
-                $tree[$item['id']] = $item;
+                $tree[$item['id']]          = $item;
                 break;
             case ($parent != null) :
-                $tmpPath = $path[$parent];
-                $tmpPath = explode(".", $tmpPath);
-                $nParent = sizeOf($tmpPath);
-                if (!isset($tree[$parent]['dropdown'])) $tree[$parent]['dropdown'] = [];
-                $localPath = ($nParent > 1) ? $tmpPath[$nParent - 2] : null;
-                $tree[$parent]['dropdown'] = $this->insertLeaf($tree[$parent]['dropdown'], $path, $item, $localPath);
+                $tmpPath                    = $path[$parent];
+                $tmpPath                    = explode(".", $tmpPath);
+                $nParent                    = sizeOf($tmpPath);
+                if (!isset($tree[$parent]['branch'])) {
+                    $tree[$parent]['branch'] = [];
+                }
+                $localPath                  = ($nParent > 1) ? $tmpPath[$nParent - 2] : null;
+                $tree[$parent]['branch']    = $this->insertLeaf($tree[$parent]['branch'], $path, $item, $localPath);
                 break;
         }
         return $tree;

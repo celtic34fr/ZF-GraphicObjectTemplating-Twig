@@ -2,18 +2,60 @@
 
 {% import _self as treeviewMacros %}
 
-{% macro drawLeaf() %}
+{% macro drawLeaf(key, item, path) %}
     {% import _self as treeviewMacros %}
+    {% if item.dropdown|length == 0 %}
+        <li data-lvl="{{ path[key] }}" data-ord="{{ key }}">
+        {% if objet.icon %}
+            {% switch(item.icon) %}
+                {% case 'none' %}
+                <i class="leaf"></i>
+                {% default %}
+                <i class="{{ item.icon }}"></i>
+            {% endswitch %}
+            {{ item.libel }}
+        </li>
+    {% else %}
+        <li class="lvl" data-lvl="{{ path[key] }}" data-ord="{{ key }}">
+            <input type="checkbox" id="lvl_{{ key }}">
+            {% if objet.icon %}
+                {% switch(item.icon) %}
+                    {% case 'none' %}
+                    <i class="icon folder closed"></i>
+                    <i class="icon folder opened"></i>
+                    {% default %}
+                    <i class="icon {{ item.icon }} closed"></i>
+                    <i class="icon {{ item.icon }} opened"></i>
+                {% endswitch %}
+                <label for  id="lvl_{{ key }}">{{ item.libel }}</label>
+                <ul>
+                    {% for id,leaf in item.dropdown %}
+                        {{ treeviewMacro.drawLeaf(id, leaf, objet.dataPath) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endif %}
 {% endmacro %}
 
 <div id="{{ objet.id }}">
     <ul>
-
+        {% for id,leaf in objet.dataTree %}
+            {{ treeviewMacro.drawLeaf(id, leaf, objet.dataPath) }}
+        {% endfor %}
     </ul>
 </div>
 
-<script>
-    $(document).ready(function (e) {
-        $('#{{ objet.id }}').jstree();
-    })
-</script>
+{% if objet.styleTree id defined and objet.styleTree|length >0 %}
+<style>
+    {% for item in styleTree %}
+    /* habillage spécifique */
+    li.n{{ item.level }}:hover {
+        border: 1px solid {{ item.color }};
+        border-radius: 3px;
+        background-color: {{ item.backgroundColor }};
+    }
+    {% endfor %}
+
+</style>
+{% endif %}

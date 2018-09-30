@@ -9,7 +9,7 @@ return array(
     'dataPath'      => [],
 
     'resources' => [
-        'css' => [],
-        'js'  => [],
+        'css' => [ 'odtreeview.css' => 'css/odtreeview.css', ],
+        'js'  => [ 'odtreeview.css' => 'js/odtreeview.js',],
     ],
 );
