@@ -9,24 +9,19 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * addLeaf($id, $label, $link, $target = self::ODTREEVIEWTARGET_SELF, $icon = '',$parent = NULL, $open = true, $disable = false, $select = false)
+ * addLeaf($libel, $ord = null, $parent = null)
+ * setLeaf($libel, $path)
+ * getLeaf($refs)
+ * enaIcon()
+ * disIcon()
  *
  * méthodes privées de la classe
  * -----------------------------
- * getTargetConstants()
- * function insertLeaf($tree, $path, $item, $parent = null)
+ * updateTree($tree, $path, $item)
  */
 
 class ODTreeview extends ODContained
 {
-
-    const ODTREEVIEWTARGET_SELF     = '_self';
-    const ODTREEVIEWTARGET_BLANK    = '_blank';
-    const ODTREEVIEWTARGET_PARENT   = '_parent';
-    const ODTREEVIEWTARGET_TOP      = '_Top';
-
-    private $const_target;
-
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odtreeview/odtreeview.config.php");
 
@@ -40,52 +35,90 @@ class ODTreeview extends ODContained
         return $this;
     }
 
-    /**
-     * @param $id               : identifiant de la feuille
-     * @param $label            : texte à présenter
-     * @param $link             : lien hypertexte (pas pour les feuilles portant feuilles)
-     * @param string $target    : mode ouverture du lient (cible)
-     * @param string $icon      : icone à présenter (glyphicon, font aweresome icon ou image)
-     * @param null $parent      : identifiant de la feuille parent
-     * @param bool $open        : pour les feuille portant feuille ouvert (true) ou non (false)
-     * @param bool $disable     : feuille activée (false) ou désactivée (true)
-     * @param bool $select      : feuille sélectionnée (true) ou non (false)
-     * @return $this|bool
-     */
-    public function addLeaf($id, $label, $link, $target = self::ODTREEVIEWTARGET_SELF, $icon = '',$parent = NULL, $open = true, $disable = false, $select = false)
+    public function addLeaf($libel, $ord = null, $parent = null)
     {
-        $targets            = $this->getTargetConstants();
-        $target             = (string) $target;
-        if (!in_array($target, $targets)) { $target = self::ODTREEVIEWTARGET_SELF; }
+        $properties = $this->getProperties();
+        $ord        = (int) $ord;
+        $parent     = (string) $parent;
 
-        $properties         = $this->getProperties();
-        $id                 = (string) $id;
-        $label              = (string) $label;
-        $link               = (string) $link;
-        $icon               = (string) $icon;
+        $dataTree   = $properties['dataTree'];
+        $dataPath   = $properties['dataPath'];
+        $validAct   = false;
 
-        $dataPath           = $properties['dataPath'];
-        $dataTree           = $properties['dataTree'];
+        if (empty($parent)) {
+            if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
+            if (!isset($dataTree[$ord])) {
+                $item = [];
+                $item['libel']      = $libel;
+                $item['ord']        = $ord;
+                $item['ref']        = $ord;
+                $item['icon']       = 'none';
+                $item['link']       = 'none';
+                $item['targetL']    = 'none';
 
-        $item               = [];
-        $item['id']         = $id;
-        $item['label']      = $label;
-        $item['link']       = $link;
-        $item['target']     = $target;
-        $item['icon']       = $icon;
-        $item['open']       = $open;
-        $item['disable']    = $disable;
-        $item['select']     = $select;
-
-        if (!array_key_exists($id, $dataPath)) {
-            if (!empty($parent)) {
-                $dataPath[$id] = $dataPath[$parent] .".". $id;
-            } else {
-                $dataPath[$id] = $id;
+                $dataTree[$ord]     = $item;
+                $dataPath[$ord]     = $ord;
+                $validAct           = true;
+                ksort($dataTree);
             }
-            $dataTree = $this->insertLeaf($dataTree, $dataPath, $item, $parent);
+        } else {
+            $path   = explode('.', $parent);
+            $leaf   = $dataTree[$path[0]];
+            $path0  = $path[0];
+            unset($path[0]);
+            foreach ($path as $id) {
+                $leaf = $leaf['children'][$id];
+            }
 
+            if ($ord == 0 || !isset($leaf['children'][$ord])) {
+                if ($ord == 0) { $ord = sizeof($leaf['children']) + 1; }
+                $item = [];
+                $item['libel']      = $libel;
+                $item['ord']        = $ord;
+                $item['ref']        = $parent.'.'.$ord;
+                $item['icon']       = 'none';
+                $item['link']       = 'none';
+                $item['targetL']    = 'none';
+
+                $path[0]            = $path0;
+                $dataTree           = $this->updateTree($dataTree, $path, $item);
+                $dataPath[$ord]     = $parent.'.'.$ord;
+                $validAct           = true;
+            }
+        }
+
+        if ($validAct) {
+            $properties['dataTree'] = $dataTree;
             $properties['dataPath'] = $dataPath;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function setLeaf($libel, $path)
+    {
+        $properties = $this->getProperties();
+        $refs       = explode('.', $path);
+        $leaf       = $properties['dataTree'];
+        $dataTree   = $properties['dataTree'];
+        $found      = true;
+        foreach ($refs as $ref) {
+            if (array_key_exists('children', $leaf)) {
+                if (isset($leaf['children'][$ref])) {
+                    $leaf = $leaf['children'][$ref];
+                } else {
+                    $found = false;
+                    break;
+                }
+            } else {
+                $found = false;
+                break;
+            }
+        }
+        if ($found) {
+            $leaf['libel']          = $libel;
+            $dataTree               = $this->updateTree($dataTree, $path, $leaf);
             $properties['dataTree'] = $dataTree;
             $this->setProperties($properties);
             return $this;
@@ -93,53 +126,59 @@ class ODTreeview extends ODContained
         return false;
     }
 
+    public function getLeaf($refs)
+    {
+        $properties = $this->getProperties();
+        $refs       = explode('.', $refs);
+        $leaf       = $properties['dataTree'];
+        $found      = true;
+        foreach ($refs as $ref) {
+            if (array_key_exists('children', $leaf)) {
+                if (isset($leaf['children'][$ref])) {
+                    $leaf = $leaf['children'][$ref];
+                } else {
+                    $found = false;
+                    break;
+                }
+            } else {
+                $found = false;
+                break;
+            }
+        }
+        return ($found) ? $leaf : false;
+    }
+
+    public function enaIcon()
+    {
+        $properties = $this->getProperties();
+        $properties['icon'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disIcon()
+    {
+        $properties = $this->getProperties();
+        $properties['icon'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
-    private function getTargetConstants()
+    private function updateTree($tree, $path, $item)
     {
-        $retour = [];
-        if (empty($this->const_target)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODTREEVIEWTARGET_');
-                if ($pos !== false) {
-                    $retour[$key] = $constant;
-                }
-            }
-            $this->const_target = $retour;
+        if (!empty($path)) {
+            $id = array_shift($path);
+            if (!isset($tree[$id]['children'])) { $tree[$id]['children'] = []; }
+            $leaves = $tree[$id]['children'];
+            $tree[$id]['children'] = $this->updateTree($leaves, $path, $item);
         } else {
-            $retour = $this->const_target;
+            $tree[$item['ord']] = $item;
         }
-
-        return $retour;
-    }
-
-    /**
-     * @param $tree         : arbre en cours de traitement
-     * @param $path         : chemin à parcourir
-     * @param $item         : feuille à insérer
-     * @param null $parent  : identifiant de la feuille parent
-     * @return $tree        : arbre retravaillé (feuille insérée)
-     */
-    private function insertLeaf($tree, $path, $item, $parent = null)
-    {
-        switch (true) {
-            case ($parent == null) :
-                $tree[$item['id']]          = $item;
-                break;
-            case ($parent != null) :
-                $tmpPath                    = $path[$parent];
-                $tmpPath                    = explode(".", $tmpPath);
-                $nParent                    = sizeOf($tmpPath);
-                if (!isset($tree[$parent]['branch'])) {
-                    $tree[$parent]['branch'] = [];
-                }
-                $localPath                  = ($nParent > 1) ? $tmpPath[$nParent - 2] : null;
-                $tree[$parent]['branch']    = $this->insertLeaf($tree[$parent]['branch'], $path, $item, $localPath);
-                break;
-        }
+        ksort($tree);
         return $tree;
     }
 }

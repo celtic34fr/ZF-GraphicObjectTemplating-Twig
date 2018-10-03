@@ -7,6 +7,7 @@ return array(
 
     'dataTree'      => [],
     'dataPath'      => [],
+    'icon'          => false,
 
     'resources' => [
         'css' => [ 'odtreeview.css' => 'css/odtreeview.css', ],

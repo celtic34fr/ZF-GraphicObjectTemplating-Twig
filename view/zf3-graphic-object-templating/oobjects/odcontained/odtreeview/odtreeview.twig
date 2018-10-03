@@ -1,61 +1,71 @@
 {# template de l'objet ODTreeview #}
 
-{% import _self as treeviewMacros %}
+{% import _self as macros %}
 
-{% macro drawLeaf(key, item, path) %}
-    {% import _self as treeviewMacros %}
-    {% if item.dropdown|length == 0 %}
+{% macro drawLeaf(key, item, path, icon) %}
+    {% import _self as macros %}
+    {% if item.children|length == 0 %}
         <li data-lvl="{{ path[key] }}" data-ord="{{ key }}">
-        {% if objet.icon %}
-            {% switch(item.icon) %}
+            {% if icon %}
+                {% switch(item.icon) %}
                 {% case 'none' %}
-                <i class="leaf"></i>
+                    <i class="fa fa-file icon leaf"></i>
                 {% default %}
-                <i class="{{ item.icon }}"></i>
-            {% endswitch %}
+                    <i class="{{ item.icon }}"></i>
+                {% endswitch %}
+            {% endif %}
             {{ item.libel }}
         </li>
     {% else %}
         <li class="lvl" data-lvl="{{ path[key] }}" data-ord="{{ key }}">
             <input type="checkbox" id="lvl_{{ key }}">
-            {% if objet.icon %}
+            {% if icon %}
                 {% switch(item.icon) %}
-                    {% case 'none' %}
-                    <i class="icon folder closed"></i>
-                    <i class="icon folder opened"></i>
-                    {% default %}
+                {% case 'none' %}
+                    <i class="fa fa-folder icon"></i>
+                    <i class="fa fa-folder-open icon"></i>
+                {% default %}
                     <i class="icon {{ item.icon }} closed"></i>
                     <i class="icon {{ item.icon }} opened"></i>
                 {% endswitch %}
-                <label for  id="lvl_{{ key }}">{{ item.libel }}</label>
-                <ul>
-                    {% for id,leaf in item.dropdown %}
-                        {{ treeviewMacro.drawLeaf(id, leaf, objet.dataPath) }}
-                    {% endfor %}
-                </ul>
             {% endif %}
+            <label for="lvl_{{ key }}">{{ item.libel }}</label>
+            <ul>
+                {% for id,leaf in item.children %}
+                    {{ macros.drawLeaf(id, leaf, path, icon) }}
+                {% endfor %}
+            </ul>
         </li>
     {% endif %}
 {% endmacro %}
 
-<div id="{{ objet.id }}">
+<div id="{{ objet.id }}" class="treeview">
+    <style>
+    {% if objet.styleTree is defined and objet.styleTree|length > 0 %}
+            {% for item in styleTree %}
+            /* habillage spécifique */
+            li.n{{ item.level }}:hover {
+                border: 1px solid {{ item.color }};
+                border-radius: 3px;
+                background-color: {{ item.backgroundColor }};
+            }
+            {% endfor %}
+    {% endif %}
+
+        #{{ objet.id }} {
+            border:  1px black solid;
+            padding: 0.5em;
+        }
+
+        #{{ objet.id }} ul {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+
     <ul>
         {% for id,leaf in objet.dataTree %}
-            {{ treeviewMacro.drawLeaf(id, leaf, objet.dataPath) }}
+            {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon) }}
         {% endfor %}
     </ul>
 </div>
-
-{% if objet.styleTree id defined and objet.styleTree|length >0 %}
-<style>
-    {% for item in styleTree %}
-    /* habillage spécifique */
-    li.n{{ item.level }}:hover {
-        border: 1px solid {{ item.color }};
-        border-radius: 3px;
-        background-color: {{ item.backgroundColor }};
-    }
-    {% endfor %}
-
-</style>
-{% endif %}
