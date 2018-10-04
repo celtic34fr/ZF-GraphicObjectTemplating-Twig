@@ -16,12 +16,13 @@
  * limitations under the License.
  * ========================================================= */
 /* fonctionnel mécanisme ouverture fermeture branche */
-input                           { display: none; }
-input ~ ul                      { display: none; }
-input:checked ~ ul              { display: block; }
-input ~ .fa-folder-open         { display: none; }
-input:checked ~ .fa-folder      { display: none;}
-input:checked ~ .fa-folder-open { display: inline;}
+li input                       { display: none; }
+li input ~ ul                  { display: none; }
+li input:checked ~ ul          { display: block; }
+
+li input ~ .icon.opened            { display: none; }
+li input:checked ~ .icon.closed    { display: none;}
+li input:checked ~ .icon.opened    { display: inline;}
 
 /* habillage */
 li {
@@ -36,7 +37,7 @@ li {
     cursor: pointer !important;
 }
 
-.treeview .fa {
+.treeview .icon {
     font-weight: 100 !important;
     color: lightslategray !important;
 }

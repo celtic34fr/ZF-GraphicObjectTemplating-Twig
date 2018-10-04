@@ -2,14 +2,14 @@
 
 {% import _self as macros %}
 
-{% macro drawLeaf(key, item, path, icon) %}
+{% macro drawLeaf(key, item, path, icon, objet) %}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
         <li data-lvl="{{ path[key] }}" data-ord="{{ key }}">
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
-                    <i class="fa fa-file icon leaf"></i>
+                    <i class="{{ objet.leafIco }} icon leaf"></i>
                 {% default %}
                     <i class="{{ item.icon }}"></i>
                 {% endswitch %}
@@ -17,22 +17,22 @@
             {{ item.libel }}
         </li>
     {% else %}
-        <li class="lvl" data-lvl="{{ path[key] }}" data-ord="{{ key }}">
+        <li data-lvl="{{ path[key] }}" data-ord="{{ key }}">
             <input type="checkbox" id="lvl_{{ key }}">
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
-                    <i class="fa fa-folder icon"></i>
-                    <i class="fa fa-folder-open icon"></i>
+                    <i class="{{ objet.nodeClosedIco }} icon closed"></i>
+                    <i class="{{ objet.nodeOpenedIco }} icon opened"></i>
                 {% default %}
-                    <i class="icon {{ item.icon }} closed"></i>
-                    <i class="icon {{ item.icon }} opened"></i>
+                    <i class="{{ item.icon }} icon closed"></i>
+                    <i class="{{ item.icon }} icon opened"></i>
                 {% endswitch %}
             {% endif %}
             <label for="lvl_{{ key }}">{{ item.libel }}</label>
             <ul>
                 {% for id,leaf in item.children %}
-                    {{ macros.drawLeaf(id, leaf, path, icon) }}
+                    {{ macros.drawLeaf(id, leaf, path, icon, objet) }}
                 {% endfor %}
             </ul>
         </li>
@@ -42,6 +42,7 @@
 <div id="{{ objet.id }}" class="treeview">
     <style>
     {% if objet.styleTree is defined and objet.styleTree|length > 0 %}
+
             {% for item in styleTree %}
             /* habillage spécifique */
             li.n{{ item.level }}:hover {
@@ -51,21 +52,11 @@
             }
             {% endfor %}
     {% endif %}
-
-        #{{ objet.id }} {
-            border:  1px black solid;
-            padding: 0.5em;
-        }
-
-        #{{ objet.id }} ul {
-            padding: 0 !important;
-            margin: 0 !important;
-        }
     </style>
 
     <ul>
         {% for id,leaf in objet.dataTree %}
-            {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon) }}
+            {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
         {% endfor %}
     </ul>
 </div>

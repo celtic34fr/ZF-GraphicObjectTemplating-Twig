@@ -8,6 +8,9 @@ return array(
     'dataTree'      => [],
     'dataPath'      => [],
     'icon'          => false,
+    'leafIco'       => 'fa fa-file',
+    'nodeClosedIco' => 'fa fa-folder',
+    'nodeOpenedIco' => 'fa fa-folder-open',
 
     'resources' => [
         'css' => [ 'odtreeview.css' => 'css/odtreeview.css', ],

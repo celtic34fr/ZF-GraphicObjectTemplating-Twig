@@ -9,11 +9,17 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * addLeaf($libel, $ord = null, $parent = null)
+ * addLeaf($ref, $libel, $ord = null, $parent = null)
  * setLeaf($libel, $path)
- * getLeaf($refs)
+ * getLeaf($ref)
  * enaIcon()
  * disIcon()
+ * setLeafIco($leafIco)
+ * getLeafIco()
+ * setNodeOpenedIco($nodeOpenedIco)
+ * getNodeOpenedIco()
+ * setNodeClosedIco($nodeClosedIco)
+ * getNodeClosedIco()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -35,11 +41,13 @@ class ODTreeview extends ODContained
         return $this;
     }
 
-    public function addLeaf($libel, $ord = null, $parent = null)
+    public function addLeaf($ref, $libel, $ord = null, $parent = null)
     {
         $properties = $this->getProperties();
         $ord        = (int) $ord;
         $parent     = (string) $parent;
+        $ref        = (string) $ref;
+        $libel      = (string) $libel;
 
         $dataTree   = $properties['dataTree'];
         $dataPath   = $properties['dataPath'];
@@ -57,7 +65,7 @@ class ODTreeview extends ODContained
                 $item['targetL']    = 'none';
 
                 $dataTree[$ord]     = $item;
-                $dataPath[$ord]     = $ord;
+                $dataPath[$ref]     = $ord;
                 $validAct           = true;
                 ksort($dataTree);
             }
@@ -82,7 +90,7 @@ class ODTreeview extends ODContained
 
                 $path[0]            = $path0;
                 $dataTree           = $this->updateTree($dataTree, $path, $item);
-                $dataPath[$ord]     = $parent.'.'.$ord;
+                $dataPath[$ref]     = $parent.'.'.$ord;
                 $validAct           = true;
             }
         }
@@ -126,11 +134,13 @@ class ODTreeview extends ODContained
         return false;
     }
 
-    public function getLeaf($refs)
+    public function getLeaf($ref)
     {
         $properties = $this->getProperties();
-        $refs       = explode('.', $refs);
+        $dataPath   = $properties['dataPath'];
         $leaf       = $properties['dataTree'];
+
+        $refs       = explode('.', $dataPath[$ref]);
         $found      = true;
         foreach ($refs as $ref) {
             if (array_key_exists('children', $leaf)) {
@@ -162,6 +172,51 @@ class ODTreeview extends ODContained
         $properties['icon'] = false;
         $this->setProperties($properties);
         return $this;
+    }
+
+    public function setLeafIco($leafIco)
+    {
+        $properties = $this->getProperties();
+        $leafIco    = (string) $leafIco;
+        $properties['leafIco']  = $leafIco;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getLeafIco()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('leafIco', $properties) ? $properties['leafIco'] : false;
+    }
+
+    public function setNodeOpenedIco($nodeOpenedIco)
+    {
+        $properties     = $this->getProperties();
+        $nodeOpenedIco  = (string) $nodeOpenedIco;
+        $properties['nodeOpenedIco']  = $nodeOpenedIco;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getNodeOpenedIco()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('nodeOpenedIco', $properties) ? $properties['nodeOpenedIco'] : false;
+    }
+
+    public function setNodeClosedIco($nodeClosedIco)
+    {
+        $properties     = $this->getProperties();
+        $nodeClosedIco  = (string) $nodeClosedIco;
+        $properties['nodeClosedIco']  = $nodeClosedIco;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getNodeClosedIco()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('nodeClosedIco', $properties) ? $properties['nodeClosedIco'] : false;
     }
 
     /** **************************************************************************************************
