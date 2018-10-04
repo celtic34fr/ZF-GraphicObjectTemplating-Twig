@@ -39,7 +39,12 @@
     {% endif %}
 {% endmacro %}
 
-<div id="{{ objet.id }}" class="treeview">
+<div id="{{ objet.id }}"
+    data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
+    {% if objet.form|length > 0 %} data-form="{{ objet.form }}" {% endif %}
+    class="gotObject hidden treeview {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
     <style>
     {% if objet.styleTree is defined and objet.styleTree|length > 0 %}
 
@@ -62,6 +67,11 @@
 
     <script>
         $(document).ready(function (e) {
+
+            {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
+            {% endif %}
+
             $("#{{ objet.id }} li").click(function (e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -82,7 +92,8 @@
                 {% endif %}
                 if (asSelect)   { $(this).removeClass('selected'); }
                 else            { $(this).addClass('selected'); }
-            })
+            });
+
         })
     </script>
 </div>
