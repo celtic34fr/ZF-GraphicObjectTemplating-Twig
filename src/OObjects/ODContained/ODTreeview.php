@@ -59,7 +59,7 @@ class ODTreeview extends ODContained
                 $item = [];
                 $item['libel']      = $libel;
                 $item['ord']        = $ord;
-                $item['ref']        = $ord;
+                $item['ref']        = $ref;
                 $item['icon']       = 'none';
                 $item['link']       = 'none';
                 $item['targetL']    = 'none';
@@ -83,7 +83,7 @@ class ODTreeview extends ODContained
                 $item = [];
                 $item['libel']      = $libel;
                 $item['ord']        = $ord;
-                $item['ref']        = $parent.'.'.$ord;
+                $item['ref']        = $ref;
                 $item['icon']       = 'none';
                 $item['link']       = 'none';
                 $item['targetL']    = 'none';

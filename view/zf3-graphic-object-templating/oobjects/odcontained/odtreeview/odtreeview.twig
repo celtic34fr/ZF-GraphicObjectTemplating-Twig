@@ -5,7 +5,7 @@
 {% macro drawLeaf(key, item, path, icon, objet) %}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
-        <li data-lvl="{{ path[key] }}" data-ord="{{ key }}">
+        <li class="leaf" data-lvl="{{ path[item.ref] }}" data-ord="{{ key }}">
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -17,7 +17,7 @@
             {{ item.libel }}
         </li>
     {% else %}
-        <li data-lvl="{{ path[key] }}" data-ord="{{ key }}">
+        <li class="node" data-lvl="{{ path[item.ref] }}" data-ord="{{ key }}">
             <input type="checkbox" id="lvl_{{ key }}">
             {% if icon %}
                 {% switch(item.icon) %}
@@ -45,7 +45,7 @@
 
             {% for item in styleTree %}
             /* habillage spécifique */
-            li.n{{ item.level }}:hover {
+            li[data-lvl="{{ item.level }}"]:hover {
                 border: 1px solid {{ item.color }};
                 border-radius: 3px;
                 background-color: {{ item.backgroundColor }};
@@ -59,4 +59,30 @@
             {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
         {% endfor %}
     </ul>
+
+    <script>
+        $(document).ready(function (e) {
+            $("#{{ objet.id }} li").click(function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                let asSelect = $(this).hasClass('selected');
+                if ($(this).hasClass('node')) {
+                    $(this).find('input').prop("checked", !$(this).find('input').prop("checked"));
+                    if (!$(this).find('input').prop("checked")) {
+                        $(this).find('li').each(function (e) {
+                            if ($(this).hasClass('selected')) { $(this).removeClass('selected'); }
+                        });
+                        asSelect = true;
+                    }
+                }
+                {% if objet.multiSelect == false %}
+                $("#{{ objet.id }} li").each(function (e) {
+                    if ($(this).hasClass('selected')) { $(this).removeClass('selected');}
+                });
+                {% endif %}
+                if (asSelect)   { $(this).removeClass('selected'); }
+                else            { $(this).addClass('selected'); }
+            })
+        })
+    </script>
 </div>

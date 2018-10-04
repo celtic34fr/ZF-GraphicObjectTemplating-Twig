@@ -54,3 +54,15 @@ li .icon {
 li .icon.leaf {
     margin-right: 0.3em;
 }
+
+li:hover {
+    border: 1px solid grey;
+    border-radius: 3px;
+    background-color: lightgrey;
+}
+
+li.selected {
+    border: 1px solid #020a68;
+    border-radius: 3px;
+    background-color: #c0bcff;
+}

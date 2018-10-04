@@ -11,6 +11,7 @@ return array(
     'leafIco'       => 'fa fa-file',
     'nodeClosedIco' => 'fa fa-folder',
     'nodeOpenedIco' => 'fa fa-folder-open',
+    'multiSelect'   => false,
 
     'resources' => [
         'css' => [ 'odtreeview.css' => 'css/odtreeview.css', ],
