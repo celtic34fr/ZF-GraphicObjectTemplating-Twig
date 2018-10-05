@@ -145,7 +145,7 @@ function invokeAjax(datas, idSource, event, e) {
                 treeview.deltUpdtLeaf(code);
                 break;
             case 'appendTreeNode': // mise à jour feuille Treeview
-                treeview = new odtreeview('#'+id);
+                treeview = new odtreeview($('#'+id));
                 treeview.appendTreeNode(code);
                 break;
         }

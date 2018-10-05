@@ -18,14 +18,14 @@ odtreeview.prototype = {
         });
     },
     updtTreeLeaf(params) {
-        let html        = parseInt(params['html']);
-        let selector    = parseInt(params['selector']);
+        let html        = params['html'];
+        let selector    = params['selector'];
         $('#'+this.id+' '+selector).replaceWith(html);
 
     },
     appendTreeNode(params) {
-        let html        = parseInt(params['html']);
-        let selector    = parseInt(params['selector']);
-        $('#'+this.id+' '+selector).append(code);
+        let html        = params['html'];
+        let selector    = params['selector'];
+        $('#'+this.id+' '+selector).append(html);
     },
 };

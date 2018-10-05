@@ -16,6 +16,9 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  *              -> ajout de l'objet en tant qu'enfant du formulaire (pareent::addChild)
  *              -> ajout de la référence du champs à la liste des champs du formulaire (attribut fields)
  * (traitement récussif en cas d'ajout d'objet de type OSContainer)
+ * addExtField(ODContained $field, $require = false)
+ * setExtField(ODContained $field, $require = false)
+ * removeExtField(ODContained $field)
  * removeChild(OObject $child)
  *              : méthode de suppression d'un champ au formulaire en 2 temps*
  *              -> suppression de l'objet en tant qu'enfant du formulaire (parent::removeChild)
@@ -99,6 +102,39 @@ class OSForm extends OSDiv
         if (!array_key_exists($child->getId(), $children)) {
             parent::addChild($child, $mode, $params);
             $this->propageFormParams($child, $this->getId(), $this->getId(), $require);
+            return $this;
+        }
+        return false;
+    }
+
+    public function addExtField(ODContained $field, $require = false)
+    {
+        $properties = $this->getProperties();
+        $properties['fields'][$field->getId()] = $require;
+        $field->setForm(trim($field->getForm().' '.$this->getId()));
+        $field->saveProperties();
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setExtField(ODContained $field, $require = false)
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists($field->getId(), $properties['fields'])) {
+            $properties['fields'][$field->getId()] = $require;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function removeExtField(ODContained $field)
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists($field->getId(), $properties['fields'])
+        && !array_key_exists($field->getId(), $properties['children'])) {
+            unset($properties['fields'][$field->getId()]);
+            $this->setProperties($properties);
             return $this;
         }
         return false;

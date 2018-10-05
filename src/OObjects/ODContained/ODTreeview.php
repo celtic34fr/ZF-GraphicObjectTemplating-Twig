@@ -3,6 +3,7 @@
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\OObject;
 
 /**
  * Class ODTreeview
@@ -22,9 +23,9 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getNodeClosedIco()
  * setSelectedLeaves(array $selectedLeaves)
  * getSelectedLeaves()
- * evtClick($class, $method, $stopEvent = false)
- * getClick()
- * disClick()
+ * #evtClick($class, $method, $stopEvent = false)
+ * #getClick()
+ * #disClick()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -158,18 +159,25 @@ class ODTreeview extends ODContained
         $leaf       = $properties['dataTree'];
         $found      = true;
         if (!empty($path)) {
+            $first      = true;
             $refs       = explode('.', $path);
             foreach ($refs as $ref) {
-                if (array_key_exists('children', $leaf)) {
-                    if (isset($leaf['children'][$ref])) {
-                        $leaf = $leaf['children'][$ref];
+                if ($first) {
+                    $leaf   = $leaf[$ref];
+                    $first  = false;
+                } else {
+                    if (array_key_exists('children', $leaf)) {
+                        $children   = $leaf['children'];
+                        if (array_key_exists($ref, $children)) {
+                            $leaf = $children[$ref];
+                        } else {
+                            $found = false;
+                            break;
+                        }
                     } else {
                         $found = false;
                         break;
                     }
-                } else {
-                    $found = false;
-                    break;
                 }
             }
         }
@@ -275,11 +283,12 @@ class ODTreeview extends ODContained
 
     public function returnAddLeaf($parentPath, $ord)
     {
-        if ($parentPath == "1") {
+        if ($parentPath == "1" || empty($parentPath)) {
             $pathChild  = $ord;
             $parent     = null;
+            $parentPath = "1";
         } else {
-            $pathChild  =  $parentPath.'./'.$ord;
+            $pathChild  =  $parentPath.'.'.$ord;
             $parent     = $this->getLeafByPath($parentPath);
         }
         $child      = $this->getLeafByPath($pathChild);
@@ -291,22 +300,22 @@ class ODTreeview extends ODContained
         $line .= $child['libel'].'</li>';
 
         $ord        = ($parentPath == "1") ? 0 : (int) $parent['ord'];
-        $selector   = '[data-lvl="'.$parentPath.'", data-ord="'.$ord."]";
+        $selector   = '[data-lvl="'.$parentPath.'"][data-ord="'.$ord.'"] ul';
 
-        if ($parent && sizeof($parent['children']) == 1) {
+        if ($parentPath != "1" && $parent && sizeof($parent['children']) == 1) {
             $node   = '<li class="node" data-lvl="{{ path[item.ref] }}" data-ord="'.$ord.'">';
             $node  .= '<input type="checkbox" id="lvl_'.$ord.'">';
             $node  .= '<i class="{{ objet.nodeClosedIco }} icon closed"></i>';
             $node  .= '<i class="{{ objet.nodeOpenedIco }} icon opened"></i>';
             $node  .= '<label for="lvl_'.$ord.'">'.$parent['libel'].'</label><ul>';
             $node  .= $line.'</ul>';
+
             $code   = ['html' => $node, 'selector' => $selector];
             $mode   = 'updtTreeLeaf';
             /* mode update supprime - remplace sur sélecteur enfant */
         } else {
             // traitement ajout nouvelle feuille enfant
             // mode append sur sélecteur parent
-            $selector   .= ' ul';
             $code   = ['html' => $line, 'selector' => $selector];
             $mode       = 'appendTreeNode';
         }

@@ -16,6 +16,6 @@ return array(
 
     'resources' => [
         'css' => [ 'odtreeview.css' => 'css/odtreeview.css', ],
-        'js'  => [ 'odtreeview.css' => 'js/odtreeview.js',],
+        'js'  => [ 'odtreeview.js' => 'js/odtreeview.js',],
     ],
 );

@@ -39,7 +39,7 @@
     {% endif %}
 {% endmacro %}
 
-<div id="{{ objet.id }}" data-lvl="1" data-ord="0"
+<div id="{{ objet.id }}"
     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
     {% if objet.form|length > 0 %} data-form="{{ objet.form }}" {% endif %}
     class="gotObject hidden treeview {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
@@ -59,39 +59,50 @@
     {% endif %}
     </style>
 
-    <ul>
-        {% for id,leaf in objet.dataTree %}
-            {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
-        {% endfor %}
-    </ul>
+    <div data-lvl="1" data-ord="0">
+        <ul>
+            {% for id,leaf in objet.dataTree %}
+                {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
+            {% endfor %}
+        </ul>
+    </div>
 
     <script>
         $(document).ready(function (e) {
 
             {% if objet.event is not empty %}
-            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event, tag:'li' } %}
             {% endif %}
 
-            $("#{{ objet.id }} li").click(function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                let asSelect = $(this).hasClass('selected');
-                if ($(this).hasClass('node')) {
-                    $(this).find('input').prop("checked", !$(this).find('input').prop("checked"));
-                    if (!$(this).find('input').prop("checked")) {
-                        $(this).find('li').each(function (e) {
-                            if ($(this).hasClass('selected')) { $(this).removeClass('selected'); }
-                        });
-                        asSelect = true;
+            window.rebond   = 0;
+
+            $("#{{ objet.id }}").on("click", "li", function (e) {
+/*                e.preventDefault();
+                e.stopImmediatePropagation(); */
+                if (window.rebond == 0) {
+                    window.rebond = 1;
+
+                    let asSelect = $(this).hasClass('selected');
+                    if ($(this).hasClass('node')) {
+                        $(this).find('input').prop("checked", !$(this).find('input').prop("checked"));
+                        if (!$(this).find('input').prop("checked")) {
+                            $(this).find('li').each(function (e) {
+                                if ($(this).hasClass('selected')) { $(this).removeClass('selected'); }
+                            });
+                            asSelect = true;
+                        }
                     }
+                    {% if objet.multiSelect == false %}
+                    $("#{{ objet.id }} li").each(function (e) {
+                        if ($(this).hasClass('selected')) { $(this).removeClass('selected');}
+                    });
+                    {% endif %}
+                    if (asSelect)   { $(this).removeClass('selected'); }
+                    else            { $(this).addClass('selected'); }
+                    setTimeout(function () {
+                        window.rebond = 0;
+                    }, 500 );
                 }
-                {% if objet.multiSelect == false %}
-                $("#{{ objet.id }} li").each(function (e) {
-                    if ($(this).hasClass('selected')) { $(this).removeClass('selected');}
-                });
-                {% endif %}
-                if (asSelect)   { $(this).removeClass('selected'); }
-                else            { $(this).addClass('selected'); }
             });
 
         })

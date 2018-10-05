@@ -4,7 +4,9 @@
 {% for evt, event in events %}
     {% if event is not empty %}
         {% if event.class != "dummy" %}
-            $('#{{ objet.id }}').{{ evt }}(function (e) {
+            $('#{{ objet.id }}').on('{{ evt }}',
+            {% if tag is defined and tag is not empty %} '{{ tag }}', {% endif %}
+            function (e) {
             {% switch(event.class) %}
             {% case 'javascript:' %}
                 {{ event.method | raw }};
