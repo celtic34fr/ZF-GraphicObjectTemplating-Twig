@@ -7,6 +7,7 @@ return array(
 
     'dataTree'      => [],
     'dataPath'      => [],
+    'dataSelected'  => [],
     'icon'          => false,
     'leafIco'       => 'fa fa-file',
     'nodeClosedIco' => 'fa fa-folder',

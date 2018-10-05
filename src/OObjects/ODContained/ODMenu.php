@@ -26,6 +26,7 @@ use GraphicObjectTemplating\OObjects\OObject;
  * getMode()
  * setTitle($title)
  * getTitle()
+ * getTargetConstants()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -71,16 +72,6 @@ class ODMenu extends ODContained
         return $this;
     }
 
-    /**
-     * @param $id           : identifiant de l'option de menu
-     * @param $label        : texte de l'option de menu
-     * @param $link         : url de la page cible
-     * @param "left" $float : pour un titre, positionnement sur la barre de menu de navigation
-     * @param null $parent  : identitifiant de l'option de menu parentes (null = titre)
-     * @param true $enable  : booléen indiquant si l'option est accessible ou non
-     *
-     * @return $this|bool   : objet menu ou false si erreur
-     */
     public function addLeaf($id, $label, $link, $float=self::ODMENUPOSITION_LEFT, $parent = NULL, $target = self::ODMENUTARGET_SELF, $enable = true)
     {
         $floats = $this->getPositionConstants();
@@ -99,16 +90,16 @@ class ODMenu extends ODContained
         $dataPath       = $properties['dataPath'];
         $dataTree       = $properties['dataTree'];
 
-        $item           = [];
-        $item['id']     = $id;
-        $item['label']  = $label;
-        $item['link']   = $link;
-        $item['float']  = $float;
-        $item['target'] = $target;
-        $item['enable'] = $enable;
-        $item['active'] = false;
+        if ($this->validIdUnique($id)) {
+            $item           = [];
+            $item['id']     = $id;
+            $item['label']  = $label;
+            $item['link']   = $link;
+            $item['float']  = $float;
+            $item['target'] = $target;
+            $item['enable'] = $enable;
+            $item['active'] = false;
 
-        if (!array_key_exists($id, $dataPath)) {
             if (!empty($parent)) {
                 $dataPath[$id] = $dataPath[$parent] .".". $id;
             } else {
@@ -165,10 +156,6 @@ class ODMenu extends ODContained
         return (isset($properties['activeMenu'])) ? $properties['activeMenu'] : false;
     }
 
-    /**
-     * supprssion de la sous arborescence à partir de l'élement $id
-     * @param $id
-     */
     public function removeLeaf($id)
     {
         $properties                  = $this->getProperties();
@@ -191,10 +178,6 @@ class ODMenu extends ODContained
 		return $this;
 	}
 
-    /**
-     * mise à jour de la sous arborescence à partir de l'élement $id
-     * @param $id
-     */
     public function updateLeaf($id, $item, $keepDropdown = true)
     {
         $properties                  = $this->getProperties();
@@ -305,6 +288,25 @@ class ODMenu extends ODContained
     {
         $properties                 = $this->getProperties();
         return (isset($properties['title'])) ? $properties['title'] : false;
+    }
+
+    public function getTargetConstants()
+    {
+        $retour = [];
+        if (empty($this->const_target)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'ODMENUTARGET_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_target = $retour;
+        } else {
+            $retour = $this->const_target;
+        }
+
+        return $retour;
     }
 
     /** **************************************************************************************************
@@ -458,22 +460,10 @@ class ODMenu extends ODContained
         return $retour;
     }
 
-    private function getTargetConstants()
+    private function validIdUnique($id)
     {
-        $retour = [];
-        if (empty($this->const_target)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODMENUTARGET_');
-                if ($pos !== false) {
-                    $retour[$key] = $constant;
-                }
-            }
-            $this->const_target = $retour;
-        } else {
-            $retour = $this->const_target;
-        }
-
-        return $retour;
+        $properties = $this->getProperties();
+        $dataPath   = $properties['dataPath'];
+        return (!array_key_exists($id, $dataPath));
     }
 }

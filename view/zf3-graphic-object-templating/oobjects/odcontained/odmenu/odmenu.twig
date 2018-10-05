@@ -29,7 +29,10 @@
     {% endif %}
 {% endmacro %}
 
-<div id="{{ objet.id }}">
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-objet="{{ objet.object }}"
+    {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
+>
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">

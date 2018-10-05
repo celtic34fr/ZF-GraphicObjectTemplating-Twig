@@ -20,6 +20,11 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getNodeOpenedIco()
  * setNodeClosedIco($nodeClosedIco)
  * getNodeClosedIco()
+ * setSelectedLeaves(array $selectedLeaves)
+ * getSelectedLeaves()
+ * evtClick($class, $method, $stopEvent = false)
+ * getClick()
+ * disClick()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -53,53 +58,57 @@ class ODTreeview extends ODContained
         $dataPath   = $properties['dataPath'];
         $validAct   = false;
 
-        if (empty($parent)) {
-            if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
-            if (!isset($dataTree[$ord])) {
-                $item = [];
-                $item['libel']      = $libel;
-                $item['ord']        = $ord;
-                $item['ref']        = $ref;
-                $item['icon']       = 'none';
-                $item['link']       = 'none';
-                $item['targetL']    = 'none';
+        if ($this->validRefUnique($ref)) {
+            if (empty($parent)) {
+                if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
+                if (!isset($dataTree[$ord])) {
+                    $item = [];
+                    $item['libel']      = $libel;
+                    $item['ord']        = $ord;
+                    $item['ref']        = $ref;
+                    $item['icon']       = 'none';
+                    $item['link']       = 'none';
+                    $item['targetL']    = 'none';
+                    $item['parent']     = '1';
 
-                $dataTree[$ord]     = $item;
-                $dataPath[$ref]     = $ord;
-                $validAct           = true;
-                ksort($dataTree);
+                    $dataTree[$ord]     = $item;
+                    $dataPath[$ref]     = $ord;
+                    $validAct           = true;
+                    ksort($dataTree);
+                }
+            } else {
+                $path   = explode('.', $parent);
+                $leaf   = $dataTree[$path[0]];
+                $path0  = $path[0];
+                unset($path[0]);
+                foreach ($path as $id) {
+                    $leaf = $leaf['children'][$id];
+                }
+
+                if ($ord == 0 || !isset($leaf['children'][$ord])) {
+                    if ($ord == 0) { $ord = sizeof($leaf['children']) + 1; }
+                    $item = [];
+                    $item['libel']      = $libel;
+                    $item['ord']        = $ord;
+                    $item['ref']        = $ref;
+                    $item['icon']       = 'none';
+                    $item['link']       = 'none';
+                    $item['targetL']    = 'none';
+                    $item['parent']     = $parent;
+
+                    $path[0]            = $path0;
+                    $dataTree           = $this->updateTree($dataTree, $path, $item);
+                    $dataPath[$ref]     = $parent.'.'.$ord;
+                    $validAct           = true;
+                }
             }
-        } else {
-            $path   = explode('.', $parent);
-            $leaf   = $dataTree[$path[0]];
-            $path0  = $path[0];
-            unset($path[0]);
-            foreach ($path as $id) {
-                $leaf = $leaf['children'][$id];
+
+            if ($validAct) {
+                $properties['dataTree'] = $dataTree;
+                $properties['dataPath'] = $dataPath;
+                $this->setProperties($properties);
+                return $this;
             }
-
-            if ($ord == 0 || !isset($leaf['children'][$ord])) {
-                if ($ord == 0) { $ord = sizeof($leaf['children']) + 1; }
-                $item = [];
-                $item['libel']      = $libel;
-                $item['ord']        = $ord;
-                $item['ref']        = $ref;
-                $item['icon']       = 'none';
-                $item['link']       = 'none';
-                $item['targetL']    = 'none';
-
-                $path[0]            = $path0;
-                $dataTree           = $this->updateTree($dataTree, $path, $item);
-                $dataPath[$ref]     = $parent.'.'.$ord;
-                $validAct           = true;
-            }
-        }
-
-        if ($validAct) {
-            $properties['dataTree'] = $dataTree;
-            $properties['dataPath'] = $dataPath;
-            $this->setProperties($properties);
-            return $this;
         }
         return false;
     }
@@ -140,19 +149,28 @@ class ODTreeview extends ODContained
         $dataPath   = $properties['dataPath'];
         $leaf       = $properties['dataTree'];
 
-        $refs       = explode('.', $dataPath[$ref]);
+        return $this->getLeafByPath($dataPath[$ref]);
+    }
+
+    public function getLeafByPath($path = null)
+    {
+        $properties = $this->getProperties();
+        $leaf       = $properties['dataTree'];
         $found      = true;
-        foreach ($refs as $ref) {
-            if (array_key_exists('children', $leaf)) {
-                if (isset($leaf['children'][$ref])) {
-                    $leaf = $leaf['children'][$ref];
+        if (!empty($path)) {
+            $refs       = explode('.', $path);
+            foreach ($refs as $ref) {
+                if (array_key_exists('children', $leaf)) {
+                    if (isset($leaf['children'][$ref])) {
+                        $leaf = $leaf['children'][$ref];
+                    } else {
+                        $found = false;
+                        break;
+                    }
                 } else {
                     $found = false;
                     break;
                 }
-            } else {
-                $found = false;
-                break;
             }
         }
         return ($found) ? $leaf : false;
@@ -219,6 +237,82 @@ class ODTreeview extends ODContained
         return array_key_exists('nodeClosedIco', $properties) ? $properties['nodeClosedIco'] : false;
     }
 
+    public function setSelectedLeaves(array $selectedLeaves)
+    {
+        $properties = $this->getProperties();
+        $properties['dataSelected'] = $selectedLeaves;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getSelectedLeaves()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('dataSelected', $properties) ? $properties['dataSelected'] : false;
+    }
+
+    public function evtClick($class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('click', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    public function getClick()
+    {
+        return $this->getEvent('click');
+    }
+
+    public function disClick()
+    {
+        return $this->disEvent('click');
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion de retour de callback                                                         *
+     * *************************************************************************************************** */
+
+    public function returnAddLeaf($parentPath, $ord)
+    {
+        if ($parentPath == "1") {
+            $pathChild  = $ord;
+            $parent     = null;
+        } else {
+            $pathChild  =  $parentPath.'./'.$ord;
+            $parent     = $this->getLeafByPath($parentPath);
+        }
+        $child      = $this->getLeafByPath($pathChild);
+
+        // traitement ajout de feuille enfant
+        $line  = '<li class="leaf" data-lvl="'.$parentPath.'" data-ord="'.$ord.'">';
+        $itemIco = ($child['icon'] == 'non') ? $this->getLeafIco() : $child['icon'];
+        $line .= '<i class="'.$itemIco.' icon leaf"></i>';
+        $line .= $child['libel'].'</li>';
+
+        $ord        = ($parentPath == "1") ? 0 : (int) $parent['ord'];
+        $selector   = '[data-lvl="'.$parentPath.'", data-ord="'.$ord."]";
+
+        if ($parent && sizeof($parent['children']) == 1) {
+            $node   = '<li class="node" data-lvl="{{ path[item.ref] }}" data-ord="'.$ord.'">';
+            $node  .= '<input type="checkbox" id="lvl_'.$ord.'">';
+            $node  .= '<i class="{{ objet.nodeClosedIco }} icon closed"></i>';
+            $node  .= '<i class="{{ objet.nodeOpenedIco }} icon opened"></i>';
+            $node  .= '<label for="lvl_'.$ord.'">'.$parent['libel'].'</label><ul>';
+            $node  .= $line.'</ul>';
+            $code   = ['html' => $node, 'selector' => $selector];
+            $mode   = 'updtTreeLeaf';
+            /* mode update supprime - remplace sur sélecteur enfant */
+        } else {
+            // traitement ajout nouvelle feuille enfant
+            // mode append sur sélecteur parent
+            $selector   .= ' ul';
+            $code   = ['html' => $line, 'selector' => $selector];
+            $mode       = 'appendTreeNode';
+        }
+        return [OObject::formatRetour($this->getId(), $this->getId(), $mode, $code)];
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
@@ -235,5 +329,12 @@ class ODTreeview extends ODContained
         }
         ksort($tree);
         return $tree;
+    }
+
+    private function validRefUnique($ref)
+    {
+        $properties = $this->getProperties();
+        $dataPath   = $properties['dataPath'];
+        return (!array_key_exists($ref, $dataPath));
     }
 }

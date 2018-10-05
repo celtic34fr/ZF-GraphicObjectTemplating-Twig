@@ -69,8 +69,9 @@ function invokeAjax(datas, idSource, event, e) {
             }
         });
 
-        let updId = "";
-        let table = "";
+        let updId       = "";
+        let table       = "";
+        let treeview    = "";
         switch (mode) {
             case 'rscs': //extraction des ressources CSS / Js avec injection
                 loadResources(id, code);
@@ -138,6 +139,14 @@ function invokeAjax(datas, idSource, event, e) {
             case 'rmLineUpd': // mise à jour colonne ODTable
                 table = new odtable($('#'+id));
                 table.rmLineUpdate(code);
+                break;
+            case 'updtTreeLeaf': // ajout noeud et feuille Treeview sur ancienne feuille
+                treeview = new odtreeview('#'+id);
+                treeview.deltUpdtLeaf(code);
+                break;
+            case 'appendTreeNode': // mise à jour feuille Treeview
+                treeview = new odtreeview('#'+id);
+                treeview.appendTreeNode(code);
                 break;
         }
     });

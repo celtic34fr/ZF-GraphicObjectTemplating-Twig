@@ -11,7 +11,7 @@
                 {% case 'none' %}
                     <i class="{{ objet.leafIco }} icon leaf"></i>
                 {% default %}
-                    <i class="{{ item.icon }}"></i>
+                    <i class="{{ item.icon }} icon leaf"></i>
                 {% endswitch %}
             {% endif %}
             {{ item.libel }}
@@ -39,7 +39,7 @@
     {% endif %}
 {% endmacro %}
 
-<div id="{{ objet.id }}"
+<div id="{{ objet.id }}" data-lvl="1" data-ord="0"
     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
     {% if objet.form|length > 0 %} data-form="{{ objet.form }}" {% endif %}
     class="gotObject hidden treeview {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"

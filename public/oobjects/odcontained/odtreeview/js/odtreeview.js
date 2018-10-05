@@ -5,17 +5,27 @@ function odtreeview(obj) {
 
 odtreeview.prototype = {
     getData: function (evt) {
-        let selected = '';
+        let selected = [];
         $('#'+this.id+' li.selected').each(function () {
-            selected += $(this).data('lvl') + '.' + $(this).data('ord') + "-"
+            selected.push($(this).data('lvl') + '.' + $(this).data('ord'));
         });
-        selected = selected.substring(0, selected.length - 1);
-        let chps = "id=" + this.id + "&value='" + selected + "'&event='click'";
+        let chps = "id=" + this.id + "&value='" + selected.join("$") + "'&event='click'";
         return chps;
     },
     setData: function (data) {
         $.each(data, function (i, value) {
             $('#'+this.id+' li[data-lvl="'+ value.lvl +'"][data-ord="'+ value.ord +'"]').addClass('selected');
         });
+    },
+    updtTreeLeaf(params) {
+        let html        = parseInt(params['html']);
+        let selector    = parseInt(params['selector']);
+        $('#'+this.id+' '+selector).replaceWith(html);
+
+    },
+    appendTreeNode(params) {
+        let html        = parseInt(params['html']);
+        let selector    = parseInt(params['selector']);
+        $('#'+this.id+' '+selector).append(code);
     },
 };

@@ -156,6 +156,7 @@ class MainController extends AbstractActionController
             // formatage en sortie en tableau idObj => valeur
             switch ($object) {
                 case 'odcheckbox':
+                case 'odtreeview':
                     $val = explode('$', $val);
                     if (!is_array($val)) { $val[] = $val; }
                     $formDatas[$idF] = $val;
@@ -194,6 +195,9 @@ class MainController extends AbstractActionController
                             }
                         }
                         $properties['options'] = $options;
+                        break;
+                    case 'odtreeview':
+                        $properties['dataSelected'] = $data;
                         break;
                     default:
                         $properties['value'] = $data;

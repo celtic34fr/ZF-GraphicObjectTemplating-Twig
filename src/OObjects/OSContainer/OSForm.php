@@ -49,7 +49,7 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * updateFormDatas()
  * razFormDatas()
  * appendField($objID, OObject $objet)
- * idValid(array $formDatas)
+ * isValid(array $formDatas)
  */
 class OSForm extends OSDiv
 {
