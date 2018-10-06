@@ -47,7 +47,7 @@ class ODTreeview extends ODContained
         return $this;
     }
 
-    public function addLeaf($ref, $libel, $ord = null, $parent = null)
+    public function addLeaf($ref, $libel, $ord = null, $parent = "0")
     {
         $properties = $this->getProperties();
         $ord        = (int) $ord;
@@ -60,7 +60,7 @@ class ODTreeview extends ODContained
         $validAct   = false;
 
         if ($this->validRefUnique($ref)) {
-            if (empty($parent)) {
+            if ($parent == "0") {
                 if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
                 if (!isset($dataTree[$ord])) {
                     $item = [];
@@ -78,14 +78,7 @@ class ODTreeview extends ODContained
                     ksort($dataTree);
                 }
             } else {
-                $path   = explode('.', $parent);
-                $leaf   = $dataTree[$path[0]];
-                $path0  = $path[0];
-                unset($path[0]);
-                foreach ($path as $id) {
-                    $leaf = $leaf['children'][$id];
-                }
-
+                $leaf   = $this->getLeafByPath($parent);
                 if ($ord == 0 || !isset($leaf['children'][$ord])) {
                     if ($ord == 0) { $ord = sizeof($leaf['children']) + 1; }
                     $item = [];
@@ -97,7 +90,8 @@ class ODTreeview extends ODContained
                     $item['targetL']    = 'none';
                     $item['parent']     = $parent;
 
-                    $path[0]            = $path0;
+                    $path               = explode('.', $parent);
+                    if ((int) $path[0] == 0) { unset($path[0]); }
                     $dataTree           = $this->updateTree($dataTree, $path, $item);
                     $dataPath[$ref]     = $parent.'.'.$ord;
                     $validAct           = true;
@@ -158,13 +152,14 @@ class ODTreeview extends ODContained
         $properties = $this->getProperties();
         $leaf       = $properties['dataTree'];
         $found      = true;
-        if (!empty($path)) {
+        if ($path != '') {
             $first      = true;
             $refs       = explode('.', $path);
+            if ((int) $refs[0] == 0) { unset($refs[0]); }
             foreach ($refs as $ref) {
                 if ($first) {
-                    $leaf   = $leaf[$ref];
-                    $first  = false;
+                    $leaf = $leaf[$ref];
+                    $first = false;
                 } else {
                     if (array_key_exists('children', $leaf)) {
                         $children   = $leaf['children'];
@@ -283,31 +278,37 @@ class ODTreeview extends ODContained
 
     public function returnAddLeaf($parentPath, $ord)
     {
-        if ($parentPath == "1" || empty($parentPath)) {
+        $parentPath = (string) $parentPath;
+        $ord        = (int) $ord;
+
+        if ($parentPath == "0" || empty($parentPath)) {
+            $parentPath = "0";
+            $dataLvl    = "0";
             $pathChild  = $ord;
             $parent     = null;
-            $parentPath = "1";
         } else {
-            $pathChild  =  $parentPath.'.'.$ord;
+            $dataLvl    = $parentPath;
+            $pathChild  = $parentPath.'.'.$ord;
             $parent     = $this->getLeafByPath($parentPath);
+            $parentPath = explode('.', $parentPath);
         }
         $child      = $this->getLeafByPath($pathChild);
 
         // traitement ajout de feuille enfant
-        $line  = '<li class="leaf" data-lvl="'.$parentPath.'" data-ord="'.$ord.'">';
+        $line  = '<li class="leaf" data-lvl="'.$dataLvl.'" data-ord="'.$ord.'">';
         $itemIco = ($child['icon'] == 'non') ? $this->getLeafIco() : $child['icon'];
         $line .= '<i class="'.$itemIco.' icon leaf"></i>';
         $line .= $child['libel'].'</li>';
 
-        $ord        = ($parentPath == "1") ? 0 : (int) $parent['ord'];
+        $ord        = ($parentPath == "0") ? 0 : (int) $parent['ord'];
         $selector   = '[data-lvl="'.$parentPath.'"][data-ord="'.$ord.'"] ul';
 
-        if ($parentPath != "1" && $parent && sizeof($parent['children']) == 1) {
-            $node   = '<li class="node" data-lvl="{{ path[item.ref] }}" data-ord="'.$ord.'">';
-            $node  .= '<input type="checkbox" id="lvl_'.$ord.'">';
-            $node  .= '<i class="{{ objet.nodeClosedIco }} icon closed"></i>';
-            $node  .= '<i class="{{ objet.nodeOpenedIco }} icon opened"></i>';
-            $node  .= '<label for="lvl_'.$ord.'">'.$parent['libel'].'</label><ul>';
+        if ($parentPath != "0" && $parent && sizeof($parent['children']) == 1) {
+            $node   = '<li class="node" data-lvl="'.$parent['parent'].'" data-ord="'.$parent['ord'].'">';
+            $node  .= '<input type="checkbox" id="lvl_'.$parent['ord'].'">';
+            $node  .= '<i class="'.$this->getNodeClosedIco().' icon closed"></i>';
+            $node  .= '<i class="'.$this->getNodeOpenedIco().' icon opened"></i>';
+            $node  .= '<label for="lvl_'.$parent['ord'].'">'.$parent['libel'].'</label><ul>';
             $node  .= $line.'</ul>';
 
             $code   = ['html' => $node, 'selector' => $selector];

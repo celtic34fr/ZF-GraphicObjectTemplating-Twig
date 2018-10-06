@@ -5,7 +5,7 @@ function osform(obj) {
 osform.prototype = {
     getData: function (evt) {
         var formData = "";
-        var eltSelection = $("*[data-form='" + this.id + "']");
+        var eltSelection = $("*[data-form~='" + this.id + "']");
 
         $.each(eltSelection, function (i, selection) {
             var object     = selection.getAttribute('data-objet');
