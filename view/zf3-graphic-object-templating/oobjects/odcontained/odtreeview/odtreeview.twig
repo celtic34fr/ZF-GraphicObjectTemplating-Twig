@@ -5,7 +5,22 @@
 {% macro drawLeaf(key, item, path, icon, objet) %}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
-        <li class="leaf" data-lvl="{{ path[item.ref] }}" data-ord="{{ key }}">
+        <li>
+            <label>
+                <input class="hummingbird-end-node" id="node-{{ path[item.ref] }}-{{ key }}" data-id="custom-{{ path[item.ref] }}-{{ key }}" type="checkbox">
+                {% if icon %}
+                    {% switch(item.icon) %}
+                    {% case 'none' %}
+                <i class="{{ objet.leafIco }} icon leaf"></i>
+                    {% default %}
+                <i class="{{ item.icon }} icon leaf"></i>
+                    {% endswitch %}
+                {% endif %}
+                {{ item.libel }}
+            </label>
+        </li>
+
+        <!--li class="leaf" data-lvl="{#{ path[item.ref] }}" data-ord="{{ key }}">
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -14,11 +29,24 @@
                     <i class="{{ item.icon }} icon leaf"></i>
                 {% endswitch %}
             {% endif %}
-            {{ item.libel }}
-        </li>
+            {{ item.libel }#}
+        </li-->
     {% else %}
-        <li class="node" data-lvl="{{ path[item.ref] }}" data-ord="{{ key }}">
-            <input type="checkbox" id="lvl_{{ key }}">
+        <li>
+            <i class="fa fa-minus"></i>
+            <label>
+                <input id="node{{ path[item.ref] }}-{{ key }}" data-id="custom-{{ path[item.ref] }}-{{ key }}" type="checkbox">
+                {{ item.libel }}
+            </label>
+            <ul>
+                {% for id,leaf in item.children %}
+                    {{ macros.drawLeaf(id, leaf, path, icon, objet) }}
+                {% endfor %}
+            </ul>
+        </li>
+
+        <!--li class="node" data-lvl="{#{ path[item.ref] }}" data-ord="{{ key }}">
+            <input type="checkbox" id="lvl_{{ item.parent~'.'~item.ord }}">
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -29,13 +57,13 @@
                     <i class="{{ item.icon }} icon opened"></i>
                 {% endswitch %}
             {% endif %}
-            <label for="lvl_{{ key }}">{{ item.libel }}</label>
+            <label for="lvl_{{ item.parent~'.'~item.ord }}">{{ item.libel }}</label>
             <ul>
                 {% for id,leaf in item.children %}
                     {{ macros.drawLeaf(id, leaf, path, icon, objet) }}
-                {% endfor %}
+                {% endfor %#}
             </ul>
-        </li>
+        </li-->
     {% endif %}
 {% endmacro %}
 
@@ -45,66 +73,24 @@
     class="gotObject hidden treeview {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
-    <style>
-    {% if objet.styleTree is defined and objet.styleTree|length > 0 %}
-
-            {% for item in styleTree %}
-            /* habillage spécifique */
-            li[data-lvl="{{ item.level }}"]:hover {
-                border: 1px solid {{ item.color }};
-                border-radius: 3px;
-                background-color: {{ item.backgroundColor }};
-            }
-            {% endfor %}
-    {% endif %}
-    </style>
-
-    <div data-lvl="0" data-ord="0">
-        <ul>
+    <div class="hummingbird-treeview treeview_container">
+        <ul class="hummingbird-base treeview">
             {% for id,leaf in objet.dataTree %}
                 {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
             {% endfor %}
         </ul>
     </div>
+    <!--div data-lvl="0" data-ord="0">
+        <ul>
+            {#% for id,leaf in objet.dataTree %}
+                {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
+            {% endfor %#}
+        </ul>
+    </div-->
 
-    <script>
-        $(document).ready(function (e) {
-
-            {% if objet.event is not empty %}
-            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event, tag:'li' } %}
-            {% endif %}
-
-            window.rebond   = 0;
-
-            $("#{{ objet.id }}").on("click", "li", function (e) {
-/*                e.preventDefault();
-                e.stopImmediatePropagation(); */
-                if (window.rebond == 0) {
-                    window.rebond = 1;
-
-                    let asSelect = $(this).hasClass('selected');
-                    if ($(this).hasClass('node')) {
-                        $(this).find('input').prop("checked", !$(this).find('input').prop("checked"));
-                        if (!$(this).find('input').prop("checked")) {
-                            $(this).find('li').each(function (e) {
-                                if ($(this).hasClass('selected')) { $(this).removeClass('selected'); }
-                            });
-                            asSelect = true;
-                        }
-                    }
-                    {% if objet.multiSelect == false %}
-                    $("#{{ objet.id }} li").each(function (e) {
-                        if ($(this).hasClass('selected')) { $(this).removeClass('selected');}
-                    });
-                    {% endif %}
-                    if (asSelect)   { $(this).removeClass('selected'); }
-                    else            { $(this).addClass('selected'); }
-                    setTimeout(function () {
-                        window.rebond = 0;
-                    }, 500 );
-                }
-            });
-
-        })
-    </script>
 </div>
+<script>
+    $(document).ready(function (e) {
+        $('#{{ objet.id }} .treeview').hummingbird();
+    });
+</script>

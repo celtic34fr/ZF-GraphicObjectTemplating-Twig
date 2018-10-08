@@ -26,6 +26,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  * #evtClick($class, $method, $stopEvent = false)
  * #getClick()
  * #disClick()
+ * enaMultiSelect
+ * disMultiSelect
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -70,7 +72,7 @@ class ODTreeview extends ODContained
                     $item['icon']       = 'none';
                     $item['link']       = 'none';
                     $item['targetL']    = 'none';
-                    $item['parent']     = '1';
+                    $item['parent']     = '0';
 
                     $dataTree[$ord]     = $item;
                     $dataPath[$ref]     = $ord;
@@ -272,6 +274,22 @@ class ODTreeview extends ODContained
         return $this->disEvent('click');
     }
 
+    public function enaMultiSelect()
+    {
+        $properties = $this->getProperties();
+        $properties['multiSelect'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disMultiSelect()
+    {
+        $properties = $this->getProperties();
+        $properties['multiSelect'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -282,34 +300,54 @@ class ODTreeview extends ODContained
         $ord        = (int) $ord;
 
         if ($parentPath == "0" || empty($parentPath)) {
-            $parentPath = "0";
             $dataLvl    = "0";
-            $pathChild  = $ord;
+            $dataOrd    = "0";
             $parent     = null;
         } else {
             $dataLvl    = $parentPath;
-            $pathChild  = $parentPath.'.'.$ord;
             $parent     = $this->getLeafByPath($parentPath);
-            $parentPath = explode('.', $parentPath);
+            $dataOrd    = $parent['ord'];
         }
+        $pathChild  = $dataLvl.'.'.$ord;
         $child      = $this->getLeafByPath($pathChild);
 
         // traitement ajout de feuille enfant
-        $line  = '<li class="leaf" data-lvl="'.$dataLvl.'" data-ord="'.$ord.'">';
-        $itemIco = ($child['icon'] == 'non') ? $this->getLeafIco() : $child['icon'];
+        $line   = '<li>';
+        $line  .= '<label>';
+        $line  .= '<input class="hummingbird-end-node" id="node-'.$dataLvl.'-'.$dataOrd.'" data-id="custom-'.$dataLvl.'-'.$dataOrd.'" type="checkbox">';
+        $itemIco = ($child['icon'] == 'none') ? $this->getLeafIco() : $child['icon'];
         $line .= '<i class="'.$itemIco.' icon leaf"></i>';
-        $line .= $child['libel'].'</li>';
+        $line .= $child['libel'];
+        $line .= '</label>';
+        $line .= '</li>';
 
-        $ord        = ($parentPath == "0") ? 0 : (int) $parent['ord'];
-        $selector   = '[data-lvl="'.$parentPath.'"][data-ord="'.$ord.'"] ul';
+/*        $line  = '<li class="leaf" data-lvl="'.$dataLvl.'" data-ord="'.$ord.'">';
+        $itemIco = ($child['icon'] == 'none') ? $this->getLeafIco() : $child['icon'];
+        $line .= '<i class="'.$itemIco.' icon leaf"></i>';
+        $line .= $child['libel'].'</li>';*/
+
+        /** détermination sélecteur sur parent ligne à indérer */
+        if (!empty($parent)) { $dataLvl = $parent['parent']; }
+        $selector   = '[data-id="custom-'.$dataLvl.'-'.$dataOrd.'"]';
 
         if ($parentPath != "0" && $parent && sizeof($parent['children']) == 1) {
-            $node   = '<li class="node" data-lvl="'.$parent['parent'].'" data-ord="'.$parent['ord'].'">';
-            $node  .= '<input type="checkbox" id="lvl_'.$parent['ord'].'">';
+            $node   = '<li>';
+            $node  .= '<i class="fa fa-minus"></i>';
+            $node  .= '<label>';
+            $node  .= '<input id="node-'.$parent['parent'].'-'.$parent['ord'].'" data-id="custom-'.$parent['parent'].'-'.$parent['ord'].'" type="checkbox">';
+            $node  .= $parent['libel'];
+            $node  .= '</label>';
+            $node  .= '<ul>';
+            $node  .= $line;
+            $node  .= '</ul>';
+            $node  .= '</li>';
+
+/*            $node   = '<li class="node" data-lvl="'.$parent['parent'].'" data-ord="'.$parent['ord'].'">';
+            $node  .= '<input type="checkbox" id="lvl_'.$parent['parent'].'.'.$parent['ord'].'">';
             $node  .= '<i class="'.$this->getNodeClosedIco().' icon closed"></i>';
             $node  .= '<i class="'.$this->getNodeOpenedIco().' icon opened"></i>';
-            $node  .= '<label for="lvl_'.$parent['ord'].'">'.$parent['libel'].'</label><ul>';
-            $node  .= $line.'</ul>';
+            $node  .= '<label for="lvl_'.$parent['parent'].'.'.$parent['ord'].'">'.$parent['libel'].'</label><ul>';
+            $node  .= $line.'</ul>';*/
 
             $code   = ['html' => $node, 'selector' => $selector];
             $mode   = 'updtTreeLeaf';
@@ -317,7 +355,7 @@ class ODTreeview extends ODContained
         } else {
             // traitement ajout nouvelle feuille enfant
             // mode append sur sélecteur parent
-            $code   = ['html' => $line, 'selector' => $selector];
+            $code   = ['html' => $line, 'selector' => $selector.' ul'];
             $mode       = 'appendTreeNode';
         }
         return [OObject::formatRetour($this->getId(), $this->getId(), $mode, $code)];

@@ -15,7 +15,10 @@ return array(
     'multiSelect'   => false,
 
     'resources' => [
-        'css' => [ 'odtreeview.css' => 'css/odtreeview.css', ],
-        'js'  => [ 'odtreeview.js' => 'js/odtreeview.js',],
+        'css' => [ 'hummingbird_treeview.css' => 'css/hummingbird_treeview.css', ],
+        'js'  => [
+            'odtreeview.js' => 'js/odtreeview.js',
+            'hummingbird_treeview.js' => 'js/hummingbird_treeview.js',
+        ],
     ],
 );
