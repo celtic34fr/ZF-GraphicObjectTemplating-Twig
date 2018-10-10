@@ -5,9 +5,9 @@
 {% macro drawLeaf(key, item, path, icon, objet) %}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
-        <li>
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}">
             <label>
-                <input class="hummingbird-end-node" id="node-{{ path[item.ref] }}-{{ key }}" data-id="custom-{{ path[item.ref] }}-{{ key }}" type="checkbox">
+                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
                 {% if icon %}
                     {% switch(item.icon) %}
                     {% case 'none' %}
@@ -19,23 +19,11 @@
                 {{ item.libel }}
             </label>
         </li>
-
-        <!--li class="leaf" data-lvl="{#{ path[item.ref] }}" data-ord="{{ key }}">
-            {% if icon %}
-                {% switch(item.icon) %}
-                {% case 'none' %}
-                    <i class="{{ objet.leafIco }} icon leaf"></i>
-                {% default %}
-                    <i class="{{ item.icon }} icon leaf"></i>
-                {% endswitch %}
-            {% endif %}
-            {{ item.libel }#}
-        </li-->
     {% else %}
-        <li>
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}">
             <i class="fa fa-minus"></i>
             <label>
-                <input id="node{{ path[item.ref] }}-{{ key }}" data-id="custom-{{ path[item.ref] }}-{{ key }}" type="checkbox">
+                <input id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
                 {{ item.libel }}
             </label>
             <ul>
@@ -44,26 +32,6 @@
                 {% endfor %}
             </ul>
         </li>
-
-        <!--li class="node" data-lvl="{#{ path[item.ref] }}" data-ord="{{ key }}">
-            <input type="checkbox" id="lvl_{{ item.parent~'.'~item.ord }}">
-            {% if icon %}
-                {% switch(item.icon) %}
-                {% case 'none' %}
-                    <i class="{{ objet.nodeClosedIco }} icon closed"></i>
-                    <i class="{{ objet.nodeOpenedIco }} icon opened"></i>
-                {% default %}
-                    <i class="{{ item.icon }} icon closed"></i>
-                    <i class="{{ item.icon }} icon opened"></i>
-                {% endswitch %}
-            {% endif %}
-            <label for="lvl_{{ item.parent~'.'~item.ord }}">{{ item.libel }}</label>
-            <ul>
-                {% for id,leaf in item.children %}
-                    {{ macros.drawLeaf(id, leaf, path, icon, objet) }}
-                {% endfor %#}
-            </ul>
-        </li-->
     {% endif %}
 {% endmacro %}
 
@@ -73,24 +41,56 @@
     class="gotObject hidden treeview {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
-    <div class="hummingbird-treeview treeview_container">
+
+    <div id="{{ objet.id }}Li-0-0" class="hummingbird-treeview treeview_container" data-id="0-0">
         <ul class="hummingbird-base treeview">
             {% for id,leaf in objet.dataTree %}
                 {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
             {% endfor %}
         </ul>
     </div>
-    <!--div data-lvl="0" data-ord="0">
-        <ul>
-            {#% for id,leaf in objet.dataTree %}
-                {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
-            {% endfor %#}
-        </ul>
-    </div-->
+
+    <style>
+        li {
+            display: block;
+            font-family: 'Arial';
+            font-size: 15px;
+            padding: 0.2em;
+            border: 1px solid transparent;
+        }
+
+        li:hover {
+            border: 1px solid grey;
+            border-radius: 3px;
+            background-color: lightgrey;
+        }
+
+        li.selected {
+            border: 1px solid #0105de;
+            border-radius: 3px;
+            background-color: #b4bed3;
+        }
+    </style>
+
+    <script id="{{ objet.id }}Script">
+        $(document).ready(function (e) {
+            $('#{{ objet.id }} .treeview li input').on('click', function (e) {
+                var selectedLeaf = $(this).parents('label').parents('li').hasClass('selected');
+                {%  if objet.multiSelect == false %}
+                $.each($(this).parents('.treeview').find('li.selected'), function (e) {
+                    $(this).removeClass('selected');
+                    $(this).find('input').prop('checked', false);
+                });
+                {% endif %}
+                if (selectedLeaf) {
+                    $(this).parents('label').parents('li').removeClass('selected');
+                    $(this).prop('checked', false);
+                } else {
+                    $(this).parents('label').parents('li').addClass('selected');
+                    $(this).prop('checked', true);
+                }
+            });
+        });
+    </script>
 
 </div>
-<script>
-    $(document).ready(function (e) {
-        $('#{{ objet.id }} .treeview').hummingbird();
-    });
-</script>

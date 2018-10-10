@@ -7,7 +7,7 @@ odtreeview.prototype = {
     getData: function (evt) {
         let selected = [];
         $('#'+this.id+' li.selected').each(function () {
-            selected.push($(this).data('lvl') + '.' + $(this).data('ord'));
+            selected.push($(this).find('input').data('id'));
         });
         let chps = "id=" + this.id + "&value='" + selected.join("$") + "'&event='click'";
         return chps;
