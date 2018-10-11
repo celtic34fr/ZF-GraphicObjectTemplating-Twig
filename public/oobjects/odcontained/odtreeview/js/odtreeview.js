@@ -28,4 +28,26 @@ odtreeview.prototype = {
         let selector    = params['selector'];
         $('#'+this.id+' '+selector).append(html);
     },
+    updateNodeState(currentInput) {
+        let currentLi       = currentInput.parent('label').parent('li');
+        let currentParent   = currentLi.parent('ul').parent('li');
+        console.log('current >'+currentLi.attr('id'));
+        console.log('parent >'+currentParent.attr('id'));
+
+        let nbreLiUnSel = 'rien';
+        let nbreLiSelec = 'rien';
+        let nbreLeSelec = 'rien';
+        if (currentParent.length > 0) {
+            nbreLiUnSel = currentParent.children('ul').children('li').length;
+            nbreLiSelec = currentParent.children('ul').children('li.selected').length;
+            nbreLeSelec = currentParent.find('li.selected').length;
+        } else {
+            nbreLiUnSel = $('#'+this.id).children('ul').children('li').length;
+            nbreLiSelec = $('#'+this.id).children('ul').children('li.selected').length;
+            nbreLeSelec = $('#'+this.id).find('li.selected').length;
+        }
+        console.log('nbre li child  >'+nbreLiUnSel);
+        console.log('nbre li Select >'+nbreLiSelec);
+        console.log('nbre le Select >'+nbreLeSelec);
+    }
 };

@@ -313,7 +313,7 @@ class ODTreeview extends ODContained
         $child      = $this->getLeafByPath($pathChild);
 
         // traitement ajout de feuille enfant
-        $line   = '<li id="'.$this->getId().'Li-'.$dataLvl.'-'.$ord.'">';
+        $line   = '<li id="'.$this->getId().'Li-'.$dataLvl.'-'.$ord.'" class="leaf">';
         $line  .= '<label>';
         $line  .= '<input class="hummingbird-end-node" id="'.$this->getId().'-'.$dataLvl.'-'.$ord.'" data-id="'.$dataLvl.'-'.$ord.'" type="checkbox">';
         $itemIco = ($child['icon'] == 'none') ? $this->getLeafIco() : $child['icon'];
@@ -332,13 +332,13 @@ class ODTreeview extends ODContained
         $selector   = '#'.$this->getId().'Li-'.$dataLvl.'-'.$dataOrd.'';
 
         if ($parentPath != "0" && $parent && sizeof($parent['children']) == 1) {
-            $node   = '<li id="'.$this->getId().'Li-'.$dataLvl.'-'.$dataOrd.'">';
-            $node  .= '<i class="fa fa-minus"></i>';
+            $node   = '<li id="'.$this->getId().'Li-'.$dataLvl.'-'.$dataOrd.'" class="node">';
+            $node  .= '<i class="'.$this->getNodeClosedIco().'"></i>';
             $node  .= '<label>';
             $node  .= '<input id="'.$this->getId().'-'.$dataLvl.'-'.$dataOrd.'" data-id="'.$dataLvl.'-'.$dataOrd.'" type="checkbox">';
             $node  .= $parent['libel'];
             $node  .= '</label>';
-            $node  .= '<ul>';
+            $node  .= '<ul class="hide">';
             $node  .= $line;
             $node  .= '</ul>';
             $node  .= '</li>';

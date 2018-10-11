@@ -5,7 +5,7 @@
 {% macro drawLeaf(key, item, path, icon, objet) %}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}">
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}" class="leaf">
             <label>
                 <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
                 {% if icon %}
@@ -20,8 +20,8 @@
             </label>
         </li>
     {% else %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}">
-            <i class="fa fa-minus"></i>
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}" class="node">
+            <i class="{{ objet.nodeClosedIco }}"></i>
             <label>
                 <input id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
                 {{ item.libel }}
@@ -75,19 +75,37 @@
     <script id="{{ objet.id }}Script">
         $(document).ready(function (e) {
             $('#{{ objet.id }} .treeview li input').on('click', function (e) {
-                var selectedLeaf = $(this).parents('label').parents('li').hasClass('selected');
+                var selectedLeaf = $(this).parent('label').parent('li').hasClass('selected');
                 {%  if objet.multiSelect == false %}
                 $.each($(this).parents('.treeview').find('li.selected'), function (e) {
                     $(this).removeClass('selected');
                     $(this).find('input').prop('checked', false);
                 });
                 {% endif %}
+
+                console.log('objet cliqué');
+                console.log($(this).attr('id'));
+
                 if (selectedLeaf) {
-                    $(this).parents('label').parents('li').removeClass('selected');
+                    $(this).parent('label').parent('li').removeClass('selected');
                     $(this).prop('checked', false);
                 } else {
-                    $(this).parents('label').parents('li').addClass('selected');
+                    $(this).parent('label').parent('li').addClass('selected');
                     $(this).prop('checked', true);
+                }
+
+                var localObject = new {{ objet.object }}($('#{{ objet.id }}'));
+                localObject.updateNodeState($(this));
+            });
+
+            $('#{{ objet.id }} .treeview li.node i:first-child').on('click', function (e) {
+                var opened = $(this).hasClass('{{ objet.nodeOpenedIco }}');
+                if (opened) {
+                    $(this).removeClass('{{ objet.nodeOpenedIco }}').addClass('{{ objet.nodeClosedIco }}');
+                    $(this).parent('li').find('ul').removeClass('show').addClass('hide');
+                } else {
+                    $(this).removeClass('{{ objet.nodeClosedIco }}').addClass('{{ objet.nodeOpenedIco }}');
+                    $(this).parent('li').find('ul').removeClass('hide').addClass('show');
                 }
             });
         });
