@@ -7,7 +7,6 @@
     {% if item.children|length == 0 %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}" class="leaf">
             <label>
-                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
                 {% if icon %}
                     {% switch(item.icon) %}
                     {% case 'none' %}
@@ -17,6 +16,7 @@
                     {% endswitch %}
                 {% endif %}
                 {{ item.libel }}
+                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
             </label>
         </li>
     {% else %}

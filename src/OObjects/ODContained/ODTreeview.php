@@ -28,6 +28,10 @@ use GraphicObjectTemplating\OObjects\OObject;
  * #disClick()
  * enaMultiSelect
  * disMultiSelect
+ * 
+ * méthodes de gestion de retour de callback
+ * -----------------------------------------
+ * returnAddLeaf($parentPath, $ord)
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -314,10 +318,10 @@ class ODTreeview extends ODContained
 
         // traitement ajout de feuille enfant
         $line   = '<li id="'.$this->getId().'Li-'.$dataLvl.'-'.$ord.'" class="leaf">';
-        $line  .= '<label>';
-        $line  .= '<input class="hummingbird-end-node" id="'.$this->getId().'-'.$dataLvl.'-'.$ord.'" data-id="'.$dataLvl.'-'.$ord.'" type="checkbox">';
         $itemIco = ($child['icon'] == 'none') ? $this->getLeafIco() : $child['icon'];
         $line .= '<i class="'.$itemIco.' icon leaf"></i>';
+        $line  .= '<label>';
+        $line  .= '<input class="hummingbird-end-node" id="'.$this->getId().'-'.$dataLvl.'-'.$ord.'" data-id="'.$dataLvl.'-'.$ord.'" type="checkbox">';
         $line .= $child['libel'];
         $line .= '</label>';
         $line .= '</li>';
@@ -333,12 +337,12 @@ class ODTreeview extends ODContained
 
         if ($parentPath != "0" && $parent && sizeof($parent['children']) == 1) {
             $node   = '<li id="'.$this->getId().'Li-'.$dataLvl.'-'.$dataOrd.'" class="node">';
-            $node  .= '<i class="'.$this->getNodeClosedIco().'"></i>';
+            $node  .= '<i class="'.$this->getNodeOpenedIco().'"></i>';
             $node  .= '<label>';
             $node  .= '<input id="'.$this->getId().'-'.$dataLvl.'-'.$dataOrd.'" data-id="'.$dataLvl.'-'.$dataOrd.'" type="checkbox">';
             $node  .= $parent['libel'];
             $node  .= '</label>';
-            $node  .= '<ul class="hide">';
+            $node  .= '<ul class="show">';
             $node  .= $line;
             $node  .= '</ul>';
             $node  .= '</li>';
