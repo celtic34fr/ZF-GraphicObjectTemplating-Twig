@@ -19,7 +19,7 @@ class OSDiv extends OSContainer
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
-    public function appendField($object)
+    public function appendField(OObject $object)
     {
         if ($object instanceof OObject) { $object = $object->getId(); }
         $ret    = [];
