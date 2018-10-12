@@ -1,7 +1,38 @@
 function odtreeview(obj) {
     this.id = obj.attr('id');
     this.form   = obj.data('form');
-}
+};
+
+function updateNodeStatus(node) {
+    let nbreLi_Alls = 'rien';
+    let nbreLiSelec = 'rien';
+    let nbreLiIndet = 'rien';
+
+    if (node != undefined) {
+        nbreLi_Alls = currentParent.children('ul').children('li').length;
+        nbreLiSelec = currentParent.children('ul').children('li.selected').length;
+        nbreLiIndet = currentParent.children('ul').children('li.indeterminate').length;
+    } else {
+        nbreLiUnSel = $('#'+this.id).children('ul').children('li').length;
+        nbreLiSelec = $('#'+this.id).children('ul').children('li.selected').length;
+        nbreLeSelec = $('#'+this.id).find('li.selected').length;
+    }
+
+    node.removeClass('selected').removeClass('indeterminate');
+    if (nbreLi_Alls == nbreLiSelec) {
+        node.addClass('selected');
+        node.children('input').prop('checked', true).prop('indeterminate', false);
+    } else if (nbreLiSelec > 0 || nbreLiIndet > 0) {
+        node.addClass('indeterminate');
+        node.children('input').prop('checked', false).prop('indeterminate', true);
+    } else {
+        node.children('input').prop('checked', false).prop('indeterminate', false);
+    }
+
+    if (node != udefined) {
+        updateNodeStatus(node.parent('ul').parent('li'));
+    }
+};
 
 odtreeview.prototype = {
     getData: function (evt) {
@@ -31,23 +62,12 @@ odtreeview.prototype = {
     updateNodeState(currentInput) {
         let currentLi       = currentInput.parent('label').parent('li');
         let currentParent   = currentLi.parent('ul').parent('li');
-        console.log('current >'+currentLi.attr('id'));
-        console.log('parent >'+currentParent.attr('id'));
 
-        let nbreLiUnSel = 'rien';
+        let nbreLi_Alls = 'rien';
         let nbreLiSelec = 'rien';
-        let nbreLeSelec = 'rien';
-        if (currentParent.length > 0) {
-            nbreLiUnSel = currentParent.children('ul').children('li').length;
-            nbreLiSelec = currentParent.children('ul').children('li.selected').length;
-            nbreLeSelec = currentParent.find('li.selected').length;
-        } else {
-            nbreLiUnSel = $('#'+this.id).children('ul').children('li').length;
-            nbreLiSelec = $('#'+this.id).children('ul').children('li.selected').length;
-            nbreLeSelec = $('#'+this.id).find('li.selected').length;
-        }
-        console.log('nbre li child  >'+nbreLiUnSel);
-        console.log('nbre li Select >'+nbreLiSelec);
-        console.log('nbre le Select >'+nbreLeSelec);
+        let nbreLiIndet = 'rien';
+
+//        updateStatusNode(currentParent);
+
     }
 };

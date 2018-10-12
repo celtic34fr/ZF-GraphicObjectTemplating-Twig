@@ -348,7 +348,7 @@ class ODTreeview extends ODContained
         } else {
             // traitement ajout nouvelle feuille enfant
             // mode append sur sélecteur parent
-            $code   = ['html' => $line, 'selector' => $selector.' ul'];
+            $code   = ['html' => $line, 'selector' => $selector.' > ul'];
             $mode       = 'appendTreeNode';
         }
         $ret[] = OObject::formatRetour($this->getId(), $this->getId(), $mode, $code);
