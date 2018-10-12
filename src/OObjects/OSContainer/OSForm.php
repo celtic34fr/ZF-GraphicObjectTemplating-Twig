@@ -260,7 +260,7 @@ class OSForm extends OSDiv
         }
     }
 
-    public function addBtn($name, $label, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
+    public function addBtn($name, $label, $icon,  $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
         $name           = (string) $name;
         $type           = (string) $type;
@@ -276,6 +276,7 @@ class OSForm extends OSDiv
             }
             $bouton = new ODButton($name.$this->getId());
             $bouton->setLabel($label);
+            $bouton->setIcon($icon);
             $bouton->setType($type);
             $bouton->setNature($nature);
             $bouton->setValue($value);
@@ -302,8 +303,8 @@ class OSForm extends OSDiv
                     $widthBT[2] = 'O2:W4';
                     break;
                 case 3:
-                    $widthBT[1] = "O1:W2";
-                    $widthBT[2] = 'O2:W2';
+                    $widthBT[1] = "O1:W3";
+                    $widthBT[2] = 'O1:W3';
                     break;
                 case 4:
                     $widthBT[1] = "O1:W2";
