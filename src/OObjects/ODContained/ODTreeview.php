@@ -326,11 +326,6 @@ class ODTreeview extends ODContained
         $line .= '</label>';
         $line .= '</li>';
 
-/*        $line  = '<li class="leaf" data-lvl="'.$dataLvl.'" data-ord="'.$ord.'">';
-        $itemIco = ($child['icon'] == 'none') ? $this->getLeafIco() : $child['icon'];
-        $line .= '<i class="'.$itemIco.' icon leaf"></i>';
-        $line .= $child['libel'].'</li>';*/
-
         /** détermination sélecteur sur parent ligne à indérer */
         if (!empty($parent)) { $dataLvl = $parent['parent']; }
         $selector   = '#'.$this->getId().'Li-'.$dataLvl.'-'.$dataOrd.'';
@@ -346,13 +341,6 @@ class ODTreeview extends ODContained
             $node  .= $line;
             $node  .= '</ul>';
             $node  .= '</li>';
-
-/*            $node   = '<li class="node" data-lvl="'.$parent['parent'].'" data-ord="'.$parent['ord'].'">';
-            $node  .= '<input type="checkbox" id="lvl_'.$parent['parent'].'.'.$parent['ord'].'">';
-            $node  .= '<i class="'.$this->getNodeClosedIco().' icon closed"></i>';
-            $node  .= '<i class="'.$this->getNodeOpenedIco().' icon opened"></i>';
-            $node  .= '<label for="lvl_'.$parent['parent'].'.'.$parent['ord'].'">'.$parent['libel'].'</label><ul>';
-            $node  .= $line.'</ul>';*/
 
             $code   = ['html' => $node, 'selector' => $selector];
             $mode   = 'updtTreeLeaf';
