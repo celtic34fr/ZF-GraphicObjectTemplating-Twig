@@ -148,7 +148,6 @@ class ODTreeview extends ODContained
     {
         $properties = $this->getProperties();
         $dataPath   = $properties['dataPath'];
-        $leaf       = $properties['dataTree'];
 
         return $this->getLeafByPath($dataPath[$ref]);
     }
@@ -294,6 +293,33 @@ class ODTreeview extends ODContained
         return $this;
     }
 
+    public function rmLeafNode($ref, $root = true)
+    {
+        $leaf       = $this->getLeaf($ref);
+
+        if ($leaf) {
+            if (array_key_exists('children', $leaf)) {
+                $children = $leaf['children'];
+                foreach ($children as $child) {
+                    $this->rmLeafNode($child['ref'], false);
+                }
+            }
+
+            $properties = $this->getProperties();
+            $dataPath   = $properties['dataPath'];
+            if ($root) {
+                $dataTree   = $properties['dataTree'];
+                $dataTree   = $this->rmLeafTree($dataTree, $dataPath[$ref]);
+            }
+            unset($dataPath[$ref]);
+            $properties['dataPath'] = $dataPath;
+
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -357,6 +383,17 @@ class ODTreeview extends ODContained
         return $ret ;
     }
 
+    public function returnDelLeaf($leafPath)
+    {
+        $leafPath = (string) $leafPath;
+        $leaf     = $this->getLeaf($leafPath);
+        $selector = $this->getId().'Li-'.$leaf['parent'].'-'.$leaf['ord'];
+
+        $ret[] = OObject::formatRetour($this->getId(), $selector, 'delete');
+
+        return $ret ;
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
@@ -380,5 +417,25 @@ class ODTreeview extends ODContained
         $properties = $this->getProperties();
         $dataPath   = $properties['dataPath'];
         return (!array_key_exists($ref, $dataPath));
+    }
+
+    private function rmLeafTree($dataTree, $dataPath)
+    {
+        $refs       = explode('-', $dataPath);
+        if ((int) $refs[0] == 0) { unset($refs[0]); }
+        if (sizeof($refs) > 1) {
+            $localTree = $dataTree['children'][$refs[0]];
+            unset($refs[0]);
+            $refs = implode('-', $refs);
+            $this->rmLeafTree($localTree, $refs);
+            $dataTree['children'][$refs[0]] = $localTree;
+        } else {
+            if (array_key_exists('children', $dataTree)) {
+                unset($dataTree['children'][$dataPath]);
+            } else {
+                unset($dataTree[$dataPath]);
+            }
+        }
+        return $dataTree;
     }
 }
