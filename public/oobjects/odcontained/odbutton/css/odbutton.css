@@ -2,3 +2,9 @@ div[data-objet="odbutton"] {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
+.btnIco .btn {
+    width: 34px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+}

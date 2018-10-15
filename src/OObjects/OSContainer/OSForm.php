@@ -281,6 +281,7 @@ class OSForm extends OSDiv
             $bouton->setNature($nature);
             $bouton->setValue($value);
             $bouton->setForm($this->getId());
+            if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
             if ($type == ODButton::BUTTONTYPE_RESET && (empty($class) || empty($method))){
                 $bouton->evtClick('javascript:', 'resetFormDatas('.$this->getId().')', true);
             } else {
