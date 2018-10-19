@@ -51,7 +51,7 @@ class ODMenu extends ODContained
     const ODMENUTARGET_SELF     = '_self';
     const ODMENUTARGET_BLANK    = '_blank';
     const ODMENUTARGET_PARENT   = '_parent';
-    const ODMENUTARGET_TOP      = '_Top';
+    const ODMENUTARGET_TOP      = '_top';
 
     private $const_position;
     private $const_mode;

@@ -30,6 +30,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  * disMultiSelect
  * setTitle($title)
  * getTitle()
+ * setLeafLink($ref, $link, $target)
+ * getLeafLink($ref)
  * 
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -38,10 +40,21 @@ use GraphicObjectTemplating\OObjects\OObject;
  * méthodes privées de la classe
  * -----------------------------
  * updateTree($tree, $path, $item)
+ * validRefUnique($ref)
+ * rmLeafTree($dataTree, $dataPath)
+ * getTargetConstants()
  */
 
 class ODTreeview extends ODContained
 {
+
+    const ODTREEVIEWTARGET_SELF     = '_self';
+    const ODTREEVIEWTARGET_BLANK    = '_blank';
+    const ODTREEVIEWTARGET_PARENT   = '_parent';
+    const ODTREEVIEWTARGET_TOP      = '_top';
+
+    private $const_target;
+
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odtreeview/odtreeview.config.php");
 
@@ -81,7 +94,7 @@ class ODTreeview extends ODContained
                     $item['parent']     = '0';
 
                     $dataTree[$ord]     = $item;
-                    $dataPath[$ref]     = "0";
+                    $dataPath[$ref]     = "0-".$ord;
                     $validAct           = true;
                     ksort($dataTree);
                 }
@@ -102,7 +115,7 @@ class ODTreeview extends ODContained
                     if ((int) $path[0] == 0) { unset($path[0]); }
 
                     $dataTree           = $this->updateTree($dataTree, $path, $item);
-                    $dataPath[$ref]     = $parent; //.'-'.$ord; <--- l'ajout de ord est fait dans le TWIG //
+                    $dataPath[$ref]     = $parent.'-'.$ord;
                     $validAct           = true;
                 }
             }
@@ -339,6 +352,26 @@ class ODTreeview extends ODContained
         return (array_key_exists('title', $properties)) ? $properties['title'] : false ;
     }
 
+    public function setLeafLink($ref, $link, $target = self::ODTREEVIEWTARGET_SELF)
+    {
+        $leaf = $this->getLeaf($ref);
+        if ($leaf) {
+            $properties     = $this->getProperties();
+            $dataTree       = $properties['dataTree'];
+            $dataPath       = $properties['dataPath'];
+
+            $leaf['link']   = $link;
+            $targets        = $this->getTargetConstants();
+            if (!in_array($target, $targets)) { $target = self::ODTREEVIEWTARGET_SELF; }
+
+            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -456,5 +489,24 @@ class ODTreeview extends ODContained
             }
         }
         return $dataTree;
+    }
+
+    public function getTargetConstants()
+    {
+        $retour = [];
+        if (empty($this->const_target)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'ODTREEVIEWTARGET_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_target = $retour;
+        } else {
+            $retour = $this->const_target;
+        }
+
+        return $retour;
     }
 }

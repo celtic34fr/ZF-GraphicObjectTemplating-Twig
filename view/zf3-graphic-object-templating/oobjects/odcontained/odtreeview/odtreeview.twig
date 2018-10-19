@@ -6,7 +6,7 @@
     {#{ dump(item) }#}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ item.ord }}" class="leaf">
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}" class="leaf">
             {% if objet.icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -16,17 +16,17 @@
                 {% endswitch %}
             {% endif %}
             <label>
-                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ item.ord }}" data-id="{{ path[item.ref] }}-{{ item.ord }}" type="checkbox">
+                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}" data-id="{{ path[item.ref] }}" type="checkbox">
                 {{ item.libel }}
             </label>
         </li>
     {% else %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ item.ord }}" class="node">
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}" class="node">
             {% if objet.icon %}
             <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
             <label>
-                <input id="{{ objet.id }}-{{ path[item.ref] }}-{{ item.ord }}" data-id="{{ path[item.ref] }}-{{ item.ord }}" type="checkbox">
+                <input id="{{ objet.id }}-{{ path[item.ref] }}" data-id="{{ path[item.ref] }}" type="checkbox">
                 {{ item.libel }}
             </label>
             <ul>
@@ -52,8 +52,6 @@
             {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
         </label>
         <ul class="hummingbird-base treeview">
-            {#{ dump(objet.dataPath) }}
-            {{ dump("+++++++++++++++++++++++++") }#}
             {% for leaf in objet.dataTree %}
                 {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet) }}
             {% endfor %}
