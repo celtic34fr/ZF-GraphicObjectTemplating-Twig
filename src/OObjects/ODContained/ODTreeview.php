@@ -28,6 +28,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  * #disClick()
  * enaMultiSelect
  * disMultiSelect
+ * setTitle($title)
+ * getTitle()
  * 
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -65,8 +67,8 @@ class ODTreeview extends ODContained
         $dataPath   = $properties['dataPath'];
         $validAct   = false;
 
-        if ($this->validRefUnique($ref)) {
-            if ($parent == "0") {
+            if ($this->validRefUnique($ref)) {
+            if ($parent == '0') {
                 if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
                 if (!isset($dataTree[$ord])) {
                     $item = [];
@@ -79,7 +81,7 @@ class ODTreeview extends ODContained
                     $item['parent']     = '0';
 
                     $dataTree[$ord]     = $item;
-                    $dataPath[$ref]     = $ord;
+                    $dataPath[$ref]     = "0";
                     $validAct           = true;
                     ksort($dataTree);
                 }
@@ -98,8 +100,9 @@ class ODTreeview extends ODContained
 
                     $path               = explode('-', $parent);
                     if ((int) $path[0] == 0) { unset($path[0]); }
+
                     $dataTree           = $this->updateTree($dataTree, $path, $item);
-                    $dataPath[$ref]     = $parent.'-'.$ord;
+                    $dataPath[$ref]     = $parent; //.'-'.$ord; <--- l'ajout de ord est fait dans le TWIG //
                     $validAct           = true;
                 }
             }
@@ -157,6 +160,7 @@ class ODTreeview extends ODContained
         $properties = $this->getProperties();
         $leaf       = $properties['dataTree'];
         $found      = true;
+
         if ($path != '') {
             $first      = true;
             $refs       = explode('-', $path);
@@ -318,6 +322,21 @@ class ODTreeview extends ODContained
             return $this;
         }
         return false;
+    }
+
+    public function setTitle($title = "")
+    {
+        $title = (string) $title;
+        $properties = $this->getProperties();
+        $properties['title'] = $title;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        $properties             = $this->getProperties();
+        return (array_key_exists('title', $properties)) ? $properties['title'] : false ;
     }
 
     /** **************************************************************************************************

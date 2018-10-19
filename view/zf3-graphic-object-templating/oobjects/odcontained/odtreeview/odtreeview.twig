@@ -2,33 +2,36 @@
 
 {% import _self as macros %}
 
-{% macro drawLeaf(key, item, path, icon, objet) %}
+{% macro drawLeaf(item, path, icon, objet) %}
+    {#{ dump(item) }#}
     {% import _self as macros %}
     {% if item.children|length == 0 %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}" class="leaf">
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ item.ord }}" class="leaf">
+            {% if objet.icon %}
+                {% switch(item.icon) %}
+                {% case 'none' %}
+            <i class="{{ objet.leafIco }} icon leaf"></i>
+                {% default %}
+            <i class="{{ item.icon }} icon leaf"></i>
+                {% endswitch %}
+            {% endif %}
             <label>
-                {% if icon %}
-                    {% switch(item.icon) %}
-                    {% case 'none' %}
-                <i class="{{ objet.leafIco }} icon leaf"></i>
-                    {% default %}
-                <i class="{{ item.icon }} icon leaf"></i>
-                    {% endswitch %}
-                {% endif %}
+                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ item.ord }}" data-id="{{ path[item.ref] }}-{{ item.ord }}" type="checkbox">
                 {{ item.libel }}
-                <input class="hummingbird-end-node" id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
             </label>
         </li>
     {% else %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ key }}" class="node">
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}-{{ item.ord }}" class="node">
+            {% if objet.icon %}
             <i class="{{ objet.nodeClosedIco }}"></i>
+            {% endif %}
             <label>
-                <input id="{{ objet.id }}-{{ path[item.ref] }}-{{ key }}" data-id="{{ path[item.ref] }}-{{ key }}" type="checkbox">
+                <input id="{{ objet.id }}-{{ path[item.ref] }}-{{ item.ord }}" data-id="{{ path[item.ref] }}-{{ item.ord }}" type="checkbox">
                 {{ item.libel }}
             </label>
             <ul>
                 {% for id,leaf in item.children %}
-                    {{ macros.drawLeaf(id, leaf, path, icon, objet) }}
+                    {{ macros.drawLeaf(leaf, path, icon, objet) }}
                 {% endfor %}
             </ul>
         </li>
@@ -42,10 +45,17 @@
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
 
+    {#{ breakpoint(objet.dataTree) }#}
+
     <div id="{{ objet.id }}Li-0-0" class="hummingbird-treeview treeview_container" data-id="0-0">
+        <label>
+            {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
+        </label>
         <ul class="hummingbird-base treeview">
-            {% for id,leaf in objet.dataTree %}
-                {{ macros.drawLeaf(id, leaf, objet.dataPath, objet.icon, objet) }}
+            {#{ dump(objet.dataPath) }}
+            {{ dump("+++++++++++++++++++++++++") }#}
+            {% for leaf in objet.dataTree %}
+                {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet) }}
             {% endfor %}
         </ul>
     </div>

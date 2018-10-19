@@ -13,9 +13,13 @@ return array(
     'nodeClosedIco' => 'fa fa-folder',
     'nodeOpenedIco' => 'fa fa-folder-open',
     'multiSelect'   => false,
+    'title'         => '',
 
     'resources' => [
-        'css' => [ 'hummingbird_treeview.css' => 'css/hummingbird_treeview.css', ],
+        'css' => [
+            'odtreeview.css' => 'css/odtreeview.css',
+            'hummingbird_treeview.css' => 'css/hummingbird_treeview.css',
+            ],
         'js'  => [
             'odtreeview.js' => 'js/odtreeview.js',
             'hummingbird_treeview.js' => 'js/hummingbird_treeview.js',
