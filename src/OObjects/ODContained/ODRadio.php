@@ -44,6 +44,8 @@ class ODRadio extends ODContained
             $this->enable();
             $this->setName($this->getId());
         }
+
+        $this->saveProperties();
         return $this;
     }
 

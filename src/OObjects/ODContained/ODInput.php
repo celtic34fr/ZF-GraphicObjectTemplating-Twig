@@ -67,6 +67,8 @@ class ODInput extends ODContained
             $this->setDisplay(OObject::DISPLAY_BLOCK);
             $this->enable();
         }
+
+        $this->saveProperties();
         return $this;
     }
 

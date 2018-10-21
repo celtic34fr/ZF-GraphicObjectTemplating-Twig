@@ -92,6 +92,7 @@ class OSForm extends OSDiv
         $properties['className'] = $objName;
 
         $this->setProperties($properties);
+        $this->saveProperties();
         return $this;
     }
 

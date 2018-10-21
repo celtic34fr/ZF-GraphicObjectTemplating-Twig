@@ -129,7 +129,9 @@ class ODTable extends ODContained
         $properties = $this->getProperties();
         $properties['title'] = $title;
         $properties['titlePos'] = $position;
+
         $this->setProperties($properties);
+        $this->saveProperties();
         return $this;
     }
 

@@ -111,6 +111,8 @@ class ODSelect extends ODContained
         $width = $this->getWidthBT();
         if (!is_array($width) || empty($width)) $this->setWidthBT(12);
         $this->enable();
+
+        $this->saveProperties();
         return $this;
     }
 

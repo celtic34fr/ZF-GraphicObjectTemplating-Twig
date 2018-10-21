@@ -13,6 +13,8 @@ class OSDiv extends OSContainer
         if (!$this->getWidthBT() || empty($this->getWidthBT())) {
             $this->setWidthBT(12); // largeur Bootstrap Twitter à 12 par défaut
         }
+        $this->saveProperties();
+        return $this;
     }
 
     /** **************************************************************************************************

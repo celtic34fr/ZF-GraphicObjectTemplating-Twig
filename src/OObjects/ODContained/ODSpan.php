@@ -23,6 +23,8 @@ class ODSpan extends ODContained
             if (!is_array($width) || empty($width)) $this->setWidthBT(12);
             $this->enable();
         }
+
+        $this->saveProperties();
         return $this;
     }
 

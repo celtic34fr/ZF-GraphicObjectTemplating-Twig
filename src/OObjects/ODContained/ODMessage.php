@@ -165,6 +165,8 @@ class ODMessage extends ODContained
             $this->setDisplay(self::DISPLAY_BLOCK);
             $this->enable();
         }
+
+        $this->saveProperties();
         return $this;
     }
 

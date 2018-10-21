@@ -1,8 +1,8 @@
 <?php
 
-namespace ZF3_GOT\OObjects\ODContained;
+namespace GraphicObjectTemplating\OObjects\ODContained;
 
-use ZF3_GOT\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\ODContained;
 
 /**
  * Class ODTextarea
@@ -46,6 +46,8 @@ class ODTextarea extends ODContained
         $width = $this->getWidthBT();
         if (!is_array($width) || empty($width)) $this->setWidthBT(12);
         $this->enable();
+
+        $this->saveProperties();
         return $this;
     }
 

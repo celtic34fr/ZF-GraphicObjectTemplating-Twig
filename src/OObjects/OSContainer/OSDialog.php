@@ -96,6 +96,8 @@ class OSDialog extends OSContainer
             if (!is_array($width) || empty($width)) $this->setWidthBT(12);
             $this->enable();
         }
+
+        $this->saveProperties();
         return $this;
     }
 
