@@ -1,0 +1,95 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+    <h1>{{ translate('A 404 error occurred') }}</h1>
+    <h2>{{ translate(message) }}</h2>
+
+    {% if reason is defined and not (reason is empty) %}
+        {% if reason == 'error-controller-cannot-dispatch' %}
+            {% set reasonMessage = 'The requested controller was unable to dispatch the request.' %}
+        {% elseif reason == 'error-controller-not-found' %}
+            {% set reasonMessage = 'The requested controller could not be mapped to an existing controller class.' %}
+        {% elseif reason == 'error-controller-invalid' %}
+            {% set reasonMessage = 'The requested controller was not dispatchable.' %}
+        {% elseif reason == 'error-router-no-match' %}
+            {% set reasonMessage = 'The requested URL could not be matched by routing.' %}
+        {% else %}
+            {% set reasonMessage = 'We cannot determine at this time why a 404 was generated.' %}
+        {% endif %}
+    {% endif %}
+    <p>
+        {{ translate(reasonMessage) }}
+    </p>
+
+    {% if controller is defined and not(controller is empty) %}
+        <dl>
+            <dt>{{ translate('Controller') }}:</dt>
+            <dd>{{ controller }}
+                {% if controller_class is defined and not(controller_class is empty) %}
+                    {% if controller_class != controller %}
+                        ( {{ translate('resolves to %s' | format(controller_class)) }} )
+                    {% endif %}
+                {% endif %}
+            </dd>
+        </dl>
+    {% endif %}
+
+    {% if display_exceptions is defined and not (display_exceptions is empty) %}
+        {% if exception is defined and not (exception is empty) %}
+            {% if exception is instanceof('Exception') %}
+                <h2>{{ translate('Additional information') }}:</h2>
+                <h3>{{ getclass(exception) }}</h3>
+                {% set arrayException = arrayexception(exception) %}
+                <dl>
+                    <dt>{{ translate('File') }}:</dt>
+                    <dd>
+                        <pre class="prettyprint linenums">{{ arrayException.File }}:{{ arrayException.Line }}</pre>
+                    </dd>
+                    <dt>{{ translate('Message') }}:</dt>
+                    <dd>
+                        <pre class="prettyprint linenums">{{ arrayException.Message }}</pre>
+                    </dd>
+                    <dt>{{ translate('Stack trace') }}:</dt>
+                    <dd>
+                        <pre class="prettyprint linenums">{{ arrayException.TraceAsString }}</pre>
+                    </dd>
+                </dl>
+                {% set previousExArray = arrayException.Previous %}
+                {% set icount = 0 %}
+                {% set break = false %}
+                {% if previousExArray is defined and not (previousExArray is empty)%}
+                    <hr/>
+                    <h2>{{ translate('Previous exceptions') }}:</h2>
+                    <ul class="unstyled">
+                        {% for ex in previousExArray if not break%}
+                            <li>
+                                <h3>{{ ex.Class }}</h3>
+                                <dl>
+                                    <dt>{{ translate('File') }}:</dt>
+                                    <dd>
+                                        <pre class="prettyprint linenums">{{ ex.File }}:{{ ex.Line }}</pre>
+                                    </dd>
+                                    <dt>{{ translate('Message') }}:</dt>
+                                    <dd>
+                                        <pre class="prettyprint linenums">{{ ex.Message }}</pre>
+                                    </dd>
+                                    <dt>{{ translate('Stack trace') }}:</dt>
+                                    <dd>
+                                        <pre class="prettyprint linenums">{{ ex.TraceAsString }}</pre>
+                                    </dd>
+                                </dl>
+                            </li>
+                            {% set icount = icount + 1 %}
+                            {% if (icount >=50)  %}
+                                <li>There may be more exceptions, but we have no enough memory to proccess it.</li>
+                                {% set break = true %}
+                            {% endif  %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <h3>{{ translate('No Exception available') }}</h3>
+        {% endif %}
+    {% endif %}
+{% endblock content %}
