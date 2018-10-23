@@ -150,6 +150,11 @@ class OObject
     const BOOLEAN_TRUE    = 'true';
     const BOOLEAN_FALSE   = 'false';
 
+    /**
+     * OObject constructor.
+     * @param $id           identifiant de l'objet
+     * @param $pathObjArray chemin partiel du fichier config de l'objet étendu
+     */
     public function __construct($id, $pathObjArray)
     {
         if (empty($id)) {
@@ -196,6 +201,13 @@ class OObject
             $this->properties = $properties;
         }
         $this->saveProperties();
+
+//        if (!in_array($properties['object'] , ['osform', 'osdiv'])) {
+//            var_dump("OObject =>");
+//            var_dump($properties);
+//            exit();
+//        }
+
         return $this;
     }
 

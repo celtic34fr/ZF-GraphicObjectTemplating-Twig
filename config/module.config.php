@@ -17,6 +17,9 @@ use GraphicObjectTemplating\ViewHelpers\ZF3GotVersion;
 use Zend\Router\Http\Literal;
 
 return [
+    'parameters' => [
+        'coreViewRoot' => __DIR__ . '/../view/zf3-graphic-object-templating',
+    ],
 
     'router' => [
         'routes' => [

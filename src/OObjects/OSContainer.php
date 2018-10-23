@@ -52,6 +52,7 @@ class OSContainer extends OObject
         }
 
         $this->setProperties($properties);
+        $this->saveProperties();
         return $this;
     }
 
