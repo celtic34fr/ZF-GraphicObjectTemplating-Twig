@@ -367,7 +367,7 @@ class OSForm extends OSDiv
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
-    private function propageFormParams(OObject $child, $sourceID, string $formID, bool $require )
+    private function propageFormParams(OObject $child, $sourceID, $formID, $require )
     {
         if ($child instanceof OSContainer) {
             $localChildren = $child->getChildren();

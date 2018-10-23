@@ -35,17 +35,8 @@ class ODContained extends OObject
             if (!array_key_exists($key, $properties)) { $properties[$key] = $objProperty; }
         }
 
-
-
         $this->setProperties($properties);
         $this->saveProperties();
-
-        if (!in_array($properties['object'] , ['osform', 'osdiv'])) {
-            var_dump("OODContained =>");
-            var_dump($properties);
-            exit();
-        }
-
         return $this;
     }
 

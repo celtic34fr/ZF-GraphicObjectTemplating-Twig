@@ -465,6 +465,9 @@ class OObject
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;

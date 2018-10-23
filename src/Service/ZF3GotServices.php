@@ -141,7 +141,7 @@ class ZF3GotServices
             $rscsTab['jsScripts']   = [];
 
             /** cas des objets OSContainer -> contenant d'autres objets */
-            if ($properties['typeObj'] == 'oscontainer') {
+            if (in_array($properties['typeObj'] ,['oscontainer', 'oescontainer'] )) {
                 $children = $properties['children'];
                 if (!empty($children)) {
                     foreach ($children as $child => $value) {
