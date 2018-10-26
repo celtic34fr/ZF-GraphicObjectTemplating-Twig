@@ -41,7 +41,7 @@
             {% endfor %}
 
             if (topRequire) {
-                $("#{{ objet.id }}").append('<h4 class="require col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</h4>');
+                $("#{{ objet.id }}").append('<span class="require col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
             }
         });
     </script>
