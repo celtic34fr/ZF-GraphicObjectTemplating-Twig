@@ -15,6 +15,12 @@
             padding-left: 2em;
         }
         {% endif %}
+
+        #{{ objet.id }} input {
+            position: relative !important;
+            margin: 0 5px !important;
+            top: -1px;
+        }
     </style>
 
     {% if objet.label is not empty or objet.options|length > 1 %}
