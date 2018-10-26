@@ -6,7 +6,7 @@ use GraphicObjectTemplating\OObjects\ODContained;
 
 /**
  * Class ODSpan
- * @package ZF3_GOT\OObjects\ODContained
+ * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * setContent($content)
  * getContent()
@@ -32,7 +32,7 @@ class ODSpan extends ODContained
     {
         $content    = (string) $content;
         $properties = $this->getProperties();
-        $properties['content'] = $content;
+        $properties['contenu'] = $content;
         $this->setProperties($properties);
         return $this;
     }
@@ -40,6 +40,6 @@ class ODSpan extends ODContained
     public function getContent()
     {
         $properties = $this->getProperties();
-        return array_key_exists('content', $properties) ? $properties['content'] : false;
+        return array_key_exists('contenu', $properties) ? $properties['content'] : false;
     }
 }

@@ -5,9 +5,10 @@ return [
     'typeObj'       => 'odcontained',
     'template'      => 'odspan.twig',
 
-    'content'       => '',
+    'contenu'       => '',
     
     'resources' => [
+        'css'		=> [ ],
         'js'		=> [ ],
     ],
 ];

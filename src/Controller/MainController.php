@@ -158,6 +158,7 @@ class MainController extends AbstractActionController
                 case 'odcheckbox':
                 case 'odtreeview':
                     $val = explode('$', $val);
+                    if (empty($val)) { $val = []; }
                     if (!is_array($val)) { $val[] = $val; }
                     $formDatas[$idF] = $val;
                     break;
@@ -187,6 +188,7 @@ class MainController extends AbstractActionController
                 $properties = unserialize($objects[$id]);
                 switch ($properties['object']) {
                     case 'odcheckbox':
+                        if (empty($data)) {$data = []; }
                         if (!is_array($data)) { $data[] = $data; }
                         $options    = $properties['options'];
                         foreach ($data as $value) {

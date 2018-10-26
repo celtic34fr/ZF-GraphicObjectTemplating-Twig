@@ -4,9 +4,9 @@ function odcheckbox(obj) {
     let type = obj.find("input");
     if (type.length > 0) {
         let options = [];
-        $.each(type, function(i, input){
-            if (input.attr('checked') !== null) {
-                options.push(input.val());
+        type.each(function(){
+            if ($(this).is(':checked')) {
+                options.push($(this).val());
             }
         });
         this.options = options;
