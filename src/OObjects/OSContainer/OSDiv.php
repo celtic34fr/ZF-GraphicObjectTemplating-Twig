@@ -21,13 +21,31 @@ class OSDiv extends OSContainer
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
-    public function appendField(OObject $object)
+    public function appendField(OObject $object, $type = 'append', $objParm = null)
     {
         if ($object instanceof OObject) { $object = $object->getId(); }
         $ret    = [];
-        $ret[]  = OObject::formatRetour($object, $this->getId(), 'append');
-        $ret[]  = OObject::formatRetour($this->getId(), $this->getId(), 'exec', 'updatePage()');
-        $ret[]  = OObject::formatRetour($this->getId(), $this->getId(), 'exec', 'updateForm()');
+        switch ($type) {
+            case 'append':
+                $ret[]  = OObject::formatRetour($object, $this->getId(), 'append');
+                $ret[]  = OObject::formatRetour($this->getId(), $this->getId(), 'exec', 'updatePage()');
+                $ret[]  = OObject::formatRetour($this->getId(), $this->getId(), 'exec', 'updateForm()');
+                break;
+            case 'after':
+                $form   = $this->getId();
+                $ret[]  = OObject::formatRetour($object->getId(), $form."  #".$objParm, 'appendAfter');
+                $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updatePage()');
+                $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updateForm("'.$this->getId().'"")');
+                break;
+            case 'before':
+                $form   = $this->getId();
+                $ret[]  = OObject::formatRetour($object->getId(), $form." #".$objParm, 'appendBefore');
+                $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updatePage()');
+                $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updateForm()');
+                break;
+            default:
+                throw new \Exception('type insertion inconnue '.$type);
+        }
 
         return $ret;
     }
@@ -39,24 +57,18 @@ class OSDiv extends OSContainer
 
     public function appendFieldAfter($objID, string $objPrev)
     {
-        $ret    = [];
-        $form   = $this->getId();
-        $ret[]  = OObject::formatRetour($objID, $form."  #".$objPrev, 'appendAfter');
-        $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updatePage()');
-        $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updateForm("'.$this->getId().'"")');
+        $sessionObjects = OObject::validateSession();
+        $object         = OObject::buildObject($objID, $sessionObjects);
 
-        return $ret;
+        return $this->appendField($object, 'after', $objPrev);
     }
 
     public function appendFieldBefore($objID, string $objPrev)
     {
-        $ret    = [];
-        $form   = $this->getId();
-        $ret[]  = OObject::formatRetour($objID, $form." #".$objPrev, 'appendBefore');
-        $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updatePage()');
-        $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updateForm()');
+        $sessionObjects = OObject::validateSession();
+        $object         = OObject::buildObject($objID, $sessionObjects);
 
-        return $ret;
+        return $this->appendField($object, 'before', $objPrev);
     }
 
 }
