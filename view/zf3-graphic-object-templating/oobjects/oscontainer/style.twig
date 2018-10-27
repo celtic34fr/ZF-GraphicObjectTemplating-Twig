@@ -1,5 +1,5 @@
 {% for selector, code in codeCss %}
-    #{{ id }} {{ selector|raw }} {
+    {{ selector|raw }} {
         {{ code|raw }}
     }
 {% endfor %}

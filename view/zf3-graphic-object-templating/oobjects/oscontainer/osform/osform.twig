@@ -6,7 +6,7 @@
 >
     <style>
     {% if objet.codeCss is defined and objet.codeCss is not empty %}
-        {% include 'zf3-graphic-object-templating/oobjects/oscontainer/style.twig'  with objet.codeCss %}
+        {% include 'zf3-graphic-object-templating/oobjects/oscontainer/style.twig'  with { id:objet.id, codeCss:objet.codeCss } %}
     {% endif %}
     {% if objet.autoCenter %}
         {% include 'zf3-graphic-object-templating/oobjects/autoCenter.twig' with {id:objet.id, acPx:objet.acPx, acPy:objet.acPy } %}

@@ -31,8 +31,10 @@ class ZF3GotServicesFactory implements FactoryInterface
         $serviceManager =  $container->get('ServiceManager');
         /** @var TwigRenderer $twigRender */
         $twigRender  = $container->get('ZfcTwigRenderer');
+        /** get Configuration array */
+        $config = $container->get('Config') ;
 
-        return new ZF3GotServices($serviceManager, $twigRender);
+        return new ZF3GotServices($serviceManager, $twigRender, $config);
     }
 }
 ?>

@@ -16,11 +16,13 @@ class ZF3GotServices
     private $_serviceManager;
     /** @var TwigRenderer $_twigRender */
     private $_twigRender;
+    private $_config;
 
-    public function __construct($sm, $tr)
+    public function __construct($sm, $tr, $cfg)
     {
-        $this->_serviceManager = $sm;
-        $this->_twigRender = $tr;
+        $this->_serviceManager  = $sm;
+        $this->_twigRender      = $tr;
+        $this->_config          = $cfg;
         return $this;
     }
 
@@ -221,5 +223,14 @@ class ZF3GotServices
             $menuGlobal->addLeaf($menu->getId(), $menu->getLabel(), $menu->getLink(), null, $parent);
         }
         $menuGlobal->saveProperties();
+    }
+
+    public function getTheme()
+    {
+        $gotCfg = $this->_config['gotParameters'];
+        if (array_key_exists('theme', $gotCfg)) {
+            return $gotCfg['theme'];
+        }
+        return 'layout';
     }
 }
