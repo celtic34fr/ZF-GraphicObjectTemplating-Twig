@@ -1,0 +1,53 @@
+{# template objet ODImage #}
+
+{#{ dump(objet.classes) }#}
+{% set objClass = "gotObject "~gotBootstrap(objet.widthBT) %}
+{% if objet.classes is not empty %}
+    {% set objClass = objClass ~ " " ~ objet.classes %}
+{% endif %}
+
+<div id="{{ objet.id }}" 
+{% if objClass is not empty %} class="{{ objClass }}" {% endif %}>
+    <style>
+        #{{ objet.id }} {
+        {% if objet.autoCenter == true %}
+        {% set objClass = "" %}
+            width: {{ objet.autoCenterPx }};
+            height:  {{ objet.autoCenterPy }};
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        {% endif %}
+            display: {{ objet.display }};
+        {% if objet.style is not empty %}
+        {{ objet.style | raw }}
+        {% endif %}
+        }
+    </style>
+
+    <img src="{{ basepath(objet.url) }}"
+         {% if objet.alt is defined and objet.alt is not empty %} alt="{{ objet.alt }}" {% endif %}
+         {% if objet.width is defined and objet.width > 0 %} width="{{ objet.width }}" {% endif %}
+         {% if objet.height is defined and objet.height > 0 %} height="{{ objet.height }}" {% endif %}
+    />
+
+    {% if objet.event is defined and objet.event is not empty %}
+        <script id="{{ objet.id }}Script" type="text/javascript">
+            $('document').ready(function () {
+                {% if objet.event is not empty %}
+                {% set events = objet.event %}
+                {% include 'graphic-object-templating/oobjects/event.js.twig' with events %}
+                {% endif %}
+            });
+        </script>
+    {% endif %}
+
+    {% if infoBulle.title is not empty %}
+        {%  set type = infoBulle.type %}
+        {%  set id = objet.id %}
+        {% include 'graphic-object-templating/oobjects/infoBulle.js.twig'  with {'id':id, 'type':type} %}
+    {% endif %}
+</div>

@@ -1,0 +1,83 @@
+{# tremplate pour l'objet ODBadge#}
+
+{% set objClasses = "gotObject " ~ objet.badgeColor %}
+{% if objet.position is not empty %}
+    {% set objClasses = objClasses ~ " " ~ objet.position %}
+{% endif %}
+{% if objet.display is defined %} {# bouton mode affichage #}
+    {%  set objClasses = objClasses ~ " display-" ~ objet.display ~ " " %}
+{% endif %}
+
+<span id="{{ objet.id }}"  data-objet="{{ objet.object }}" data-type="{{ objet.type }}"
+      class="badgeGOT {{ objClasses }}"
+
+        {% if objet.infoBulle.title is not empty and objet.erreur.libel is empty %}
+            {%  set infoBulle = objet.infoBulle %}
+        {% elseif objet.erreur.libel is not empty %}
+            {% set infoBulle = objet.infoBulle %}
+            {% set erreur = objet.erreur %}
+            {% set infoBulle =
+            infoBulle | update({'title': erreur.libel, 'content': '', 'type': 'tooltip'}) %}
+        {% endif %}
+        {% if infoBulle is defined and infoBulle is not empty %}
+            {% include 'graphic-object-templating/oobjects/infoBulle.twig'  with infoBulle %}
+        {% endif %}
+
+        {% if objet.event is not empty %}
+            {% set allEvt = '' %}
+            {% for evt, callback in objet.event %}
+                {% set allEvt = allEvt ~ evt ~ ", " %}
+                data-{{ evt }}-class ="{{ callback.class }}"
+                data-{{ evt }}-method ="{{ callback.method }}"
+                data-{{ evt }}-stopevt ="{{ callback.stopEvent }}"
+            {% endfor %}
+            data-evt="{{ allEvt | slice(0, allEvt|length - 2) }}"
+        {% endif %}
+>
+    <style>
+        {% if objet.style is not empty %}
+        #{{ objet.id }} {
+        {{ objet.style | raw }}
+        }
+        {% endif %}
+
+        {% if objet.infoBulle.type is not empty and objet.infoBulle.css is not empty and objet.erreur.libel is empty %}
+        {% set id = objet.id %}
+        {% set type = objet.infoBulle.type %}
+        {% set css = objet.infoBulle.css %}
+        {% set placement = objet.infoBulle.placement %}
+        {% include 'graphic-object-templating/oobjects/infoBulle.css.twig'  with {"id": id, "type": type, "css": css, "placement": placement } %}
+        {% elseif objet.erreur.libel is not empty %}
+        {% set erreur = objet.erreur %}
+        {% set id = objet.id %}
+        {% set type = 'tooltip' %}
+        {% set css = "background-color: #" ~ erreur.backgroundColor ~ ";color: #" ~ erreur.color ~ ';' %}
+        {% set placement = objet.infoBulle.placement %}
+        {% include 'graphic-object-templating/oobjects/infoBulle.css.twig'  with {"id": id, "type": type, "css": css, "placement": placement } %}
+
+        #{{ id }} {
+            border:  solid 2px #{{ erreur.color }} !important;
+        }
+        {% endif %}
+    </style>
+
+    {{ objet.content | raw }}
+
+    {% if objet.event is defined and objet.event is not empty %}
+        <script id="{{ objet.id }}Script" type="text/javascript">
+                $('document').ready(
+                        {% if objet.event is not empty %}
+                        {% set events = objet.event %}
+                        {% include 'graphic-object-templating/oobjects/event.js.twig' with events %}
+                        {% endif %}
+                );
+            </script>
+    {% endif %}
+
+    {% if infoBulle.title is not empty %}
+        {%  set type = infoBulle.type %}
+        {%  set id = objet.id %}
+        {% include 'graphic-object-templating/oobjects/infoBulle.js.twig'  with {'id':id, 'type':type} %}
+    {% endif %}
+</span>
+

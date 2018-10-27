@@ -150,6 +150,59 @@ class OObject
     const BOOLEAN_TRUE    = 'true';
     const BOOLEAN_FALSE   = 'false';
 
+    const COLOR_BLACK         = 'black';
+    const COLOR_WHITE         = 'white';
+    const COLOR_LIME          = 'lime';
+    const COLOR_GREEN         = 'green';
+    const COLOR_EMERALD       = 'emerald';
+    const COLOR_TEAL          = 'teal';
+    const COLOR_BLUE          = 'blue';
+    const COLOR_CYAN          = 'cyan';
+    const COLOR_COBALT        = 'cobalt';
+    const COLOR_INDIGO        = 'indigo';
+    const COLOR_VIOLET        = 'violet';
+    const COLOR_PINK          = 'pink';
+    const COLOR_MAGENTA       = 'magenta';
+    const COLOR_CRIMSON       = 'crimson';
+    const COLOR_RED           = 'red';
+    const COLOR_ORANGE        = 'orange';
+    const COLOR_AMBER         = 'amber';
+    const COLOR_YELLOW        = 'yellow';
+    const COLOR_BROWN         = 'brown';
+    const COLOR_OLIVE         = 'olive';
+    const COLOR_STEEL         = 'steel';
+    const COLOR_MAUVE         = 'mauve';
+    const COLOR_TAUPE         = 'taupe';
+    const COLOR_GRAY          = 'gray';
+    const COLOR_DARK          = 'dark';
+    const COLOR_DARKER        = 'darker';
+    const COLOR_DARKBROWN     = 'darkBrown';
+    const COLOR_DARKCRIMSON   = 'darkCrimson';
+    const COLOR_DARKMAGENTA   = 'darkMagenta';
+    const COLOR_DARKINDIGO    = 'darkIndigo';
+    const COLOR_DARKCYAN      = 'darkCyan';
+    const COLOR_DARKCOBALT    = 'darkCobalt';
+    const COLOR_DARKTEAL      = 'darkTeal';
+    const COLOR_DARKEMERALD   = 'darkEmerald';
+    const COLOR_DARKGREEN     = 'darkGreen';
+    const COLOR_DARKORANGE    = 'darkOrange';
+    const COLOR_DARKRED       = 'darkRed';
+    const COLOR_DARKPINK      = 'darkPink';
+    const COLOR_DARKVIOLET    = 'darkViolet';
+    const COLOR_DARKBLUE      = 'darkBlue';
+    const COLOR_LIGHTBLUE     = 'lightBlue';
+    const COLOR_LIGHTRED      = 'lightRed';
+    const COLOR_LIGHTGREEN    = 'lightGreen';
+    const COLOR_LIGHTERBLUE   = 'lighterBlue';
+    const COLOR_LIGHTTEAL     = 'lightTeal';
+    const COLOR_LIGHTOLIVE    = 'lightOlive';
+    const COLOR_LIGHTORANGE   = 'lightOrange';
+    const COLOR_LIGHTPINK     = 'lightPink';
+    const COLOR_GRAYDARK      = 'grayDark';
+    const COLOR_GRAYDARKER    = 'grayDarker';
+    const COLOR_GRAYLIGHT     = 'grayLight';
+    const COLOR_GRAYLIGHTER   = 'grayLighter';
+
     /**
      * OObject constructor.
      * @param $id           identifiant de l'objet
@@ -538,8 +591,9 @@ class OObject
         return array_key_exists('display', $properties) ? $properties['display'] : false;
     }
 
-    public function setWidthBT(string $widthBT)
+    public function setWidthBT($widthBT)
     {
+        $widthBT    = (string) $widthBT;
         if (!empty($widthBT)) {
             $retour = self::formatBootstrap($widthBT);
             $properties = $this->getProperties();
@@ -1485,6 +1539,25 @@ class OObject
             $this->const_IBtrigger = $retour;
         } else {
             $retour = $this->const_IBtrigger;
+        }
+
+        return $retour;
+    }
+
+    public function getColorConstants()
+    {
+        $retour = [];
+        if (empty($this->const_color)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'COLOR_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_color = $retour;
+        } else {
+            $retour = $this->const_color;
         }
 
         return $retour;
