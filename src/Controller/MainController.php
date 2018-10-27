@@ -49,6 +49,7 @@ class MainController extends AbstractActionController
                 $sessionObj = OObject::validateSession();
                 /** @var OObject $callingObj */
                 $callingObj = OObject::buildObject($params['id'], $sessionObj);
+                $objects    = $sessionObj->objects;
 
                 switch ($callingObj->getObject()) {
                     case 'odcheckbox':
@@ -58,21 +59,22 @@ class MainController extends AbstractActionController
                         break;
                     default:
                         $event      = $callingObj->getEvent($params['event']);
-                        $object     = $this->buildObject($event['class']);
+                        $object     = $this->buildObject($event['class'], $sessionObj);
                         $objMethod  = $event['method'];
 
                         // traitement en cas de formulaire
                         if (strlen($params['form']) > 2) {
                             /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                            $params['form'] = $this->buildFormDatas($params['form'], $sessionObj);
+                            list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
+                            $sessionObj->objects    = $objects;
                         }
                         // appel de la méthode de l'objet passée en paramètre
                         $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
                         break;
                 }
-                $result  = [];
-                $rscs    = [];
-                $objects = [];
+                $result     = [];
+                $rscs       = [];
+                $updDatas   = [];
                 foreach ($results as $rlst) {
                     $html       = "";
                     switch (true) {
@@ -85,7 +87,7 @@ class MainController extends AbstractActionController
                         default:
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                     }
-                    $objects[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];
+                    $updDatas[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];
                 }
 
                 // traitement des ressources pour injection de fichiers sans doublons
@@ -106,7 +108,7 @@ class MainController extends AbstractActionController
                     $result[]   = ['id'=>$key, 'mode'=>'rscs', 'code'=>substr($item, strpos($item, '|') + 1)];
                 }
 
-                $viewModel = (new ViewModel([ 'content' => [array_merge($result, $objects)], ]))
+                $viewModel = (new ViewModel([ 'content' => [array_merge($result, $updDatas)], ]))
                     ->setTemplate("zf3-graphic-object-templating/main/got-dispatch.twig")
                     ->setTerminal(TRUE);
                 return $viewModel;
@@ -120,12 +122,12 @@ class MainController extends AbstractActionController
      * méthodes privées de la classe
      */
 
-    private function buildObject($objClass, $params = null) {
+    private function buildObject($objClass, $sessionObjects, $params = null) {
         if (NULL === $params) {
             $object = new $objClass;
         } else {
             if (isset($params['obj']) && $params['obj'] == 'OUI') {
-                $object = OObject::buildObject($params['id']);
+                $object = OObject::buildObject($params['id'], $sessionObjects);
             } else {
                 $object = new $objClass($params);
             }
@@ -133,7 +135,7 @@ class MainController extends AbstractActionController
         return $object;
     }
 
-    private function buildFormDatas($form, $sessionObj) {
+    private function buildFormDatas($form, $objects) {
         $datas     = explode('|', $form);
         $formDatas = [];
         foreach ($datas as $data) {
@@ -167,9 +169,9 @@ class MainController extends AbstractActionController
                     break;
             }
             // mise à jour avec la valeur récupérée de chaque objet champ du formulaire
-            $this->updateFieldObject($formDatas, $sessionObj);
+            $objects = $this->updateFieldObject($formDatas, $objects);
         }
-        return $formDatas;
+        return [$formDatas, $objects];
     }
 
     private function trimQuote($var, $char = "'") {
@@ -180,9 +182,8 @@ class MainController extends AbstractActionController
         return $var;
     }
 
-    private function updateFieldObject(array $datas, Container $sessionObj)
+    private function updateFieldObject(array $datas, array $objects)
     {
-        $objects    = $sessionObj->objects;
         foreach ($datas as $id => $data) {
             if (array_key_exists($id, $objects)) {
                 $properties = unserialize($objects[$id]);
@@ -206,8 +207,8 @@ class MainController extends AbstractActionController
                         break;
                 }
                 $objects[$id] = serialize($properties);
+                return $objects;
             }
         }
-        $sessionObj->objets = $objects;
     }
 }

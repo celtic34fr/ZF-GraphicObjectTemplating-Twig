@@ -255,6 +255,7 @@ class OObject
                 if ($object instanceof ODContained && !empty($value)) {
                     $object->setValue($valeur);
                 }
+                $sessionObj->objects    = $objects;
                 return $object;
             }
             throw new \Exception('objet sans atrribut, identifiant '.$id);
