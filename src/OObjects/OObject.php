@@ -352,7 +352,7 @@ class OObject
             if (self::existObject($id, $sessionObj)) {
                 $objects = $sessionObj->objects;
                 $properties = unserialize($objects[$id]);
-                if ($properties['type'] == 'oscontainer') {
+                if ($properties['typeObj'] == 'oscontainer') {
                     $objet = self::buildObject($id, $sessionObj);
                     $children = $objet->getChildren();
                     foreach ($children as $child) {
