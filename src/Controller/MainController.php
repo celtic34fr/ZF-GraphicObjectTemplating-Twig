@@ -124,7 +124,7 @@ class MainController extends AbstractActionController
 
     private function buildObject($objClass, $sessionObjects, $params = null) {
         if (NULL === $params) {
-            $object = new $objClass;
+            $object = new $objClass();
         } else {
             if (isset($params['obj']) && $params['obj'] == 'OUI') {
                 $object = OObject::buildObject($params['id'], $sessionObjects);

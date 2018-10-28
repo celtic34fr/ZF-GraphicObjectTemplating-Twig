@@ -62,7 +62,7 @@
 
         {% if objet.event is not empty %}
         $(document).ready(function () {
-            {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
         });
         {% endif %}
     </script>
