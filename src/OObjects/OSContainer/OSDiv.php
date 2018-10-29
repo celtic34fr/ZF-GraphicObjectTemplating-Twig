@@ -21,25 +21,25 @@ class OSDiv extends OSContainer
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
-    public function appendField(OObject $object, $type = 'append', $objParm = null)
+    public function appendField($objID, $type = 'append', $objParm = null)
     {
-        if ($object instanceof OObject) { $object = $object->getId(); }
+        $objID  = (string) $objID;
         $ret    = [];
         switch ($type) {
             case 'append':
-                $ret[]  = OObject::formatRetour($object, $this->getId(), 'append');
+                $ret[]  = OObject::formatRetour($objID, $this->getId(), 'append');
                 $ret[]  = OObject::formatRetour($this->getId(), $this->getId(), 'exec', 'updatePage()');
                 $ret[]  = OObject::formatRetour($this->getId(), $this->getId(), 'exec', 'updateForm()');
                 break;
             case 'after':
                 $form   = $this->getId();
-                $ret[]  = OObject::formatRetour($object->getId(), $form."  #".$objParm, 'appendAfter');
+                $ret[]  = OObject::formatRetour($objID, $form."  #".$objParm, 'appendAfter');
                 $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updatePage()');
                 $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updateForm("'.$this->getId().'"")');
                 break;
             case 'before':
                 $form   = $this->getId();
-                $ret[]  = OObject::formatRetour($object->getId(), $form." #".$objParm, 'appendBefore');
+                $ret[]  = OObject::formatRetour($objID, $form." #".$objParm, 'appendBefore');
                 $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updatePage()');
                 $ret[]  = OObject::formatRetour($form, $form, 'exec', 'updateForm()');
                 break;
@@ -55,20 +55,14 @@ class OSDiv extends OSContainer
         return OObject::formatRetour($object->getId(), $object->getId(), 'delete');
     }
 
-    public function appendFieldAfter($objID, string $objPrev)
+    public function appendFieldAfter($objID, $objPrev)
     {
-        $sessionObjects = OObject::validateSession();
-        $object         = OObject::buildObject($objID, $sessionObjects);
-
-        return $this->appendField($object, 'after', $objPrev);
+        return $this->appendField($objID, 'after', $objPrev);
     }
 
-    public function appendFieldBefore($objID, string $objPrev)
+    public function appendFieldBefore($objID, $objPrev)
     {
-        $sessionObjects = OObject::validateSession();
-        $object         = OObject::buildObject($objID, $sessionObjects);
-
-        return $this->appendField($object, 'before', $objPrev);
+        return $this->appendField($objID, 'before', $objPrev);
     }
 
 }

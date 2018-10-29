@@ -551,7 +551,7 @@ class ODSelect extends ODContained
         return $retour;
     }
 
-    private function getColorConstants()
+    public function getColorConstants()
     {
         $retour = [];
         if (empty($this->const_color)) {

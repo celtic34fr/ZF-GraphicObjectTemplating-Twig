@@ -469,7 +469,7 @@ class OSForm extends OSDiv
         return OObject::formatRetour($idSource, $idCible, $mode, $html);
     }
 
-    public function appendField($objID, OObject $objet)
+    public function appendField($objet, $type = 'append', $objID = null)
     {
         $ret = parent::appendField($objet);
         if ($this->isRequire($objID)) { $objet->addClass('require'); }
@@ -478,23 +478,30 @@ class OSForm extends OSDiv
         return $ret;
     }
 
-    public function appendFieldAfter($objID, string $objPrev, OObject $objet)
+    public function appendFieldAfter($objID, $objPrev)
     {
+        $sessionObjects = OObject::validateSession();
+        /** @var OObject $object */
+        $object         = OObject::buildObject($objID, $sessionObjects);
         if ($this->isRequire($objID)) {
-            $objet->addClass('require');
+            $object->addClass('require');
+            $object->saveProperties();
         }
-        $ret = parent::appendFieldAfter($objet, $objPrev);
+        $ret = parent::appendFieldAfter($objID, $objPrev);
         $ret[0] = OObject::formatRetour($objID, $this->getId()." .formBody #".$objPrev, 'appendAfter');
 
         return $ret;
     }
 
-    public function appendFieldBefore($objID, string $objPrev, OObject $objet)
+    public function appendFieldBefore($objID, $objPrev)
     {
+        $sessionObjects = OObject::validateSession();
+        /** @var OObject $object */
+        $object         = OObject::buildObject($objID, $sessionObjects);
         if ($this->isRequire($objID)) {
             $objet->addClass('require');
         }
-        $ret = parent::appendFieldBefore($objet, $objPrev);
+        $ret = parent::appendFieldBefore($objID, $objPrev);
         $ret[0] = OObject::formatRetour($objID, $this->getId()." .formBody #".$objPrev, 'appendBefore');
 
         return $ret;
