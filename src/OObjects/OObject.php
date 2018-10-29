@@ -527,9 +527,10 @@ class OObject
         return $this->id;
     }
 
-    public function setId(string $id)
+    public function setId($id)
     {
         if (null !== $this->id) {
+            $id                 = (string) $id;
             $gotObjList         = OObject::validateSession();
             $objects            = $gotObjList->objects;
             $properties         = unserialize($objects[$this->id]);
