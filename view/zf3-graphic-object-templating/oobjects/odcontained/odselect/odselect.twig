@@ -12,11 +12,28 @@
             color: {{ objet.fgColor }} !important;
             border: 1px solid {{ objet.fgColor }} !important;
         }
+
         #{{ objet.id }} .custom-dropdown label {
             margin-top: 0.5em !important;
         }
+
         #{{ objet.id }} .custom-dropdown {
             margin: 0 !important;
+        }
+
+        #{{ objet.id }} .custom-dropdown:before {
+            z-index: 1000 !important;
+            background-color: #dedede !important;
+            height: 2.15em !important;
+            border-width: 2px;
+            border-style: outset;
+            border-color: buttonface;
+            border-image: initial;
+        }
+
+        #{{ objet.id }} .custom-dropdown:after {
+            z-index: 1000 !important;
+            background-color: #dedede !important;
         }
     </style>
     <span class="custom-dropdown {{ objet.format }}" style="width: 100%;">
