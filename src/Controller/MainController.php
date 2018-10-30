@@ -84,8 +84,10 @@ class MainController extends AbstractActionController
                             break;
                         case (in_array($rlst['mode'], self::ModeExecJS)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
+                            break;
                         default:
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
+                            break;
                     }
                     $updDatas[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];
                 }
