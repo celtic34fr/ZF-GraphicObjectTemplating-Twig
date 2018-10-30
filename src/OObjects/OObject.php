@@ -290,6 +290,7 @@ class OObject
         if (!empty($id)) {
             /** @var Container $sessionObj */
             $objects = $sessionObj->objects;
+            if (empty($objects)) { $objects = []; }
             return (array_key_exists($id, $objects));
         }
         return false;

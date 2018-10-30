@@ -32,8 +32,16 @@
         }
 
         #{{ objet.id }} .custom-dropdown:after {
+            /*z-index: 1000 !important;*/
+            /*background-color: #dedede !important;*/
             z-index: 1000 !important;
             background-color: #dedede !important;
+            content: "▼" !important;
+            font-size: 1.6em;
+            top: 0.6em;
+            position: absolute;
+            right: 0.1em !important;
+            color: black;
         }
     </style>
     <span class="custom-dropdown {{ objet.format }}" style="width: 100%;">
