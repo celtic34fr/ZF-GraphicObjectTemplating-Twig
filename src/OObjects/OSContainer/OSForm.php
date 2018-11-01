@@ -512,14 +512,37 @@ class OSForm extends OSDiv
         $properties = $this->getProperties();
         $fields     = $properties['fields'];
         $valid      = true;
+        $rc         = [];
 
-        foreach ($formDatas as $key => $formData) {
-            if ($fields[$key]) {
-                $valid = $valid && (!empty($formData));
-                if (!$valid) { break; }
+        foreach ($fields as $key => $field) {
+            if (array_key_exists($key, $formDatas)) {
+                if ($field) { $valid = $valid && (!empty($formDatas[$key])); }
+                unset($formDatas[$key]);
+            } else {
+                if ($field) {
+                    $rc['valid']    = 'NF';
+                    $rc['msg']      = 'Champs non trouvé '.$key. 'dans le tableau';
+                    break;
+                }
+            }
+            if (!$valid) {
+                $rc['valid']    = 'KO';
+                $rc['msg']      = 'Champs obligatoire'.$key.' non saisi';
+                break;
             }
         }
 
-        return $valid;
+        if (!empty($formDatas)) {
+            $rc['valid']    = 'IN';
+            $fields         = implode(', ', array_keys($formDatas));
+            $rc['msg']      = 'Champ(s) injecté(s) '.$fields;
+        }
+
+        if (empty($rc)) {
+            $rc['valid']    = 'OK';
+            $rc['msg']      = 'Validation des champs obligatoires exécutée avec succès';
+        }
+
+        return $rc;
     }
 }
