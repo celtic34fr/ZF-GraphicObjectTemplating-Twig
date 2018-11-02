@@ -296,6 +296,13 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $id
+     * @param Container $sessionObj
+     * @param null $valeur
+     * @return mixed bool / OObject
+     * @throws \Exception
+     */
     public static function buildObject($id, Container $sessionObj, $valeur = null)
     {
         if (!empty($id)) {
