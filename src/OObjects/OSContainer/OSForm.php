@@ -108,6 +108,17 @@ class OSForm extends OSDiv
         return false;
     }
 
+    public function setChild(OObject $child, $require = false)
+    {
+        $properties = $this->getProperties();
+        $children   = $properties['children'];
+        if (array_key_exists($child->getId(), $children)) {
+            $this->propageFormParams($child, $this->getId(), $this->getId(), $require);
+            return $this;
+        }
+        return false;
+    }
+
     public function addExtField(ODContained $field, $require = false)
     {
         $properties = $this->getProperties();
@@ -363,6 +374,20 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    public function setDefaultBtn($name)
+    {
+        $name           = (string) $name;
+        $properties     = $this->getProperties();
+        $btnControls    = $properties['btnControls'];
+        if (array_key_exists($name, $btnControls)) {
+            $sessionObjects = OObject::validateSession();
+            /** @var ODButton $btn */
+            $btn            = OObject::buildObject($name.$this->getId(), $sessionObjects);
+            $btn->enaDefault();
+            $btn->saveProperties();
+        }
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
@@ -532,7 +557,7 @@ class OSForm extends OSDiv
             }
         }
 
-        if (!empty($formDatas)) {
+        if (!empty($formDatas) && empty($rc)) {
             $rc['valid']    = 'IN';
             $fields         = implode(', ', array_keys($formDatas));
             $rc['msg']      = 'Champ(s) injecté(s) '.$fields;

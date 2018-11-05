@@ -11,6 +11,7 @@ return [
     'label'         => '',
     'icon'          => '',
     'nature'        => ODButton::BUTTONNATURE_DEFAULT,
+    'default'       => false,
 
     'resources' => [
         'css'		=> [

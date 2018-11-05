@@ -26,11 +26,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  *                          affecation de la nature du bouton (= couleur graphique) par deefaut 'DEFAULT' blanc
  *                          remarque : la nature (LINK' présente le bouton comme un lien hypertexte
  * getNature()
- *
- * méthodes privées
- * getTypeConstants()       récupération des constantes 'BUTTONTYPE_*' dans un tableau associatif
- * getNatureConstants()     récupération des constantes 'BUTTONNATURE_*' dans un tableau associatif
- * getLinkTargetConstants() récupération des constantes 'BUTTONLINK_TARGET_*' dans un tableau associatif
+ * enaDefault()
+ * disDefault()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -179,34 +176,6 @@ class ODButton extends ODContained
         if (!empty($class) && !empty($method)) {
             // TODO; manque gestion bouton RESET cas méthode spécifique
             return $this->setEvent('click', $class, $method, $stopEvent);
-/*            $properties = $this->getProperties();
-            if (!array_key_exists('event', $properties)) { $properties['event'] = []; }
-
-            if (in_array($properties['type'], [self::BUTTONTYPE_CUSTOM, self::BUTTONTYPE_SUBMIT])) {
-                if (class_exists($class)) {
-                    $obj = new $class();
-                    if (method_exists($obj, $method)) {
-                        $properties['event']['click'] = [];
-                        $properties['event']['click']['class'] = $class;
-                        $properties['event']['click']['method'] = $method;
-                        $properties['event']['click']['stopEvent'] = ($stopEvent) ? 'OUI' : 'NON';
-                    }
-                }
-            } elseif ($properties['type'] == self::BUTTONTYPE_LINK) {
-                $params = [];
-                if ($method != 'none') {
-                    $method = explode('|', $method);
-                    foreach ($method as $item) {
-                        $item = explode(':', $item);
-                        $params[$item[0]] = $item[1];
-                    }
-                }
-                $properties['event']['click'] = [];
-                $properties['event']['click']['class'] = $class;
-                $properties['event']['click']['method'] = $params;
-                $properties['event']['click']['stopEvent'] = ($stopEvent) ? 'OUI' : 'NON';
-            }
-            $this->setProperties($properties);*/
         }
         return false;
     }
@@ -214,31 +183,11 @@ class ODButton extends ODContained
     public function getClick() 
     {
         return $this->getEvent('click');
-/*        $properties = $this->getProperties();
-        if (array_key_exists('event', $properties)) {
-            $event = $properties['event'];
-            if (array_key_exists('click', $event)) {
-                return $event['click'];
-            }
-        }
-        return false;*/
     }
 
     public function disClick()
     {
         return $this->disEvent('click');
-
-/*        $properties = $this->getProperties();
-        if (array_key_exists('event', $properties)) {
-            $event = $properties['event'];
-            if (array_key_exists('click', $event)) {
-                unset($event['click']);
-                $properties['event'] = $event;
-                $this->setProperties($properties);
-                return $this;
-            }
-        }
-        return false;*/
     }
     
     public function setNature($nature = self::BUTTONNATURE_DEFAULT)
@@ -257,6 +206,22 @@ class ODButton extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('nature', $properties) ? $properties['nature'] : false;
+    }
+
+    public function enaDefault()
+    {
+        $properties = $this->getProperties();
+        $properties['default'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disDefault()
+    {
+        $properties = $this->getProperties();
+        $properties['default'] = true;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************

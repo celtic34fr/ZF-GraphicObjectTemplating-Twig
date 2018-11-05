@@ -148,7 +148,7 @@ class OSContainer extends OObject
         return false;
     }
 
-    public function setChild(OObject $child, $value = null)
+    public function setChildValue(OObject $child, $value = null)
     {
         $properties = $this->getProperties();
         $children   = $properties['children'];
