@@ -25,17 +25,6 @@
             {% if objet.event is not empty %}
             {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
             {% endif %}
-
-            {# gestion pression touche, si enter = soumission formulaire si existe #}
-            {% if objet.form is not empty %}
-            $("#{{ objet.id }}").on("keypress", function (e) {
-                if (e.keyCode === 13) {
-                    let submitBtn = $('#{{ objet.form }} div[data-objet="odbutton"][data-default="true"]');
-                    let submitObj = eval('new '+objBuilder+'($("#'+submitBtn.attr('id')+'"));');
-                    invokeAjax(submitObj.getData('click'), submitBtn.attr('id'), 'click', e);
-                }
-            })
-            {% endif %}
         })
     </script>
 </div>
