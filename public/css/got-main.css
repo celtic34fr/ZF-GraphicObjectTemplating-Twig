@@ -22,6 +22,10 @@
 .ospadding10  { padding:     1em; }
 .ospadding20  { padding:     2em; }
 
+.border-noir-01 {
+    border: 0.1em black solid;
+}
+
 body {
     margin: 0 !important;
     height: 100% !important;

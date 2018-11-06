@@ -129,13 +129,15 @@ class OSForm extends OSDiv
         return $this;
     }
 
-    public function setExtField(ODContained $field, $require = false)
+    public function setExtField(OObject $field, $require = false)
     {
-        $properties = $this->getProperties();
-        if (array_key_exists($field->getId(), $properties['fields'])) {
-            $properties['fields'][$field->getId()] = $require;
-            $this->setProperties($properties);
-            return $this;
+        if (!in_array($field->getTypeObj(), ['oscontainer', 'oescontainer'])) {
+            $properties = $this->getProperties();
+            if (array_key_exists($field->getId(), $properties['fields'])) {
+                $properties['fields'][$field->getId()] = $require;
+                $this->setProperties($properties);
+                return $this;
+            }
         }
         return false;
     }
