@@ -38,7 +38,7 @@
         {% if objet.title is not empty %}
             <caption>{{ objet.title }}</caption>
         {% endif %}
-        <thead>
+        <thead class="{{ objet.id }}">
             <tr class="line">
                 {% for col in objet.cols %}
                     {% if col.view == true %}
@@ -47,7 +47,7 @@
                 {% endfor %}
             </tr>
         </thead>
-        <tbody>
+        <tbody class="{{ objet.id }}">
             <tr class="line nodata {% if objet.datas|length > 0 %}hide{% endif %}">
                 <td colspan="{{ objet.cols|length }}" style="text-align: center">No data to show</td>
             </tr>
