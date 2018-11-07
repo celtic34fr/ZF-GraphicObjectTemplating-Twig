@@ -39,6 +39,9 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * addBtn($name, $label, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
  * rmBtn($name)
  * rmBtns()
+ * setDefaultBtn($name)
+ * enaSubmitEnter()
+ * disSubmitEnter()
  *
  * mérthodes privées
  * propageFormParams(OObject $child, string $formID, bool $require )
@@ -388,6 +391,22 @@ class OSForm extends OSDiv
             $btn->enaDefault();
             $btn->saveProperties();
         }
+    }
+
+    public function enaSubmitEnter()
+    {
+        $properties     = $this->getProperties();
+        $properties['submitEnter'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disSubmitEnter()
+    {
+        $properties     = $this->getProperties();
+        $properties['submitEnter'] = true;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************

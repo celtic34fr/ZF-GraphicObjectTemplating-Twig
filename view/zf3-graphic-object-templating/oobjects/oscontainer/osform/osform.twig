@@ -44,15 +44,18 @@
                 $("#{{ objet.id }}").append('<span class="require col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
             }
 
+            {% if objet.submitEnter %}
+            let submitBtn = $('#{{ objet.id }} div[data-objet="odbutton"][data-default="true"]');
+            let objBuilder  = submitBtn.data("objet");
+
             {# gestion pression touche, si enter = soumission formulaire si existe #}
             $("#{{ objet.id }} .gotObject").on("keypress", function (e) {
                 if (e.keyCode === 13) {
-                    let submitBtn = $('#{{ objet.id }} div[data-objet="odbutton"][data-default="true"]');
-                    let objBuilder  = submitBtn.data("objet");
-                    let submitObj = eval('new '+objBuilder+'($("#'+submitBtn.attr('id')+'"));');
-                    invokeAjax(submitObj.getData('click'), submitBtn.attr('id'), 'click', e);
+                    let submit{{ objet.id }} = eval('new '+objBuilder+'($("#'+submitBtn.attr('id')+'"));');
+                    invokeAjax(submit{{ objet.id }}.getData('click'), submitBtn.attr('id'), 'click', e);
                 }
             })
+            {% endif %}
         });
     </script>
     {% endif %}
