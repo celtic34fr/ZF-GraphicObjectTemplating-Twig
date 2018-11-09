@@ -63,7 +63,7 @@ class MainController extends AbstractActionController
                         $objMethod  = $event['method'];
 
                         // traitement en cas de formulaire
-                        if (strlen($params['form']) > 2) {
+                        if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
                             /** reformatage et mise à jour des données du formulaire niveau objets de la page */
                             list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
                             $sessionObj->objects    = $objects;
