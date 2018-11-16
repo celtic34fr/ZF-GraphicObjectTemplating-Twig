@@ -101,20 +101,12 @@
 
     <script>
         $(document).ready(function () {
-            {#% if objet.mode == 'click' % pas autre que pas click pour le moment #}
             $('#{{ objet.id }} ul.dropdown-menu [datat-toggle=dropdown]').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 $(this).parent().siblings().removeClass('open');
                 $(this).parent().toggleClass('open');
             })
-            {#% elseif objet.mode == 'hover' %}
-            $('ul.nav li.dropdown').hover(function (event) {
-                $(this).find('ul:first-child').stop(true, true).delay(200).fadeIn();
-            }, function (event) {
-                $(this).find('ul:first-child').stop(true, true).delay(200).fadeOut();
-            });
-            {% endif %#}
         })
     </script>
 </div>
