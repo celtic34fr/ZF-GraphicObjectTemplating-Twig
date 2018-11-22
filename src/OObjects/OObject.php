@@ -76,6 +76,10 @@ namespace GraphicObjectTemplating\OObjects;
  * getEvents()
  * disEvent($event)
  * saveProperties()
+ * setWidth($width)
+ * getWidth()
+ * setHeight($height)
+ * getHeight()
  *
  * méthodes de gestion des infobulles mis sur les objets
  * -----------------------------------------------------
@@ -1198,6 +1202,36 @@ class OObject
         $sessionObj->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
         $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
 
+    }
+
+    public function setWidth($width)
+    {
+        $width = (string) $width ;
+        $properties = $this->getProperties();
+        $properties['width'] = $width;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getWidth()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('width', $properties) ? $properties['width'] : false;
+    }
+
+    public function setHeight($height)
+    {
+        $height = (string) $height;
+        $properties = $this->getProperties();
+        $properties['height'] = $height;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getHeight()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('height', $properties) ? $properties['height'] : false;
     }
 
     /** **************************************************************************************************

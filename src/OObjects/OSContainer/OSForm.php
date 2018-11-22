@@ -404,7 +404,7 @@ class OSForm extends OSDiv
     public function disSubmitEnter()
     {
         $properties     = $this->getProperties();
-        $properties['submitEnter'] = true;
+        $properties['submitEnter'] = false;
         $this->setProperties($properties);
         return $this;
     }

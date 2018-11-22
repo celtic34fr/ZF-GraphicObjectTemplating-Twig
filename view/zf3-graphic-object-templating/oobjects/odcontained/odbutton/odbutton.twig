@@ -1,5 +1,35 @@
 {# template de l'objet ODButton #}
 
+{% set btnClasses = '' %}
+
+{% set widthBT = '' %}
+{% if objet.width is empty and objet.height is empty %}
+    {% set widthBT = objet.widthBT %}
+{% endif %}
+
+<style>
+    {% if objet.width is not empty %}
+    {% set btnClasses = btnClasses ~ ' width' %}
+    #{{ objet.id }} .width {
+        width: {{ objet.width }} !important;
+    }
+    {% endif %}
+
+    {% if objet.height is not empty %}
+    {% set btnClasses = btnClasses ~ ' height' %}
+    #{{ objet.id }} .height {
+        height: {{ objet.height}} !important;
+    }
+    {% endif %}
+
+    {% if objet.width is not empty or objet.height is not empty %}
+    #{{ objet.id }} {
+        float: left;
+        padding: 0 2px !important;
+    }
+    {% endif %}
+</style>
+
 {% if objet.type == 'link' %}
     {% if objet.event.click is defined %}
         {% set route  = objet.event.click.class %}
@@ -13,7 +43,7 @@
 {% endif %}
 
 <div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-objet="{{ objet.object }}"
-    {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if widthBT is not empty %}data-widthbt="{{ widthBT }}" {% endif %}
     {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
     data-role="{{ objet.type }}" data-default="{{ objet.default ? 'true' : 'false' }}"
@@ -22,7 +52,7 @@
         {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
     {% endif %}
 >
-    <button class="{{ objet.nature }}" style="width: 100%;"
+    <button class="{{ objet.nature }}{{ btnClasses }}" {% if btnClasses is empty %}style="width: 100%;"{% endif %}
         {% if objet.type == 'link' %} onclick="location.href='{{ routeUrl }}'" {% endif %}
         {% if objet.value is defined and objet.value is not empty %} data-value="{{ objet.value }}" {% endif %}
         {% if objet.state == false %} disabled {% endif %}

@@ -14,6 +14,8 @@ return [
     'lastAccess'    => '',
     'state'         => true,
     'classes'       => '',
+    'width'         => '',
+    'height'        => '',
 
     'autoCenter'    => false,
     'acPx'          => '',
