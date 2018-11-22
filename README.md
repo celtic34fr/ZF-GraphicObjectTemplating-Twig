@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This module help you for building UI object oriented and interacting with it, using TWIG Templating Engine. This version work only on Zend Framework 3.0+
+This module help you for building UI object oriented and interacting with it, using TWIG Templating Engine. This version work only on Zend Framework 2.5+ and 3.0+
 
 ## Installation using Composer
 
