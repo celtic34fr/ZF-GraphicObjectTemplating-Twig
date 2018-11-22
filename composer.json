@@ -1,5 +1,5 @@
 {
-  "name": "celtic34fr/ZF-GraphicObjectTemplating-Twig",
+  "name": "celtic34fr/zf-graphic-object-templating-twig",
   "description": "templating engine oriented object",
   "type": "project",
   "license": "BSD-3-Clause",
@@ -16,7 +16,7 @@
       "role":      "Project Leader"
     }
   ],
-  "homepage": "http://girthub.com/celtic34fr/ZF-GraphicObjectTeplating-Twig",
+  "homepage": "http://girthub.com/celtic34fr/zf-graphic-object-templating-twig",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
