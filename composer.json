@@ -16,11 +16,11 @@
       "role":      "Project Leader"
     }
   ],
-  "homepage": "http://girthub.com/celtic34fr/zf-graphic-object-templating-twig",
+  "homepage": "http://github.com/celtic34fr/zf-graphic-object-templating-twig",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": "^5.6 || ^7.0",
+    "php": "^7.0",
     "zendframework/zend-component-installer": "^1.0 || ^0.7 || ^1.0.0-dev@dev",
     "zendframework/zend-session": "2.8.5",
     "kokspflanze/zfc-twig": "2.2.0"  },
