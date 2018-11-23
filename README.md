@@ -6,7 +6,7 @@ This module help you for building UI object oriented and interacting with it, us
 
 ## Installation using Composer
 
-Fisrt during creating your Zend Framework 3 project, you need to install :
+First during creating your Zend Framework 3 project, you need to install :
 * the developer toolbar,
 * caching support,
 * JSON de/serialization support,
@@ -29,11 +29,11 @@ First, in **config/modules.config.php** file, add the following lines :
     'GraphicObjectTemplating',
     ...,
 
-In public folder of your application, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed at the root of the project :
+In public folder of your application, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed :
 
     ln -s ../vendor/celtic34fr/zf-graphic-object-templating-twig/public graphicobjecttemplating
 
-Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** in the config folder of GraphicObjectTemplating config folder witout **dist** extension in config/autoload folder of your project.
+Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** found in the config folder of **GraphicObjectTemplating** config folder without **dist** extension in *config/autoload* folder of your project.
 They will activate all the needed parameters by **GraphicObjectTemplating**.
 
 
