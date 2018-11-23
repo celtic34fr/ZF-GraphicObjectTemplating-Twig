@@ -43,7 +43,7 @@ By using *Twig Templating Engine*, you have to replace somes templates and param
 
 With these models, you will have the same behavior as with an original Zend Framework 3 project. Some extensions to Twig have been programmed to reproduce the same mechanisms implemented in a Zend Framework 3 project that does not use Twig for rendering pages.
 
-This is only a base for your development that you can modify and adapt at your convenience. the current layout.twig template works with the Twig block mode. in this it is defined several blocks to insert different data:
+This is only a base for your development that you can modify and adapt at your convenience. The current *layout.twig* template works with the Twig block mode. in this, it is defined severals variables and blocks to insert different datas :
 * the variable *local* allows to define the language of the page, example 'fr' or 'en',
 * the *Hmeta* block defines the basic metas, which you can record or complete,
 * the *Hstyle* block descriptes the style sheets to apply to the page,
