@@ -44,12 +44,14 @@ By using *Twig Templating Engine*, you have to replace somes templates and param
 With these models, you will have the same behavior as with an original Zend Framework 3 project. Some extensions to Twig have been programmed to reproduce the same mechanisms implemented in a Zend Framework 3 project that does not use Twig for rendering pages.
 
 This is only a base for your development that you can modify and adapt at your convenience. the current layout.twig template works with the Twig block mode. in this it is defined several blocks to insert different data:
-* the variable * local * allows to define the language of the page, example 'fr' or 'en',
-* the * Hmeta * block defines the basic metas, which you can record or complete,
-* the * Hstyle * block descriptes the style sheets to apply to the page,
-* the * Hscript * block describes the JavaScript sources to load so that the base events are managed,
-* the * Bcontent * block contains or will contain if you changed the page by itself, and contains the * content * block which is set up for this to see the central part of page,
-* the * Bscript * block is there to allow ajour, JavaScript code or source loading while changing the central part of the page
+* the variable *local* allows to define the language of the page, example 'fr' or 'en',
+* the *Hmeta* block defines the basic metas, which you can record or complete,
+* the *Hstyle* block descriptes the style sheets to apply to the page,
+* the *Hscript* block describes the JavaScript sources to load so that the base events are managed,
+* the *Bcontent* block contains or will contain if you changed the page by itself, and contains the * content * block which is set up for this to see the central part of page,
+* the *Bscript* block is there to allow ajour, JavaScript code or source loading while changing the central part of the page.
+
+Finaly, before developping you application, you must make some changes in module/Application/config/module.config.php file. In the bloc *template_map* you must change all the file name extension from *phtml* to *twig*. Don't forget to dump autolod before controlling if all is in order to work.
 
 ## Development mode
 
