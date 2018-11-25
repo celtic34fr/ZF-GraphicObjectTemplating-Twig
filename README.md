@@ -7,7 +7,7 @@ This module help you for building UI object oriented and interacting with it, us
 ## Before any Installation ##
 
 * You must have a Zend Framework 3 project,
-* during its installationg, you will need to have installed :
+* during its installation, you will need to have installed :
     * the developer toolbar (in order to debug your project),
     * caching support (useful in production by the use of Twig),
     * JSON de/serialization support,
