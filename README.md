@@ -2,19 +2,22 @@
 
 ## Introduction
 
-This module help you for building UI object oriented and interacting with it, using TWIG Templating Engine. This version work only on Zend Framework 2.5+ and 3.0+
+This module help you for building UI object oriented and interacting with it, using TWIG Templating Engine. This version work only on Zend Framework 2.5+ and 3.0+ (tested only with 3.0+ project)
 
-## Installation using Composer
+## Before any Installation ##
 
-First during creating your Zend Framework 3 project, you need to install :
-* the developer toolbar,
-* caching support,
-* JSON de/serialization support,
+* You must have a Zend Framework 3 project,
+* during its installationg, you will need to have installed :
+    * the developer toolbar (in order to debug your project),
+    * caching support (useful in production by the use of Twig),
+    * JSON de/serialization support,
+    * sessions support
+
+optionally, you can also install
 * i18n support (if you need),
 * the official MVC plugins, including PRG support, identity, and flash messages (if you use Authentication),
-* sessions support
 
-Then, you must declare the developer toolbar in config/development.config.php.dist, and all the other module in  config/modules.config.php
+## Installation using Composer
 
 For installing **GraphicObjectTemplating** use the following command :
 
