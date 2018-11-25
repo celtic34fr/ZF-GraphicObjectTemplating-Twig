@@ -11,7 +11,7 @@ This module help you for building UI object oriented and interacting with it, us
     * the developer toolbar (in order to debug your project),
     * caching support (useful in production by the use of Twig),
     * JSON de/serialization support,
-    * sessions support
+    * sessions support.
 
 optionally, you can also install
 * i18n support (if you need),
@@ -32,11 +32,11 @@ First, in **config/modules.config.php** file, add the following lines :
     'GraphicObjectTemplating',
     ...,
 
-In public folder of your application, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed :
+In public folder of your project, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed :
 
     ln -s ../vendor/celtic34fr/zf-graphic-object-templating-twig/public graphicobjecttemplating
 
-Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** found in the config folder of **GraphicObjectTemplating** without **dist** extension in *config/autoload* folder of your project.
+Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** found in the config folder of **GraphicObjectTemplating** without **.dist** extension in *config/autoload* folder of your project.
 They will activate all the basics needed parameters by **GraphicObjectTemplating**.
 
 By using *Twig Templating Engine*, you have to replace somes templates and parameters. You can found some templates in view/twigtemplates for your project :
@@ -46,7 +46,7 @@ By using *Twig Templating Engine*, you have to replace somes templates and param
 
 With these models, you will have the same behavior as with an original Zend Framework 3 project. Some extensions to Twig have been programmed to reproduce the same mechanisms implemented in a Zend Framework 3 project that does not use Twig for rendering pages.
 
-This is only a base for your development that you can modify and adapt at your convenience. The current *layout.twig* template works with the Twig block mode. in this, it is defined severals variables and blocks to insert different datas :
+This is only a base for your development that you can modify and adapt at your convenience. The current *layout.twig* template works with the Twig block mode. In this, it is defined severals variables and blocks to insert different datas :
 * the variable *local* allows to define the language of the page, as 'fr' or 'en',
 * the *Hmeta* block defines the basic metas, which you can change or complete,
 * the *Hstyle* block sets the stylesheets files needed to run **GraphicObjectTemplating** in any page,
