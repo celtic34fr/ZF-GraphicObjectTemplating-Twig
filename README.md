@@ -32,9 +32,13 @@ First, in **config/modules.config.php** file, add the following lines :
     'GraphicObjectTemplating',
     ...,
 
-In public folder of your project, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed :
+In public folder of your project, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed on Linux :
 
     ln -s ../vendor/celtic34fr/zf-graphic-object-templating-twig/public graphicobjecttemplating
+
+For Windows environment use only cmd.exe, the command exected as administrator in public folder became :
+
+    mklink /D graphicobjecttemplating ..\vendor\celtic34fr\zf-graphic-object-templating\public
 
 Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** found in the config folder of **GraphicObjectTemplating** without **.dist** extension in *config/autoload* folder of your project.
 They will activate all the basics needed parameters by **GraphicObjectTemplating**.
