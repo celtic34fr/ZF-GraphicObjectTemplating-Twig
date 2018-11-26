@@ -58,6 +58,11 @@ Finaly, before developping you application, you must make some changes in module
 
 ## Development mode
 
+First, install all the needed package just for dev environment :
+
+    composer.phar require --dev zendframework/zend-developer-tools ^1.1.0
+    composer.phar require --dev san/san-session-toolbar ^2.0.2
+
 As **GraphicObjectTemplating** uses Php sessions, we need to be able to review and delete their content as needed. For this, and only in development mode, the *san/san-session-toolbar* extension has been installed with **GraphicObjectTemplating**.
 To use this extension, add the following lines to the config/development.config.php file of your project:
 

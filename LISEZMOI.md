@@ -59,6 +59,11 @@ En dernier, avant de débuter le développement de votre application, vous devre
 
 ## Mode Dévelopment
 
+En premier, installez, seulement en mode développement, les extasions nécessaires :
+
+    composer.phar require --dev zendframework/zend-developer-tools ^1.1.0
+    composer.phar require --dev san/san-session-toolbar ^2.0.2
+
 Comme **GraphicObjectTemplating** utilise les sessions Php, nous devons avoir un moyen pour les consulter, voire supprimer leur contenu au besion. Pour cela, et seulement en mode de développement, il a été installé l'extension *san/san-session-toolbazr*, en même temps que **GraphicObjectTemplating**.
 Pour pouvoir utiliser cette extension, ajoutez les lignes suivantes dans le fichier *config/developement.config.php* de votre projet :
 
