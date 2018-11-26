@@ -1,0 +1,65 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+    <h1>{{ 'An error occurred' }}</h1>
+    <h2>{{ message }}</h2>
+
+    {% if display_exceptions is defined and not(display_exceptions is empty) %}
+        {% if exception is defined and not(exception is empty) %}
+            {% if exception is instanceof('Exception') %}
+                <h2>{{ 'Additional information' }}:</h2>
+                <h3>{{ getclass(exception) }}</h3>
+                {% set arrayException = arrayexception(exception) %}
+                <dl>
+                    <dt>{{ 'File' }}:</dt>
+                    <dd>
+                        <pre class="prettyprint linenums">{{ arrayException.File }}:{{ arrayException.Line }}</pre>
+                    </dd>
+                    <dt>{{ 'Message' }}:</dt>
+                    <dd>
+                        <pre class="prettyprint linenums">{{ arrayException.Message }}</pre>
+                    </dd>
+                    <dt>{{ 'Stack trace' }}:</dt>
+                    <dd>
+                        <pre class="prettyprint linenums">{{ arrayException.TraceAsString }}</pre>
+                    </dd>
+                </dl>
+                {% set previousExArray = arrayException.Previous %}
+                {% set icount = 0 %}
+                {% set break = false %}
+                {% if previousExArray is defined and not (previousExArray is empty)%}
+                    <hr/>
+                    <h2>{{ 'Previous exceptions' }}:</h2>
+                    <ul class="unstyled">
+                        {% for ex in previousExArray if not break%}
+                            <li>
+                                <h3>{{ ex.Class }}</h3>
+                                <dl>
+                                    <dt>{{ 'File' }}:</dt>
+                                    <dd>
+                                        <pre class="prettyprint linenums">{{ ex.File }}:{{ ex.Line }}</pre>
+                                    </dd>
+                                    <dt>{{ 'Message' }}:</dt>
+                                    <dd>
+                                        <pre class="prettyprint linenums">{{ ex.Message }}</pre>
+                                    </dd>
+                                    <dt>{{ 'Stack trace' }}:</dt>
+                                    <dd>
+                                        <pre class="prettyprint linenums">{{ ex.TraceAsString }}</pre>
+                                    </dd>
+                                </dl>
+                            </li>
+                            {% set icount = icount + 1 %}
+                            {% if (icount >=50)  %}
+                                <li>There may be more exceptions, but we have no enough memory to proccess it.</li>
+                                {% set break = true %}
+                            {% endif  %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h3>{{ 'No Exception available' }}</h3>
+    {% endif %}
+{% endblock content %}
