@@ -51,27 +51,33 @@ class MainController extends AbstractActionController
                 $callingObj = OObject::buildObject($params['id'], $sessionObj);
                 $objects    = $sessionObj->objects;
 
-                switch ($callingObj->getObject()) {
-                    case 'odcheckbox':
-                    case 'odmessage':
-                        // appel de la méthode de l'objet passée en paramètre
-                        $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
-                        break;
-                    default:
-                        $event      = $callingObj->getEvent($params['event']);
-                        $object     = $this->buildObject($event['class'], $sessionObj);
-                        $objMethod  = $event['method'];
+                if (!$callingObj) {
+                    // si retour false de la création d'objet => redirection sur la route home de l'application
+                    $results = [OObject::formatRetour($params['id'], $params['id'], 'redirect', '/')];
+                } else {
+                    switch ($callingObj->getObject()) {
+                        case 'odcheckbox':
+                        case 'odmessage':
+                            // appel de la méthode de l'objet passée en paramètre
+                            $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
+                            break;
+                        default:
+                            $event      = $callingObj->getEvent($params['event']);
+                            $object     = $this->buildObject($event['class'], $sessionObj);
+                            $objMethod  = $event['method'];
 
-                        // traitement en cas de formulaire
-                        if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
-                            /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                            list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
-                            $sessionObj->objects    = $objects;
-                        }
-                        // appel de la méthode de l'objet passée en paramètre
-                        $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
-                        break;
+                            // traitement en cas de formulaire
+                            if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
+                                /** reformatage et mise à jour des données du formulaire niveau objets de la page */
+                                list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
+                                $sessionObj->objects    = $objects;
+                            }
+                            // appel de la méthode de l'objet passée en paramètre
+                            $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
+                            break;
+                    }
                 }
+
                 $result     = [];
                 $rscs       = [];
                 $updDatas   = [];
