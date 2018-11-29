@@ -19,6 +19,7 @@ osform.prototype = {
                     datas = datas.replace(/=\'/g, '=*');
                     datas = datas.replace(/\'§/g, '*§');
                     datas = datas.replace(/\*\'/g, '**');
+                    datas = datas.replace(/\'$/, '*');
                     formData = formData + "|" + datas;
                 }
             }
