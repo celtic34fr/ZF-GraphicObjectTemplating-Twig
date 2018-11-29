@@ -17,10 +17,12 @@ return [
     'errMessage'    => '',
     'icon'          => '',
     'autoFocus'     => false,
+    'mask'          => '',
 
     'resources' => [
         'js'		=> [
             'odinput.js' => 'js/odinput.js',
+            'jquery.maskedinput.min.js' => 'js/jquery.maskedinput.min.js',
         ],
     ],
 ];

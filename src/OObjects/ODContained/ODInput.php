@@ -42,6 +42,9 @@ use GraphicObjectTemplating\OObjects\OObject;
  * enaAutoFocus()
  * disAutoFocus()
  * getAutoFocus()
+ * enaMask($mask)
+ * disMask()
+ * getMask()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -270,6 +273,32 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('autoFocus', $properties) ? $properties['autoFocus'] : false;
+    }
+
+    public function enaMask($mask)
+    {
+        $mask = (string) $mask;
+        if (!empty($mask)) {
+            $properties = $this->getProperties();
+            $properties['mask'] = $mask;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function disMask()
+    {
+        $properties = $this->getProperties();
+        $properties['mask'] = '';
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMask()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('mask', $properties) ? $properties['mask'] : false;
     }
 
     /** **************************************************************************************************

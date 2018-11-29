@@ -25,6 +25,12 @@
             {% if objet.event is not empty %}
             {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
             {% endif %}
+
+            {% if objet.mask is not empty %}
+            $("#{{ objet.id }} input").mask("{{ objet.mask }}");
+
+
+            {% endif %}
         })
     </script>
 </div>
