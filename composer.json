@@ -14,6 +14,11 @@
       "name":      "Gilbert ARMENGAUD",
       "email":     "gilbert.armengaud@gmail.com",
       "role":      "Project Leader"
+    },
+    {
+      "name":      "Emmanuel ARMENGAUD",
+      "email":     "crafttonjus@gmail.com",
+      "role":      "Developer"
     }
   ],
   "homepage": "http://github.com/celtic34fr/zf-graphic-object-templating-twig",

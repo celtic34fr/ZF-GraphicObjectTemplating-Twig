@@ -28,9 +28,10 @@
 
             {% if objet.mask is not empty %}
             $("#{{ objet.id }} input").mask("{{ objet.mask }}");
-
-
-            {% endif %}
+            {% endif %}		
+			{% if objet.autoFocus%}
+			{% include "zf3-graphic-object-templating/oobjects/autoFocus.js.twig" with {id : (objet.id ~ 'Input')} %}
+			{% endif %}
         })
     </script>
 </div>
