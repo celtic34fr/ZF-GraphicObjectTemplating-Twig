@@ -237,3 +237,5 @@ function showHideTableNodata(id, nbrLines) {
         $("#"+id+" tr.line.nodata").removeClass('hide').addClass('hide');
     }
 }
+
+
