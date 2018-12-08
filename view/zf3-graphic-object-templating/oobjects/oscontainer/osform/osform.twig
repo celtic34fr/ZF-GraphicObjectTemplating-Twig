@@ -36,17 +36,15 @@
                 {% if bool %}
             $("#{{ ident }}").addClass('require');
             mark = $("#{{ ident }} label span");
-            console.log("#{{ ident }} "+mark.length);
             if (mark.length == 0) {
                 $("#{{ ident }} label:first").html(require+$("#{{ ident }} label:first").html());
             }
-                if (!topRequire) {topRequire = true;}
+            if (!topRequire) {topRequire = true;}
                 {% endif %}
             {% endfor %}
 
             if (topRequire) {
                 mention = $('span.require.mention');
-                console.log(mention.length);
                 if (mention.length == 0) {
                     $("#{{ objet.id }}").append('<span class="require mention col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
                 }
