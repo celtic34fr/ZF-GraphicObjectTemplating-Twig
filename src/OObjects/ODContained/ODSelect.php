@@ -16,8 +16,9 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * enaOption($value)
  * disOption($value)
  * getStateOption($value)
- * selectOption($value)
- * unselectOption($value)
+ * setSelectedOption($value)
+ * unsetSelecteOption($value)
+ * getSelectedOption()
  * unselectAll()
  * isSelectedOption($value)
  * enaMultiple($number)
@@ -275,7 +276,7 @@ class ODSelect extends ODContained
         return false;
     }
 
-    public function selectOption($value)
+    public function setSelectedOption($value)
     {
         $value      = (string) $value;
         if (!empty($value)) {
@@ -292,7 +293,7 @@ class ODSelect extends ODContained
         return false;
     }
 
-    public function unselectOption($value)
+    public function unsetSelectedOption($value)
     {
         $value      = (string) $value;
         if (!empty($value)) {
@@ -319,6 +320,22 @@ class ODSelect extends ODContained
             $properties['options'] = $options;
             $this->setProperties($properties);
             return $this;
+        }
+        return false;
+    }
+
+    public function getSelectedOption()
+    {
+        $properties = $this->getProperties();
+        $selection  = [];
+        if (array_key_exists('options', $properties) && !empty($properties['options'])) {
+            $options = $properties['options'];
+            foreach ($options as $value => $option) {
+                if ($options[$value]['selected']) {
+                    $selection[] = $value;
+                }
+            }
+            return $selection;
         }
         return false;
     }

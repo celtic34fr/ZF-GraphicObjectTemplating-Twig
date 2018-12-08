@@ -27,21 +27,29 @@
         ceci pour permettre la mise en place de l'étoile rouge à gauche du texte inclus pour indiquer l'ensemble
         des champs obligatoires pour valider la saisie du formulaire
     ########################################################################################################### #}
+    <script id="{{ object.id }}Script">
     {% if objet.fields is not empty %}
-    <script>
-        $(document).ready(function () {
-            let require = '<p style="color:red;float:left;";>*&nbsp;</p>';
+        function {{ objet.id }}Script() {
+            let require = '<span class"require mark" style="color:red;float:left;";>*&nbsp;</span>';
             let topRequire = false;
             {% for ident, bool in objet.fields %}
-            {% if bool %}
+                {% if bool %}
             $("#{{ ident }}").addClass('require');
-            $("#{{ ident }} label:first").html(require+$("#{{ ident }} label:first").html());
-            if (!topRequire) {topRequire = true;}
-            {% endif %}
+            mark = $("#{{ ident }} label span");
+            console.log("#{{ ident }} "+mark.length);
+            if (mark.length == 0) {
+                $("#{{ ident }} label:first").html(require+$("#{{ ident }} label:first").html());
+            }
+                if (!topRequire) {topRequire = true;}
+                {% endif %}
             {% endfor %}
 
             if (topRequire) {
-                $("#{{ objet.id }}").append('<span class="require col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
+                mention = $('span.require.mention');
+                console.log(mention.length);
+                if (mention.length == 0) {
+                    $("#{{ objet.id }}").append('<span class="require mention col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
+                }
             }
 
             {% if objet.submitEnter %}
@@ -54,9 +62,12 @@
                     let submit{{ objet.id }} = eval('new '+objBuilder+'($("#'+submitBtn.attr('id')+'"));');
                     invokeAjax(submit{{ objet.id }}.getData('click'), submitBtn.attr('id'), 'click', e);
                 }
-            })
+            });
             {% endif %}
-        });
-    </script>
+        }
+    $(document).ready(function () {
+        {{ objet.id }}Script();
+    });
     {% endif %}
+    </script>
 </div>

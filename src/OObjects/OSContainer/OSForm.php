@@ -53,6 +53,7 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  *
  * méthodes de gestion de retour de callback
  * updateFormDatas()
+ * updateFormRequire()
  * razFormDatas()
  * appendField($objID, OObject $objet)
  * isValid(array $formDatas)
@@ -504,6 +505,15 @@ class OSForm extends OSDiv
         $mode       = 'setFormDatas';
         $html       = json_encode($this->getFormDatas());
         return OObject::formatRetour($idSource, $idCible, $mode, $html);
+    }
+
+    public function updateFormRequire()
+    {
+        $idSource   = $this->getId();
+        $idCible    = $this->getId();
+        $mode       = 'exec';
+        $idFuncExec = $this->getId()."Script()";
+        return OObject::formatRetour($idSource, $idCible, $mode, $idFuncExec);
     }
 
     public function razFormDatas()
