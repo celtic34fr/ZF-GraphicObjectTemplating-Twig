@@ -1,0 +1,31 @@
+{# template de l'objet ODDateTimePicker #}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
+    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
+    {% if objet.state == false %} checkbox disabled {% endif %}"
+    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    {% if objet.state == false %} disabled {% endif %}
+>
+    <div class="form-group">
+        <div class='input-group date' id='{{ objet.id }}DateTimePicker'>
+            <input type='text' class="form-control" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#{{ objet.id }}DateTimePicker').datetimepicker({
+                locale: '{{ objet.locale }}',
+                format: '{{ objet.formatDate }}',
+                defaultDate: "{{ objet.defaultDate }}",
+                viewMode: '{{ objet.viewMode }}',
+                inline: '{{ objet.inline ? 'true' : 'false' }}',
+            });
+        });
+    </script>
+</div>
