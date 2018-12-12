@@ -9,11 +9,14 @@ return [
 
     'minDate'       => '',
     'maxDate'       => '',
+    'minTime'       => '',
+    'maxTime'       => '',
     'locale'        => 'fr',
     'enableTime'    => false,
     'dateFormat'    => ODDateTimePicker::DATETIMEPICKER_DATEFR,
     'time_24hr'     => false,
     'noCalendar'    => false,
+    'inline'        => false,
 
     'resources' => [
         'css'		=> [

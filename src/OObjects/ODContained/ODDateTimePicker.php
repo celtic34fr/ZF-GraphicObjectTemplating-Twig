@@ -22,11 +22,17 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getMaxDate()
  * ena24h()
  * enaAmPm()
+ * setMinTime($minTime = null)
+ * getMinTime()
+ * setMaxTime($maxTime = null)
+ * getMaxTime()
  * enaCalendar()
  * disCalendar()
  * enaDatPicker()
  * enaTimePicker()
  * enaDatTimePicker()
+ * enaInline()
+ * disInline()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -184,6 +190,38 @@ class ODDateTimePicker extends ODContained
         return $this;
     }
 
+    public function setMinTime($minTime = null)
+    {
+        $minTime    = (string) $minTime;
+        $properties = $this->getProperties();
+        if (empty($minTime)) { $minTime = '00:00'; }
+        $properties['minTime']  = $minTime;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMinTime()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('minTime', $properties) ? $properties['minTime'] : false;
+    }
+
+    public function setMaxTime($maxTime = null)
+    {
+        $maxTime    = (string) $maxTime;
+        $properties = $this->getProperties();
+        if (empty($maxTime)) { $maxTime = '23:59'; }
+        $properties['maxTime']  = $maxTime;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMaxTime()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('maxTime', $properties) ? $properties['maxTime'] : false;
+    }
+
     public function enaCalendar()
     {
         $properties = $this->getProperties();
@@ -223,6 +261,22 @@ class ODDateTimePicker extends ODContained
         $properties = $this->getProperties();
         $properties['noCalendar'] = false;
         $properties['enableTime'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaInline()
+    {
+        $properties = $this->getProperties();
+        $properties['inline'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disInline()
+    {
+        $properties = $this->getProperties();
+        $properties['inline'] = false;
         $this->setProperties($properties);
         return $this;
     }
@@ -267,22 +321,6 @@ class ODDateTimePicker extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('viewMode', $properties) ? $properties['viewMode'] : false;
-    }
-
-    public function enaInline()
-    {
-        $properties = $this->getProperties();
-        $properties['inline'] = true;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function disInline()
-    {
-        $properties = $this->getProperties();
-        $properties['inline'] = false;
-        $this->setProperties($properties);
-        return $this;
     }
 
 
