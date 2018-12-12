@@ -8,16 +8,13 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * Class ODDateTimePicker
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
- * setFormatDate($formatDate = self::DATETIMEPICKER_LONGTIME)
- * getFormatDate()
- * setDefaultDate($defaultDate = null)
- * getDefaultDate($formatDate = null)
  * setLocale($locale = 'fr')
  * getLocale()
- * setViewMode($viewMode = self::DATETIMEPICKER_VMODEDAYS)
- * getViewMode()
- * enaInline()
- * disInline()
+ * enaTime()
+ * disTime()
+ * statusTime()
+ * setDateFormat($dateFormat = self::DATETIMEPICKER_DATEFR)
+ * getDateFormat()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -26,12 +23,7 @@ use GraphicObjectTemplating\OObjects\ODContained;
 
 class ODDateTimePicker extends ODContained
 {
-    const DATETIMEPICKER_LONGTIME           = 'LT';
-    const DATETIMEPICKER_LONGTIMESECOND     = 'LTS';
-    const DATETIMEPICKER_DATE               = 'L';
-    const DATETIMEPICKER_FULLDATE           = 'LL';
-    const DATETIMEPICKER_FULLDATETIME       = 'LLL';
-    const DATETIMEPICKER_DWEEKFULLDATETIME  = 'LLLL';
+    const DATETIMEPICKER_DATEFR             = "d/m/Y";
 
     const DATETIMEPICKER_VMODEDAYS          = 'days';
     const DATETIMEPICKER_VMODEDECADES       = 'decades';
@@ -55,20 +47,59 @@ class ODDateTimePicker extends ODContained
         return $this;
     }
 
-    public function setFormatDate($formatDate = self::DATETIMEPICKER_LONGTIME)
+    public function setLocale($locale = 'fr')
     {
-        $formatDate = (string) $formatDate;
+        $locale = (string) $locale;
         $properties = $this->getProperties();
-        $properties['formatDate'] = $formatDate;
+        $properties['locale'] = $locale;
         $this->setProperties($properties);
         return $this;
     }
 
-    public function getFormatDate()
+    public function getLocale()
     {
         $properties = $this->getProperties();
-        return array_key_exists('formatDate', $properties) ? $properties['formatDate'] : false;
+        return array_key_exists('locale', $properties) ? $properties['locale'] : false;
     }
+
+    public function enaTime()
+    {
+        $properties = $this->getProperties();
+        $properties['enableTime'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disTime()
+    {
+        $properties = $this->getProperties();
+        $properties['enableTime'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function statusTime()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('enableTime', $properties) ? $properties['enableTime'] : false;
+    }
+
+    public function setDateFormat($dateFormat = self::DATETIMEPICKER_DATEFR)
+    {
+        $dateFormat = (string) $dateFormat;
+        $properties = $this->getProperties();
+        $properties['dateFormat'] = $dateFormat;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getDateFormat()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('dateFormat', $properties) ? $properties['dateFormat'] : false;
+    }
+
+
 
     public function setDefaultDate($defaultDate = null)
     {
@@ -91,21 +122,6 @@ class ODDateTimePicker extends ODContained
             return (new \DateTime($date))->format($formatDate);
         }
         return false;
-    }
-
-    public function setLocale($locale = 'fr')
-    {
-        $locale = (string) $locale;
-        $properties = $this->getProperties();
-        $properties['locale'] = $locale;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function getLocale()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('locale', $properties) ? $properties['locale'] : false;
     }
 
     public function setViewMode($viewMode = self::DATETIMEPICKER_VMODEDAYS)

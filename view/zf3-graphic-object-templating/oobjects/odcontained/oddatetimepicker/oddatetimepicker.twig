@@ -1,30 +1,25 @@
 {# template de l'objet ODDateTimePicker #}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}"
-    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
+     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
     {% if objet.state == false %} checkbox disabled {% endif %}"
-    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
-    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
-    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-    {% if objet.state == false %} disabled {% endif %}
+        {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+        {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+        {% if objet.state == false %} disabled {% endif %}
 >
-    <div class="form-group">
-        <div class='input-group date' id='{{ objet.id }}DateTimePicker'>
-            <input type='text' class="form-control" />
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-        </div>
-    </div>
+    <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." readonly="readonly">
 
-    <script type="text/javascript">
-        $(function () {
-            $('#{{ objet.id }}DateTimePicker').datetimepicker({
-                locale: '{{ objet.locale }}',
-                format: '{{ objet.formatDate }}',
-                defaultDate: "{{ objet.defaultDate }}",
-                viewMode: '{{ objet.viewMode }}',
-                inline: '{{ objet.inline ? 'true' : 'false' }}',
+    {% if objet.locale != 'en' %}
+    <script type="text/javascript" src="/graphicobjecttemplating/oobjects/odcontained/oddatetimepicker/flatpickr/l10n/{{ objet.locale }}.js"></script>
+    {% endif %}
+
+    <script>
+        $(document).ready(function (e) {
+            flatpickr('#{{ objet.id }} input', {
+                "locale": "{{ objet.locale }}",
+                "enableTime": "{{ objet.enableTime ? 'true' : 'false' }}",
+                "dateFormat": "{{ objet.dateFormat }}",
             });
         });
     </script>

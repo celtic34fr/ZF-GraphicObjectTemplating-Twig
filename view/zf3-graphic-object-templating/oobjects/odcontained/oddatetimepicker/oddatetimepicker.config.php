@@ -9,21 +9,16 @@ return [
 
     'minDate'       => '',
     'maxDate'       => '',
-    'formatDate'    => ODDateTimePicker::DATETIMEPICKER_LONGTIME,
-    'defaultDate'   => (new \DateTime())->format('m/d/Y'),
-    'viewMode'      => ODDateTimePicker::DATETIMEPICKER_VMODEDAYS,
-    'inline'        => false,
-    'disabledDates' => [],
     'locale'        => 'fr',
+    'enableTime'    => false,
+    'dateFormat'    => ODDateTimePicker::DATETIMEPICKER_DATEFR,
 
     'resources' => [
         'css'		=> [
-            'bootstrap-datetimepicker.css' => 'css/bootstrap-datetimepicker.css',
-            'bootstrap-datetimepicker-standalone.css' => 'css/bootstrap-datetimepicker-standalone.css',
+            'flatpickr.css' => 'flatpickr/flatpickr.css'
         ],
         'js'		=> [
-            'moment.js' => 'js/moment.js',
-            'bootstrap-datetimepicker.js' => 'js/bootstrap-datetimepicker.js',
+            'flatpickr.js'  => 'flatpickr/flatpickr.js',
         ],
     ],
 ];
