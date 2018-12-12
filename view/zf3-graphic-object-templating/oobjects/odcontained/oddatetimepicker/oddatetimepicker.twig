@@ -19,6 +19,7 @@
             flatpickr('#{{ objet.id }} input', {
                 "locale": "{{ objet.locale }}",
                 "enableTime": "{{ objet.enableTime ? 'true' : 'false' }}",
+                "enableSeconds": "{{ objet.enableSeconds ? 'true' : 'false' }}",
                 "dateFormat": "{{ objet.dateFormat }}",
             {% if objet.minDate is not empty %}
                 "minDate": "{{ objet.minDate }}",
@@ -34,7 +35,8 @@
             {% endif %}
                 "time_24hr": "{{ objet.time_24hr ? 'true' : 'false' }}",
                 "noCalendar": "{{ objet.noCalendar ? 'true' : 'false' }}",
-                "inline": "{{ objet.inline? 'true' : 'false' }}"
+                "inline": "{{ objet.inline ? 'true' : 'false' }}",
+                "mode": "{{ objet.mode  }}"
             });
         });
     </script>

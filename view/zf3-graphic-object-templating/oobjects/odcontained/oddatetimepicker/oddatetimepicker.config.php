@@ -13,10 +13,14 @@ return [
     'maxTime'       => '',
     'locale'        => 'fr',
     'enableTime'    => false,
+    'enableSeconds' => false,
     'dateFormat'    => ODDateTimePicker::DATETIMEPICKER_DATEFR,
     'time_24hr'     => false,
     'noCalendar'    => false,
     'inline'        => false,
+    'altInput'      => false,
+    'altFormat'     => 'F j, Y',
+    'mode'          => ODDateTimePicker::DATETIMEPICKER_MODESINGLE,
 
     'resources' => [
         'css'		=> [

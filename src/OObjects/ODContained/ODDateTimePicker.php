@@ -13,6 +13,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getLocale()
  * enaTime()
  * disTime()
+ * enaSecond()
+ * disSecond()
  * statusTime()
  * setDateFormat($dateFormat = self::DATETIMEPICKER_DATEFR)
  * getDateFormat()
@@ -33,6 +35,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * enaDatTimePicker()
  * enaInline()
  * disInline()
+ * enaAltFormat($altFormat = 'F j, Y')
+ * disAltFormat()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -45,12 +49,17 @@ class ODDateTimePicker extends ODContained
 
     const DATETIMEPICKER_AUJOURDHUI         = "today";
 
+    const DATETIMEPICKER_MODESINGLE         = 'single';
+    const DATETIMEPICKER_MODEMULTIPLE       = "multiple";
+    const DATETIMEPICKER_MODERANGE          = "range";
+
     const DATETIMEPICKER_VMODEDAYS          = 'days';
     const DATETIMEPICKER_VMODEDECADES       = 'decades';
     const DATETIMEPICKER_VMODEYEARS         = 'years';
     const DATETIMEPICKER_VMODEMONTHS        = 'months';
 
     private $const_viewMode;
+    private $const_mode;
 
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/oddatetimepicker/oddatetimepicker.config.php");
@@ -94,6 +103,22 @@ class ODDateTimePicker extends ODContained
     {
         $properties = $this->getProperties();
         $properties['enableTime'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaSeconds()
+    {
+        $properties = $this->getProperties();
+        $properties['enableSeconds'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disSeconds()
+    {
+        $properties = $this->getProperties();
+        $properties['enableSeconds'] = false;
         $this->setProperties($properties);
         return $this;
     }
@@ -280,6 +305,65 @@ class ODDateTimePicker extends ODContained
         $this->setProperties($properties);
         return $this;
     }
+
+    public function enaAltFormat($altFormat = 'F j, Y')
+    {
+        $altFormat  = (string) $altFormat;
+        $proerties  = $this->getProperties();
+        $properties['altInpuit'] = true;
+        $properties['altFormat'] = $altFormat;
+        $this->setProperties($proerties);
+        return $this;
+    }
+
+    public function disAltFormat()
+    {
+        $proerties  = $this->getProperties();
+        $properties['altInpuit'] = false;
+        $properties['altFormat'] = '';
+        $this->setProperties($proerties);
+        return $this;
+    }
+
+    public function setMode($mode = self::DATETIMEPICKER_MODESINGLE)
+    {
+        $mode = (string) $mode;
+        $modes  = $this->getModeConstants();
+        if (!in_array($mode, $modes)) { $mode = self::DATETIMEPICKER_MODESINGLE; }
+        $proerties  = $this->getProperties();
+        $proerties['mode']  = $mode;
+        $this->setProperties($proerties);
+        return $this;
+    }
+
+    public function getMode()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('mode', $properties) ? $properties['mode'] : false;
+    }
+
+
+    private function getModeConstants()
+    {
+        $retour = [];
+        if (empty($this->const_mode)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'DATETIMEPICKER_MODE');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_mode = $retour;
+        } else {
+            $retour = $this->const_mode;
+        }
+        return $retour;
+    }
+
+
+
+
 
 
 
