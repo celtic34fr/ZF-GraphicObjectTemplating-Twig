@@ -20,6 +20,12 @@
                 "locale": "{{ objet.locale }}",
                 "enableTime": "{{ objet.enableTime ? 'true' : 'false' }}",
                 "dateFormat": "{{ objet.dateFormat }}",
+            {% if objet.minDate is not empty %}
+                "minDate": "{{ objet.minDate }}",
+            {% endif %}
+            {% if objet.maxDate is not empty %}
+                "maxDate": "{{ objet.maxDate }}",
+            {% endif %}
             });
         });
     </script>

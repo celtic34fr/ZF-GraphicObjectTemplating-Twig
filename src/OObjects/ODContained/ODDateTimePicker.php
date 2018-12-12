@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use DateTime;
 use GraphicObjectTemplating\OObjects\ODContained;
 
 /**
@@ -15,6 +16,10 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * statusTime()
  * setDateFormat($dateFormat = self::DATETIMEPICKER_DATEFR)
  * getDateFormat()
+ * setMinDate($minDate = null) date à null = aujourd'hui
+ * getMinDate()
+ * setMaxDate($maxDate = null) date à null = aujourd'hui
+ * getMaxDate()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -24,6 +29,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
 class ODDateTimePicker extends ODContained
 {
     const DATETIMEPICKER_DATEFR             = "d/m/Y";
+
+    const DATETIMEPICKER_AUJOURDHUI         = "today";
 
     const DATETIMEPICKER_VMODEDAYS          = 'days';
     const DATETIMEPICKER_VMODEDECADES       = 'decades';
@@ -89,6 +96,19 @@ class ODDateTimePicker extends ODContained
         $dateFormat = (string) $dateFormat;
         $properties = $this->getProperties();
         $properties['dateFormat'] = $dateFormat;
+
+        /** traitement de date minimale et/ou maximale */
+        $minDate    = $properties['minDate'];
+        $maxDate    = $properties['maxDate'];
+        if (!empty($minDate) && $minDate != self::DATETIMEPICKER_AUJOURDHUI) {
+            $date = new DateTime($minDate);
+            $properties['minDate'] = $date->format($dateFormat);
+        }
+        if (!empty($maxDate) && $maxDate != self::DATETIMEPICKER_AUJOURDHUI) {
+            $date = new DateTime($maxDate);
+            $properties['maxDate'] = $date->format($dateFormat);
+        }
+
         $this->setProperties($properties);
         return $this;
     }
@@ -99,6 +119,47 @@ class ODDateTimePicker extends ODContained
         return array_key_exists('dateFormat', $properties) ? $properties['dateFormat'] : false;
     }
 
+    public function setMinDate($minDate = null)
+    {
+        $minDate    = (string) $minDate;
+        $properties = $this->getProperties();
+        if (empty($minDate)) { $minDate = self::DATETIMEPICKER_AUJOURDHUI; }
+        if ($minDate != self::DATETIMEPICKER_AUJOURDHUI) {
+            $date = new DateTime($minDate);
+            $dateFormat = $properties['dateFormat'];
+            $minDate    = $date->format($dateFormat);
+        }
+        $properties['minDate']  = $minDate;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMinDate()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('minDate', $properties) ? $properties['minDate'] : false;
+    }
+
+    public function setMaxDate($maxDate = null)
+    {
+        $maxDate    = (string) $maxDate;
+        $properties = $this->getProperties();
+        if (empty($maxDate)) { $maxDate = self::DATETIMEPICKER_AUJOURDHUI; }
+        if ($maxDate != self::DATETIMEPICKER_AUJOURDHUI) {
+            $date = new DateTime($maxDate);
+            $dateFormat = $properties['dateFormat'];
+            $maxDate    = $date->format($dateFormat);
+        }
+        $properties['maxDate']  = $maxDate;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMaxDate()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('maxDate', $properties) ? $properties['maxDate'] : false;
+    }
 
 
     public function setDefaultDate($defaultDate = null)
