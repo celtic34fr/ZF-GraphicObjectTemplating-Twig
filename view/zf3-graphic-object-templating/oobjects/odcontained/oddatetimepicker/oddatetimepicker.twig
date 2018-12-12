@@ -26,6 +26,8 @@
             {% if objet.maxDate is not empty %}
                 "maxDate": "{{ objet.maxDate }}",
             {% endif %}
+                "time_24hr": "{{ objet.time_24hr ? 'true' : 'false' }}",
+                "noCalendar": "{{ objet.noCalendar ? 'true' : 'false' }}"
             });
         });
     </script>

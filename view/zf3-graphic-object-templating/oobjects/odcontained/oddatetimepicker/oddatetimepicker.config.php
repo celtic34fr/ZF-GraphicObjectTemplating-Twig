@@ -12,6 +12,8 @@ return [
     'locale'        => 'fr',
     'enableTime'    => false,
     'dateFormat'    => ODDateTimePicker::DATETIMEPICKER_DATEFR,
+    'time_24hr'     => false,
+    'noCalendar'    => false,
 
     'resources' => [
         'css'		=> [

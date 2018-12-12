@@ -20,6 +20,13 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getMinDate()
  * setMaxDate($maxDate = null) date à null = aujourd'hui
  * getMaxDate()
+ * ena24h()
+ * enaAmPm()
+ * enaCalendar()
+ * disCalendar()
+ * enaDatPicker()
+ * enaTimePicker()
+ * enaDatTimePicker()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -160,6 +167,66 @@ class ODDateTimePicker extends ODContained
         $properties = $this->getProperties();
         return array_key_exists('maxDate', $properties) ? $properties['maxDate'] : false;
     }
+
+    public function ena24h()
+    {
+        $properties = $this->getProperties();
+        $properties['time_24hr'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaAmPm()
+    {
+        $properties = $this->getProperties();
+        $properties['time_24hr'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaCalendar()
+    {
+        $properties = $this->getProperties();
+        $properties['noCalendar'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disCalendar()
+    {
+        $properties = $this->getProperties();
+        $properties['noCalendar'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDatePicker()
+    {
+        $properties = $this->getProperties();
+        $properties['noCalendar'] = false;
+        $properties['enableTime'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaTimePicker()
+    {
+        $properties = $this->getProperties();
+        $properties['noCalendar'] = true;
+        $properties['enableTime'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDateTimePicker()
+    {
+        $properties = $this->getProperties();
+        $properties['noCalendar'] = false;
+        $properties['enableTime'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
 
 
     public function setDefaultDate($defaultDate = null)
