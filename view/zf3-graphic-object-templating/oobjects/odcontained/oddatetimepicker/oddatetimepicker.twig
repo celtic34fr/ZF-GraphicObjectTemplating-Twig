@@ -7,7 +7,10 @@
         {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
         {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
         {% if objet.state == false %} disabled {% endif %}
+        {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
+    {{ dump(objet.event) }}
+
     <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." readonly="readonly">
 
     {% if objet.locale != 'en' %}
@@ -16,7 +19,7 @@
 
     <script>
         $(document).ready(function (e) {
-            flatpickr('#{{ objet.id }} input', {
+            $('#{{ objet.id }} input').flatpickr({
                 "locale": "{{ objet.locale }}",
                 "enableTime": "{{ objet.enableTime ? 'true' : 'false' }}",
                 "enableSeconds": "{{ objet.enableSeconds ? 'true' : 'false' }}",
@@ -33,10 +36,19 @@
             {% if objet.maxTime is not empty %}
                 "maxTime": "{{ objet.maxTime }}",
             {% endif %}
+            {% if objet.defaultDate is not empty %}
+                "defaultDate": "{{ objet.defaultDate}}",
+            {% endif %}
                 "time_24hr": "{{ objet.time_24hr ? 'true' : 'false' }}",
                 "noCalendar": "{{ objet.noCalendar ? 'true' : 'false' }}",
                 "inline": "{{ objet.inline ? 'true' : 'false' }}",
-                "mode": "{{ objet.mode  }}"
+                "mode": "{{ objet.mode  }}",
+            {% if arraykeyexists('change', objet.event) %}
+                onChange: function(dateObj, dateStr, instance, e) {
+                    let chps = "id={{ objet.id }}&value='"+dateStr+"&evt='change'&obj='OUI'";
+                    invokeAjax(chps, '{{ objet.id }}', 'change', e);
+                },
+            {% endif %}
             });
         });
     </script>

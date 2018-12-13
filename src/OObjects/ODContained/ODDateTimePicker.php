@@ -37,6 +37,12 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * disInline()
  * enaAltFormat($altFormat = 'F j, Y')
  * disAltFormat()
+ * evtChange($class, $method, $stopEvent = false)
+ *                          déclaration et paramétrage de l'évènement onChange sur la zone de saisie
+ * getChange()              récupération des paramètres de l'évènement onChange sur la zone de saisie
+ * disChange()              suppression / déactivation de l'évènement onChange sur la zone de saisie
+ * setDefaultDate($defaultDate = null)
+ * getDefaultDate()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -53,12 +59,6 @@ class ODDateTimePicker extends ODContained
     const DATETIMEPICKER_MODEMULTIPLE       = "multiple";
     const DATETIMEPICKER_MODERANGE          = "range";
 
-    const DATETIMEPICKER_VMODEDAYS          = 'days';
-    const DATETIMEPICKER_VMODEDECADES       = 'decades';
-    const DATETIMEPICKER_VMODEYEARS         = 'years';
-    const DATETIMEPICKER_VMODEMONTHS        = 'months';
-
-    private $const_viewMode;
     private $const_mode;
 
     public function __construct($id) {
@@ -136,8 +136,9 @@ class ODDateTimePicker extends ODContained
         $properties['dateFormat'] = $dateFormat;
 
         /** traitement de date minimale et/ou maximale */
-        $minDate    = $properties['minDate'];
-        $maxDate    = $properties['maxDate'];
+        $minDate        = $properties['minDate'];
+        $maxDate        = $properties['maxDate'];
+        $defaultDate    = $properties['defaultDate'];
         if (!empty($minDate) && $minDate != self::DATETIMEPICKER_AUJOURDHUI) {
             $date = new DateTime($minDate);
             $properties['minDate'] = $date->format($dateFormat);
@@ -145,6 +146,10 @@ class ODDateTimePicker extends ODContained
         if (!empty($maxDate) && $maxDate != self::DATETIMEPICKER_AUJOURDHUI) {
             $date = new DateTime($maxDate);
             $properties['maxDate'] = $date->format($dateFormat);
+        }
+        if (!empty($defaultDate)) {
+            $date = new DateTime($defaultDate);
+            $properties['defaultDate'] = $date->format($dateFormat);
         }
 
         $this->setProperties($properties);
@@ -342,6 +347,45 @@ class ODDateTimePicker extends ODContained
         return array_key_exists('mode', $properties) ? $properties['mode'] : false;
     }
 
+    public function evtChange($class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('change', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    public function getChange()
+    {
+        return $this->getEvent('change');
+    }
+
+    public function disChange()
+    {
+        return $this->disEvent('change');
+
+    }
+
+
+    public function setDefaultDate($defaultDate = null)
+    {
+        if (empty($defaultDate)) { $defaultDate = (new DateTime())->format('Y-m-d'); }
+        $defaultDate = (string) $defaultDate;
+
+        $date = new DateTime($defaultDate);
+        $properties = $this->getProperties();
+        $dateFormat = $properties['dateFormat'];
+        $properties['defaultDate'] = $date->format($dateFormat);
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getDefaultDate()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('defaultDate', $properties) ? $properties['defaultDate'] : false;
+    }
+
 
     private function getModeConstants()
     {
@@ -357,71 +401,6 @@ class ODDateTimePicker extends ODContained
             $this->const_mode = $retour;
         } else {
             $retour = $this->const_mode;
-        }
-        return $retour;
-    }
-
-
-
-
-
-
-
-    public function setDefaultDate($defaultDate = null)
-    {
-        if (empty($defaultDate)) { $defaultDate = (new \DateTime())->format('Y-m-d'); }
-        $defaultDate = (string) $defaultDate;
-
-        $date = new \DateTime($defaultDate);
-        $properties = $this->getProperties();
-        $properties['defaultDate'] = $date->format('m/d/Y');
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function getDefaultDate($formatDate = null)
-    {
-        $properties = $this->getProperties();
-        $date = array_key_exists('defaultDate', $properties) ? $properties['defaultDate'] : false;
-        if (empty($formatDate)) { $formatDate = 'm/d/Y'; }
-        if ($date) {
-            return (new \DateTime($date))->format($formatDate);
-        }
-        return false;
-    }
-
-    public function setViewMode($viewMode = self::DATETIMEPICKER_VMODEDAYS)
-    {
-        $viewModes  = $this->getViewModeConstants();
-        $viewMode   = (string) $viewMode;
-        if (!in_array($viewMode, $viewModes)) { $viewMode = self::DATETIMEPICKER_VMODEDAYS; }
-        $properties = $this->getProperties();
-        $properties['viewMode'] = $viewMode;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function getViewMode()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('viewMode', $properties) ? $properties['viewMode'] : false;
-    }
-
-
-    private function getViewModeConstants()
-    {
-        $retour = [];
-        if (empty($this->const_viewMode)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'DATETIMEPICKER_VMODE');
-                if ($pos !== false) {
-                    $retour[$key] = $constant;
-                }
-            }
-            $this->const_viewMode = $retour;
-        } else {
-            $retour = $this->const_viewMode;
         }
         return $retour;
     }

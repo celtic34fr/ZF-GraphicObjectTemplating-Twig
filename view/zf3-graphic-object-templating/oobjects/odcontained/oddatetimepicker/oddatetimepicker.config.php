@@ -21,6 +21,7 @@ return [
     'altInput'      => false,
     'altFormat'     => 'F j, Y',
     'mode'          => ODDateTimePicker::DATETIMEPICKER_MODESINGLE,
+    'defaultDate'   => '',
 
     'resources' => [
         'css'		=> [

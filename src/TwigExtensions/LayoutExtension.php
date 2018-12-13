@@ -9,6 +9,30 @@ use Twig_Filter;
 use Twig_Function;
 use Twig_Test;
 
+/**
+ * Class LayoutExtension
+ * @package GraphicObjectTemplating\TwigExtensions
+ *
+ * fonctions :
+ * -----------
+ * getclass         : retourne la classe associé à l'objet
+ * gettype          : retourne le type de variable
+ * arrayexception   : restitue le tableau d'exception Php gé,néré par une erreur
+ * substr           : sous découpage d'une chaîne de caractères
+ * strpos           : restitue la position d'uncaractère ou sous chaîne dans chaîne de caractères
+ * instring         : précise l'existance d'un caractère ou sous chaîne ou non dans une chaîne de caractères
+ * arraykeyexist    : recherche l'existance d'une clé d'accès dans un tableau
+ *
+ * tests :
+ * -------
+ * instanceof       : valide ou non que l'obvjet est une instance d'une classe
+ * typeof           : valide ou non que l'objet (variable) est d'un type précis
+ *
+ * filtres :
+ * ---------
+ * update           : met à jour ou complète un tableau
+ * ksort            : réalise un ksort sur un tableau avant de le restituer
+ */
 class LayoutExtension extends \Twig_Extension
 {
 
@@ -21,6 +45,7 @@ class LayoutExtension extends \Twig_Extension
             new Twig_Function('substr', array($this, 'twigFunction_subString'), array('is_safe' => array('html'))),
             new Twig_Function('strpos', array($this, 'twigFunction_strPos'), array('is_safe' => array('html'))),
             new Twig_Function('instring', array($this, 'twigFunction_inString'), array('is_safe' => array('html'))),
+            new Twig_Function('arraykeyexists', [$this, 'twigFunction_arrayKeyExists']),
         );
     }
 
@@ -212,5 +237,10 @@ class LayoutExtension extends \Twig_Extension
             if (array_key_exists($key, $arr1)) $arr1[$key] = $value;
         }
         return $arr1;
+    }
+
+    public function twigFunction_arrayKeyExists($key, $array)
+    {
+        return array_key_exists($key, $array);
     }
 }
