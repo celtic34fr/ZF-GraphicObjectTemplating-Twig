@@ -45,7 +45,7 @@
                 "mode": "{{ objet.mode  }}",
             {% if arraykeyexists('change', objet.event) %}
                 onChange: function(dateObj, dateStr, instance, e) {
-                    let chps = "id={{ objet.id }}&value='"+dateStr+"&evt='change'&obj='OUI'";
+                    let chps = "id={{ objet.id }}&value='"+dateStr+"&event='change'&obj='OUI'";
                     invokeAjax(chps, '{{ objet.id }}', 'change', e);
                 },
             {% endif %}
