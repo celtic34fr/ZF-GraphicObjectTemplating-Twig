@@ -16,6 +16,16 @@
         class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." readonly="readonly"
         {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
     >
+    {% if objet.btnClear %}
+        <style>
+            #{{ objet.id }} .boutton.clear {
+                font-size: 1em;
+                position: absolute;
+                right: 15px;
+            }
+        </style>
+        <button class="boutton clear" tabindex="-1" type="button"><span class="fa fa-times"></span></button>
+    {% endif %}
 
     {% if objet.locale != 'en' %}
     <script type="text/javascript" src="/graphicobjecttemplating/oobjects/odcontained/oddatetimepicker/flatpickr/l10n/{{ objet.locale }}.js"></script>
@@ -57,6 +67,12 @@
                 },
             {% endif %}
             });
+
+            {% if objet.btnClear %}
+            $('#{{ objet.id }} .boutton.clear').on('click', function(){
+                $(this).parent().find('input').val('').trigger('change');
+            });
+            {% endif %}
         });
     </script>
 </div>

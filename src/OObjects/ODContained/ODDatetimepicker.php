@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use DateTime;
 use GraphicObjectTemplating\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\OObject;
 
 /**
  * Class ODDatetimepicker
@@ -49,10 +50,11 @@ use GraphicObjectTemplating\OObjects\ODContained;
  *                          fixe la taille du label par rapport à la zone de saisie
  * getLabelWidthBT()
  * getInputWidthBT()
+ * enaClear()
+ * disClear()
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
- * retourUpdMinDate($id, $minDate)
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -172,13 +174,13 @@ class ODDatetimepicker extends ODContained
         return array_key_exists('dateFormat', $properties) ? $properties['dateFormat'] : false;
     }
 
-    public function setMinDate($minDate = null)
+    public function setMinDate($minDate = null, $format = null)
     {
         $minDate    = (string) $minDate;
         $properties = $this->getProperties();
         if (empty($minDate)) { $minDate = self::DATETIMEPICKER_AUJOURDHUI; }
         if ($minDate != self::DATETIMEPICKER_AUJOURDHUI) {
-            $date = new DateTime($minDate);
+            $date = DateTime::createFromFormat($format, $minDate);
             $dateFormat = $properties['dateFormat'];
             $minDate    = $date->format($dateFormat);
         }
@@ -193,13 +195,13 @@ class ODDatetimepicker extends ODContained
         return array_key_exists('minDate', $properties) ? $properties['minDate'] : false;
     }
 
-    public function setMaxDate($maxDate = null)
+    public function setMaxDate($maxDate = null, $format = null)
     {
         $maxDate    = (string) $maxDate;
         $properties = $this->getProperties();
         if (empty($maxDate)) { $maxDate = self::DATETIMEPICKER_AUJOURDHUI; }
         if ($maxDate != self::DATETIMEPICKER_AUJOURDHUI) {
-            $date = new DateTime($maxDate);
+            $date = DateTime::createFromFormat($format, $maxDate);
             $dateFormat = $properties['dateFormat'];
             $maxDate    = $date->format($dateFormat);
         }
@@ -437,25 +439,25 @@ class ODDatetimepicker extends ODContained
         return array_key_exists('inputWidthBT', $properties) ? $properties['inputWidthBT'] : false;
     }
 
+    public function enaClear()
+    {
+        $properties = $this->getProperties();
+        $properties['btnClear'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disClear()
+    {
+        $properties = $this->getProperties();
+        $properties['btnClear'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
-
-    public function retourUpdMinDate($minDate)
-    {
-        $idObj  = $this->getId();
-        $code   = '$("#'.$idObj.' input").flatpickr({ "minDate": "'.$minDate.'"});';
-
-        return [OObject::formatRetour($idObj, $idObj, 'exec', $code)];
-    }
-
-    public function retourUpdMaxDate($maxDate)
-    {
-        $idObj  = $this->getId();
-        $code   = '$("#'.$idObj.' input").flatpickr({ "maxDate": "'.$maxDate.'"});';
-
-        return [OObject::formatRetour($idObj, $idObj, 'exec', $code)];
-    }
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *

@@ -25,6 +25,7 @@ return [
     'label'         => '',
     'labelWidthBT'  => '',
     'inputWidthBT'  => '',
+    'btnClear'      => false,
 
     'resources' => [
         'css'		=> [
