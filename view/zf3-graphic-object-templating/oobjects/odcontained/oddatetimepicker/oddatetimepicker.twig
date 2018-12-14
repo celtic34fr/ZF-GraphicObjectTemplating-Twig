@@ -71,6 +71,8 @@
             {% if objet.btnClear %}
             $('#{{ objet.id }} .boutton.clear').on('click', function(){
                 $(this).parent().find('input').val('').trigger('change');
+                let chps = "id={{ objet.id }}&value=''&event='clear'&obj='OUI'";
+                invokeAjax(chps, '{{ objet.id }}', 'clear', e);
             });
             {% endif %}
         });

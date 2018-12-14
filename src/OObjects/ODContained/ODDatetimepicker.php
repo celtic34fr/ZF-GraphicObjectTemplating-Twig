@@ -5,6 +5,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 use DateTime;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class ODDatetimepicker
@@ -83,6 +84,8 @@ class ODDatetimepicker extends ODContained
             if (!is_array($width) || empty($width)) $this->setWidthBT(12);
             $this->enable();
         }
+
+        $this->setEvent('clear', self::class, 'evtClearValue');
 
         $this->saveProperties();
         return $this;
@@ -458,6 +461,18 @@ class ODDatetimepicker extends ODContained
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
+
+    public function evtClearValue(ServiceManager $sm, array $params)
+    {
+        $sessionObjects = OObject::validateSession();
+        /** @var ODDatetimepicker $objet */
+        $objet          = OObject::buildObject($params['id'], $sessionObjects);
+        $objet->setValue('');
+        $objet->saveProperties();
+        $idObj          = $objet->getId();
+
+        return [OObject::formatRetour($idObj, $idObj, 'update')];
+    }
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *

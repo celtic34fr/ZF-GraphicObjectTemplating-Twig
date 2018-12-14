@@ -1125,7 +1125,11 @@ class OObject
 
             switch (true) {
                 case (class_exists($class)) :
-                    $obj = new $class();
+                    if ($class != $properties['className']) {
+                        $obj = new $class();
+                    } else {
+                        $obj = $this;
+                    }
                     if (method_exists($obj, $method)) {
                         $evtDef['class']        = $class;
                         $evtDef['method']       = $method;

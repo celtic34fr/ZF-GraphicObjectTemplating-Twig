@@ -63,7 +63,11 @@ class MainController extends AbstractActionController
                             break;
                         default:
                             $event      = $callingObj->getEvent($params['event']);
-                            $object     = $this->buildObject($event['class'], $sessionObj);
+                            if ($event['class'] != $callingObj->getClassName()) {
+                                $object     = $this->buildObject($event['class'], $sessionObj);
+                            } else {
+                                $object     = $callingObj;
+                            }
                             $objMethod  = $event['method'];
 
                             // traitement en cas de formulaire
