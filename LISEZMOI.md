@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Ce module vous aidera à construire des interfaces utilisateurs (UI) à parti d’objets, en utilisant le moteur de rendu de page TWIG. Cette version ne fonctionne qu’avec les versions 2.5+ et 3.0+ de Zend Framework (testé pour un projet 3.0+).
+Ce module vous aidera à construire des interfaces utilisateurs (UI) à partir d’objets, en utilisant le moteur de rendu de page TWIG. Cette version ne fonctionne qu’avec les versions 2.5+ et 3.0+ de Zend Framework (testé pour un projet 3.0+).
 
 ## Avant toute installation ##
 
@@ -37,7 +37,7 @@ Dans le dossier *public* de votre projet, créez un répertoire lié au réperto
     cd public
     ln -s ../vendor/celtic34fr/zf-graphic-object-templating-twig/public graphicobjecttemplating
 
-Dans un environnement **Windows** utiliser seulement **cmd.exe** pour lancer la commande à exécuter en tant qu'administrateur, dans le répertoire public du projet :
+Dans un environnement **Windows** utiliser seulement **cmd.exe** pour lancer la commande à exécuter en tant qu'administrateur, dans le répertoire *public* du projet :
 
     cd public
     mklink /D graphicobjecttemplating ..\vendor\celtic34fr\zf-graphic-object-templating\public
@@ -45,19 +45,19 @@ Dans un environnement **Windows** utiliser seulement **cmd.exe** pour lancer la 
 Copier le fichier **zfGraphicObjectTemplting.local.php.dist** que vous trouverez dans le répertoire *config* de **GraphicObjectTemplating** sans l'extension **.dist** dans le répertoire *config/autoload* de votre projet.
 Ceci activera tous les paramètres de bases nécessaires au bon fonctionnement de **GraphicObjectTemplating**.
 
-Avec l'utilisation du *moteur de rendu de page TWIG*, vous devrez remplacer quelques modèles et paramètres. Vous pouvez trouver des modèles de remplacement dans le répertoire *view/twigtemplates* du module **GraphicObjectTemplating** utilisable pour votre projet :
+Avec l'utilisation du *moteur de rendu de page TWIG*, vous devrez remplacer quelques modèles et paramètres. Vous pouvez trouver des modèles de remplacement dans le répertoire *view/twigtemplates* du module **GraphicObjectTemplating** utilisables pour votre projet :
 
 * dans le répertoire *application/index*, vous avez le modèle *index.twig* à l'identique à celui d'un projet de base *index.phtml*,
 * dans le répertoire *error*, vous avez les modèles *index.twig* and *404.twig* pour remplacer ceux du répertoire *error* de votre projet, *index.phtml* et *404.phtml*,
-* dans le répertoire *layout*, vous trouverez une adaptation du modèle original *layout.phtml*, *layout.twig* utilisant les facilités fournies par le moteur Twig.
+* dans le répertoire *layout*, vous trouverez une adaptation du modèle original *layout.phtml*, *layout.twig* utilisant les facilités fournies par le moteur *Twig*.
 
 Avec ces modèles, vous obtiendrez le même comportement qu’avec un projet standard **Zend Framework 3.0**. Quelques extensions au moteur *TWIG* ont été développées afin de reproduire et implémenter les mêmes mécanismes que ceux d’un projet **Zend Framework 3** n’utilisant pas le moteur *TWIG*.
 
 Ceci n'est qu'une base pour vos développements que vous pouvez modifier et adapter à votre convenance. Le modèle *layout.twig* fourni, fonctionne avec la mise en place de bloc *TWIG*. Dans ce dernier, différentes variables et blocs sont définis pour insérer vos données :
 * la variable *local* permet de définir la langue supportée par la page, comme 'fr' ou 'en',
 * le bloc *Hmeta* fourni  la définition de base des metas de la page, que vous pouvez modifier ou compléter,
-* le bloc *Hstyle* formalise les fichiers de feuilles de styles nécessaires au bon fonctionnement de **GraphicObjectTemplating**,
-* le bloc *Hscript* formalmise les fichiers JavaScript nécessaires au bon fonctionnement de **GraphicObjectTemplating**,
+* le bloc *Hstyle* formalise l'insertion des fichiers de feuilles de styles nécessaires au bon fonctionnement de **GraphicObjectTemplating**,
+* le bloc *Hscript* formalise l'insertion des fichiers JavaScript nécessaires au bon fonctionnement de **GraphicObjectTemplating**,
 * le bloc *Bcontent* contient ou contiendra si vous le modifiez, la structure de votre page, le bloc *content* contiendra la partie principale de votre page (exclus la barre de navigation et le pied de page),
 * le bloc *Bscript* est là afin de vous permettre d'ajouter du code et/ou des fichiers JavaScript, changés dans le corps de la page.
 
@@ -70,8 +70,8 @@ En premier, installez, seulement en mode développement, les extensions nécessa
     composer.phar require --dev zendframework/zend-developer-tools ^1.1.0
     composer.phar require --dev san/san-session-toolbar ^2.0.2
 
-Comme **GraphicObjectTemplating** utilise les sessions *PHP*, nous devons avoir un moyen pour les consulter, voire supprimer leur contenu au besion. Pour cela, et seulement en mode de développement, il a été installé l'extension *san/san-session-toolbar*, en même temps que **GraphicObjectTemplating**.
-Pour pouvoir utiliser cette extension, ajoutez les lignes suivantes dans le fichier *config/developement.config.php* de votre projet :
+Comme **GraphicObjectTemplating** utilise les sessions *PHP*, nous devons avoir un moyen pour les consulter, voire supprimer leur contenu au besion. Pour cela, et seulement en mode de développement, il a été installé en plus de la barre de développement, l'extension *san/san-session-toolbar*, en même temps que **GraphicObjectTemplating**.
+Pour pouvoir utiliser ces extensions, ajoutez les lignes suivantes dans le fichier *config/developement.config.php* de votre projet :
 
     ...
     'modules' => [
