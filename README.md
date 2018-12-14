@@ -2,69 +2,68 @@
 
 ## Introduction
 
-This module help you for building UI object oriented and interacting with it, using TWIG Templating Engine. This version work only on Zend Framework 2.5+ and 3.0+ (tested only with 3.0+ project)
+This module will help you to build interactive object oriented UI elements using the TWIG Templating Engine. This version only works with Zend Framework versions 2.5+ and 3.0+, however it has only been tested with Zend version 3.0+.
 
-## Before any Installation ##
+## Before Installation ##
 
 * You must have a Zend Framework 3 project,
-* during its installation, you will need to have installed :
-    * the developer toolbar (in order to debug your project),
-    * caching support (useful in production by the use of Twig),
-    * JSON de/serialization support,
-    * sessions support.
+* with the following dependencies:
+    * developer toolbar (in order to debug your project),
+    * support for caching (useful in productions using TWIG),
+    * support for JSON de/serialization,
+    * support for sessions.
 
-optionally, you can also install
-* i18n support (if you need),
+optionally, you can also install:
+* i18n support (if needed),
 * the official MVC plugins, including PRG support, identity, and flash messages (if you use Authentication),
 
 ## Installation using Composer
 
-For installing **GraphicObjectTemplating** use the following command :
+For to install **GraphicObjectTemplating** use the following command:
 
     composer.phar require celtic34fr/zf-graphic-object-templating-twig dev-master
 
 In order to use the installed module, you need to configure your application as follows:
 
-First, in **config/modules.config.php** file, add the following lines :
+First, in **config/modules.config.php** file, add the following lines:
 
-    ..., 
+    ...,
     'ZfcTwig',
     'GraphicObjectTemplating',
     ...,
 
-In public folder of your project, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following command executed on Linux :
+In your project's public folder, create a linked directory with the **vendor/celtic34fr/zf-graphic-object-templating-twig/public** directory named **graphicobjecttemplating** with the following commands:
+If you're on Linux, run the following command:
 
-    cd public
     ln -s ../vendor/celtic34fr/zf-graphic-object-templating-twig/public graphicobjecttemplating
 
-For Windows environment use only cmd.exe, the command exected as administrator in public folder became :
+If you're on Windows, run the following command as an administrator using cmd.exe in the public folder:
 
-    cd public
     mklink /D graphicobjecttemplating ..\vendor\celtic34fr\zf-graphic-object-templating\public
 
 Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** found in the config folder of **GraphicObjectTemplating** without **.dist** extension in *config/autoload* folder of your project.
-They will activate all the basics needed parameters by **GraphicObjectTemplating**.
+They will activate all the basics needed parameters by **GraphicObjectTemplating**. 
 
-By using *Twig Templating Engine*, you have to replace somes templates and parameters. You can found some templates in view/twigtemplates for your project :
-* in *application/index* folder you have the template *index.twig* the same as index.phtml in a standard project,
-* in *error* folder you have *index.twig* and *404.twig* to replace in *error* folder of your project *index.phtml* and *404.phtml*,
-* in *layout* folder is an adaptation of the original *layout.phtml* in *layout.twig* using Twig facilities.
+By using the *Twig Templating Engine*, you have to replace some templates and parameters. You can find templates in view/twigtemplates for your project:
+* in the *application/index* folder, you have the *index.twig* template, which is the same as index.phtml in a standard project,
+* in the *error* folder, you'll find the *index.twig* and *404.twig* files. Use them to replace the *index.phtml* and *404.phtml* files in your project's *error* folder,
+* in the *layout* folder you'll find the *layout.twig* file, which is an adaptation of the original *layout.phtml* file, to be used with the Twig templating engine.
 
-With these models, you will have the same behavior as with an original Zend Framework 3 project. Some extensions to Twig have been programmed to reproduce the same mechanisms implemented in a Zend Framework 3 project that does not use Twig for rendering pages.
+One this is done, you will experience the same behavior as an original Zend Framework 3 project. Some extensions to Twig have been made to copy the same mechanics as a Zend Framework 3 project that do not originally use Twig for rendering pages.
 
-This is only a base for your development that you can modify and adapt at your convenience. The current *layout.twig* template works with the Twig block mode. In this, it is defined severals variables and blocks to insert different datas :
-* the variable *local* allows to define the language of the page, as 'fr' or 'en',
-* the *Hmeta* block defines the basic metas, which you can change or complete,
-* the *Hstyle* block sets the stylesheets files needed to run **GraphicObjectTemplating** in any page,
-* the *Hscript* block sets the necessaries JavaScript files  to run **GraphicObjectTemplating** in any page,
-* the *Bcontent* block contains or will contain if you changed it, the structure of your page, the *content* blocks contains the main part of the page (excluding navigation bar and footer),
+This is only a foundation for your development, you can modify/adapt it to fit your needs. The current *layout.twig* template works with the Twig block mode. In this, there are several variables and blocks that are defined, so you can input your own data:
+* the variable *local* allows you to define the language of the page, for instance; 'fr' or 'en',
+* the *Hmeta* block defines the basic metas, which you can either change or complete,
+* the *Hstyle* block defines the stylesheets needed to run **GraphicObjectTemplating** in any page,
+* the *Hscript* block defines the JavaScript files needed to run **GraphicObjectTemplating** in any page,
+* the *Bcontent* block contains or will contain, the structure of your page, the *content* blocks contain the main part of the page (excluding the navigation bar and footer),
 * the *Bscript* block is there to allow you to add JavaScript code or files, loaded in the body of the page.
 
-Finaly, before developping you application, you must make some changes in module/Application/config/module.config.php file. In the bloc *template_map* you must change all the file name extension from *.phtml* to *.twig*. Don't forget to dump autoload before controlling if all is in order to work.
+Finally, before developing your application, you must make some changes in the module/Application/config/module.config.php file. In the *template_map* block you must change all the file name extension from *.phtml* to *.twig*. Don't forget to dump autoload before controlling if all is in order to work.
 
 ## Development mode
 
-First, install all the needed package just for dev environment :
+First, install all the needed packages for your dev environment:
 
     composer.phar require --dev zendframework/zend-developer-tools ^1.1.0
     composer.phar require --dev san/san-session-toolbar ^2.0.2
@@ -82,4 +81,3 @@ To use this extension, add the following lines to the config/development.config.
     ...
 
 ## Running Unit Tests
-
