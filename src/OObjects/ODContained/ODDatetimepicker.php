@@ -56,6 +56,7 @@ use Zend\ServiceManager\ServiceManager;
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
+ * evtClearValue(ServiceManager $sm, array $params)
  *
  * méthodes privées de la classe
  * -----------------------------

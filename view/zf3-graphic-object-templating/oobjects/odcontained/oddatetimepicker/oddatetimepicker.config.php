@@ -33,6 +33,7 @@ return [
         ],
         'js'		=> [
             'flatpickr.js'  => 'flatpickr/flatpickr.js',
+            'oddatetimepicker.js'  => 'flatpickr/oddatetimepicker.js',
         ],
     ],
 ];
