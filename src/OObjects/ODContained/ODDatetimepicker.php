@@ -6,7 +6,7 @@ use DateTime;
 use GraphicObjectTemplating\OObjects\ODContained;
 
 /**
- * Class ODDateTimePicker
+ * Class ODDatetimepicker
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * setLocale($locale = 'fr')
@@ -43,13 +43,23 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * disChange()              suppression / déactivation de l'évènement onChange sur la zone de saisie
  * setDefaultDate($defaultDate = null)
  * getDefaultDate()
+ * setLabel($label)
+ * getLabel()
+ * setLabelWidthBT($labelWidthBT)
+ *                          fixe la taille du label par rapport à la zone de saisie
+ * getLabelWidthBT()
+ * getInputWidthBT()
+ *
+ * méthodes de gestion de retour de callback
+ * -----------------------------------------
+ * retourUpdMinDate($id, $minDate)
  *
  * méthodes privées de la classe
  * -----------------------------
- * getViewModeConstants()
+ * getModeConstants()
  */
 
-class ODDateTimePicker extends ODContained
+class ODDatetimepicker extends ODContained
 {
     const DATETIMEPICKER_DATEFR             = "d/m/Y";
 
@@ -386,6 +396,70 @@ class ODDateTimePicker extends ODContained
         return array_key_exists('defaultDate', $properties) ? $properties['defaultDate'] : false;
     }
 
+    public function setLabel($label)
+    {
+        $label = (string) $label;
+        $properties = $this->getProperties();
+        $properties['label'] = $label;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getLabel()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('label', $properties) ? $properties['label'] : false;
+    }
+
+    public function setLabelWidthBT($labelWidthBT)
+    {
+        if (!empty($labelWidthBT)) {
+            $widthLabChkBT  = self::formatLabelBT($labelWidthBT);
+
+            $properties     = $this->getProperties();
+            $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+            $properties['inputWidthBT'] = $widthLabChkBT['inputWidthBT'];
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getLabelWidthBT()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
+    }
+
+    public function getInputWidthBT()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('inputWidthBT', $properties) ? $properties['inputWidthBT'] : false;
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion de retour de callback                                                         *
+     * *************************************************************************************************** */
+
+    public function retourUpdMinDate($minDate)
+    {
+        $idObj  = $this->getId();
+        $code   = '$("#'.$idObj.' input").flatpickr({ "minDate": "'.$minDate.'"});';
+
+        return [OObject::formatRetour($idObj, $idObj, 'exec', $code)];
+    }
+
+    public function retourUpdMaxDate($maxDate)
+    {
+        $idObj  = $this->getId();
+        $code   = '$("#'.$idObj.' input").flatpickr({ "maxDate": "'.$maxDate.'"});';
+
+        return [OObject::formatRetour($idObj, $idObj, 'exec', $code)];
+    }
+
+    /** **************************************************************************************************
+     * méthodes privées de la classe                                                                     *
+     * *************************************************************************************************** */
 
     private function getModeConstants()
     {

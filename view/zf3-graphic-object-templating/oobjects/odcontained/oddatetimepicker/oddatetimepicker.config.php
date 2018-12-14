@@ -1,6 +1,6 @@
 <?php
 
-use GraphicObjectTemplating\OObjects\ODContained\ODDateTimePicker;
+use GraphicObjectTemplating\OObjects\ODContained\ODDatetimepicker;
 
 return [
     'object'        => 'oddatetimepicker',
@@ -14,14 +14,17 @@ return [
     'locale'        => 'fr',
     'enableTime'    => false,
     'enableSeconds' => false,
-    'dateFormat'    => ODDateTimePicker::DATETIMEPICKER_DATEFR,
+    'dateFormat'    => ODDatetimepicker::DATETIMEPICKER_DATEFR,
     'time_24hr'     => false,
     'noCalendar'    => false,
     'inline'        => false,
     'altInput'      => false,
     'altFormat'     => 'F j, Y',
-    'mode'          => ODDateTimePicker::DATETIMEPICKER_MODESINGLE,
+    'mode'          => ODDatetimepicker::DATETIMEPICKER_MODESINGLE,
     'defaultDate'   => '',
+    'label'         => '',
+    'labelWidthBT'  => '',
+    'inputWidthBT'  => '',
 
     'resources' => [
         'css'		=> [

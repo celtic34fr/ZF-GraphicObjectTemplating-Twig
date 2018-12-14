@@ -1,6 +1,6 @@
 <?php
 
-use GraphicObjectTemplating\OObjects\ODContained\ODDateTimePicker;
+use GraphicObjectTemplating\OObjects\ODContained\ODDatetimepicker;
 
 return [
     'object'        => 'oddatetimepicker',
@@ -9,9 +9,9 @@ return [
 
     'minDate'       => '',
     'maxDate'       => '',
-    'formatDate'    => ODDateTimePicker::DATETIMEPICKER_LONGTIME,
+    'formatDate'    => ODDatetimepicker::DATETIMEPICKER_LONGTIME,
     'defaultDate'   => (new \DateTime())->format('m/d/Y'),
-    'viewMode'      => ODDateTimePicker::DATETIMEPICKER_VMODEDAYS,
+    'viewMode'      => ODDatetimepicker::DATETIMEPICKER_VMODEDAYS,
     'inline'        => false,
     'disabledDates' => [],
     'locale'        => 'fr',

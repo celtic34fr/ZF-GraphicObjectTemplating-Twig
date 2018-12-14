@@ -1,4 +1,4 @@
-{# template de l'objet ODDateTimePicker #}
+{# template de l'objet ODDatetimepicker #}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}"
      class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
@@ -9,9 +9,13 @@
         {% if objet.state == false %} disabled {% endif %}
         {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
-    {{ dump(objet.event) }}
-
-    <input class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." readonly="readonly">
+    <label for="{{ objet.id }}Input"
+            {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+    >{{ objet.label }}</label>
+    <input id="{{ objet.id }}Input"
+        class="flatpickr flatpickr-input active" type="text" placeholder="Select Date.." readonly="readonly"
+        {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    >
 
     {% if objet.locale != 'en' %}
     <script type="text/javascript" src="/graphicobjecttemplating/oobjects/odcontained/oddatetimepicker/flatpickr/l10n/{{ objet.locale }}.js"></script>
@@ -19,6 +23,9 @@
 
     <script>
         $(document).ready(function (e) {
+            setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
+            setBtClasses("#{{ objet.id }} input", $("#{{ objet.id }} input").data("widthbt"));
+
             $('#{{ objet.id }} input').flatpickr({
                 "locale": "{{ objet.locale }}",
                 "enableTime": "{{ objet.enableTime ? 'true' : 'false' }}",
