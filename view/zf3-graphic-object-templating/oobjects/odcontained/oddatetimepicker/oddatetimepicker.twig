@@ -36,6 +36,14 @@
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} input", $("#{{ objet.id }} input").data("widthbt"));
 
+            {% if objet.btnClear %}
+            $('#{{ objet.id }} .boutton.clear').on('click', function(){
+                $(this).parent().find('input').val('').trigger('change');
+                let chps = "id={{ objet.id }}&value=''&event='clear'&obj='OUI'";
+                invokeAjax(chps, '{{ objet.id }}', 'clear', e);
+            });
+            {% endif %}
+
             $('#{{ objet.id }} input').flatpickr({
                 "locale": "{{ objet.locale }}",
                 "enableTime": "{{ objet.enableTime ? 'true' : 'false' }}",
@@ -67,14 +75,6 @@
                 },
             {% endif %}
             });
-
-            {% if objet.btnClear %}
-            $('#{{ objet.id }} .boutton.clear').on('click', function(){
-                $(this).parent().find('input').val('').trigger('change');
-                let chps = "id={{ objet.id }}&value=''&event='clear'&obj='OUI'";
-                invokeAjax(chps, '{{ objet.id }}', 'clear', e);
-            });
-            {% endif %}
         });
     </script>
 </div>
