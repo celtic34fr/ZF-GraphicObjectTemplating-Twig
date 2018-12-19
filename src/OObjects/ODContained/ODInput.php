@@ -52,9 +52,10 @@ use GraphicObjectTemplating\OObjects\OObject;
  */
 class ODInput extends ODContained
 {
-    const INPUTTYPE_HIDDEN = 'hidden';
-    const INPUTTYPE_TEXT = 'text';
-    const INPUTTYPE_PASSWORD = 'password';
+    const INPUTTYPE_HIDDEN      = 'hidden';
+    const INPUTTYPE_TEXT        = 'text';
+    const INPUTTYPE_PASSWORD    = 'password';
+    const INPUTTYP_NUMBER       = 'number';
 
     private $const_type;
 
