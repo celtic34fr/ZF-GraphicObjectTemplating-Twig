@@ -34,10 +34,11 @@
     </div>
     {% endif %}
 
-    <table id="{{ objet.id }}_table"  style="width: 100% !important;" class="lno0 cno0 {{ objClass }}" data-lno="0" data-cno="0">
+    <table id="{{ objet.id }}_table"  style="width: 100% !important;" class="lno0 cno0 {{ objClass }} {{ objet.tableClasses }}" data-lno="0" data-cno="0">
         {% if objet.title is not empty %}
             <caption>{{ objet.title }}</caption>
         {% endif %}
+        {% if objet.header %}
         <thead class="{{ objet.id }}">
             <tr class="line">
                 {% for col in objet.cols %}
@@ -47,6 +48,7 @@
                 {% endfor %}
             </tr>
         </thead>
+        {% endif %}
         <tbody class="{{ objet.id }}">
             <tr class="line nodata {% if objet.datas|length > 0 %}hide{% endif %}">
                 <td colspan="{{ objet.cols|length }}" style="text-align: center">No data to show</td>

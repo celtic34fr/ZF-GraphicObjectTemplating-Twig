@@ -25,6 +25,8 @@ return [
     'noPage'        => 0,
     'maxPage'       => 0,
     'isIdRow'       => false,
+    'header'        => true,
+    'tableClasses'  => '',
 
     'objLength'     => '',
     'objNavbar'     => '',

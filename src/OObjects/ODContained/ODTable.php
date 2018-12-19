@@ -86,6 +86,12 @@ use Zend\Session\Container;
  * getLength()
  * setStart(int $start = 0) fixe l'index du premier élement de la page par rapport à length et noPage
  * getStart()
+ * buildNavbar()
+ * showHeader()             affiche les entête de colonnes comme définie avec initColsHead()
+ * hideHeader()             supprime l'affichage des entête de colonne (tableau sans titre de colonne)
+ * addTableClass($class)
+ * getTableClasses()
+ * setTableClasses($classes)
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -1031,6 +1037,52 @@ class ODTable extends ODContained
             return $this;
         }
         return false;
+    }
+
+    public function showHeader()
+    {
+        $properties = $this->getProperties();
+        $properties['header'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideHeader()
+    {
+        $properties = $this->getProperties();
+        $properties['header'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function addTableClass($class = null)
+    {
+        if (strlen($class) > 0) {
+            $properties = $this->getProperties();
+            $tableClasses = $properties['tableClasses'];
+            if (!strpos($tableClasses, ' '.$class.' ')) {
+                $tableClasses .= ' '.$class.' ';
+                $properties['tableClasses'] = $tableClasses;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    public function getTableClasses()
+    {
+        $properties = $this->getProperties();
+        return (array_key_exists('tableClasses', $properties) ? $properties['tableClasses'] : false);
+    }
+
+    public function setTableClasses($tableClasses)
+    {
+        $tableClasses = (string) $tableClasses;
+        $properties = $this->getProperties();
+        $properties['tableClasses'] = $tableClasses;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************

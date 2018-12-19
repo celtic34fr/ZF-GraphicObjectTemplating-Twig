@@ -1,7 +1,7 @@
 <?php
 
-use GraphicObjectTemplating\Twig\Extension\LayoutExtension;
-use GraphicObjectTemplating\Twig\Extension\SwitchExtension;
+use GraphicObjectTemplating\TwigExtensions\LayoutExtension;
+use GraphicObjectTemplating\TwigExtensions\SwitchExtension;
 
 return [
     'gotParameters' => [
