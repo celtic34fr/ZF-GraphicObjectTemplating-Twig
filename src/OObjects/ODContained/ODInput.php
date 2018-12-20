@@ -26,8 +26,12 @@ use GraphicObjectTemplating\OObjects\OObject;
  *                          fixe la taille du label par rapport à la zone de saisie
  * getLabelWidthBT()
  * getInputWidthBT()
+ * enaDispBySide()          disposition label à coté zone de saisie
+ * enaDispUnder()           disposition label, et dessous zone de saisie
+ *                  ATTENTION : un setLabelWidthBT après ces 2 dernières commandes annule l'effet attendu pour exécuter
+ *                  la commande demandée (setLabelWidthBT)
  * setErrMessage($errMessage)
- *                          affectation du message d'eerue à afficher
+ *                          affectation du message d'erreur à afficher
  * getErrMessage()
  * setIcon($icon)           affectation de la classe CSS pour affichage d'une icône à gauche du label (glyphicon, ...)
  * getIcon()
@@ -184,6 +188,27 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('inputWidthBT', $properties) ? $properties['inputWidthBT'] : false;
+    }
+
+    public function enaDispBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['labelWidthBT'] = '';
+        $properties['inputWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDispUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['inputWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function setErrMessage($errMessage)
