@@ -16,6 +16,6 @@ return array(
 
     'resources' => [
         'css' => [],
-        'js'  => ['odtextarea.js' => 'js/odtestarea.js',],
+        'js'  => ['odtextarea.js' => 'js/odtextarea.js',],
     ],
 );
