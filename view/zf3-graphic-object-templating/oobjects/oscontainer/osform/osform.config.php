@@ -6,7 +6,7 @@ return [
 
     'fields'            => [],
     'origine'           => [],
-    'btnControle'       => [],
+    'btnControls'       => [],
     'submitEnter'       => true,
     'validateMethod'    => [
         'classObj'  => '',
