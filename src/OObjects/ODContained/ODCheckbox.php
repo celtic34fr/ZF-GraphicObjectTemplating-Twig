@@ -16,6 +16,10 @@ use GraphicObjectTemplating\Service\ZF3GotServices;
  * setLabelWidthBT($labelWidthBT)
  * getLabelWidthBT()
  * getCheckboxWidthBT()
+ * enaDispBySide()          disposition label à coté de la case à cocher
+ * enaDispUnder()           disposition label, et dessous de la case à cocher
+ *                  ATTENTION : un setLabelWidthBT après ces 2 dernières commandes annule l'effet attendu pour exécuter
+ *                  la commande demandée (setLabelWidthBT)
  * addOption($value, $libel, $type = self::CHECKTYPE_DEFAULT, $state = self::STATE_ENABLE)
  * rmOption($value)
  * setOption($value, $libel, $type = self::CHECKTYPE_DEFAULT, $state = self::STATE_ENABLE)
@@ -130,6 +134,48 @@ class ODCheckbox extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('inputWidthBT', $properties) ? $properties['inputWidthBT'] : false;
+    }
+
+    public function enaDispBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['labelWidthBT'] = '';
+        $properties['inputWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDispUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['inputWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaCheckBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['checkLabelWidthBT'] = '';
+        $properties['checkInputWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaCheckUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['checkLabelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['checkInputWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function addOption($value, $libel, $type = self::CHECKTYPE_DEFAULT, $state = self::STATE_ENABLE)

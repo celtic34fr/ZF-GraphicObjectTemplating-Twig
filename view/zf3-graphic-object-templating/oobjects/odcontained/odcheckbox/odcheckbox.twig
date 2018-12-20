@@ -23,34 +23,40 @@
         }
     </style>
 
-    {% if objet.label is not empty or objet.options|length > 1 %}
-    <label {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}>
+    {% if objet.label is not empty %}
+    <label {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+        style="float: left;">
         {{ objet.label }}
     </label>
     {% endif %}
-    <div class="checkboxes {% if objet.options|length == 1 %}col-lg-12 col-md-12 col-sm-12 col-xs-12{% endif %}"
-        {% if objet.inputWidthBT is not empty and objet.label is not empty and objet.options|length > 1 %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    <div class="checkboxes" style="float: left;"
+    {% if objet.label is not empty %}
+        {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    {% endif %}
     >
         {% for options in objet.options %}
             <div class="{{ options.type }} {% if objet.options|length == 1 %}col-lg-12 col-md-12 col-sm-12 col-xs-12{% endif %}">
                 {% if objet.placement != "right" %}
                     <label for="{{ objet.id ~ loop.index0 }}"
                     {% if objet.options|length == 1 and objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
-                    >
+                    {% if objet.options|length > 1 and objet.checkLabelWidthBT is not empty %} data-widthbt="{{ objet.checkLabelWidthBT }}" {% endif %}
+                    style="text-align: center">
                         {{ options.libel }}
                     </label>
                 {% endif %}
                 <input id="{{ objet.id ~ loop.index0 }}" type="checkbox" value="{{ options.value }}"
                 {% if options.state == false or objet.state == false %} disabled {% endif %}
                 {% if options.check == 'check' %}checked {% endif %}
-                {% if objet.options|length == 1 and objet.inputWidthBT is not empty %} data-widthbt="WL1:WM1:WS1:WX1" {% endif %}
+                {% if objet.options|length == 1 and objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+                {% if objet.options|length > 1 and objet.checkInputWidthBT is not empty %} data-widthbt="{{ objet.checkInputWidthBT }}" {% endif %}
                 >
                 {% if objet.placement == "right" %}
-                <label for="{{ objet.id ~ loop.index0 }}"
-                {% if objet.options|length == 1 and objet.labelWidthBT is not empty %} data-widthbt="{{ labelWidthBT }}" {% endif %}
-                >
-                    {{ options.libel }}
-                </label>
+                    <label for="{{ objet.id ~ loop.index0 }}"
+                    {% if objet.options|length == 1 and objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+                    {% if objet.options|length > 1 and objet.checkLabelWidthBT is not empty %} data-widthbt="{{ objet.checkLabelWidthBT }}" {% endif %}
+                    style="text-align: center">
+                        {{ options.libel }}
+                    </label>
                 {% endif %}
             </div>
         {% endfor %}

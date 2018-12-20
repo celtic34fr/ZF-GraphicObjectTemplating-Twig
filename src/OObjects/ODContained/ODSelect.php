@@ -9,23 +9,32 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * @package GraphicObjectTemplating\Objects\ODContained
  *
  * addOption($value, $libel, $selected = false, $enable = true)
+ * setOption($value, $libel, $selected = false, $enable = true)
  * rmOption($value)
  * setOptions(array $options)
  * getOptions()
+ * getOption($valeur = null)
  * clearOptions()
  * enaOption($value)
  * disOption($value)
  * getStateOption($value)
  * setSelectedOption($value)
- * unsetSelecteOption($value)
- * getSelectedOption()
+ * unsetSelectedOption($value)
  * unselectAll()
+ * getSelectedOption()
  * isSelectedOption($value)
  * enaMultiple($number)
  * disMultiple()
  * isMultiple()
  * setLabel($label)
  * getLabel()
+ * setLabelWidthBT($labelWidthBT)
+ * getLabelWidthBT()
+ * getSelectWidthBT()
+ * enaDispBySide()          disposition label à coté zone de sélection
+ * enaDispUnder()           disposition label, et dessous zone de sélection
+ *                  ATTENTION : un setLabelWidthBT après ces 2 dernières commandes annule l'effet attendu pour exécuter
+ *                  la commande demandée (setLabelWidthBT)
  * setPlaceholder($placeholder)
  * getPlaceholder()
  * evtChange($class, $method, $stopEvent = false)
@@ -424,6 +433,27 @@ class ODSelect extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('selectWidthBT', $properties) ? $properties['selectWidthBT'] : false;
+    }
+
+    public function enaDispBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['labelWidthBT'] = '';
+        $properties['selectWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDispUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['selectWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function setPlaceholder($placeholder)

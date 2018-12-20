@@ -36,6 +36,10 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getLabel         : restitue le label, l'étiquette affectée à la zone de saisie
  * setLabelWidthBT  : attribut une largeur (Bootstrap Twitter) au label (tableau de valeur en rapport des 4 médias gérés)
  * getLabelWidthBT  : restitue la largeur (Bootstrap Twitter) du label (tableau de valeur en rapport des 4 médias gérés)
+ * enaDispBySide()  : disposition label à coté zone de saisie Textarea
+ * enaDispUnder()   : disposition label, et dessous zone de saisie Textarea
+ *                  ATTENTION : un setLabelWidthBT après ces 2 dernières commandes annule l'effet attendu pour exécuter
+ *                  la commande demandée (setLabelWidthBT)
  */
 class ODTextarea extends ODContained
 {
@@ -208,5 +212,26 @@ class ODTextarea extends ODContained
     {
         $properties                = $this->getProperties();
         return ((!empty($properties['labelWidthBT'])) ? $properties['labelWidthBT'] : false) ;
+    }
+
+    public function enaDispBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['labelWidthBT'] = '';
+        $properties['textareaWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDispUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['textareaWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
     }
 }
