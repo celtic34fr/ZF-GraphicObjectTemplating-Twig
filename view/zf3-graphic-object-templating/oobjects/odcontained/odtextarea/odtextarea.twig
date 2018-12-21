@@ -24,6 +24,7 @@
         {% if textareaClass is not empty %} class="{{ textareaClass }}" {% endif %}
         {% if objet.placeholder is not empty %} placeholder="{{ objet.placeholder }}" {% endif %}
         {% if objet.textareaWidthBT is not empty %} data-widthbt="{{ objet.textareaWidthBT }}" {% endif %}
+        {% if not objet.enable %} disabled {% endif %}
     >
         {{ objet.text | raw }}
     </textarea>
