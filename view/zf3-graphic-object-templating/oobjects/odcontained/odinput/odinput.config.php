@@ -9,6 +9,7 @@ return [
 
     'type'          => ODInput::INPUTTYPE_TEXT,
     'size'          => '',
+    'minlength'     => '',
     'maxlength'     => '',
     'label'         => '',
     'placeholder'   => '',

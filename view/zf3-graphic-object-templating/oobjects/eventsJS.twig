@@ -13,7 +13,19 @@
             {% default %}
                 let {{ objet.id }}DOM = $('#{{ objet.id }}');
                 let {{ objet.id }} = new {{ objet.object }}({{ objet.id }}DOM);
-                invokeAjax({{ objet.id }}.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
+                var valid = 'OK';
+                if (typeof {{ objet.id }}.validate === 'function') {
+                    valid = {{ objet.id }}.validate();
+                }
+                if (valid.substring(0,2) == 'OK') {
+                    $('#{{ objet.id }}').remove('has-error');
+                    $('#{{ objet.id }} span').removeClass('hidden').addClass('hidden');
+                    invokeAjax({{ objet.id }}.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
+                } else {
+                    $('#{{ objet.id }}').remove('has-error').addClass('has-error');
+                    $('#{{ objet.id }} span').removeClass('hidden');
+                    $('#{{ objet.id }} span').html(valid.substring(2));
+                }
             {% endswitch %}
             });
         {% endif %}

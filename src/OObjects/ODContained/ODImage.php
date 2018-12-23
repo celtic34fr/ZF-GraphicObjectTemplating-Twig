@@ -4,6 +4,21 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 
+/**
+ * Class ODImage
+ * @package GraphicObjectTemplating\OObjects\ODContained
+ *
+ * setUrl($url)
+ * getUrl()
+ * setAlt($alt)
+ * getAlt()
+ * setWidth($width)
+ * getWidth()
+ * setHeight($height)
+ * getHeight()
+ * evtClick($class, $method, $stopEvent = true)
+ * disClick()
+ */
 class ODImage extends ODContained
 {
     public function __construct($id) {

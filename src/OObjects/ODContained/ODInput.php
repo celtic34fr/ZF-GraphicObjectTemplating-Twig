@@ -15,6 +15,8 @@ use GraphicObjectTemplating\OObjects\OObject;
  * getType()
  * setSize($size)           affectation de la taille visible de la zone de saisie
  * getSize()
+ * setMinlength($minlength) affectation de la taille minimale de la zone de saisie
+ * getMinlength()
  * setMaxlength($maxlength) affectation de la taille maximale de la zone de saisie
  * getMaxlength()
  * setLabel($label)         affectation du texte affiché à droite de la zone de saisie
@@ -60,6 +62,7 @@ class ODInput extends ODContained
     const INPUTTYPE_TEXT        = 'text';
     const INPUTTYPE_PASSWORD    = 'password';
     const INPUTTYPE_NUMBER      = 'number';
+    const INPUTTYPE_EMAIL       = 'email';
 
     private $const_type;
 
@@ -116,16 +119,37 @@ class ODInput extends ODContained
         return array_key_exists('size', $properties) ? $properties['size'] : false;
     }
 
+    public function setMinlength($minlength)
+    {
+        $properties = $this->getProperties();
+        $maxlength  = (int) $properties['maxlength'];
+        $minlength = (int) $minlength;
+
+        if ($maxlength < $minlength) { return false; }
+
+        $properties['minlength'] = $minlength;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getMinlength()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('minlength', $properties) ? $properties['minlength'] : false;
+    }
+
     public function setMaxlength($maxlength)
     {
+        $properties = $this->getProperties();
+        $minlength  = (int) $properties['minlength'];
         $maxlength = (int) $maxlength;
-        if ($maxlength > 0) {
-            $properties = $this->getProperties();
-            $properties['maxlength'] = $maxlength;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
+
+        if ($maxlength < $minlength) { return false; }
+
+        $properties = $this->getProperties();
+        $properties['maxlength'] = $maxlength;
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function getMaxlength()

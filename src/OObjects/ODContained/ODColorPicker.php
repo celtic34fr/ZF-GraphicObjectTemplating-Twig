@@ -4,6 +4,20 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 
+/**
+ * Class ODColorPicker
+ * @package GraphicObjectTemplating\OObjects\ODContained
+ *
+ * setTitle($title = null)
+ * getTitle()
+ * setLabel($label)
+ * getLabel()
+ * setLabelWidthBT($labelWidthBT)
+ * getLabelWidthBT()
+ * evtChange($class, $method, $stopEvent = false)
+ * getChange()
+ * disChange()
+ */
 class ODColorPicker extends ODContained
 {
     public function __construct($id) {
