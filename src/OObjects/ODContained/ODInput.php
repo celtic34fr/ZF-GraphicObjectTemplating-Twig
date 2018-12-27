@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
+use phpDocumentor\Reflection\Types\Self_;
 
 /**
  * Class ODInput
@@ -51,6 +52,10 @@ use GraphicObjectTemplating\OObjects\OObject;
  * enaMask($mask)
  * disMask()
  * getMask()
+ * setValMax($valMax = 0)
+ * getValMax()
+ * setValMin($valMin = 0)
+ * getValMin()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -123,9 +128,10 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         $maxlength  = (int) $properties['maxlength'];
-        $minlength = (int) $minlength;
+        $minlength  = (int) $minlength;
+        $type       = $properties['typê'];
 
-        if ($maxlength < $minlength) { return false; }
+        if ($maxlength < $minlength || !in_array($type, [self::INPUTTYPE_TEXT, self::INPUTTYPE_PASSWORD])) { return false; }
 
         $properties['minlength'] = $minlength;
         $this->setProperties($properties);
@@ -142,9 +148,10 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         $minlength  = (int) $properties['minlength'];
-        $maxlength = (int) $maxlength;
+        $maxlength  = (int) $maxlength;
+        $type       = $properties['typê'];
 
-        if ($maxlength < $minlength) { return false; }
+        if ($maxlength < $minlength || !in_array($type, [self::INPUTTYPE_TEXT, self::INPUTTYPE_PASSWORD])) { return false; }
 
         $properties = $this->getProperties();
         $properties['maxlength'] = $maxlength;
@@ -330,6 +337,7 @@ class ODInput extends ODContained
         $mask = (string) $mask;
         if (!empty($mask)) {
             $properties = $this->getProperties();
+            $properties['type'] = self::INPUTTYPE_TEXT;
             $properties['mask'] = $mask;
             $this->setProperties($properties);
             return $this;
@@ -349,6 +357,50 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('mask', $properties) ? $properties['mask'] : false;
+    }
+
+    public function setValMax($valMax = 0)
+    {
+        $valMax = (int) $valMax;
+        $properties = $this->getProperties();
+        $valMin     = (int) $properties['valMin'];
+        $type       = $properties['type'];
+
+        if ($valMax >= $valMin && $type == self::INPUTTYPE_NUMBER) {
+            $properties['valMax'] = $valMax;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getValMax()
+    {
+        $properties = $this->getProperties();
+        $valmax     = array_key_exists('valMax', $properties) ? $properties['valMax'] : false;
+        return ($properties['type'] == self::INPUTTYPE_NUMBER) ? $valmax : false;
+    }
+
+    public function setValMin($valMin = 0)
+    {
+        $valMin = (int) $valMin;
+        $properties = $this->getProperties();
+        $valMax     = (int) $properties['valMax'];
+        $type       = $properties['type'];
+
+        if ($valMax >= $valMin && $type == self::INPUTTYPE_NUMBER) {
+            $properties['valMin'] = $valMin;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getValMin()
+    {
+        $properties = $this->getProperties();
+        $valmin     = array_key_exists('valMin', $properties) ? $properties['valMin'] : false;
+        return ($properties['type'] == self::INPUTTYPE_NUMBER) ? $valmin : false;
     }
 
     /** **************************************************************************************************

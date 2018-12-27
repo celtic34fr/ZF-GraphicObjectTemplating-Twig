@@ -17,6 +17,15 @@
     {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
     {% if objet.autoFocus %} autofocus {% endif %}
     class="form-control"
+    {% if objet.type == 'number' %}
+        {% if objet.valMin is defined and objet.valMin is not empy %}
+    data-valMin="{{ objet.valMin }}"
+        {% endif %}
+        {% if objet.valMax is defined and objet.valMax is not empy %}
+    data-valMax="{{ objet.valMax }}"
+        {% endif %}
+    {% endif %}
+    {% if objet.mask is not empty %}data-mask="{{ objet.mask }}"{% endif %}
     >
     <span class="help-block hidden">d</span>
 
@@ -24,7 +33,6 @@
         $(document).ready(function (e) {
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} input", $("#{{ objet.id }} input").data("widthbt"));
-
 
             {% if objet.mask is not empty %}
             $("#{{ objet.id }} input").mask("{{ objet.mask }}");

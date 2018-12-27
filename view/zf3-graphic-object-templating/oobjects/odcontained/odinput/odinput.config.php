@@ -19,6 +19,8 @@ return [
     'icon'          => '',
     'autoFocus'     => false,
     'mask'          => '',
+    'valMin'        => '',
+    'valMax'        => '',
 
     'resources' => [
         'js'		=> [
