@@ -18,10 +18,10 @@
     {% if objet.autoFocus %} autofocus {% endif %}
     class="form-control"
     {% if objet.type == 'number' %}
-        {% if objet.valMin is defined and objet.valMin is not empy %}
+        {% if objet.valMin is defined and objet.valMin is not empty %}
     data-valMin="{{ objet.valMin }}"
         {% endif %}
-        {% if objet.valMax is defined and objet.valMax is not empy %}
+        {% if objet.valMax is defined and objet.valMax is not empty %}
     data-valMax="{{ objet.valMax }}"
         {% endif %}
     {% endif %}
