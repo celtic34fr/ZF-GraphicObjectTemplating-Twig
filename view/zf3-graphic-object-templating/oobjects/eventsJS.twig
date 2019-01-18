@@ -17,7 +17,7 @@
                 if (typeof {{ objet.id }}.invalidate === 'function') {
                     invalid = {{ objet.id }}.invalidate();
                 }
-                if (valid.length == 0) {
+                if (invalid.length == 0) {
                     $('#{{ objet.id }}').remove('has-error');
                     $('#{{ objet.id }} span').removeClass('hidden').addClass('hidden');
                     invokeAjax({{ objet.id }}.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
