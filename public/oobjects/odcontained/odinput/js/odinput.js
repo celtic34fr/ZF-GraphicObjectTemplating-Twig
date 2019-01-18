@@ -21,6 +21,14 @@ odinput.prototype = {
         // méthode de validation / invalidation du champ ODInput
         // si retour un champ vide  = champ valide
         // sinon retourne le message d'erreur
+        //
+        // cette méthode présente le code de base pour les mêmes traitements codés dans le fichier JavaScript
+        // ./src/OObjects/ODContained/ODInput.php
+        // dans la méthode validateContent()
+        //
+        // TOUTE MODIFICATION DANS LES TRAITEMENTS CI-DESSOUS DEVRA ÊTRE IMPÉRATIVEMENT REPORTÉS DANS LE FICHIER JAVASCRIPT
+        // DONT LE NOM ET LE CHEMIN D'ACCÈS À ÉTÉ DONNÉ CI-AVANT POUR GARANTIR L'INTÉGRITÉ DE L'APPLICATION
+        //
         // ------------------------------------------------------
         var data    = this.value;
         var type    = this.type;

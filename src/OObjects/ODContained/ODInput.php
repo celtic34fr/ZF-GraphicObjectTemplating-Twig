@@ -56,6 +56,7 @@ use phpDocumentor\Reflection\Types\Self_;
  * getValMax()
  * setValMin($valMin = 0)
  * getValMin()
+ * validateContent();
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -141,7 +142,9 @@ class ODInput extends ODContained
     public function getMinlength()
     {
         $properties = $this->getProperties();
-        return array_key_exists('minlength', $properties) ? $properties['minlength'] : false;
+        $minLength  = array_key_exists('minlength', $properties) ? $properties['minlength'] : false;
+        if (!$minLength || empty($minLength)) { $minLength = -1; } else { $minLength = (int) $minLength; }
+        return $minLength;
     }
 
     public function setMaxlength($maxlength)
@@ -162,7 +165,9 @@ class ODInput extends ODContained
     public function getMaxlength()
     {
         $properties = $this->getProperties();
-        return array_key_exists('maxlength', $properties) ? $properties['maxlength'] : false;
+        $maxLength  = array_key_exists('maxlength', $properties) ? $properties['maxlength'] : false;
+        if (!$maxLength || empty($maxLength)) { $maxLength = -1; } else { $maxLength = (int) $maxLength; }
+        return $maxLength;
     }
 
     public function setLabel($label)
@@ -378,6 +383,7 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         $valmax     = array_key_exists('valMax', $properties) ? $properties['valMax'] : false;
+        if (!$valmax) { $valmax = -1; } else { $valmax = (int) $valmax; }
         return ($properties['type'] == self::INPUTTYPE_NUMBER) ? $valmax : false;
     }
 
@@ -400,12 +406,80 @@ class ODInput extends ODContained
     {
         $properties = $this->getProperties();
         $valmin     = array_key_exists('valMin', $properties) ? $properties['valMin'] : false;
+        if (!$valmin) { $valmin = -1; } else { $valmin = (int) $valmin; }
         return ($properties['type'] == self::INPUTTYPE_NUMBER) ? $valmin : false;
+    }
+
+    /** ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * méthode de validation / invalidation du champ ODInput
+     * si retour un champ vide  = champ valide
+     * sinon retourne le message d'erreur
+     *
+     * cette méthode reproduit les mêmes traitements que ceux codés dans le fichier JavaScript
+     * ./public/oobject/odcontained/odinput/js/odinput.js
+     * dans la méthode invalidate
+     *
+     * TOUTE MODIFICATION DANS LES TRAITEMENTS CI-DESSOUS DEVRA ÊTRE IMPÉRATIVEMENT REPORTÉS DANS LE FICHIER JAVASCRIPT
+     * DONT LE NOM ET LE CHEMIN D'ACCÈS À ÉTÉ DONNÉ CI-AVANT POUR GARANTIR L'INTÉGRITÉ DE L'APPLICATION
+     ** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+    public function validateContent()
+    {
+        $value  = $this->getValue();
+        $type   = $this->getType();
+        $retour = '';
+
+        switch ($type) {
+            case ODInput::INPUTTYPE_HIDDEN:
+                break;
+            case ODInput::INPUTTYPE_TEXT:
+                if (!empty($this->getMask())) { break; }
+
+                $minLength  = $this->getMinlength();
+                $maxLength  = $this->getMaxlength();
+                if ($minLength != -1 || $maxLength != -1) {
+                    // si tous 2 = -1 rien à faire, sinon test
+                    $length     = strlen($value);
+                    if (!($minLength <= $length && $length <= $maxLength)) {
+                        if ($minLength >= $length) {
+                            $retour = "Le champs doit comprendre $minLength caractères minimum";
+                        } else {
+                            $retour = "Le champs doit comprendre $maxLength caractères maximum";
+                        }
+                    }
+                }
+                break;
+            case ODInput::INPUTTYPE_NUMBER:
+                if (!is_null($value)) {
+                    $retour = 'Le champs doit être numérique seulement';
+                } else {
+                    $valMin = $this->getValMin();
+                    $valMax = $this->getValMax();
+                    if ($minLength != -1 || $maxLength != -1) {
+                        // si tous 2 = -1 rien à faire, sinon test
+                        $value = (int) $value;
+                        if ($value < $valMin) {
+                            $retour = "La valeur doit être au moins égale à $valMin";
+                        }
+                        if ($value > $valMax) {
+                            $retour = "La valeur doit être au maximum égale à $valMax";
+                        }
+                    }
+                }
+                break;
+            case ODInput::INPUTTYPE_EMAIL:
+                if (!preg_match('/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/', $value )) {
+                    $retour = 'Veuillez saisir une adresse courriel (email) valide';
+                }
+                break;
+            default:
+                $retour = 'Erreur inconnue';
+        }
+        return $retour;
     }
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
-     * *************************************************************************************************** */
+     * ************************************************************************************************* */
 
     private function getTypeConstants()
     {
