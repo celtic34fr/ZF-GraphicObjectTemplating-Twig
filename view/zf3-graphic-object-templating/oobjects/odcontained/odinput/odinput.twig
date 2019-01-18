@@ -16,7 +16,7 @@
     {% if objet.state == false %} disabled {% endif %}
     {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
     {% if objet.autoFocus %} autofocus {% endif %}
-    class="form-control"
+    class="form-control-got"
     {% if objet.type == 'number' %}
         {% if objet.valMin is defined and objet.valMin is not empty %}
     data-valMin="{{ objet.valMin }}"
