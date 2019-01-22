@@ -73,6 +73,23 @@ class OSContainer extends OObject
         return false;
     }
 
+
+    public function __isset($nameChild) {
+        $sessionObj = OObject::validateSession();
+        $objects    = $sessionObj->objects;
+        $properties = $this->getProperties();
+
+        if (!empty($properties['children'])) {
+            foreach ($properties['children'] as $idChild => $child) {
+                $childProperties = unserialize($objects[$idChild]);
+                if ($childProperties['name'] == $nameChild || $idChild = $nameChild) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public function getValue()
     {
         $properties = $this->getProperties();
