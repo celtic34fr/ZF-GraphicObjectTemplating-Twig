@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\OSContainer;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
+use GraphicObjectTemplating\OObjects\ODContained\ODSpan;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer;
 
@@ -279,6 +280,111 @@ class OSForm extends OSDiv
     }
 
     public function addBtn($name, $label, $icon,  $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
+    {
+        $name           = (string) $name;
+        $type           = (string) $type;
+        $types          = $this->getBtnConstants();
+        if (!in_array($type, $types)) { $type = self::OSFORMBTN_SUBMIT; }
+        $properties     = $this->getProperties();
+        $btnControls    = $properties['btnControls'] ?? [];
+        if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
+        $sessionObject  = self::validateSession();
+
+        if (sizeof($btnControls['ord']) < 4 && (!array_key_exists('ord', $btnControls) || !array_key_exists($ord, $btnControls['ord']))) {
+            if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {
+                return false;
+            }
+
+            if (sizeof($btnControls['ord']) == 0 && !self::existObject('formCtrls', $sessionObject)) {
+                // création de la séparation des boutons de controle du formulaire avec le reste du formulaire
+                $formCtrls = new ODSpan('formCtrls');
+                $formCtrls->setWidthBT(12);
+                $formCtrls->setClasses('formControls ospaddingV05');
+                $formCtrls->saveProperties();
+
+                $this->addChild($formCtrls, false);
+            }
+
+            // création du bouton proprement dite + ajout dans btnControls
+            $bouton = new ODButton($name.$this->getId());
+            $bouton->setLabel($label);
+            $bouton->setIcon($icon);
+            $bouton->setType($type);
+            $bouton->setNature($nature);
+            $bouton->setValue($value);
+            $bouton->setForm($this->getId());
+            if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
+            if ($type == ODButton::BUTTONTYPE_RESET && (empty($class) || empty($method))){
+                $bouton->evtClick('javascript:', 'resetFormDatas('.$this->getId().')', true);
+            } else {
+                $bouton->evtClick($class, $method, $stopEvent);
+            }
+            $bouton->saveProperties();
+            $btnControls['ord'][$ord]       = $bouton->getId();
+            $btnControls[$name] = [];
+            $btnControls[$name]['object']   = $bouton->getId();
+            $btnControls[$name]['ord']      = $ord;
+
+            // reprise des taille de boutons suit à ajout d'un
+            switch (sizeof($btnControls['ord'])) {
+                case 1:
+                    $widthBT[1] = "O1:W10";
+                    $widthBT[2] = '';
+                    break;
+                case 2:
+                    $widthBT[1] = "O1:W4";
+                    $widthBT[2] = 'O2:W4';
+                    break;
+                case 3:
+                    $widthBT[1] = "O1:W3";
+                    $widthBT[2] = 'O1:W3';
+                    break;
+                case 4:
+                    $widthBT[1] = "O1:W2";
+                    $widthBT[2] = 'O1:W2';
+                    break;
+            }
+
+            // modification de la taille des boutons sauvegardés en session + sauvegarde du tout
+            $objects    = $sessionObject->objects;
+            foreach ($btnControls['ord'] as $ordBtn => $btnID) {
+                $btnProperties = unserialize($objects[$btnID]);
+                $btnProperties['widthBT'] = self::formatBootstrap($widthBT[1 + ($ordBtn > 1)]);
+                $objects[$btnID]    = serialize($btnProperties);
+            }
+            $sessionObject->objects    = $objects;
+
+            // insertion du nouveau bouton à sa place
+            if (sizeof($btnControls['ord']) == 1) {
+                $this->addChild($bouton, false);
+            } else {
+                $btnAv  = $btnAp    = "";
+                for ($ind =1; $ind < 5; $ind++) {
+                    if (array_key_exists($ind, $btnControls['ord'])) {
+                        if ($ind < $ord) { $btnAp = $ind; }
+                        if ($ind > $ord) { $btnAv = $ind; }
+                    }
+                }
+                if (!empty($btnAv)) {
+                    $this->addChild($bouton, false, self::MODE_BEFORE, $btnControls['ord'][$btnAv]);
+                } elseif (!empty($btnAp)) {
+                    $this->addChild($bouton, false, self::MODE_AFTER, $btnControls['ord'][$btnAv]);
+                } else {
+                    $this->addChild($bouton, false);
+                }
+            }
+            $this->saveProperties();
+
+            // enregistrement des modification des contrôles du formulaire
+            $properties = $this->getProperties();
+            $properties['btnControls'] = $btnControls;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function addBtnOld($name, $label, $icon,  $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
         $name           = (string) $name;
         $type           = (string) $type;
