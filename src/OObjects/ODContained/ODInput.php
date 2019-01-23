@@ -130,7 +130,7 @@ class ODInput extends ODContained
         $properties = $this->getProperties();
         $maxlength  = (int) $properties['maxlength'];
         $minlength  = (int) $minlength;
-        $type       = $properties['typê'];
+        $type       = $properties['type'];
 
         if ($maxlength < $minlength || !in_array($type, [self::INPUTTYPE_TEXT, self::INPUTTYPE_PASSWORD])) { return false; }
 
@@ -152,7 +152,7 @@ class ODInput extends ODContained
         $properties = $this->getProperties();
         $minlength  = (int) $properties['minlength'];
         $maxlength  = (int) $maxlength;
-        $type       = $properties['typê'];
+        $type       = $properties['type'];
 
         if ($maxlength < $minlength || !in_array($type, [self::INPUTTYPE_TEXT, self::INPUTTYPE_PASSWORD])) { return false; }
 
