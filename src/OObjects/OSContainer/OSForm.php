@@ -358,7 +358,8 @@ class OSForm extends OSDiv
             if (sizeof($btnControls['ord']) == 1) {
                 $this->addChild($bouton, false);
             } else {
-                $btnAv  = $btnAp    = "";
+                $btnAv      = "";
+                $btnAp      = "";
                 for ($ind =1; $ind < 5; $ind++) {
                     if (array_key_exists($ind, $btnControls['ord'])) {
                         if ($ind < $ord) { $btnAp = $ind; }
@@ -368,7 +369,7 @@ class OSForm extends OSDiv
                 if (!empty($btnAv)) {
                     $this->addChild($bouton, false, self::MODE_BEFORE, $btnControls['ord'][$btnAv]);
                 } elseif (!empty($btnAp)) {
-                    $this->addChild($bouton, false, self::MODE_AFTER, $btnControls['ord'][$btnAv]);
+                    $this->addChild($bouton, false, self::MODE_AFTER, $btnControls['ord'][$btnAp]);
                 } else {
                     $this->addChild($bouton, false);
                 }
