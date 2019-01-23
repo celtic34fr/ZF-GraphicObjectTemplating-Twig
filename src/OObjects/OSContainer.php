@@ -116,8 +116,10 @@ class OSContainer extends OObject
     public function addChild(OObject $child, $mode =self::MODE_LAST, $params=null)
     {
         if (!empty($child)) {
-            $properties = $this->getProperties();
-            $children   = $properties['children'];
+            $properties     = $this->getProperties();
+            $children       = $properties['children'];
+            $sessionObjects = self::validateSession();
+
             if (!array_key_exists($child->getId(), $children)) {
                 switch ($mode) {
                     case self::MODE_LAST:
@@ -129,7 +131,7 @@ class OSContainer extends OObject
                         break;
                     case self::MODE_BEFORE:
                     case self::MODE_AFTER:
-                        if (!empty($params) && $this->isChild($params) && OObject::existObject($params) ) {
+                        if (!empty($params) && $this->isChild($params) && OObject::existObject($params, $sessionObjects) ) {
                             $newChildren = [];
                             foreach ($children as $id => $valeur) {
                                 if ($params == $id && $mode == self::MODE_BEFORE) {

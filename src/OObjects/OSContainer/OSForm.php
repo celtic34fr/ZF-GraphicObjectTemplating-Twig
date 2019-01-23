@@ -345,14 +345,9 @@ class OSForm extends OSDiv
                     break;
             }
 
-            // modification de la taille des boutons sauvegardés en session + sauvegarde du tout
-            $objects    = $sessionObject->objects;
-            foreach ($btnControls['ord'] as $ordBtn => $btnID) {
-                $btnProperties = unserialize($objects[$btnID]);
-                $btnProperties['widthBT'] = self::formatBootstrap($widthBT[1 + ($ordBtn > 1)]);
-                $objects[$btnID]    = serialize($btnProperties);
-            }
-            $sessionObject->objects    = $objects;
+            // enregistrement des modification des contrôles du formulaire
+            $properties['btnControls'] = $btnControls;
+            $this->setProperties($properties);
 
             // insertion du nouveau bouton à sa place
             if (sizeof($btnControls['ord']) == 1) {
@@ -376,10 +371,15 @@ class OSForm extends OSDiv
             }
             $this->saveProperties();
 
-            // enregistrement des modification des contrôles du formulaire
-            $properties = $this->getProperties();
-            $properties['btnControls'] = $btnControls;
-            $this->setProperties($properties);
+            // modification de la taille des boutons sauvegardés en session + sauvegarde du tout
+            $objects    = $sessionObject->objects;
+            foreach ($btnControls['ord'] as $ordBtn => $btnID) {
+                $btnProperties = unserialize($objects[$btnID]);
+                $btnProperties['widthBT'] = self::formatBootstrap($widthBT[1 + ($ordBtn > 1)]);
+                $objects[$btnID]    = serialize($btnProperties);
+            }
+            $sessionObject->objects    = $objects;
+
             return $this;
         }
         return false;
