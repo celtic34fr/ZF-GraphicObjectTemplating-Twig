@@ -318,7 +318,7 @@ class OObject
                 /** @var OObject $object */
                 $object = new $properties['className']($id);
                 $object->setProperties($properties);
-                if ($object->getTypeObj() == 'odcontained' && !empty($value)) {
+                if ($object->getTypeObj() == 'odcontained' && !empty($valeur)) {
                     if (method_exists($object, 'setValue')) {
                         $object->setValue($valeur);
                     }
