@@ -432,6 +432,7 @@ class ODInput extends ODContained
             case ODInput::INPUTTYPE_HIDDEN:
                 break;
             case ODInput::INPUTTYPE_TEXT:
+            case ODInput::INPUTTYPE_PASSWORD:
                 if (!empty($this->getMask())) { break; }
 
                 $minLength  = $this->getMinlength();
