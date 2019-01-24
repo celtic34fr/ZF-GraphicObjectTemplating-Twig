@@ -323,6 +323,7 @@ class OObject
                         $object->setValue($valeur);
                     }
                 }
+                $objects[$id]           = serialize($object->getProperties());
                 $sessionObj->objects    = $objects;
                 return $object;
             }
