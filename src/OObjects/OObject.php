@@ -315,10 +315,13 @@ class OObject
             $properties = unserialize($pObj);
             if (!empty($properties)) {
                 // TODO: pb boucle sans fin sur création de l'instance de l'objet
+                /** @var OObject $object */
                 $object = new $properties['className']($id);
                 $object->setProperties($properties);
-                if ($object instanceof ODContained && !empty($value)) {
-                    $object->setValue($valeur);
+                if ($object->getTypeObj() == 'odcontained' && !empty($value)) {
+                    if (method_exists($object, 'setValue')) {
+                        $object->setValue($valeur);
+                    }
                 }
                 $sessionObj->objects    = $objects;
                 return $object;
