@@ -416,10 +416,6 @@ class OSForm extends OSDiv
                     break;
             }
 
-            // enregistrement des modification des contrôles du formulaire
-            $properties['btnControls'] = $btnControls;
-            $this->setProperties($properties);
-
             // insertion du nouveau bouton à sa place
             if (sizeof($btnControls['ord']) == 1) {
                 $this->addChild($bouton, false);
@@ -441,6 +437,10 @@ class OSForm extends OSDiv
                 }
             }
             $this->saveProperties();
+
+            // enregistrement des modification des contrôles du formulaire
+            $properties['btnControls'] = $btnControls;
+            $this->setProperties($properties);
 
             // modification de la taille des boutons sauvegardés en session + sauvegarde du tout
             $objects    = $sessionObject->objects;
