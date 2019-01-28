@@ -373,6 +373,7 @@ class OSForm extends OSDiv
                 $formCtrls->saveProperties();
 
                 $this->addChild($formCtrls, false);
+                $this->saveProperties();
             }
 
             // création du bouton proprement dite + ajout dans btnControls
