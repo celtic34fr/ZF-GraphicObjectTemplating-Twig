@@ -501,6 +501,10 @@ class OSForm extends OSDiv
                     $objects[$btnID]    = serialize($btnProperties);
                 }
                 $sessionObjects->objects    = $objects;
+            } else {
+                /** suppression du séprateur comme plus de bouton */
+                $object = self::buildObject('formCtrls', $sessionObjects);
+                $this->removeChild($object);
             }
 
             $properties['btnControls'] = $btnControls;
@@ -525,6 +529,10 @@ class OSForm extends OSDiv
             $object = self::buildObject($btnID, $sessionObjects);
             $this->removeChild($object);
         }
+        /** suppression du séprateur */
+        $object = self::buildObject('formCtrls', $sessionObjects);
+        $this->removeChild($object);
+
         $properties                 = $this->getProperties();
         $properties['btnControls']  = [];
 
