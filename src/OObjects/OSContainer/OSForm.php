@@ -67,6 +67,11 @@ class OSForm extends OSDiv
 
     protected $const_btn;
 
+    /**
+     * OSForm constructor.
+     *
+     * @param $id
+     */
     public function __construct($id)
     {
         /** création de l'objet de base OSDiv */
@@ -101,6 +106,13 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @param OObject $child
+     * @param bool $require
+     * @param string|null $mode
+     * @param null $params
+     * @return $this|bool|OSDiv
+     */
     public function addChild(OObject $child, $require = false, $mode = self::MODE_LAST, $params = null)
     {
         $properties = $this->getProperties();
@@ -113,6 +125,11 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @param OObject $child
+     * @param bool $require
+     * @return $this|bool
+     */
     public function setChild(OObject $child, $require = false)
     {
         $properties = $this->getProperties();
@@ -124,6 +141,11 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @param ODContained $field
+     * @param bool $require
+     * @return $this
+     */
     public function addExtField(ODContained $field, $require = false)
     {
         $properties = $this->getProperties();
@@ -134,6 +156,11 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @param OObject $field
+     * @param bool $require
+     * @return $this|bool
+     */
     public function setExtField(OObject $field, $require = false)
     {
         if (!in_array($field->getTypeObj(), ['oscontainer', 'oescontainer'])) {
@@ -147,6 +174,10 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @param ODContained $field
+     * @return $this|bool
+     */
     public function removeExtField(ODContained $field)
     {
         $properties = $this->getProperties();
@@ -159,6 +190,10 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @param OObject $child
+     * @return $this|bool|OSDiv
+     */
     public function removeChild(OObject $child)
     {
         $topExec = parent::removeChild($child);
@@ -169,6 +204,9 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @return $this|bool|OSDiv
+     */
     public function removeChildren()
     {
         $topExec = parent::removeChildren();
@@ -181,6 +219,11 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @param OObject $field
+     * @return $this|bool
+     * @throws \Exception
+     */
     public function removeField(OObject $field)
     {
         $properties = $this->getProperties();
@@ -199,6 +242,10 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @param $fieldID
+     * @return bool
+     */
     public function isField($fieldID)
     {
         $properties = $this->getProperties();
@@ -206,6 +253,10 @@ class OSForm extends OSDiv
         return (array_key_exists($fieldID, $fields));
     }
 
+    /**
+     * @param $fieldID
+     * @return bool
+     */
     public function isRequire($fieldID)
     {
         $properties = $this->getProperties();
@@ -213,6 +264,9 @@ class OSForm extends OSDiv
         return (array_key_exists($fieldID, $fields) && $fields[$fieldID]);
     }
 
+    /**
+     * @return array
+     */
     public function getFormDatas()
     {
         $properties = $this->getProperties();
@@ -243,6 +297,9 @@ class OSForm extends OSDiv
         return $datas;
     }
 
+    /**
+     * @param array $datas
+     */
     public function setFormDatas(array $datas)
     {
         /** validation du contenu (clés) du tableau en entrée sont dans le formulaire */
@@ -279,7 +336,20 @@ class OSForm extends OSDiv
         }
     }
 
-    public function addBtn($name, $label, $icon,  $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
+    /**
+     * @param $name
+     * @param $label
+     * @param $icon
+     * @param $value
+     * @param $type
+     * @param $nature
+     * @param $ord
+     * @param null $class
+     * @param null $method
+     * @param bool $stopEvent
+     * @return $this|bool
+     */
+    public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
         $name           = (string) $name;
         $type           = (string) $type;
@@ -385,83 +455,25 @@ class OSForm extends OSDiv
         return false;
     }
 
-    public function addBtnOld($name, $label, $icon,  $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
-    {
-        $name           = (string) $name;
-        $type           = (string) $type;
-        $types          = $this->getBtnConstants();
-        if (!in_array($type, $types)) { $type = self::OSFORMBTN_SUBMIT; }
-        $properties     = $this->getProperties();
-        $btnControls    = $properties['btnControls'] ?? [];
-        if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
-
-        if (sizeof($btnControls) < 4 && (!array_key_exists('ord', $btnControls) || !array_key_exists($ord, $btnControls['ord']))) {
-            if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {
-                return false;
-            }
-            $bouton = new ODButton($name.$this->getId());
-            $bouton->setLabel($label);
-            $bouton->setIcon($icon);
-            $bouton->setType($type);
-            $bouton->setNature($nature);
-            $bouton->setValue($value);
-            $bouton->setForm($this->getId());
-            if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
-            if ($type == ODButton::BUTTONTYPE_RESET && (empty($class) || empty($method))){
-                $bouton->evtClick('javascript:', 'resetFormDatas('.$this->getId().')', true);
-            } else {
-                $bouton->evtClick($class, $method, $stopEvent);
-            }
-            $bouton->saveProperties();
-            if (!array_key_exists('ord', $btnControls)) { $btnControls['ord'] = []; }
-            $btnControls['ord'][$ord]       = $bouton->getId();
-            $btnControls[$name] = [];
-            $btnControls[$name]['object']   = $bouton->getId();
-            $btnControls[$name]['ord']      = $ord;
-
-            switch (sizeof($btnControls['ord'])) {
-                case 1:
-                    $widthBT[1] = "O1:W10";
-                    $widthBT[2] = '';
-                    break;
-                case 2:
-                    $widthBT[1] = "O1:W4";
-                    $widthBT[2] = 'O2:W4';
-                    break;
-                case 3:
-                    $widthBT[1] = "O1:W3";
-                    $widthBT[2] = 'O1:W3';
-                    break;
-                case 4:
-                    $widthBT[1] = "O1:W2";
-                    $widthBT[2] = 'O1:W2';
-                    break;
-            }
-            $sessionObj = OObject::validateSession();
-            $objects    = $sessionObj->objects;
-            foreach ($btnControls['ord'] as $ord => $btnID) {
-                $btnProperties = unserialize($objects[$btnID]);
-                $btnProperties['widthBT'] = OObject::formatBootstrap($widthBT[1 + ($ord > 1)]);
-                $objects[$btnID]    = serialize($btnProperties);
-            }
-            $sessionObj->objects    = $objects;
-            $properties['btnControls'] = $btnControls;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
+    /**
+     * @param $name
+     * @return $this|bool
+     * @throws \Exception
+     */
     public function rmBtn($name)
     {
+        $sessionObjects = self::validateSession();
         $name           = (string) $name;
         $properties     = $this->getProperties();
         $btnControls    = $properties['btnControls'];
         if (array_key_exists($name, $btnControls)) {
             $ord = $btnControls[$name]['ord'];
+
             unset($btnControls[$name]);
+            $object = self::buildObject($btnControls['ord'][$ord], $sessionObjects);
+            $this->removeChild($object);
             unset($btnControls['ord'][$ord]);
-            OObject::destroyObject($name);
+
             $properties['btnControls'] = $btnControls;
             $this->setProperties($properties);
             return $this;
@@ -469,6 +481,10 @@ class OSForm extends OSDiv
         return false;
     }
 
+    /**
+     * @return $this
+     * @throws \Exception
+     */
     public function rmBtns()
     {
         $properties                 = $this->getProperties();
@@ -476,17 +492,20 @@ class OSForm extends OSDiv
         $properties['btnControls']  = [];
 
         /** suppression en session des objets boutons du formulaire */
-        $sessionObj                 = OObject::validateSession();
-        $objects                    = $sessionObj->objetcs;
+        $sessionObjects             = OObject::validateSession();
         foreach ($btnControls['ord'] as $ord => $btnID) {
-            unset($objects[$btnID]);
+            $object = self::buildObject($btnID, $sessionObjects);
+            $this->removeChild($object);
         }
-        $sessionObj->objects        = $objects;
 
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @param $name
+     * @throws \Exception
+     */
     public function setDefaultBtn($name)
     {
         $name           = (string) $name;
@@ -501,6 +520,9 @@ class OSForm extends OSDiv
         }
     }
 
+    /**
+     * @return $this
+     */
     public function enaSubmitEnter()
     {
         $properties     = $this->getProperties();
@@ -509,6 +531,9 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disSubmitEnter()
     {
         $properties     = $this->getProperties();
@@ -519,8 +544,16 @@ class OSForm extends OSDiv
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
-     * *************************************************************************************************** */
+     * ***************************************************************************************************
+     */
 
+    /**
+     * @param OObject $child
+     * @param $sourceID
+     * @param $formID
+     * @param $require
+     * @return OSForm
+     */
     private function propageFormParams(OObject $child, $sourceID, $formID, $require )
     {
         if ($child instanceof OSContainer) {
@@ -539,6 +572,10 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @param OObject $child
+     * @return $this
+     */
     private function removeFormParams(OObject $child)
     {
         if ($child instanceof OSContainer) {
@@ -554,6 +591,12 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @param $fieldID
+     * @param $sourceId
+     * @param bool $require
+     * @return $this
+     */
     private function addField($fieldID, $sourceId, $require = false)
     {
         $properties = $this->getProperties();
@@ -563,6 +606,10 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @param OObject $field
+     * @param OSContainer $source
+     */
     private function delField(OObject $field, OSContainer $source)
     {
         if ($field instanceof ODContained) {
@@ -583,6 +630,9 @@ class OSForm extends OSDiv
         }
     }
 
+    /**
+     * @return array
+     */
     private function getBtnConstants()
     {
         $retour = [];
@@ -605,6 +655,9 @@ class OSForm extends OSDiv
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
+    /**
+     * @return array
+     */
     public function updateFormDatas()
     {
         $idSource   = $this->getId();
@@ -614,6 +667,9 @@ class OSForm extends OSDiv
         return OObject::formatRetour($idSource, $idCible, $mode, $html);
     }
 
+    /**
+     * @return array
+     */
     public function updateFormRequire()
     {
         $idSource   = $this->getId();
@@ -623,6 +679,9 @@ class OSForm extends OSDiv
         return OObject::formatRetour($idSource, $idCible, $mode, $idFuncExec);
     }
 
+    /**
+     * @return array
+     */
     public function razFormDatas()
     {
         $idSource   = $this->getId();
@@ -632,6 +691,13 @@ class OSForm extends OSDiv
         return OObject::formatRetour($idSource, $idCible, $mode, $html);
     }
 
+    /**
+     * @param $objet
+     * @param string $type
+     * @param null $objID
+     * @return array
+     * @throws \Exception
+     */
     public function appendField($objet, $type = 'append', $objID = null)
     {
         $ret = parent::appendField($objet);
@@ -641,6 +707,12 @@ class OSForm extends OSDiv
         return $ret;
     }
 
+    /**
+     * @param $objID
+     * @param $objPrev
+     * @return array
+     * @throws \Exception
+     */
     public function appendFieldAfter($objID, $objPrev)
     {
         $sessionObjects = OObject::validateSession();
@@ -656,13 +728,19 @@ class OSForm extends OSDiv
         return $ret;
     }
 
+    /**
+     * @param $objID
+     * @param $objPrev
+     * @return array
+     * @throws \Exception
+     */
     public function appendFieldBefore($objID, $objPrev)
     {
         $sessionObjects = OObject::validateSession();
         /** @var OObject $object */
         $object         = OObject::buildObject($objID, $sessionObjects);
         if ($this->isRequire($objID)) {
-            $objet->addClass('require');
+            $object->addClass('require');
         }
         $ret = parent::appendFieldBefore($objID, $objPrev);
         $ret[0] = OObject::formatRetour($objID, $this->getId()." .formBody #".$objPrev, 'appendBefore');
@@ -670,6 +748,10 @@ class OSForm extends OSDiv
         return $ret;
     }
 
+    /**
+     * @param array $formDatas
+     * @return array
+     */
     public function isValid(array $formDatas)
     {
         $properties = $this->getProperties();
