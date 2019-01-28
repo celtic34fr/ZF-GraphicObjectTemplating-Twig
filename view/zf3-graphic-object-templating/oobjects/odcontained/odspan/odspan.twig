@@ -1,6 +1,6 @@
 {# template de l'objet ODSpan #}
 
-<span id="{{ objet.id }}" class="{{ objClass }} {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}" data-objet="{{ objet.object }}"
+<span id="{{ objet.id }}" data-objet="{{ objet.object }}"
     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
     {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
