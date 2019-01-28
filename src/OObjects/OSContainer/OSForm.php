@@ -473,6 +473,7 @@ class OSForm extends OSDiv
             $object = self::buildObject($btnControls['ord'][$ord], $sessionObjects);
             $this->removeChild($object);
             unset($btnControls['ord'][$ord]);
+            $properties     = $this->getProperties();
 
             $properties['btnControls'] = $btnControls;
             $this->setProperties($properties);
@@ -489,7 +490,6 @@ class OSForm extends OSDiv
     {
         $properties                 = $this->getProperties();
         $btnControls                = $properties['btnControls'];
-        $properties['btnControls']  = [];
 
         /** suppression en session des objets boutons du formulaire */
         $sessionObjects             = OObject::validateSession();
@@ -497,6 +497,8 @@ class OSForm extends OSDiv
             $object = self::buildObject($btnID, $sessionObjects);
             $this->removeChild($object);
         }
+        $properties                 = $this->getProperties();
+        $properties['btnControls']  = [];
 
         $this->setProperties($properties);
         return $this;
