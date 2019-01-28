@@ -475,6 +475,34 @@ class OSForm extends OSDiv
             unset($btnControls['ord'][$ord]);
             $properties     = $this->getProperties();
 
+            if (sizeof($btnControls['ord']) > 0) {
+                switch (sizeof($btnControls['ord'])) {
+                    case 1:
+                        $widthBT[1] = "O1:W10";
+                        $widthBT[2] = '';
+                        break;
+                    case 2:
+                        $widthBT[1] = "O1:W4";
+                        $widthBT[2] = 'O2:W4';
+                        break;
+                    case 3:
+                        $widthBT[1] = "O1:W3";
+                        $widthBT[2] = 'O1:W3';
+                        break;
+                    case 4:
+                        $widthBT[1] = "O1:W2";
+                        $widthBT[2] = 'O1:W2';
+                        break;
+                }
+                $objects    = $sessionObjects->objects;
+                foreach ($btnControls['ord'] as $ordBtn => $btnID) {
+                    $btnProperties = unserialize($objects[$btnID]);
+                    $btnProperties['widthBT'] = self::formatBootstrap($widthBT[1 + ($ordBtn > 1)]);
+                    $objects[$btnID]    = serialize($btnProperties);
+                }
+                $sessionObjects->objects    = $objects;
+            }
+
             $properties['btnControls'] = $btnControls;
             $this->setProperties($properties);
             return $this;
