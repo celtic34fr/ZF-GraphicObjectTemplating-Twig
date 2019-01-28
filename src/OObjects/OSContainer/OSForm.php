@@ -439,6 +439,7 @@ class OSForm extends OSDiv
             $this->saveProperties();
 
             // enregistrement des modification des contrôles du formulaire
+            $properties = $this->getProperties();
             $properties['btnControls'] = $btnControls;
             $this->setProperties($properties);
 
