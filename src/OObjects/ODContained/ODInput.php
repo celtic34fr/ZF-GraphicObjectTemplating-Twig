@@ -468,7 +468,10 @@ class ODInput extends ODContained
                 }
                 break;
             case ODInput::INPUTTYPE_EMAIL:
-                if (!preg_match('/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/', $value )) {
+                $email = strtolower($value);
+                $regexPattern = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+
+                if (!preg_match($regexPattern, $email)) {
                     $retour = 'Veuillez saisir une adresse courriel (email) valide';
                 }
                 break;

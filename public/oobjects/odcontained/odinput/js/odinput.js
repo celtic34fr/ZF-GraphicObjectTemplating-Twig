@@ -71,7 +71,8 @@ odinput.prototype = {
                 break;
             case 'email':
                 var email = this.value;
-                if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!re.test(String(email).toLowerCase())) {
                     retour = 'Veuillez saisir une adresse courriel (email) valide';
                 }
                 break;
