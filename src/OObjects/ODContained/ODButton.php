@@ -224,6 +224,15 @@ class ODButton extends ODContained
         return $this;
     }
 
+    public function createSimpleControl(ZF3GotServices $gotServices, Container $sessionObj, $ord) {
+    	$btn = self::cloneObject($this, $sessionObj);
+		$btn->setId($this->getId().$ord)
+			->setValue($ord)
+			->setDisplay(self::DISPLAY_BLOCK)
+			->saveProperties();
+		return $gotServices->render($btn);
+	}
+    
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
