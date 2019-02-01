@@ -230,7 +230,7 @@ class ODButton extends ODContained
 			->setValue($ord)
 			->setDisplay(self::DISPLAY_BLOCK)
 			->saveProperties();
-		return $gotServices->render($btn);
+		return $btn;
 	}
     
     /** **************************************************************************************************
