@@ -127,6 +127,7 @@ class OObject
     const DISPLAY_BLOCK   = 'block';
     const DISPLAY_INLINE  = 'inline';
     const DISPLAY_INBLOCK = 'inline-block';
+    const NO_DISPLAY      = 'noDisplay';
 
     const STATE_ENABLE    = true;
     const STATE_DISABLE   = false;
@@ -1210,6 +1211,7 @@ class OObject
         $sessionObj->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
         $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
 
+        return $sessionObj;
     }
 
     public function setWidth($width)

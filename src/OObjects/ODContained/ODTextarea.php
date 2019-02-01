@@ -40,9 +40,18 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * enaDispUnder()   : disposition label, et dessous zone de saisie Textarea
  *                  ATTENTION : un setLabelWidthBT après ces 2 dernières commandes annule l'effet attendu pour exécuter
  *                  la commande demandée (setLabelWidthBT)
+ * enaResize()      : autorise à redimensionner le textarea en X et Y
+ * disResize()      : interdit à redimensionner le textarea en X et Y
+ * enaVertiResize   : autorise à redimensionner le textarea en Y
+ * enaHorizResize   : autorise à redimensionner le textarea en X
  */
 class ODTextarea extends ODContained
 {
+    const TEXTAREA_RESIZEBOTH   = 'both';
+    const TEXTAREA_RESIZEHORIZ  = 'horizontal';
+    const TEXTAREA_RESIZEVERTI  = 'vertical';
+    const TEXTAREA_RESIZENONE   = 'none';
+
     public function __construct($id)
     {
         parent::__construct($id, "oobjects/odcontained/odtextarea/odtextarea.config.php");
@@ -233,5 +242,59 @@ class ODTextarea extends ODContained
 
         $this->setProperties($properties);
         return $this;
+    }
+
+    public function enaResize()
+    {
+        $properties = $this->getProperties();
+        $properties['resize'] = self::TEXTAREA_RESIZEBOTH;
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disResize()
+    {
+        $properties = $this->getProperties();
+        $properties['resize'] = self::TEXTAREA_RESIZENONE;
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaVertiResize()
+    {
+        $properties = $this->getProperties();
+        $properties['resize'] = self::TEXTAREA_RESIZEVERTI;
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaHorizResize()
+    {
+        $properties = $this->getProperties();
+        $properties['resize'] = self::TEXTAREA_RESIZEHORIZ;
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    private function getResizeConstants()
+    {
+        $retour = [];
+        if (empty($this->const_resize)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'TEXTAREA_RESIZE');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_resize = $retour;
+        } else {
+            $retour = $this->const_resize;
+        }
+        return $retour;
     }
 }

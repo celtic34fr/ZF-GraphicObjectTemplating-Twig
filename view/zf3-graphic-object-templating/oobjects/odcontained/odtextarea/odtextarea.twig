@@ -9,6 +9,11 @@
     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
+    <style>
+        #{{ object.id }} textarea {
+            resize: {{ objet.resize }};
+        }
+    </style>
     {%  if objet.label is not empty or objet.icon is not empty %}
     <label for="{{ objet.id }}Textarea"
         {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}

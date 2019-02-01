@@ -1,5 +1,7 @@
 <?php
 
+use GraphicObjectTemplating\OObjects\ODContained\ODTextarea;
+
 return array(
     "object"        => "odtextarea",
     "typeObj"       => "odcontained",
@@ -13,6 +15,7 @@ return array(
     'event'         => [],
     'textareaWidth' => '',
     'labelWidthBT'  => '',
+    'resize'        => ODTextarea::TEXTAREA_RESIZEBOTH,
 
     'resources' => [
         'css' => [],

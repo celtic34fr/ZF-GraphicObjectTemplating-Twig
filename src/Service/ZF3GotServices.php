@@ -6,6 +6,7 @@ use Application\Entity\Menus;
 use Doctrine\ORM\EntityManager;
 use GraphicObjectTemplating\OObjects\ODContained\ODMenu;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use GraphicObjectTemplating\OObjects\OObject;
 use ZfcTwig\View\TwigRenderer;
@@ -30,46 +31,55 @@ class ZF3GotServices
     /** rendu de l'objet en code HTML */
     /**
      * @param $object       string / OObject
+     * @param Container $sessionObjects
      * @return bool|mixed   false si KO / code HTML
      * @throws \Exception
      */
-    public function render($object)
+    public function render($object, Container $sessionObjects = null)
     {
-        if ($object instanceof OObject) { $object = $object->getId(); }
-
-        if (!empty($object)) {
-            $sessionObj = OObject::validateSession();
-            $objects    = $sessionObj->objects;
-
+        if (empty($sessionObjects)) { $sessionObjects = OObject::validateSession(); }
+        $properties     = [];
+        if ($object instanceof OObject) {
+            $properties = $object->getProperties();
+            $object = $object->getId();
+        } else {
+            $objects    = $sessionObjects->objects;
             if (array_key_exists($object, $objects)) {
-                $html       = new ViewModel();
                 $properties = unserialize($objects[$object]);
-                $template   = $properties['template'];
-
-                switch($properties['typeObj']) {
-                    case 'odcontained' :
-                    case 'oedcontained':
-                        $html->setTemplate($template);
-                        $html->setVariable('objet', $properties);
-                        break;
-                    case 'oscontainer':
-                    case 'oescontainer':
-                        $content  = "";
-                        $children = $properties['children'];
-                        if (!empty($children)) {
-                            foreach ($children as $child => $value) {
-                                $rendu    = $this->render($child);
-                                $content .= $rendu;
-                            }
-                        }
-                        $html->setTemplate($template);
-                        $html->setVariable('objet', $properties);
-                        $html->setVariable('content', $content);
-                        break;
-                }
-                $renduHtml = $this->_twigRender->render($html);
-                return str_replace(array("\r\n", "\r", "\n"), "", $renduHtml);
             }
+        }
+
+        if (!empty($properties)) {
+            if ($properties['display'] == OObject::NO_DISPLAY) {
+                return '';
+            }
+
+            $html       = new ViewModel();
+            $template   = $properties['template'];
+
+            switch($properties['typeObj']) {
+                case 'odcontained' :
+                case 'oedcontained':
+                    $html->setTemplate($template);
+                    $html->setVariable('objet', $properties);
+                    break;
+                case 'oscontainer':
+                case 'oescontainer':
+                    $content  = "";
+                    $children = $properties['children'];
+                    if (!empty($children)) {
+                        foreach ($children as $child => $value) {
+                            $rendu    = $this->render($child, $sessionObjects);
+                            $content .= $rendu;
+                        }
+                    }
+                    $html->setTemplate($template);
+                    $html->setVariable('objet', $properties);
+                    $html->setVariable('content', $content);
+                    break;
+            }
+            $renduHtml = $this->_twigRender->render($html);
+            return str_replace(array("\r\n", "\r", "\n"), "", $renduHtml);
         }
         return false;
     }
@@ -228,9 +238,6 @@ class ZF3GotServices
     public function getTheme()
     {
         $gotCfg = $this->_config['gotParameters'];
-        if (array_key_exists('theme', $gotCfg)) {
-            return $gotCfg['theme'];
-        }
-        return 'layout';
+        return $gotCfg['theme'] ?? 'layout';
     }
 }
