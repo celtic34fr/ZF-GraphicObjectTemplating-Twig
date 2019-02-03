@@ -43,6 +43,10 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * setDefaultBtn($name)
  * enaSubmitEnter()
  * disSubmitEnter()
+ * addHiddenValue($key, $val)
+ * setHiddenValue($key, $val)
+ * rmHiddenValue($key)
+ * getHiddenValue($key)
  *
  * mérthodes privées
  * propageFormParams(OObject $child, string $formID, bool $require )
@@ -71,6 +75,7 @@ class OSForm extends OSDiv
      * OSForm constructor.
      *
      * @param $id
+     * @throws \Exception
      */
     public function __construct($id)
     {
@@ -145,6 +150,7 @@ class OSForm extends OSDiv
      * @param ODContained $field
      * @param bool $require
      * @return $this
+     * @throws \Exception
      */
     public function addExtField(ODContained $field, $require = false)
     {
@@ -266,6 +272,7 @@ class OSForm extends OSDiv
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getFormDatas()
     {
@@ -299,6 +306,7 @@ class OSForm extends OSDiv
 
     /**
      * @param array $datas
+     * @throws \Exception
      */
     public function setFormDatas(array $datas)
     {
@@ -348,6 +356,7 @@ class OSForm extends OSDiv
      * @param null $method
      * @param bool $stopEvent
      * @return $this|bool
+     * @throws \Exception
      */
     public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
@@ -583,6 +592,87 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @param $key
+     * @param $val
+     * @return $this|bool
+     */
+    public function addHiddenValue($key, $val)
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
+        $hidden     = $properties['hidden'];
+        if (!array_key_exists($key, $hidden)) {
+            $hidden[$key]           = $val;
+            $properties['hidden']   = $hidden;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @param $key
+     * @param $val
+     * @return $this|bool
+     */
+    public function setHiddenValue($key, $val)
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
+        $hidden     = $properties['hidden'];
+        if (array_key_exists($key, $hidden)) {
+            $hidden[$key]           = $val;
+            $properties['hidden']   = $hidden;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @param $key
+     * @return $this|bool
+     */
+    public function rmHiddenValue($key)
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
+        $hidden     = $properties['hidden'];
+        if (array_key_exists($key, $hidden)) {
+            unset($hidden[$key]);
+            $properties['hidden']   = $hidden;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @param $key
+     * @return bool|mixed
+     */
+    public function getHiddenValue($key)
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
+        $hidden     = $properties['hidden'];
+        if (array_key_exists($key, $hidden)) {
+            return $hidden[$key];
+        }
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHiddenValues()
+    {
+        $properties = $this->getProperties();
+        if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
+        return $properties['hidden'];
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * ***************************************************************************************************
@@ -594,6 +684,7 @@ class OSForm extends OSDiv
      * @param $formID
      * @param $require
      * @return OSForm
+     * @throws \Exception
      */
     private function propageFormParams(OObject $child, $sourceID, $formID, $require )
     {
@@ -673,6 +764,7 @@ class OSForm extends OSDiv
 
     /**
      * @return array
+     * @throws \ReflectionException
      */
     private function getBtnConstants()
     {
@@ -698,6 +790,7 @@ class OSForm extends OSDiv
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function updateFormDatas()
     {

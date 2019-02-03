@@ -2,14 +2,13 @@
 
 namespace GraphicObjectTemplating\Controller;
 
+use GraphicObjectTemplating\OObjects\ODContained;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
-use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
-use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
 use GraphicObjectTemplating\Service\ZF3GotServices;
 
 class MainController extends AbstractActionController
@@ -22,13 +21,21 @@ class MainController extends AbstractActionController
     /** @var ZF3GotServices $gotServices */
     private $gotServices;
 
-    /** @param ServiceManager $serviceManager */
+    /**
+     * @param ServiceManager $serviceManager
+     * @param ZF3GotServices $gotServices
+     */
     public function __construct($serviceManager, $gotServices)
     {
         $this->serviceManager   = $serviceManager;
         $this->gotServices      = $gotServices;
     }
+
     /* méthode appelé pour l'exécution des demandes Ajax */
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function gotDispatchAction()
     {
         /** @var Request $request */
@@ -74,6 +81,13 @@ class MainController extends AbstractActionController
                             if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
                                 /** reformatage et mise à jour des données du formulaire niveau objets de la page */
                                 list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
+
+                                if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
+                                    $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
+                                    $hiddens        = $form->getHiddenValues();
+                                    $params['form'] = array_merge($params['form'], $hiddens);
+                                }
+
                                 $sessionObj->objects    = $objects;
                             }
                             // appel de la méthode de l'objet passée en paramètre
@@ -134,6 +148,15 @@ class MainController extends AbstractActionController
      * méthodes privées de la classe
      */
 
+    /**
+     * méthode de création d'objet
+     *
+     * @param $objClass         nom de classe de l'objet à créer si $params vide
+     * @param $sessionObjects   Objet Session contenant la déclarations des objets en cours de validité
+     * @param null $params      tableau des paramétres pour créatiion de l'objet à travailler
+     * @return mixed            un objet de type ZF3GraphicObjectTemplating ou à partir de $objClass
+     * @throws \Exception
+     */
     private function buildObject($objClass, $sessionObjects, $params = null) {
         if (NULL === $params) {
             $object = new $objClass();
@@ -147,6 +170,15 @@ class MainController extends AbstractActionController
         return $object;
     }
 
+    /**
+     * méthode de création et formatage du tableau des valeurs des champs d'un formulaire
+     *
+     * @param $form     chaîne de caractères transmise lors de l'appel Ajax des champs/valeurs du fortmulaire
+     * @param $objects  tableau des déclaration des objets valides en sessions
+     * @return array    tableau formé par :
+     *                      le tableau des champs (clé d'accès) et valeurs du formulaire retravaillés
+     *                      le tableau des déclarations des objets valides en session mis à jours avec les traitements
+     */
     private function buildFormDatas($form, $objects) {
         $datas     = explode('|', $form);
         $formDatas = [];
@@ -186,6 +218,14 @@ class MainController extends AbstractActionController
         return [$formDatas, $objects];
     }
 
+    /**
+     * méthode visant à supprimer les simple apostrophes (quote) dans une chaîne de caractères
+     * placés au débuit et à la fin
+     *
+     * @param $var
+     * @param string $char
+     * @return bool|string
+     */
     private function trimQuote($var, $char = "'") {
         if ($var[0] === $char) { $var = substr($var, 1); }
         if ($var[strlen($var) - 1] === $char) {
@@ -194,6 +234,14 @@ class MainController extends AbstractActionController
         return $var;
     }
 
+    /**
+     * méthode de mise à jour des définitions des champs valides en session avec les valeurs transmises dans la zone de
+     * communication de l'appel Ajax pour validation du formulaire
+     *
+     * @param array $datas      tableau des champs/valeurs retravaillées du formulaire
+     * @param array $objects    tableau des déclaration des objets valides en sessions
+     * @return array            tableau des déclaration des objets valides en sessions MIS À JOUR
+     */
     private function updateFieldObject(array $datas, array $objects)
     {
         foreach ($datas as $id => $data) {

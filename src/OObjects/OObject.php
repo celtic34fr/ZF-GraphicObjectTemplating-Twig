@@ -210,14 +210,16 @@ class OObject
 
     /**
      * OObject constructor.
+     *
      * @param $id           identifiant de l'objet
      * @param $pathObjArray chemin partiel du fichier config de l'objet étendu
+     * @throws \Exception
      */
     public function __construct($id, $pathObjArray)
     {
         if (empty($id)) {
             $id     = 'dummy';
-            OObject::destroyObject($id, false);
+            self::destroyObject($id, false);
         }
         $sessionObj = self::validateSession();
         $object = $sessionObj->objects;
@@ -260,12 +262,6 @@ class OObject
         }
         $this->saveProperties();
 
-//        if (!in_array($properties['object'] , ['osform', 'osdiv'])) {
-//            var_dump("OObject =>");
-//            var_dump($properties);
-//            exit();
-//        }
-
         return $this;
     }
 
@@ -273,6 +269,10 @@ class OObject
      * méthodes statiques                                                                                *
      * *************************************************************************************************** */
 
+    /**
+     * @return Container
+     * @throws \Exception
+     */
     public static function validateSession()
     {
         $now        = new \DateTime();
@@ -290,6 +290,11 @@ class OObject
         return $gotObjList;
     }
 
+    /**
+     * @param $id
+     * @param Container $sessionObj
+     * @return bool
+     */
     public static function existObject($id, Container $sessionObj)
     {
         if (!empty($id)) {
@@ -315,7 +320,6 @@ class OObject
             $pObj    = $objects[$id];
             $properties = unserialize($pObj);
             if (!empty($properties)) {
-                // TODO: pb boucle sans fin sur création de l'instance de l'objet
                 /** @var OObject $object */
                 $object = new $properties['className']($id);
                 $object->setProperties($properties);
@@ -333,6 +337,12 @@ class OObject
         return false;
     }
 
+    /**
+     * @param OObject $object
+     * @param Container $sessionObj
+     * @return OObject
+     * @throws \Exception
+     */
     public static function cloneObject(OObject $object, Container $sessionObj)
     {
         if (self::existObject($object->getId(), $sessionObj)) {
@@ -346,6 +356,12 @@ class OObject
         }
     }
 
+    /**
+     * @param $id
+     * @param bool $session
+     * @return bool
+     * @throws \Exception
+     */
     public static function destroyObject($id, $session = false)
     {
         $now    = new \DateTime();
@@ -386,6 +402,10 @@ class OObject
         }
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public static function clearObjects()
     {
         $now        = new \DateTime();
@@ -396,6 +416,10 @@ class OObject
         return true;
     }
 
+    /**
+     * @param $widthBT
+     * @return bool|string
+     */
     public static function formatBootstrap($widthBT)
     {
         if (!empty($widthBT)) {
@@ -435,6 +459,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $labelWidthBT
+     * @return mixed
+     */
     public static function formatLabelBT($labelWidthBT)
     {
         $lxs = $lsm = $lmd = $llg = 0;
@@ -510,6 +538,13 @@ class OObject
         return $retour;
     }
 
+    /**
+     * @param $idSource
+     * @param $idCible
+     * @param $mode
+     * @param null $code
+     * @return array
+     */
     public static function formatRetour($idSource, $idCible, $mode, $code = null) {
         if (empty($idCible)) { $idCible = $idSource; }
         return ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
@@ -519,6 +554,9 @@ class OObject
      * méthodes de l'objet proprement dites                                                              *
      * *************************************************************************************************** */
 
+    /**
+     * @return bool|mixed
+     */
     public function getProperties()
     {
         if (null !== $this->id) {
@@ -527,6 +565,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param array $properties
+     * @return $this|bool
+     */
     public function setProperties(array $properties)
     {
         if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
@@ -544,11 +586,16 @@ class OObject
         return $this->id;
     }
 
+    /**
+     * @param $id
+     * @return $this|bool
+     * @throws \Exception
+     */
     public function setId($id)
     {
         if (null !== $this->id) {
             $id                 = (string) $id;
-            $gotObjList         = OObject::validateSession();
+            $gotObjList         = self::validateSession();
             $objects            = $gotObjList->objects;
             $properties         = unserialize($objects[$this->id]);
 
@@ -567,15 +614,23 @@ class OObject
         return false;
     }
 
+    /**
+     * @return identifiant|string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this|bool
+     * @throws \Exception
+     */
     public function setName(string $name)
     {
         if (null !== $this->id) {
-            $gotObjList         = OObject::validateSession();
+            $gotObjList         = self::validateSession();
             $objects            = $gotObjList->objects;
             $properties         = unserialize($objects[$this->id]);
 
@@ -593,22 +648,34 @@ class OObject
         return false;
     }
 
-    public function setDisplay($display = OObject::DISPLAY_BLOCK)
+    /**
+     * @param string $display
+     * @return $this
+     * @throws \ReflectionException
+     */
+    public function setDisplay($display = self::DISPLAY_BLOCK)
     {
         $displays = $this->getDisplayConstants();
-        if (!in_array($display, $displays, true)) { $display = OObject::DISPLAY_BLOCK; }
+        if (!in_array($display, $displays, true)) { $display = self::DISPLAY_BLOCK; }
         $properties = $this->getProperties();
         $properties['display'] = $display;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getDisplay()
     {
         $properties = $this->getProperties();
         return array_key_exists('display', $properties) ? $properties['display'] : false;
     }
 
+    /**
+     * @param $widthBT
+     * @return $this|bool
+     */
     public function setWidthBT($widthBT)
     {
         $widthBT    = (string) $widthBT;
@@ -622,12 +689,19 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('widthBT', $properties) ? $properties['widthBT'] : false;
     }
 
+    /**
+     * @param string|null $className
+     * @return $this|bool
+     */
     public function setClassName(string $className = null)
     {
         if (!empty($className)) {
@@ -641,12 +715,19 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getClassName()
     {
         $properties = $this->getProperties();
         return array_key_exists('className', $properties) ? $properties['className'] : false;
     }
 
+    /**
+     * @param string|null $template
+     * @return $this|bool
+     */
     public function setTemplate(string $template = null)
     {
         if (!empty($template)) {
@@ -660,12 +741,19 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getTemplate()
     {
         $properties = $this->getProperties();
         return array_key_exists('template', $properties) ? $properties['template'] : false;
     }
 
+    /**
+     * @param string|null $object
+     * @return $this|bool
+     */
     public function setObject(string $object = null)
     {
         if (!empty($object)) {
@@ -677,12 +765,19 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getObject()
     {
         $properties = $this->getProperties();
         return array_key_exists('object', $properties) ? $properties['object'] : false;
     }
 
+    /**
+     * @param string|null $typeObj
+     * @return $this|bool
+     */
     public function setTypeObj(string $typeObj = null)
     {
         if (!empty($typeObj)) {
@@ -694,17 +789,27 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getTypeObj()
     {
         $properties = $this->getProperties();
         return array_key_exists('typeObj', $properties) ? $properties['typeObj'] : false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getLastAccess()
     {
         return $this->lastAccess;
     }
 
+    /**
+     * @param null $classes
+     * @return $this|bool
+     */
     public function setClasses($classes = null)
     {
         if (!empty($classes)) {
@@ -719,6 +824,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param null $class
+     * @return $this|bool
+     */
     public function addClass($class = null)
     {
         if (!empty($class)) {
@@ -736,6 +845,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param null $class
+     * @return $this|bool
+     */
     public function removeClass($class = null)
     {
         if (!empty($class)) {
@@ -754,12 +867,20 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getClasses()
     {
         $properties = $this->getProperties();
         return array_key_exists('classes', $properties) ? $properties['classes'] : false;
     }
 
+    /**
+     * @param $nameFile
+     * @param $pathFile
+     * @return $this|bool
+     */
     public function addCssFile($nameFile, $pathFile)
     {
         if (!empty($nameFile) && !empty($pathFile)) {
@@ -784,6 +905,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return $this|bool
+     */
     public function removeCssFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -808,6 +933,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return bool
+     */
     public function getPathCssFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -825,6 +954,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return $this|bool
+     */
     public function enaCssFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -848,6 +981,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return $this|bool
+     */
     public function disCssFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -871,6 +1008,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return bool|string
+     */
     public function getCssFileStatus($nameFile)
     {
         if (!empty($nameFile)) {
@@ -893,6 +1034,11 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @param $pathFile
+     * @return $this|bool
+     */
     public function addJsFile($nameFile, $pathFile)
     {
         if (!empty($nameFile) && !empty($pathFile)) {
@@ -917,6 +1063,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return $this|bool
+     */
     public function removeJsFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -941,6 +1091,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return bool
+     */
     public function getPathJsFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -958,6 +1112,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return $this|bool
+     */
     public function enaJsFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -981,6 +1139,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return $this|bool
+     */
     public function disJsFile($nameFile)
     {
         if (!empty($nameFile)) {
@@ -1004,6 +1166,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param $nameFile
+     * @return bool|string
+     */
     public function getJsFileStatus($nameFile)
     {
         if (!empty($nameFile)) {
@@ -1026,6 +1192,9 @@ class OObject
         return false;
     }
 
+    /**
+     * @return $this
+     */
     public function enable()
     {
         $properties = $this->getProperties();
@@ -1034,6 +1203,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disable()
     {
         $properties = $this->getProperties();
@@ -1042,12 +1214,18 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getState()
     {
         $properties = $this->getProperties();
         return array_key_exists('state', $properties) ? $properties['state'] : false;
     }
 
+    /**
+     * @return $this
+     */
     public function enaAutoCenter()
     {
         $properties = $this->getProperties();
@@ -1056,6 +1234,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disAutoCenter()
     {
         $properties = $this->getProperties();
@@ -1064,12 +1245,19 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getStateAC()
     {
         $properties = $this->getProperties();
         return array_key_exists('autoCenter', $properties) ? $properties['autoCenter'] : false;
     }
 
+    /**
+     * @param $width
+     * @return $this
+     */
     public function setACWidth($width)
     {
         $width = (string) $width;
@@ -1079,12 +1267,19 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getACWidth()
     {
         $properties = $this->getProperties();
         return array_key_exists('acPx', $properties) ? $properties['acPx'] : false;
     }
 
+    /**
+     * @param $height
+     * @return $this
+     */
     public function setACHeight($height)
     {
         $height = (string) $height;
@@ -1094,12 +1289,20 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getACHeight()
     {
         $properties = $this->getProperties();
         return array_key_exists('acPy', $properties) ? $properties['acPy'] : false;
     }
 
+    /**
+     * @param $width
+     * @param $height
+     * @return $this
+     */
     public function setACWidthHeight($width, $height)
     {
         $width = (string) $width;
@@ -1111,6 +1314,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getACWidthHeight()
     {
         $properties = $this->getProperties();
@@ -1119,6 +1325,13 @@ class OObject
         return ['width' => $acPx, 'height' => $acPy];
     }
 
+    /**
+     * @param $event
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return $this|bool
+     */
     public function setEvent($event, $class, $method, $stopEvent = false)
     {
         if (!empty($event) && !empty($class) && !empty($method)) {
@@ -1167,6 +1380,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param null $event
+     * @return bool
+     */
     public function getEvent($event = null)
     {
         if (!empty($event)) {
@@ -1178,12 +1395,19 @@ class OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getEvents()
     {
         $properties = $this->getProperties();
         return array_key_exists('event', $properties) ? $properties['event'] : false;
     }
 
+    /**
+     * @param $event
+     * @return $this|bool
+     */
     public function disEvent($event)
     {
         if (!empty($event)) {
@@ -1201,9 +1425,13 @@ class OObject
         return false;
     }
 
+    /**
+     * @return Container
+     * @throws \Exception
+     */
     public function saveProperties()
     {
-        $sessionObj = OObject::validateSession();
+        $sessionObj = self::validateSession();
         $objects    = $sessionObj->objects;
         $objects[$this->id] = serialize($this->properties);
         $sessionObj->objects = $objects;
@@ -1214,6 +1442,10 @@ class OObject
         return $sessionObj;
     }
 
+    /**
+     * @param $width
+     * @return $this
+     */
     public function setWidth($width)
     {
         $width = (string) $width ;
@@ -1223,12 +1455,19 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getWidth()
     {
         $properties = $this->getProperties();
         return array_key_exists('width', $properties) ? $properties['width'] : false;
     }
 
+    /**
+     * @param $height
+     * @return $this
+     */
     public function setHeight($height)
     {
         $height = (string) $height;
@@ -1238,6 +1477,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getHeight()
     {
         $properties = $this->getProperties();
@@ -1248,6 +1490,11 @@ class OObject
      * méthodes de gestion des infobulles mis sur les objets                                             *
      * *************************************************************************************************** */
 
+    /**
+     * @param string $IBtype
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function setIBType($IBtype = self::IBTYPE_TOOLTIP)
     {
         $IBtypes    = $this->getIBTypeConstants();
@@ -1263,6 +1510,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBType()
     {
         $properties = $this->getProperties();
@@ -1275,6 +1525,9 @@ class OObject
         return false;
     }
 
+    /**
+     * @return $this
+     */
     public function enaIBAnimation()
     {
         $properties = $this->getProperties();
@@ -1286,6 +1539,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disIBAnimation()
     {
         $properties = $this->getProperties();
@@ -1297,6 +1553,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBAnimation()
     {
         $properties = $this->getProperties();
@@ -1309,6 +1568,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param array|null $delay
+     * @return $this|bool
+     */
     public function setIBDelay(array $delay = null)
     {
         if (empty($delay)) {
@@ -1327,6 +1590,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBDelay()
     {
         $properties = $this->getProperties();
@@ -1339,6 +1605,9 @@ class OObject
         return false;
     }
 
+    /**
+     * @return $this
+     */
     public function enaIBHtml()
     {
         $properties = $this->getProperties();
@@ -1350,6 +1619,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disIBHtml()
     {
         $properties = $this->getProperties();
@@ -1361,6 +1633,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBHtml()
     {
         $properties = $this->getProperties();
@@ -1373,6 +1648,11 @@ class OObject
         return false;
     }
 
+    /**
+     * @param string $IBplacement
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function setIBPlacement($IBplacement = self::IBPLACEMENT_TOP)
     {
         $IBplacements = $this->getIBPlacementConstants();
@@ -1388,6 +1668,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBPlacement()
     {
         $properties = $this->getProperties();
@@ -1400,6 +1683,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param null $IBtitle
+     * @return $this
+     */
     public function setIBTitle($IBtitle = null)
     {
         $IBtitle = (string) $IBtitle;
@@ -1419,6 +1706,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBTitle()
     {
         $properties = $this->getProperties();
@@ -1431,6 +1721,10 @@ class OObject
         return false;
     }
 
+    /**
+     * @param null $IBContent
+     * @return $this
+     */
     public function setIBContent($IBContent = null)
     {
         $IBContent = (string) $IBContent;
@@ -1450,6 +1744,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBContent()
     {
         $properties = $this->getProperties();
@@ -1462,6 +1759,11 @@ class OObject
         return false;
     }
 
+    /**
+     * @param string $IBtrigger
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function setIBTrigger($IBtrigger = self::IBTRIGGER_HOVER)
     {
         $IBtriggers = $this->getIBTriggerConstants();
@@ -1480,6 +1782,9 @@ class OObject
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIBTrigger()
     {
         $properties = $this->getProperties();
@@ -1496,12 +1801,20 @@ class OObject
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     protected function getConstants()
     {
         $ref = new \ReflectionClass($this);
         return $ref->getConstants();
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getDisplayConstants()
     {
         $retour = [];
@@ -1521,6 +1834,10 @@ class OObject
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getStateConstants()
     {
         $retour = [];
@@ -1540,6 +1857,10 @@ class OObject
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getIBTypeConstants()
     {
         $retour = [];
@@ -1559,6 +1880,10 @@ class OObject
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getIBPlacementConstants()
     {
         $retour = [];
@@ -1578,6 +1903,10 @@ class OObject
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getIBTriggerConstants()
     {
         $retour = [];
@@ -1597,6 +1926,10 @@ class OObject
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getColorConstants()
     {
         $retour = [];

@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
+use Zend\Session\Container;
 
 /**
  * Class ODButton
@@ -62,6 +63,11 @@ class ODButton extends ODContained
     private $const_nature;
     private $const_linkTarget;
 
+    /**
+     * ODButton constructor.
+     * @param $id
+     * @throws \ReflectionException
+     */
     public function __construct($id)
     {
         parent::__construct($id, "oobjects/odcontained/odbutton/odbutton.config.php");
@@ -79,6 +85,10 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @param $label
+     * @return $this
+     */
     public function setLabel($label)
     {
         $label = (string) $label;
@@ -88,12 +98,19 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getLabel()
     {
         $properties = $this->getProperties();
         return array_key_exists('label', $properties) ? $properties['label'] : false;
     }
 
+    /**
+     * @param $icon
+     * @return $this
+     */
     public function setIcon($icon)
     {
         $icon = (string) $icon;
@@ -103,12 +120,19 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getIcon()
     {
         $properties = $this->getProperties();
         return array_key_exists('icon', $properties) ? $properties['icon'] : false;
     }
 
+    /**
+     * @param null $form
+     * @return $this|bool|ODContained
+     */
     public function setForm($form = null)
     {
         parent::setForm($form);
@@ -130,6 +154,11 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @param string $type
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function setType($type = self::BUTTONTYPE_CUSTOM)
     {
         $properties = $this->getProperties();
@@ -166,12 +195,21 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getType()
     {
         $properties = $this->getProperties();
         return array_key_exists('type', $properties) ? $properties['type'] : false;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return bool|ODButton
+     */
     public function evtClick($class, $method, $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
@@ -181,16 +219,27 @@ class ODButton extends ODContained
         return false;
     }
 
-    public function getClick() 
+    /**
+     * @return bool
+     */
+    public function getClick()
     {
         return $this->getEvent('click');
     }
 
+    /**
+     * @return bool|ODButton
+     */
     public function disClick()
     {
         return $this->disEvent('click');
     }
-    
+
+    /**
+     * @param string $nature
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function setNature($nature = self::BUTTONNATURE_DEFAULT)
     {
         $nature  = (string) $nature;
@@ -203,12 +252,18 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getNature()
     {
         $properties = $this->getProperties();
         return array_key_exists('nature', $properties) ? $properties['nature'] : false;
     }
 
+    /**
+     * @return $this
+     */
     public function enaDefault()
     {
         $properties = $this->getProperties();
@@ -217,6 +272,9 @@ class ODButton extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disDefault()
     {
         $properties = $this->getProperties();
@@ -229,6 +287,7 @@ class ODButton extends ODContained
      * @param Container $sessionObj
      * @param $ord
      * @return array
+     * @throws \Exception
      */
     public function createSimpleControl(Container $sessionObj, $ord) {
     	$btn = self::cloneObject($this, $sessionObj);
@@ -243,6 +302,10 @@ class ODButton extends ODContained
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getTypeConstants()
     {
         $retour = [];
@@ -261,6 +324,10 @@ class ODButton extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getNatureConstants()
     {
         $retour = [];
@@ -279,6 +346,10 @@ class ODButton extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getLinkTargetConstants()
     {
         $retour = [];

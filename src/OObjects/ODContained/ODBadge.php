@@ -54,6 +54,11 @@ class ODBadge extends ODContained
     protected $const_badgeColors;
     protected $const_badgePos;
 
+    /**
+     * ODBadge constructor.
+     * @param $id
+     * @throws \ReflectionException
+     */
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odbadge/odbadge.config.php");
 
@@ -70,18 +75,30 @@ class ODBadge extends ODContained
         return $this;
     }
 
+    /**
+     * @param $widthBT
+     * @return $this|bool|ODContained
+     */
     public function setWidthBT($widthBT)
     {
         // surcharge de méthode pour qu'elle ne fasse rien
         return $this;
     }
 
+    /**
+     * @return $this|bool
+     */
     public function getWidthBT()
     {
         // surcharge de méthode pour qu'elle ne fasse rien
         return $this;
     }
 
+    /**
+     * @param null $color
+     * @return $this|bool
+     * @throws \ReflectionException
+     */
     public function setColor($color = null)
     {
         if (!empty($color)) {
@@ -97,12 +114,21 @@ class ODBadge extends ODContained
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getColor()
     {
         $properties          = $this->getProperties();
         return ((!empty($properties['badgeColor'])) ? $properties['badgeColor'] : false) ;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return $this
+     */
     public function evtClick($class, $method, $stopEvent = true)
     {
         $properties = $this->getProperties();
@@ -115,6 +141,9 @@ class ODBadge extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disClick()
     {
         $properties             = $this->getProperties();
@@ -123,6 +152,11 @@ class ODBadge extends ODContained
         return $this;
     }
 
+    /**
+     * @param string $position
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function setPosition($position = self::BADGEPOS_RIGHT)
     {
         $position = (string) $position;
@@ -135,12 +169,19 @@ class ODBadge extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getPosition()
     {
         $properties          = $this->getProperties();
         return ((!empty($properties['position'])) ? $properties['position'] : false) ;
     }
 
+    /**
+     * @param string $content
+     * @return $this
+     */
     public function setContent($content = "&nbsp")
     {
         $content = (string) $content;
@@ -150,13 +191,23 @@ class ODBadge extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getContent()
     {
         $properties          = $this->getProperties();
         return ((!empty($properties['content'])) ? $properties['content'] : false) ;
     }
 
+    /** **************************************************************************************************
+     * méthodes privées de la classe                                                                     *
+     * *************************************************************************************************** */
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getBadgeColorConst()
     {
         $retour = [];
@@ -173,6 +224,10 @@ class ODBadge extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getBadgePosConst()
     {
         $retour = [];

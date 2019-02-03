@@ -12,6 +12,7 @@ return [
         'classObj'  => '',
         'methodObj' => '',
     ],
+    'hidden'            => [],
 
     'resources' => [
         'css'		=> [
