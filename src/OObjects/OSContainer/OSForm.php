@@ -373,6 +373,8 @@ class OSForm extends OSDiv
             if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {
                 return false;
             }
+            // pas encore de bouton -> initialisation du tableau par numéro d'ordre à vide
+            if (sizeof($btnControls) == 0) { $btnControls['ord'] = []; }
 
             if (sizeof($btnControls['ord']) == 0 && !self::existObject('formCtrls', $sessionObject)) {
                 // création de la séparation des boutons de controle du formulaire avec le reste du formulaire
