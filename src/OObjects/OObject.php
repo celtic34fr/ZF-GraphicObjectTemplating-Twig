@@ -369,13 +369,11 @@ class OObject
 
         if ($session) {
             $objects    = $sessionObj->objects;
-            if (array_key_exists('menuGlobal', $objects)) {
-                $menuGlobal = $objects['menuGlobal'];
-            }
+            $menuGlobal = $objects['menuGlobal'] ?? [];
             $sessionObj->objects = [];
             $sessionObj->resources = [];
             $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
-            if (isset($menuGlobal)) {
+            if (!empty($menuGlobal)) {
                 $menu = new ODMenu('menuGlobal');
                 $menu->setProperties(unserialize($menuGlobal));
                 $menu->saveProperties();
@@ -389,7 +387,7 @@ class OObject
                     $objet = self::buildObject($id, $sessionObj);
                     $children = $objet->getChildren();
                     foreach ($children as $child) {
-                        self::destroyObject($child->getId(), $session);
+                        self::destroyObject($child->getId());
                     }
                 }
                 $objects = $sessionObj->objects;
