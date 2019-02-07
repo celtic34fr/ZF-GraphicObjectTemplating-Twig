@@ -1,6 +1,6 @@
 function odtextarea(obj) {
     this.id = obj.attr('id');
-    this.contenu = obj.find(this.id+"Textarea").val();
+    this.contenu = obj.find("textarea").val();
     this.data = obj.data();
 }
 

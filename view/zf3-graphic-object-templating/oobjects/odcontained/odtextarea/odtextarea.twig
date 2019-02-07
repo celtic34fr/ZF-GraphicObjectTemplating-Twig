@@ -30,9 +30,7 @@
         {% if objet.placeholder is not empty %} placeholder="{{ objet.placeholder }}" {% endif %}
         {% if objet.textareaWidthBT is not empty %} data-widthbt="{{ objet.textareaWidthBT }}" {% endif %}
         {% if not objet.state %} disabled {% endif %}
-    >
-        {{ objet.text | raw }}
-    </textarea>
+    >{{ objet.text | raw }}</textarea>
 
 
     <script>
