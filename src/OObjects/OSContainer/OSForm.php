@@ -368,6 +368,7 @@ class OSForm extends OSDiv
         $btnControls    = $properties['btnControls'] ?? [];
         if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
         $sessionObject  = self::validateSession();
+        if (empty($btnControls)) { $btnControls['ord'] = []; }
 
         if (sizeof($btnControls['ord']) < 4 && (!array_key_exists('ord', $btnControls) || !array_key_exists($ord, $btnControls['ord']))) {
             if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {

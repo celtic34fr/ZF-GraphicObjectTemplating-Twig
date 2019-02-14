@@ -18,7 +18,7 @@ function invokeAjax(datas, idSource, event, e) {
         }
     }
     // récupération de l’URL d’appel Ajax
-    let urlGotCallback = $("#gotcallback").html();
+    let urlGotCallback = $("#gotcallback").text();
     let tabDatas       = [];
     $.ajax({
         url:        urlGotCallback,
