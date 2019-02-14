@@ -9,7 +9,7 @@ class ODCaptcha extends ODContained
     const BASE_CARACTERS_ALPHAUP    = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const BASE_CARACTERS_ALPAHDW    = 'abcdefghijklmnopqrstuvwxyz';
     const BASE_CARACTERS_NUMERIC    = '0123456789';
-    const BASE_CARACTERS_SIGNES     = "?!§!&#@£$";
+//    const BASE_CARACTERS_SIGNES     = "?!§!&#@£$";
 
     private $const_baseCaracters;
 
@@ -142,8 +142,8 @@ class ODCaptcha extends ODContained
      */
     public function setImgWidth($imgWidth)
     {
-        $imgWidth   = (string) $imgWidth;
-        if ((int) $imgWidth > 0 ) {
+        $imgWidth   = (int) $imgWidth;
+        if ($imgWidth > 0 ) {
             $properties = $this->getProperties();
             $properties['imgWidth']   = $imgWidth;
             $this->setProperties($properties);
@@ -167,8 +167,8 @@ class ODCaptcha extends ODContained
      */
     public function setImgHeight($imgHeight)
     {
-        $imgHeight  = (string) $imgHeight;
-        if ((int) $imgHeight > 0 ) {
+        $imgHeight  = (int) $imgHeight;
+        if ($imgHeight > 0 ) {
             $properties = $this->getProperties();
             $properties['imgHeight']   = $imgHeight;
             $this->setProperties($properties);
@@ -184,6 +184,27 @@ class ODCaptcha extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('imgHeight', $properties) ? $properties['imgHeight'] : false;
+    }
+
+    public function setCharSize($charSize)
+    {
+        $charSize  = (string) $charSize;
+        if ((int) $charSize > 0 ) {
+            $properties = $this->getProperties();
+            $properties['charSize']   = $charSize;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCharSize()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('charSize', $properties) ? $properties['charSize'] : false;
     }
 
     /**
@@ -248,13 +269,26 @@ class ODCaptcha extends ODContained
         return false;
     }
 
+    public function getFont($name)
+    {
+        $name       = (string) $name;
+        $properties = $this->getProperties();
+        $fonts      = $properties['fonts'];
+        if (array_key_exists($name, $fonts)) {
+            return $fonts[$name];
+        }
+        return false;
+    }
+
     public function initFonts()
     {
         $properties = $this->getProperties();
 
         $fonts      = [];
-        $fonts['icomoon']       = __DIR__.'/../../../public/fonts/icomoon.ttf';
-        $fonts['fontawesome']   = __DIR__.'/../../../public/fonts/fontawesome-webfont.ttf';
+        $fonts      = [ 'Cookie'                => __DIR__.'/../../../public/fonts/Cookie-Regular.ttf',
+                        'EuropeanTypewriter'    => __DIR__.'/../../../public/fonts/EuropeanTypewriter.ttf'
+                      ];
+
         $properties['fonts']    = $fonts;
 
         $this->setProperties($properties);
@@ -317,14 +351,16 @@ class ODCaptcha extends ODContained
     {
         $width  = $this->getImgWidth();
         $height = $this->getImgHeight();
+        $size   = $this->getCharSize();
+        $fonts  = $this->getFonts();
 
-        $image  = imagecreatetruecolor((int)$width, (int)$height);
+        $image  = imagecreatetruecolor($width, $height);
         imageantialias($image, true);
 
         $colors = [];
-        $red    = rand(125, 175);
-        $green  = rand(125, 175);
-        $blue   = rand(125, 175);
+        $red    = rand(100, 200);
+        $green  = rand(100, 200);
+        $blue   = rand(100, 200);
         for ($ind = 0; $ind < 5; $ind++) {
             $colors[]   = imagecolorallocate($image, $red - 20*$ind, $green - 20*$ind, $blue - 20*$ind);
         }
@@ -332,21 +368,34 @@ class ODCaptcha extends ODContained
         for ($ind = 0; $ind < 10; $ind++) {
             imagesetthickness($image, rand(2, 10));
             $rect_color = $colors[rand(1, 4)];
-            imagerectangle($image, rand(-10, 190), rand(-10, 10), rand(-10, 190), rand(40, 60), $rect_color);
+            imagerectangle($image, rand(-10, $width - 10), rand(-10, 10), rand(-10, $width - 10), rand($height - 10, $height + 10), $rect_color);
         }
 
-        $black      = imagecolorallocate($image, 0,0, 0);
-        $white      = imagecolorallocate($image, 255,255, 255);
-        $textColors = [$black, $white];
-        $fonts      = $this->getFonts();
+        $blackImg   = imagecolorallocate($image, 0,0, 0);
+        $whiteImg   = imagecolorallocate($image, 255,255, 255);
+        $redImg     = imagecolorallocate($image, 96,16, 16);
+        $greenImg   = imagecolorallocate($image, 16,96, 16);
+        $blueImg    = imagecolorallocate($image, 16,16, 96);
+        $textColors = [$blackImg, $redImg, $greenImg, $blueImg, $whiteImg];
 
         $captcha_string = $this->getGeneratedString();
-        $letter_space   = 170 / strlen($captcha_string);
+        $letter_space   = ($width - $size) / strlen($captcha_string);
         $initial        = 15;
 
         for ($ind = 0; $ind < strlen($captcha_string); $ind++) {
-            imagettftext($image, 20, rand(-15, 15), $initial + $ind*$letter_space, rand(20, 40),
-                $textColors[rand(0, 1)], $fonts[array_rand($fonts)], $captcha_string[$ind]);
+            $angle      = rand(-15, 15);
+            $x          = $initial + $ind*$letter_space;
+            $y          = rand($height - 30, $height - 10);
+            $color      = $textColors[rand(0, sizeof($textColors) - 1)];
+            $fontfile   = $fonts[array_rand($fonts)];
+            $text       = $captcha_string[$ind];
+            $ret        = imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text);
+
+            $angle      = rand(-15, 15);
+            $y          = rand($height - 30, $height - 10);
+            $color      = $textColors[rand(0, sizeof($textColors) - 1)];
+            $fontfile   = $fonts[array_rand($fonts)];
+            $ret        = imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text);
         }
 
         ob_start();

@@ -11,11 +11,12 @@ return [
     'baseLength'        => 5,
     'generatedString'   => '',
     'generatedCaptcha'  => '',
-    'fonts'             => [__DIR__.'/../../../../../public/fonts/icomoon.ttf',
-                            __DIR__.'/../../../../../public/fonts/fontawesome-webfont.ttf'],
+    'fonts'             => ['Cookie'                => __DIR__.'/../../../../../public/fonts/Cookie-Regular.ttf',
+                            'EuropeanTypewriter'    => __DIR__.'/../../../../../public/fonts/EuropeanTypewriter.ttf'],
 
-    'imgWidth'          => '200pt',
-    'imgHeight'         => '50pt',
+    'imgWidth'          => 300,
+    'imgHeight'         => 75,
+    'charSize'          => 35,
 
     'resources' => [
         'css'		=> [],
