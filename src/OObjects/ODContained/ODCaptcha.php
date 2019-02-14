@@ -295,6 +295,36 @@ class ODCaptcha extends ODContained
         return $this;
     }
 
+    public function setLabel($label)
+    {
+        $label = (string) $label;
+        $properties = $this->getProperties();
+        $properties['label'] = $label;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getLabel()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('label', $properties) ? $properties['label'] : false;
+    }
+
+    public function setPlaceholder($placeholder)
+    {
+        $placeholder = (string) $placeholder;
+        $properties = $this->getProperties();
+        $properties['placeholder'] = $placeholder;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getPlaceholder()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('placeholder', $properties) ? $properties['placeholder'] : false;
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */

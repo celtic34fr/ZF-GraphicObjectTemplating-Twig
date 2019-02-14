@@ -7,6 +7,8 @@ return [
     'typeObj'           => 'odcontained',
     'template'          => 'odcaptcha.twig',
 
+    'label'             => 'CAPTCHA',
+    'placeholder'       => 'saisir les caractères',
     'baseCaracters'     => ODCaptcha::BASE_CARACTERS_ALPHAUP,
     'baseLength'        => 5,
     'generatedString'   => '',
