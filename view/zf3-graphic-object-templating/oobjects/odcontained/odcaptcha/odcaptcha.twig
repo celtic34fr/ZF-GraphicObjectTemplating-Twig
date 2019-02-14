@@ -8,12 +8,14 @@
     {% if objet.state == false %} disabled {% endif %}
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
     >
-    <img src="{{ objet.generatedCaptcha|raw }}" alt="" class="col-lg-12">
+    <p class="col-lg-12">
+        <img src="{{ objet.generatedCaptcha|raw }}" alt="">
+    </p>
     <p>{{ objet.generatedString }}</p>
     <p>
         <label for="{{ objet.id }}Input" class="col-lg-12">CAPTCHA:</label>
         <input id="{{ objet.id }}Input" class="col-lg-12" type="text" required name="captchaInput">
-    </p>>
+    </p>
 
     <script id="{{ objet.id }}Script" type="text/javascript">
         {% if objet.event is not empty %}
