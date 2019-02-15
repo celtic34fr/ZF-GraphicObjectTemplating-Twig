@@ -25,13 +25,13 @@
     <script id="{{ object.id }}Script">
     {% if objet.fields is not empty %}
         function {{ objet.id }}Script() {
-            let require = '<span class"require mark" style="color:red;float:left;";>*&nbsp;</span>';
-            let topRequire = false;
+            var require = '<span style="color:red;float:left;width:10px;";>*&nbsp;</span>';
+            var topRequire = false;
             {% for ident, bool in objet.fields %}
                 {% if bool %}
             $("#{{ ident }}").addClass('require');
-            let mark = $("#{{ ident }} label span");
-            if (mark.length == 0) {
+            var mark = $("#{{ ident }} label span");
+            if (mark != undefined && mark.length == 0) {
                 $("#{{ ident }} label:first").html(require+$("#{{ ident }} label:first").html());
             }
             if (!topRequire) {topRequire = true;}
@@ -39,20 +39,20 @@
             {% endfor %}
 
             if (topRequire) {
-                let mention = $('span.require.mention');
+                var mention = $('span.require.mention');
                 if (mention.length == 0) {
-                    $("#{{ objet.id }}").append('<span class="require mention col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
+                    $("#{{ objet.id }}").append('<span class="require mention col-xs-12" style="font-weight: bold;"><span style="color:red;float:left;width: 10px;";>*&nbsp;</span> : champ(s) obligatoire(s)</span>');
                 }
             }
 
             {% if objet.submitEnter %}
-            let submitBtn = $('#{{ objet.id }} div[data-objet="odbutton"][data-default="true"]');
-            let objBuilder  = submitBtn.data("objet");
+            var submitBtn = $('#{{ objet.id }} div[data-objet="odbutton"][data-default="true"]');
+            var objBuilder  = submitBtn.data("objet");
 
             {# gestion pression touche, si enter = soumission formulaire si existe #}
             $("#{{ objet.id }} .gotObject").on("keypress", function (e) {
                 if (e.keyCode === 13) {
-                    let submit{{ objet.id }} = eval('new '+objBuilder+'($("#'+submitBtn.attr('id')+'"));');
+                    var submit{{ objet.id }} = eval('new '+objBuilder+'($("#'+submitBtn.attr('id')+'"));');
                     invokeAjax(submit{{ objet.id }}.getData('click'), submitBtn.attr('id'), 'click', e);
                 }
             });
