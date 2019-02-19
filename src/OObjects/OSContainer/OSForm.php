@@ -47,8 +47,11 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * setHiddenValue($key, $val)
  * rmHiddenValue($key)
  * getHiddenValue($key)
+ * setTitle(string $title)
+ * getTitle()
  *
  * mérthodes privées
+ * -----------------
  * propageFormParams(OObject $child, string $formID, bool $require )
  * removeFormParams(OObject $child)
  * addField($fieldID, $sourceId, $require = false)
@@ -57,6 +60,7 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * delField(OObject $field, OSContainer $source)
  *
  * méthodes de gestion de retour de callback
+ * -----------------------------------------
  * updateFormDatas()
  * updateFormRequire()
  * razFormDatas()
@@ -674,6 +678,20 @@ class OSForm extends OSDiv
         $properties = $this->getProperties();
         if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
         return $properties['hidden'];
+    }
+
+    public function setTitle(string $title)
+    {
+        $properties = $this->getProperties();
+        $properties['title']    = $title;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('title', $properties) ? $properties['title'] : false;
     }
 
     /** **************************************************************************************************

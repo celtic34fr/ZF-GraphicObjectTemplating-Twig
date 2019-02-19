@@ -13,6 +13,7 @@ return [
         'methodObj' => '',
     ],
     'hidden'            => [],
+    'title'             => '',
 
     'resources' => [
         'css'		=> [
