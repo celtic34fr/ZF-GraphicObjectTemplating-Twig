@@ -6,51 +6,13 @@
     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
-    <style>
-        #{{ objet.id }} .custom-dropdown select {
-            background-color: {{ objet.bgColor }} !important;
-            color: {{ objet.fgColor }} !important;
-            border: 1px solid {{ objet.fgColor }} !important;
-        }
 
-        #{{ objet.id }} .custom-dropdown label {
-            margin-top: 0.5em !important;
-        }
-
-        #{{ objet.id }} .custom-dropdown {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        #{{ objet.id }} .custom-dropdown:before {
-            z-index: 1000 !important;
-            background-color: #dedede !important;
-            height: 2.15em !important;
-            border-width: 2px;
-            border-style: outset;
-            border-color: buttonface;
-            border-image: initial;
-        }
-
-        #{{ objet.id }} .custom-dropdown:after {
-            /*z-index: 1000 !important;*/
-            /*background-color: #dedede !important;*/
-            z-index: 1000 !important;
-            background-color: #dedede !important;
-            content: "▼" !important;
-            font-size: 1.6em;
-            top: 0.6em;
-            position: absolute;
-            right: 0.1em !important;
-            color: black;
-        }
-    </style>
     <label for="{{ objet.id }}Select" class="{{ labelClass }}"
         {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
     >{{ objet.label }}</label>
-    <span class="custom-dropdown {{ objet.format }}"
+    <span class="{{ objet.format }}"
                 {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
->
+    >
     <select id="{{ objet.id }}Select" class="{{ selectClass }}"
             {#% include "zf3-graphic-object-templating/oobjects/objEvents.twig" with { event:objet.event } %#}
             {% if objet.multiple %} multiple {% endif %}
