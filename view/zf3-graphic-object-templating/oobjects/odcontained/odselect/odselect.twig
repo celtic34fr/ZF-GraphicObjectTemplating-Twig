@@ -11,9 +11,8 @@
         {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
     >{{ objet.label }}</label>
     <span class="{{ objet.format }}">
-    <select id="{{ objet.id }}Select" class="
-                {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
-    "
+    <select id="{{ objet.id }}Select" class="{{ selectClass }}"
+            {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
             {#% include "zf3-graphic-object-templating/oobjects/objEvents.twig" with { event:objet.event } %#}
             {% if objet.multiple %} multiple {% endif %}
             {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
