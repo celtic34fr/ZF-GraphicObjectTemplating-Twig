@@ -21,6 +21,14 @@
             margin: 0 5px !important;
             top: -1px;
         }
+
+        #{{ objet.id }} div label {
+            position: relative;
+            top: -0.3em;
+        {% if objet.options|length == 1 %}
+            font-weight: bold;
+        {% endif %}
+        }
     </style>
 
     {% if objet.label is not empty %}
