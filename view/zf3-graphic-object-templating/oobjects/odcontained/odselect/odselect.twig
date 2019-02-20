@@ -10,10 +10,10 @@
     <label for="{{ objet.id }}Select" class="{{ labelClass }}"
         {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
     >{{ objet.label }}</label>
-    <span class="{{ objet.format }}"
+    <span class="{{ objet.format }}">
+    <select id="{{ objet.id }}Select" class="
                 {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
-    >
-    <select id="{{ objet.id }}Select" class="{{ selectClass }}"
+    "
             {#% include "zf3-graphic-object-templating/oobjects/objEvents.twig" with { event:objet.event } %#}
             {% if objet.multiple %} multiple {% endif %}
             {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
@@ -34,7 +34,6 @@
         $(document).ready(function (e) {
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} select", $("#{{ objet.id }} select").data("widthbt"));
-            setBtClasses("#{{ objet.id }} span", $("#{{ objet.id }} span").data("widthbt"));
 
             {% if objet.event is not empty %}
             {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
