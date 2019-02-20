@@ -1,5 +1,7 @@
 <?php
 
+use GraphicObjectTemplating\OObjects\ODContained\ODNotification;
+
 return [
     'object'        => 'odnotification',
     'typeObj'       => 'odcontained',
@@ -8,13 +10,13 @@ return [
     'type'              => 'info',
     'title'             => '',
     'body'              => '',
-    'size'              => 'normal',
+    'size'              => ODNotification::NOTIFICATIONSIZE_NORMAL,
     'action'            => 'init',
     'sound'             => true,
     'soundExt'          => '.ogg',
     'soundPath'         => 'graphicobjecttemplating/objects/odcontained/odnotification/sounds/',
     'delay'             => 3000, // en millisecondes
-    'position'          => 'bottom right',
+    'position'          => ODNotification::NOTIFICATIONPOSITION_BR,
     'showAfterPrevious' => false,
     'delayMessage'      => 2000,
     'showClass'         => 'zoomIn',
