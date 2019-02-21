@@ -22,6 +22,24 @@
 .ospadding10  { padding:     1em; }
 .ospadding20  { padding:     2em; }
 
+.osmarginV01 { margin: 0.1em 0; }
+.osmarginV02 { margin: 0.2em 0; }
+.osmarginV05 { margin: 0.5em 0; }
+.osmarginV10 { margin:   1em 0; }
+.osmarginV20 { margin:   2em 0; }
+
+.osmarginH01 { margin: 0 0.1em; }
+.osmarginH02 { margin: 0 0.2em; }
+.osmarginH05 { margin: 0 0.5em; }
+.osmarginH10 { margin:   0 1em; }
+.osmarginH20 { margin:   0 2em; }
+
+.osmargin01  { margin:   0.1em; }
+.osmargin02  { margin:   0.2em; }
+.osmargin05  { margin:   0.5em; }
+.osmargin10  { margin:     1em; }
+.osmargin20  { margin:     2em; }
+
 .border-noir-01 {
     border: 0.1em black solid;
 }
