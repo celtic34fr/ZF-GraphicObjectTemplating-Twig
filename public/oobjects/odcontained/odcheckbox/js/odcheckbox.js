@@ -11,6 +11,7 @@ function odcheckbox(obj) {
         });
         this.options = options;
     }
+    this.objet  = obj.data('objet');
     this.data = obj.data();
 }
 
@@ -20,7 +21,7 @@ odcheckbox.prototype = {
         chps = chps + "&value='" + this.options.join("$") + "'";
         chps = chps + "&evt='" + evt + "'";
         chps = chps + "&obj='OUI'";
-        chps = chps + "&object='"+this.data('objet')+"'";
+        chps = chps + "&object='" + this.objet + "'";
         return chps;
     },
     setData: function (data) {

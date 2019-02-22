@@ -4,14 +4,15 @@ function odbutton(obj) {
 
     this.value  = button.data('value');
     this.form   = obj.data('form') ? obj.data('form') : '';
-    this.data   = obj.data();
+    this.objet  = obj.data('objet');
+    this.datas  = obj.data();
 }
 
 odbutton.prototype = {
     getData: function (evt) {
         var valeur = this.value != undefined ? this.value : '';
         var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        chps = chps + "&object='"+this.data('objet')+"'";
+        chps = chps + "&object='" + this.objet + "'";
 
         if ( this.form.length > 0 ) {
             let formObj = new osform($('#'+this.form));

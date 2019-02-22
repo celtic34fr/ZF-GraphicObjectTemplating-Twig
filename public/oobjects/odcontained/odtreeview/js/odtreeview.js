@@ -1,6 +1,8 @@
 function odtreeview(obj) {
     this.id = obj.attr('id');
     this.form   = obj.data('form');
+    this.objet  = obj.data('objet');
+    this.data   = obj.data();
 };
 
 function updateNodeStatus(node) {
@@ -41,7 +43,7 @@ odtreeview.prototype = {
             selected.push($(this).find('input').data('id'));
         });
         var chps = "id=" + this.id + "&value='" + selected.join("$") + "'&event='click'";
-        chps = chps + "&object='"+this.data('objet')+"'";
+        chps = chps + "&object='" + this.objet + "'";
         return chps;
     },
     setData: function (data) {
@@ -49,18 +51,18 @@ odtreeview.prototype = {
             $('#'+this.id+' li[data-lvl="'+ value.lvl +'"][data-ord="'+ value.ord +'"]').addClass('selected');
         });
     },
-    updtTreeLeaf(params) {
+    updtTreeLeaf: function(params) {
         var html        = params['html'];
         var selector    = params['selector'];
         $('#'+this.id+' '+selector).replaceWith(html);
 
     },
-    appendTreeNode(params) {
+    appendTreeNode: function(params) {
         var html        = params['html'];
         var selector    = params['selector'];
         $('#'+this.id+' '+selector).append(html);
     },
-    updateNodeState(currentInput) {
+    updateNodeState: function(currentInput) {
         var currentLi       = currentInput.parent('label').parent('li');
         var currentParent   = currentLi.parent('ul').parent('li');
 
