@@ -3,6 +3,7 @@ function odinput(obj) {
     this.value  = obj.find('input').val();
     this.type   = obj.find('input').attr('type');
     this.form   = obj.find('input').data('form');
+    this.objet  = obj.data('objet');
     this.data   = obj.data();
 }
 
@@ -10,7 +11,7 @@ odinput.prototype = {
     getData: function (evt) {
         var valeur = (this.value != undefined) ? this.value : '';
         var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        chps = chps + "&object='"+this.data('objet')+"'";
+        chps = chps + "&object='" + this.objet + "'";
         return chps;
     },
     setData: function (data) {
