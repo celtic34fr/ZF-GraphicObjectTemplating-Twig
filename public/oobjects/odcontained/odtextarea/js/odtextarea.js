@@ -6,7 +6,8 @@ function odtextarea(obj) {
 
 odtextarea.prototype = {
     getData: function (evt) {
-        let chps = "id=" + this.id + "&value='" + this.contenu + "'";
+        var chps = "id=" + this.id + "&value='" + this.contenu + "'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {

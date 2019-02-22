@@ -4,9 +4,9 @@ function odtreeview(obj) {
 };
 
 function updateNodeStatus(node) {
-    let nbreLi_Alls = 'rien';
-    let nbreLiSelec = 'rien';
-    let nbreLiIndet = 'rien';
+    var nbreLi_Alls = 'rien';
+    var nbreLiSelec = 'rien';
+    var nbreLiIndet = 'rien';
 
     if (node != undefined) {
         nbreLi_Alls = currentParent.children('ul').children('li').length;
@@ -36,11 +36,12 @@ function updateNodeStatus(node) {
 
 odtreeview.prototype = {
     getData: function (evt) {
-        let selected = [];
+        var selected = [];
         $('#'+this.id+' li.selected').each(function () {
             selected.push($(this).find('input').data('id'));
         });
-        let chps = "id=" + this.id + "&value='" + selected.join("$") + "'&event='click'";
+        var chps = "id=" + this.id + "&value='" + selected.join("$") + "'&event='click'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {
@@ -49,23 +50,23 @@ odtreeview.prototype = {
         });
     },
     updtTreeLeaf(params) {
-        let html        = params['html'];
-        let selector    = params['selector'];
+        var html        = params['html'];
+        var selector    = params['selector'];
         $('#'+this.id+' '+selector).replaceWith(html);
 
     },
     appendTreeNode(params) {
-        let html        = params['html'];
-        let selector    = params['selector'];
+        var html        = params['html'];
+        var selector    = params['selector'];
         $('#'+this.id+' '+selector).append(html);
     },
     updateNodeState(currentInput) {
-        let currentLi       = currentInput.parent('label').parent('li');
-        let currentParent   = currentLi.parent('ul').parent('li');
+        var currentLi       = currentInput.parent('label').parent('li');
+        var currentParent   = currentLi.parent('ul').parent('li');
 
-        let nbreLi_Alls = 'rien';
-        let nbreLiSelec = 'rien';
-        let nbreLiIndet = 'rien';
+        var nbreLi_Alls = 'rien';
+        var nbreLiSelec = 'rien';
+        var nbreLiIndet = 'rien';
 
 //        updateStatusNode(currentParent);
 

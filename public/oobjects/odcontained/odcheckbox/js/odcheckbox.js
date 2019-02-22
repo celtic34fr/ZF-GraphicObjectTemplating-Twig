@@ -20,6 +20,7 @@ odcheckbox.prototype = {
         chps = chps + "&value='" + this.options.join("$") + "'";
         chps = chps + "&evt='" + evt + "'";
         chps = chps + "&obj='OUI'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {

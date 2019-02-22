@@ -186,6 +186,7 @@ class MainController extends AbstractActionController
             $data   = explode('§', $data);
             $idF    = '';
             $val    = '';
+            $object = '';
             foreach ($data as $item) {
                 switch (true) {
                     case (strpos($item, 'id=') !== false):

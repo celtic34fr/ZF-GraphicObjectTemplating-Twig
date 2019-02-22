@@ -5,12 +5,13 @@ function odselect(obj) {
 
 odselect.prototype = {
     getData: function (evt) {
-        let selected = '';
+        var selected = '';
         $('#'+this.id+' option:selected').each(function () {
             selected += $(this).val() + "-"
         });
         selected = selected.substring(0, selected.length - 1);
-        let chps = "id=" + this.id + "&value='" + selected + "'&event='change'";
+        var chps = "id=" + this.id + "&value='" + selected + "'&event='change'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {

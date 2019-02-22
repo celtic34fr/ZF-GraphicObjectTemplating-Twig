@@ -7,8 +7,9 @@ function oddatetimepicker(obj) {
 
 oddatetimepicker.prototype = {
     getData: function (evt) {
-        let valeur = (this.value != undefined) ? this.value : '';
-        let chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        var valeur = (this.value != undefined) ? this.value : '';
+        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {

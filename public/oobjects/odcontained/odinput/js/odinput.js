@@ -10,6 +10,7 @@ odinput.prototype = {
     getData: function (evt) {
         var valeur = (this.value != undefined) ? this.value : '';
         var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {

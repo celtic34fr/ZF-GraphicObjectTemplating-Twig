@@ -7,8 +7,9 @@ function odcaptcha(obj) {
 
 odcaptcha.prototype = {
     getData: function (evt) {
-        let valeur = this.val != undefined ? this.val : '';
-        let chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        var valeur = this.val != undefined ? this.val : '';
+        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        chps = chps + "&object='"+this.data('objet')+"'";
         return chps;
     },
     setData: function (data) {
