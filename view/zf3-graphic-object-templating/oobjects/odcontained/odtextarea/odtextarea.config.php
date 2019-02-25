@@ -16,9 +16,13 @@ return array(
     'textareaWidth' => '',
     'labelWidthBT'  => '',
     'resize'        => ODTextarea::TEXTAREA_RESIZEBOTH,
+    'wysiwyg'       => false,
 
     'resources' => [
         'css' => [],
-        'js'  => ['odtextarea.js' => 'js/odtextarea.js',],
+        'js'  => [
+            'odtextarea.js' => 'js/odtextarea.js',
+            'tinymce.min.js' => 'js/tinymce/tinymce.min.js'
+        ],
     ],
 );

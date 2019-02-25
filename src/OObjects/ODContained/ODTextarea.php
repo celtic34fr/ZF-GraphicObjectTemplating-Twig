@@ -44,6 +44,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * disResize()      : interdit à redimensionner le textarea en X et Y
  * enaVertiResize   : autorise à redimensionner le textarea en Y
  * enaHorizResize   : autorise à redimensionner le textarea en X
+ * enaEditorWYSIWYG : activation de l'éditeur WYSIWYG TinyMCE
+ * disEditorWYSIWYG : déactivation de l'éditeur WYSIWYG TinyMCE, retour à textarea
  */
 class ODTextarea extends ODContained
 {
@@ -279,6 +281,26 @@ class ODTextarea extends ODContained
         $this->setProperties($properties);
         return $this;
     }
+
+    public function enaEditorWYSIWYG()
+    {
+        $properties = $this->getProperties();
+        $properties['wysiwig'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disEditorWYSIWYG()
+    {
+        $properties = $this->getProperties();
+        $properties['wysiwig'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /** **************************************************************************************************
+     * méthodes privées de la classe                                                                     *
+     * *************************************************************************************************** */
 
     private function getResizeConstants()
     {
