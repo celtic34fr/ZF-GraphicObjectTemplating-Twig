@@ -11,6 +11,7 @@
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+     data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
 >
     <style>
         #{{ objet.id }} textarea {
@@ -41,6 +42,7 @@
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} textarea", $("#{{ objet.id }} textarea").data("widthbt"));
 
+            {% if objet.wysiwyg %}
             tinymce.init({
                 selector: '#{{ objet.id }} textarea',
                 plugins: [
@@ -56,6 +58,7 @@
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/bootstrap/css/bootstrap.min.css') }}",
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/cube-portfolio/cubeportfolio/css/cubeportfolio.min.css') }}"]
             });
+            {% endif %}
 
             {% if objet.event is not empty %}
             {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}

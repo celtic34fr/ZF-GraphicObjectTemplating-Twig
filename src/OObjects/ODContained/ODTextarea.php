@@ -285,7 +285,7 @@ class ODTextarea extends ODContained
     public function enaEditorWYSIWYG()
     {
         $properties = $this->getProperties();
-        $properties['wysiwig'] = true;
+        $properties['wysiwyg'] = true;
         $this->setProperties($properties);
         return $this;
     }
@@ -293,7 +293,7 @@ class ODTextarea extends ODContained
     public function disEditorWYSIWYG()
     {
         $properties = $this->getProperties();
-        $properties['wysiwig'] = false;
+        $properties['wysiwyg'] = false;
         $this->setProperties($properties);
         return $this;
     }
