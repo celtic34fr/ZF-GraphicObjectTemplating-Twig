@@ -74,6 +74,9 @@ use Zend\Session\Container;
  * hideCol($nCol)           cache une colonne ($nCol) pour l'affichage
  * findNolineOnColValue($nCol, $value)
  *                          recherche le numéro de ligne sur une valeur de colonne
+ * findNolineOnOrderedColsValue(array $fColsVals)
+ *                          recherche le numéro de la ligne sur un ensemble de couples valeurs / colonnes (conditions
+ *                          liées entre-elles par 'AND' -> ligne contenant tous les couples valeurs / colonnes)
  * enaPagination()          activation de la pagination
  * disPagination()          dé-activation de la pagination
  * getPagination()          retourne si la pagination est activé ou non
@@ -675,6 +678,31 @@ class ODTable extends ODContained
             if ($line[$nCol] == $value) {
                 $rslt[] = $noLine;
             }
+        }
+        return $rslt;
+    }
+
+    public function findNolineOnOrderedColsValue(array $fColsVals)
+    {
+        $rslt       = [];
+        $properties = $this->getProperties();
+        $nbCols     = sizeof($properties['cols']);
+        $lines      = $this->getLines();
+
+        // validation numéros colonnes
+        foreach ($fColsVals as $nCol => $fVal) {
+            $nCol   = (int) $nCol;
+            if ($nCol < 1 || $nCol > $nbCols) return false;
+        }
+
+        // recher des lignes par numéro en retour
+        foreach ($lines as $noLine => $line) {
+            foreach ($fColsVals as $nCol => $fVal) {
+                if ($line[(int) $nCol] != $fVal) {
+                    continue 2;
+                }
+            }
+            $rslt[] = $noLine;
         }
         return $rslt;
     }
