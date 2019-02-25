@@ -7,7 +7,13 @@ function odtextarea(obj) {
 
 odtextarea.prototype = {
     getData: function (evt) {
-        var chps = "id=" + this.id + "&value='" + this.contenu + "'";
+        var content = "";
+        if (this.data['wysiwyg'] == true) {
+            content = tinyMCE.activeEditor.getContent();
+        } else {
+            content = this.contenu;
+        }
+        var chps = "id=" + this.id + "&value='" + content + "'";
         chps = chps + "&object='" + this.objet + "'";
         return chps;
     },

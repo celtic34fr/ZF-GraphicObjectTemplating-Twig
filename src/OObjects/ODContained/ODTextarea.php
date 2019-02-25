@@ -44,8 +44,6 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * disResize()      : interdit à redimensionner le textarea en X et Y
  * enaVertiResize   : autorise à redimensionner le textarea en Y
  * enaHorizResize   : autorise à redimensionner le textarea en X
- * enaEditorWYSIWYG : activation de l'éditeur WYSIWYG TinyMCE
- * disEditorWYSIWYG : déactivation de l'éditeur WYSIWYG TinyMCE, retour à textarea
  */
 class ODTextarea extends ODContained
 {
@@ -54,6 +52,13 @@ class ODTextarea extends ODContained
     const TEXTAREA_RESIZEVERTI  = 'vertical';
     const TEXTAREA_RESIZENONE   = 'none';
 
+    private $const_resize;
+
+    /**
+     * ODTextarea constructor.
+     * @param $id
+     * @throws \ReflectionException
+     */
     public function __construct($id)
     {
         parent::__construct($id, "oobjects/odcontained/odtextarea/odtextarea.config.php");
@@ -66,12 +71,19 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getCols()
     {
         $properties = $this->getProperties();
         return (array_key_exists('cols', $properties) ? $properties['cols'] : false);
     }
 
+    /**
+     * @param $cols
+     * @return $this
+     */
     public function setCols($cols)
     {
         $cols = (int) $cols;
@@ -84,12 +96,19 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getRows()
     {
         $properties = $this->getProperties();
         return (array_key_exists('rows', $properties) ? $properties['rows'] : false);
     }
 
+    /**
+     * @param $rows
+     * @return $this
+     */
     public function setRows($rows)
     {
         $rows = (int) $rows;
@@ -102,12 +121,19 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getMaxLength()
     {
         $properties = $this->getProperties();
         return (array_key_exists('maxLength', $properties) ? $properties['maxLength'] : false);
     }
 
+    /**
+     * @param $maxLength
+     * @return $this
+     */
     public function setMaxLength($maxLength)
     {
         $maxLength = (int) $maxLength;
@@ -120,6 +146,10 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @param $placeholder
+     * @return $this
+     */
     public function setPlaceholder($placeholder)
     {
         $placeholder = (string) $placeholder;
@@ -129,12 +159,19 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getPlaceholder()
     {
         $properties                = $this->getProperties();
         return ((!empty($properties['placeholder'])) ? $properties['placeholder'] : false) ;
     }
 
+    /**
+     * @param $text
+     * @return $this
+     */
     public function setText($text)
     {
         $text = (string) $text;
@@ -144,12 +181,21 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getText()
     {
         $properties                = $this->getProperties();
         return ((!empty($properties['text'])) ? $properties['text'] : false) ;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return $this
+     */
     public function evtChange($class, $method, $stopEvent = true)
     {
         $properties = $this->getProperties();
@@ -162,6 +208,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disChange()
     {
         $properties             = $this->getProperties();
@@ -170,6 +219,12 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return $this
+     */
     public function evtKeyup($class, $method, $stopEvent = true)
     {
         $properties = $this->getProperties();
@@ -182,6 +237,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disKeyup()
     {
         $properties             = $this->getProperties();
@@ -190,6 +248,10 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @param $label
+     * @return $this
+     */
     public function setLabel($label)
     {
         $label = (string) $label;
@@ -199,12 +261,19 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getLabel()
     {
         $properties            = $this->getProperties();
         return ((array_key_exists('label', $properties)) ? $properties['label'] : false);
     }
 
+    /**
+     * @param $widthBT
+     * @return $this|bool
+     */
     public function setLabelWidthBT($widthBT)
     {
         if (!empty($labelWidthBT)) {
@@ -219,12 +288,18 @@ class ODTextarea extends ODContained
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getLabelWidthBT()
     {
         $properties                = $this->getProperties();
         return ((!empty($properties['labelWidthBT'])) ? $properties['labelWidthBT'] : false) ;
     }
 
+    /**
+     * @return $this
+     */
     public function enaDispBySide()
     {
         $properties = $this->getProperties();
@@ -235,6 +310,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function enaDispUnder()
     {
         $properties = $this->getProperties();
@@ -246,6 +324,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function enaResize()
     {
         $properties = $this->getProperties();
@@ -255,6 +336,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function disResize()
     {
         $properties = $this->getProperties();
@@ -264,6 +348,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function enaVertiResize()
     {
         $properties = $this->getProperties();
@@ -273,6 +360,9 @@ class ODTextarea extends ODContained
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function enaHorizResize()
     {
         $properties = $this->getProperties();
@@ -282,26 +372,14 @@ class ODTextarea extends ODContained
         return $this;
     }
 
-    public function enaEditorWYSIWYG()
-    {
-        $properties = $this->getProperties();
-        $properties['wysiwyg'] = true;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function disEditorWYSIWYG()
-    {
-        $properties = $this->getProperties();
-        $properties['wysiwyg'] = false;
-        $this->setProperties($properties);
-        return $this;
-    }
-
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getResizeConstants()
     {
         $retour = [];

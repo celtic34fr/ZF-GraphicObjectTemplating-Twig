@@ -45,13 +45,11 @@
             {% if objet.wysiwyg %}
             tinymce.init({
                 selector: '#{{ objet.id }} textarea',
-                plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table contextmenu paste",
-                    "importcss"
-                ],
-                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify",
+                plugins: [ '{{ objet.plugins }}' ],
+                menu: {
+                    file: {title: 'File', items: 'newdocument preview', }
+                },
+                toolbar: [ "{{ objet.toolbar }}" ],
                 content_css : ["{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/blocks.css') }}",
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/app.css') }}",
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/custom.css') }}",
@@ -70,4 +68,16 @@
 // menubar: "insert",
 // toolbar: "link image numlist bullist charmap",
 // image_list: "/contenu/imageList"
+
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table contextmenu paste",
+                    "importcss"
+                ],
+
+                toolbar: ["insertfile undo redo | styleselect | bold italic forecolor backcolor ",
+                    "| alignleft aligncenter alignright alignjustify | link image media table ",
+                    "| numlist bullist outdent indent  | removeformat",
+                    ],
 #}

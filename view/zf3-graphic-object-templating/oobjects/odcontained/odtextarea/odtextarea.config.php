@@ -17,6 +17,8 @@ return array(
     'labelWidthBT'  => '',
     'resize'        => ODTextarea::TEXTAREA_RESIZEBOTH,
     'wysiwyg'       => false,
+    'plugins'       => '',
+    'toolbar'       => '',
 
     'resources' => [
         'css' => [],
