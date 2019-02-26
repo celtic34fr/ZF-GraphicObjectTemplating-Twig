@@ -54,7 +54,13 @@
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/app.css') }}",
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/custom.css') }}",
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/bootstrap/css/bootstrap.min.css') }}",
-                    "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/cube-portfolio/cubeportfolio/css/cubeportfolio.min.css') }}"]
+                    "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/cube-portfolio/cubeportfolio/css/cubeportfolio.min.css') }}"],
+            {% if objet.imgListUrl is not empty %}
+                image_list: "{{ objet.imgListUrl }}",
+            {% endif %}
+            {% if objet.lnkListUrl is not empty %}
+                link_list: "{{ objet.lnkListUrl }}",
+            {% endif %}
             });
             {% endif %}
 

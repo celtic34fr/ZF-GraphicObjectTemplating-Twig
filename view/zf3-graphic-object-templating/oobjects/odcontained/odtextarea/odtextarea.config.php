@@ -19,6 +19,8 @@ return array(
     'wysiwyg'       => false,
     'plugins'       => '',
     'toolbar'       => '',
+    'imgListUrl'    => '',
+    'lnkListUrl'    => '',
 
     'resources' => [
         'css' => [],

@@ -16,6 +16,10 @@ use GraphicObjectTemplating\OObjects\ODContained\ODTextarea;
  * setToolbar($toolbar)
  * rmToolbarItme($toolbarItem)
  * getToolbar()
+ * setImageListUrl(string $imageLisrtUrl)
+ * getImageListUrl()
+ * setLinkListUrl(string $linkListUrl)
+ * getLinkListUrl()
  */
 class ODTinyMCE extends ODTextarea
 {
@@ -259,6 +263,48 @@ class ODTinyMCE extends ODTextarea
     {
         $properties                = $this->getProperties();
         return ((!empty($properties['toolbar'])) ? $properties['toolbar'] : false) ;
+    }
+
+    /**
+     * @param string $imageListUrl
+     * @return $this
+     */
+    public function setImageListUrl(string $imageListUrl)
+    {
+        $properties                 = $this->getProperties();
+        $properties['imgListUrl']   = $imageListUrl;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getImageListUrl()
+    {
+        $properties                = $this->getProperties();
+        return ((!empty($properties['imgListUrl'])) ? $properties['imgListUrl'] : false) ;
+    }
+
+    /**
+     * @param string $linkListUrl
+     * @return $this
+     */
+    public function setLinkListUrl(string $linkListUrl)
+    {
+        $properties                 = $this->getProperties();
+        $properties['lnkListUrl']   = $linkListUrl;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLinkListUrl()
+    {
+        $properties                = $this->getProperties();
+        return ((!empty($properties['lnkListUrl'])) ? $properties['lnkListUrl'] : false) ;
     }
 
     /** **************************************************************************************************
