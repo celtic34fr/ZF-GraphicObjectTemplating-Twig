@@ -1,0 +1,47 @@
+{# template pour l'objet ODFileUpload #}
+
+{#
+
+url visualiser  url('gotFileUpload', {'action': 'view', 'id': N°image ou nomImage})
+url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou nomImage})
+#}
+
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }} form-group"
+        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
+        {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+    <input id="{{ objet.id }}-input" type="file">
+
+    <script>
+        {% set urlView = url ('gotFileUpload', {'action': 'view'}) %}
+        $(document).on('ready', function () {
+            $('#{{ objet.id }}-input').fileinput({
+                showCaption: false,
+                dropZoneEnabled: false,
+                allowedFileExtensions: {{ objet.acceptedFiles|json_encode() }},
+            {% if objet.placeholder is not empty %}
+                initialCaption: "{{ objet.placeholder }}",
+            {% endif %}
+
+            {% if objet.loadedFiles is not empty %}
+                {% set initialPreview = {} %}
+                {% set initialPreviewConfig = {} %}
+                {% for loadedFile in loadedFiles %}
+                    {% set initialPreview[loop.index0] = urlView ~ '/' ~ loadedFile.src %}
+                    {% set initialPreviewConfig[loop.index0] = {
+                        'caption': loadedFile.name,
+                        'downloadUrl': urlView ~ '/' ~ loadedFile.src,
+                        'size': loadedFile.size,
+                        'width': "120px",
+                        'key': loop.index
+                    } %}
+                {% endfor %}
+                initialPreview: {{ initialPreview|json_encode }},
+                initialPreviewAsData: true,
+                initialPreviewConfig: {{ initialPreviewConfig|json_encode }},
+            {% endif %}
+            })
+        })
+    </script>
+</div>

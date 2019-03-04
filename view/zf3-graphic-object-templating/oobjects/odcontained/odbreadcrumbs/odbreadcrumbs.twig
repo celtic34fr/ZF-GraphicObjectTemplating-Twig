@@ -1,0 +1,13 @@
+{# template de l'objet ODBreadcrumbs #}
+
+<div id="{{ objet.id }}">
+    <ol class="breadcrumb">
+        {% for item in objet.tree %}
+            {% if not(loop.last) %}
+                <li><a href="{{ item.url |escape }}">{{ item.label | escape }}</a></li>
+            {% else %}
+                <li>{{ item.label | escape }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</div>
