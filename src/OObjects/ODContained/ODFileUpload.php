@@ -58,6 +58,12 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * hideBrowseOnClick()
  * showDropZone()
  * hideDropZone()
+ * addUserExtension(string $userName, string $uyserExtension)
+ * setUserExtension(string $userName, string $uyserExtension)
+ * rmUserExtension(string $userName, string $uyserExtension)
+ * getUserExtension(string $userName, string $uyserExtension)
+ * setUserExtensions(array $uyserExtensions)
+ * getUserExtensions()
  */
 class ODFileUpload extends ODContained
 {
@@ -889,6 +895,66 @@ class ODFileUpload extends ODContained
         $properties['dropZone'] = false;
         $this->setProperties($properties);
         return $this;
+    }
+
+    public function addUserExtension(string $userName, string $userExtension)
+    {
+        $properties     = $this->getProperties();
+        $userExtensions = $properties['userExtensions'];
+        if (!array_key_exists($userName, $userExtensions) && !in_array($userExtension, $userExtensions)) {
+            $userExtensions[$userName]  = $userExtension;
+        }
+        $properties[$userExtension] = $userExtensions;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function setUserExtension(string $userName, string $userExtension)
+    {
+        $properties     = $this->getProperties();
+        $userExtensions = $properties['userExtensions'];
+        if (array_key_exists($userName, $userExtensions)) {
+            $userExtensions[$userName]  = $userExtension;
+        }
+        $properties['userExtensions'] = $userExtensions;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function rmUserExtension(string $userName)
+    {
+        $properties     = $this->getProperties();
+        $userExtensions = $properties['userExtensions'];
+        if (array_key_exists($userName, $userExtensions)) {
+            unset($userExtensions[$userName]);
+        }
+        $properties['userExtensions'] = $userExtensions;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getUserExtension(string $userName)
+    {
+        $properties     = $this->getProperties();
+        $userExtensions = $properties['userExtensions'];
+        if (array_key_exists($userName, $userExtensions)) {
+            return $userExtensions[$userName];
+        }
+        return false;
+    }
+
+    public function setUserExtensions(array $userExtensions)
+    {
+        $properties     = $this->getProperties();
+        $properties['userExtensions'] = $userExtensions;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getUserExtensions()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('userExtensions', $properties) ? $properties['userExtensions'] : false;
     }
 
     /** **************************************************************************************************

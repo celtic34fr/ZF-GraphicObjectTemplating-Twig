@@ -10,6 +10,7 @@ return [
     "locale"            => ODFileUpload::LOCALE_FRANCAIS,
     "acceptedFiles"     => [],
     "loadedFiles"       => [],
+    'userExtensions'    => [],
     'initialCaption'    => '',
     'caption'           => ODFileUpload::BOOLEAN_TRUE,
     'preview'           => ODFileUpload::BOOLEAN_TRUE,

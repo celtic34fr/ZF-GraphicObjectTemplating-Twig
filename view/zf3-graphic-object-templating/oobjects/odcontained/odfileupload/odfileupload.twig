@@ -6,6 +6,9 @@ url visualiser  url('gotFileUpload', {'action': 'view', 'id': N°image ou nomIma
 url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou nomImage})
 #}
 
+{%  set allowedFiles = objet.acceptedFiles %}
+{%  set allowedFiles = allowedFiles|merge(objet.userExtensions) %}
+
 <div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }} form-group"
         {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
      data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
@@ -28,7 +31,7 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
                 showBrowse: {{ objet.browse ? 'true' : 'false' }},
                 browseOnZoneClick: {{ objet.browseOnClick ? 'true' : 'false' }},
                 dropZoneEnabled: {{ objet.dropZone ? 'true' : 'false' }},
-                allowedFileExtensions: {{ objet.acceptedFiles|json_encode()|raw }},
+                allowedFileExtensions: {{ allowedFiles|json_encode()|raw }},
             {% if objet.placeholder is not empty %}
                 initialCaption: "{{ objet.initialCaption }}",
             {% endif %}
