@@ -35,90 +35,94 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * addLoadedFileHDD(string $fileName, string $path)
  * addLoadedFileDB(object $fileObject)
  * setLoadedFiles(array $loadedFiles)
- * setPlaceholder($placeholder)
+ * setInitialCaption($initialCaption)
  *                          fixe le texte affiché dans la zone label du téléchargement
- * getPlaceholder()
+ * getInitialCaption()
+ * showCaption()
+ * hideCaption()
+ * showDropZone()
+ * hideDropZone()
  */
 class ODFileUpload extends ODContained
 {
-    const LOCALE_FRANCAIS               = 'fr';
-    const LOCALE_ESPANOL                = 'es';
-    const LOCALE_DEUTSCH                = 'de';
-    const LOCALE_ITALIANO               = 'it';
+    const   LOCALE_FRANCAIS               = 'fr';
+    const   LOCALE_ESPANOL                = 'es';
+    const   LOCALE_DEUTSCH                = 'de';
+    const   LOCALE_ITALIANO               = 'it';
 
-    const LOCALE_AZERBAYCAN             = 'ar';
-    const LOCALE_BULGARIAN              = 'bg';
-    const LOCALE_CATALA                 = 'ca';
-    const LOCALE_HRVATSKI               = 'cr';
-    const LOCALE_CESKY                  = 'cs';
-    const LOCALE_DANSK                  = 'da';
-    const LOCALE_GREEK                  = 'el';
-    const LOCALE_EESTI                  = 'et';
-    const LOCALE_PERSAN                 = 'fa';
-    const LOCALE_SUOMALAINEN            = 'fi';
-    const LOCALE_GALEGO                 = 'gl';
-    const LOCALE_HEBREW                 = 'he';
-    const LOCALE_MAGYAR                 = 'hu';
-    const LOCALE_INDONESIA              = 'id';
-    const LOCALE_JAPANESE               = 'ja';
-    const LOCALE_GEORGIAN               = 'ka';
-    const LOCALE_KOREAN                 = 'kr';
-    const LOCALE_KAZAKH                 = 'kz';
-    const LOCALE_LIETUVOS               = 'lt';
-    const LOCALE_NEDERLANDS             = 'nl';
-    const LOCALE_NORSK                  = 'no';
-    const LOCALE_POLSKI                 = 'pl';
-    const LOCALE_PORTUGUES              = 'pt';
-    const LOCALE_PORTUGUES_BRASIL       = 'pt-BR';
-    const LOCALE_RONANESC               = 'ro';
-    const LOCALE_RUSSIAN                = 'ru';
-    const LOCALE_SLOVENSKY              = 'sk';
-    const LOCALE_SLOVENSKI              = 'sl';
-    const LOCALE_SVENSKA                = 'sv';
-    const LOCALE_THAI                   = 'th';
-    const LOCALE_TURK                   = 'tr';
-    const LOCALE_UKRAINIAN              = 'uk';
-    const LOCALE_O_ZBEKISTON            = 'uz';
-    const LOCALE_TIENG_VIET             = 'vi';
-    const LOCALE_CHINESE                = 'zh';
-    const LOCALE_CHINESE_TRADITIONAL    = 'zh-TW';
+    const   LOCALE_AZERBAYCAN             = 'ar';
+    const   LOCALE_BULGARIAN              = 'bg';
+    const   LOCALE_CATALA                 = 'ca';
+    const   LOCALE_HRVATSKI               = 'cr';
+    const   LOCALE_CESKY                  = 'cs';
+    const   LOCALE_DANSK                  = 'da';
+    const   LOCALE_GREEK                  = 'el';
+    const   LOCALE_EESTI                  = 'et';
+    const   LOCALE_PERSAN                 = 'fa';
+    const   LOCALE_SUOMALAINEN            = 'fi';
+    const   LOCALE_GALEGO                 = 'gl';
+    const   LOCALE_HEBREW                 = 'he';
+    const   LOCALE_MAGYAR                 = 'hu';
+    const   LOCALE_INDONESIA              = 'id';
+    const   LOCALE_JAPANESE               = 'ja';
+    const   LOCALE_GEORGIAN               = 'ka';
+    const   LOCALE_KOREAN                 = 'kr';
+    const   LOCALE_KAZAKH                 = 'kz';
+    const   LOCALE_LIETUVOS               = 'lt';
+    const   LOCALE_NEDERLANDS             = 'nl';
+    const   LOCALE_NORSK                  = 'no';
+    const   LOCALE_POLSKI                 = 'pl';
+    const   LOCALE_PORTUGUES              = 'pt';
+    const   LOCALE_PORTUGUES_BRASIL       = 'pt-BR';
+    const   LOCALE_RONANESC               = 'ro';
+    const   LOCALE_RUSSIAN                = 'ru';
+    const   LOCALE_SLOVENSKY              = 'sk';
+    const   LOCALE_SLOVENSKI              = 'sl';
+    const   LOCALE_SVENSKA                = 'sv';
+    const   LOCALE_THAI                   = 'th';
+    const   LOCALE_TURK                   = 'tr';
+    const   LOCALE_UKRAINIAN              = 'uk';
+    const   LOCALE_O_ZBEKISTON            = 'uz';
+    const   LOCALE_TIENG_VIET             = 'vi';
+    const   LOCALE_CHINESE                = 'zh';
+    const   LOCALE_CHINESE_TRADITIONAL    = 'zh-TW';
 
-    const   EXT_IMAG_JPG    = 'jpg';
-    const   EXT_IMAG_JPEG   = 'jpeg';
-    const   EXT_IMAG_PNG    = 'png';
-    const   EXT_IMAG_BMP    = 'bmp';
-    const   EXT_IMAG_GIF    = 'gif';
-    const   EXT_IMAG_SVG    = 'svg';
+    const   EXT_IMAG_JPG                  = 'jpg';
+    const   EXT_IMAG_JPEG                 = 'jpeg';
+    const   EXT_IMAG_PNG                  = 'png';
+    const   EXT_IMAG_BMP                  = 'bmp';
+    const   EXT_IMAG_GIF                  = 'gif';
+    const   EXT_IMAG_SVG                  = 'svg';
 
-    const   EXT_WORD_DOC    = 'doc';
-    const   EXT_WORD_DOCX   = 'docx';
-    const   EXT_WORD_ODT    = 'odt';
-    const   EXT_WORD_RTF    = 'rtf';
-    const   EXT_WORD_TXT    = 'txt';
+    const   EXT_WORD_DOC                  = 'doc';
+    const   EXT_WORD_DOCX                 = 'docx';
+    const   EXT_WORD_ODT                  = 'odt';
+    const   EXT_WORD_RTF                  = 'rtf';
+    const   EXT_WORD_TXT                  = 'txt';
 
-    const   EXT_EXCL_XLS    = 'xls';
-    const   EXT_EXCL_XLSX   = 'xlsx';
-    const   EXT_EXCL_ODS    = 'ods';
-    const   EXT_EXCL_CSV    = 'csv';
+    const   EXT_EXCL_XLS                  = 'xls';
+    const   EXT_EXCL_XLSX                 = 'xlsx';
+    const   EXT_EXCL_ODS                  = 'ods';
+    const   EXT_EXCL_CSV                  = 'csv';
 
-    const   EXT_PPTS_PPT    = 'ppt';
-    const   EXT_PPTS_PPTX   = 'pptx';
-    const   EXT_PPTS_ODP    = 'odp';
+    const   EXT_PPTS_PPT                  = 'ppt';
+    const   EXT_PPTS_PPTX                 = 'pptx';
+    const   EXT_PPTS_ODP                  = 'odp';
 
-    const   EXT_SNDS_MP3    = 'mp3';
-    const   EXT_SNDS_WAV    = 'wav';
-    const   EXT_SNDS_OGG    = 'ogg';
+    const   EXT_SNDS_MP3                  = 'mp3';
+    const   EXT_SNDS_WAV                  = 'wav';
+    const   EXT_SNDS_OGG                  = 'ogg';
 
-    const   EXT_VDEO_MP4    = 'mp4';
-    const   EXT_VDEO_MKV    = 'mkv';
-    const   EXT_VDEO_OGV    = 'ogv';
+    const   EXT_VDEO_MP4                  = 'mp4';
+    const   EXT_VDEO_MKV                  = 'mkv';
+    const   EXT_VDEO_OGV                  = 'ogv';
 
-    const   EXT_DOCS_PDF    = 'pdf';
-    const   EXT_DOCS_EPUB   = 'epub';
+    const   EXT_DOCS_PDF                  = 'pdf';
+    const   EXT_DOCS_EPUB                 = 'epub';
 
-    const   EXT_ARCH_GZ     = 'gz';
-    const   EXT_ARCH_ZIP    = 'zip';
-    const   EXT_ARCH_TAR    = 'tar';
+    const   EXT_ARCH_GZ                   = 'gz';
+    const   EXT_ARCH_ZIP                  = 'zip';
+    const   EXT_ARCH_TAR                  = 'tar';
 
     private $const_locale;
     private $const_allExt;
@@ -178,7 +182,7 @@ class ODFileUpload extends ODContained
     public function enaImageFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $imagExts   = $this->getImageExtensionConstant();
         foreach ($imagExts as $imagExt) {
             if (in_array($imagExt, $extString) === false) {
@@ -198,7 +202,7 @@ class ODFileUpload extends ODContained
     public function enaWordFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $wordExts   = $this->getWordExtensionConstant();
         foreach ($wordExts as $wordExt) {
             if (in_array($wordExt, $extString) === false) {
@@ -218,7 +222,7 @@ class ODFileUpload extends ODContained
     public function enaExcelFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $exclExts   = $this->getExcelExtensionConstant();
         foreach ($exclExts as $exclExt) {
             if (in_array($exclExt, $extString) === false) {
@@ -238,7 +242,7 @@ class ODFileUpload extends ODContained
     public function enaPresentationFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $pptsExts   = $this->getPresentationExtensionConstant();
         foreach ($pptsExts as $pptsExt) {
             if (in_array($pptsExt, $extString) === false) {
@@ -258,7 +262,7 @@ class ODFileUpload extends ODContained
     public function enaSoundFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $sndsExts   = $this->getSoundExtensionConstant();
         foreach ($sndsExts as $sndsExt) {
             if (in_array($sndsExt, $extString) === false) {
@@ -278,7 +282,7 @@ class ODFileUpload extends ODContained
     public function enaVideoFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $vdeoExts   = $this->getVideoExtensionConstant();
         foreach ($vdeoExts as $vdeoExt) {
             if (in_array($vdeoExt, $extString) === false) {
@@ -298,7 +302,7 @@ class ODFileUpload extends ODContained
     public function enaDocumentFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $docsExts   = $this->getDocumentExtensionConstant();
         foreach ($docsExts as $docsExt) {
             if (in_array($docsExt, $extString) === false) {
@@ -318,7 +322,7 @@ class ODFileUpload extends ODContained
     public function enaArchiveFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $archExts   = $this->getArchiveExtensionConstant();
         foreach ($archExts as $archExt) {
             if (in_array($archExt, $extString) === false) {
@@ -338,7 +342,7 @@ class ODFileUpload extends ODContained
     public function enaAllTypeFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $allExts    = $this->getAllExtensionConstant();
         foreach ($allExts as $allExt) {
             if (in_array($allExt, $extString) === false) {
@@ -631,14 +635,13 @@ class ODFileUpload extends ODContained
     }
 
     /**
-     * @param $placeholder
+     * @param $initialCaption
      * @return $this
      */
-    public function setPlaceholder($placeholder)
+    public function setInitialCaption(string $initialCaption)
     {
-        $placeholder = (string) $placeholder;
         $properties = $this->getProperties();
-        $properties['placeholder'] = $placeholder;
+        $properties['initialCaption'] = $initialCaption;
         $this->setProperties($properties);
         return $this;
     }
@@ -646,10 +649,54 @@ class ODFileUpload extends ODContained
     /**
      * @return bool
      */
-    public function getPlaceholder()
+    public function getInitialCaption()
     {
         $properties = $this->getProperties();
-        return array_key_exists('placeholder', $properties) ? $properties['placeholder'] : false;
+        return array_key_exists('initialCaption', $properties) ? $properties['initialCaption'] : false;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showCaption()
+    {
+        $properties = $this->getProperties();
+        $properties['caption'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideCaption()
+    {
+        $properties = $this->getProperties();
+        $properties['caption'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showDropZone()
+    {
+        $properties = $this->getProperties();
+        $properties['dropZone'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideDropZone()
+    {
+        $properties = $this->getProperties();
+        $properties['dropZone'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************
