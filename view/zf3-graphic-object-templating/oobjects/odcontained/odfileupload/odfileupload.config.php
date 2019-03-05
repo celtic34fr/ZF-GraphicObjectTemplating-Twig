@@ -12,6 +12,9 @@ return [
     "loadedFiles"       => [],
     'initialCaption'    => '',
     'caption'           => ODFileUpload::BOOLEAN_TRUE,
+    'preview'           => ODFileUpload::BOOLEAN_TRUE,
+    'remove'            => ODFileUpload::BOOLEAN_TRUE,
+    'upload'            => ODFileUpload::BOOLEAN_TRUE,
     'dropZone'          => ODFileUpload::BOOLEAN_TRUE,
 
     "resources"         => array(

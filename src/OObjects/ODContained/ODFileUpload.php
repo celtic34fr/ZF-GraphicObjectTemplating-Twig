@@ -40,6 +40,12 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getInitialCaption()
  * showCaption()
  * hideCaption()
+ * showPreview()
+ * hidePreview()
+ * showRemove()
+ * hideRemove()
+ * showUpload()
+ * hideUpload()
  * showDropZone()
  * hideDropZone()
  */
@@ -673,6 +679,72 @@ class ODFileUpload extends ODContained
     {
         $properties = $this->getProperties();
         $properties['caption'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showPreview()
+    {
+        $properties = $this->getProperties();
+        $properties['preview'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hidePreview()
+    {
+        $properties = $this->getProperties();
+        $properties['preview'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showRemove()
+    {
+        $properties = $this->getProperties();
+        $properties['remove'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideRemove()
+    {
+        $properties = $this->getProperties();
+        $properties['remove'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showUpload()
+    {
+        $properties = $this->getProperties();
+        $properties['upload'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideUpload()
+    {
+        $properties = $this->getProperties();
+        $properties['upload'] = false;
         $this->setProperties($properties);
         return $this;
     }

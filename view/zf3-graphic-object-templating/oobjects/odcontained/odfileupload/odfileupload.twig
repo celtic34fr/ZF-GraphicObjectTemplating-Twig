@@ -19,6 +19,9 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
             $('#{{ objet.id }}-input').fileinput({
                 locale: '{{ objet.locale }}',
                 showCaption: {{ objet.caption ? 'true' : 'false' }},
+                showPreview: {{ objet.preview ? 'true' : 'false' }},
+                showRemove: {{ objet.remove ? 'true' : 'false' }},
+                showUpload: {{ objet.upload ? 'true' : 'false' }},
                 dropZoneEnabled: {{ objet.dropZone ? 'true' : 'false' }},
                 allowedFileExtensions: {{ objet.acceptedFiles|json_encode()|raw }},
             {% if objet.placeholder is not empty %}
