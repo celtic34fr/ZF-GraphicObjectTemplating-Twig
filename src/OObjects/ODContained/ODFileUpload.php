@@ -46,6 +46,16 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * hideRemove()
  * showUpload()
  * hideUpload()
+ * showCancel()
+ * hideCancel()
+ * showClose()
+ * hideClose()
+ * showUploadedThumbs()
+ * hideUploadedThumbs()
+ * showBrowse()
+ * hideBrowse()
+ * showBrowseOnClick()
+ * hideBrowseOnClick()
  * showDropZone()
  * hideDropZone()
  */
@@ -745,6 +755,116 @@ class ODFileUpload extends ODContained
     {
         $properties = $this->getProperties();
         $properties['upload'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showCancel()
+    {
+        $properties = $this->getProperties();
+        $properties['cancel'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideCancel()
+    {
+        $properties = $this->getProperties();
+        $properties['cancel'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showClose()
+    {
+        $properties = $this->getProperties();
+        $properties['close'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideClose()
+    {
+        $properties = $this->getProperties();
+        $properties['close'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showUploadedThumbs()
+    {
+        $properties = $this->getProperties();
+        $properties['uploadedThumbs'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideUploadedThumbs()
+    {
+        $properties = $this->getProperties();
+        $properties['uploadedThumbs'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showBrowse()
+    {
+        $properties = $this->getProperties();
+        $properties['browse'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideBrowse()
+    {
+        $properties = $this->getProperties();
+        $properties['browse'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showBrowseOnClick()
+    {
+        $properties = $this->getProperties();
+        $properties['browseOnClick'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideBrowseOnClick()
+    {
+        $properties = $this->getProperties();
+        $properties['browseOnClick'] = false;
         $this->setProperties($properties);
         return $this;
     }

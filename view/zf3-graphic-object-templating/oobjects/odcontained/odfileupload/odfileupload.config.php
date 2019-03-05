@@ -15,6 +15,11 @@ return [
     'preview'           => ODFileUpload::BOOLEAN_TRUE,
     'remove'            => ODFileUpload::BOOLEAN_TRUE,
     'upload'            => ODFileUpload::BOOLEAN_TRUE,
+    'cancel'            => ODFileUpload::BOOLEAN_TRUE,
+    'close'             => ODFileUpload::BOOLEAN_TRUE,
+    'uploadedThumbs'    => ODFileUpload::BOOLEAN_TRUE,
+    'browse'            => ODFileUpload::BOOLEAN_TRUE,
+    'browseOnClick'     => ODFileUpload::BOOLEAN_FALSE,
     'dropZone'          => ODFileUpload::BOOLEAN_TRUE,
 
     "resources"         => array(

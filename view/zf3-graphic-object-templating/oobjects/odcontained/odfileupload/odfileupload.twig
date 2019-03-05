@@ -22,6 +22,11 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
                 showPreview: {{ objet.preview ? 'true' : 'false' }},
                 showRemove: {{ objet.remove ? 'true' : 'false' }},
                 showUpload: {{ objet.upload ? 'true' : 'false' }},
+                showCancel: {{ objet.cancel ? 'true' : 'false' }},
+                showClose: {{ objet.close ? 'true' : 'false' }},
+                showUploadedThumbs: {{ objet.uploadedThumbs ? 'true' : 'false' }},
+                showBrowse: {{ objet.browse ? 'true' : 'false' }},
+                browseOnZoneClick: {{ objet.browseOnClick ? 'true' : 'false' }},
                 dropZoneEnabled: {{ objet.dropZone ? 'true' : 'false' }},
                 allowedFileExtensions: {{ objet.acceptedFiles|json_encode()|raw }},
             {% if objet.placeholder is not empty %}
