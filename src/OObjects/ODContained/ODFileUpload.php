@@ -40,6 +40,10 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * setInitialCaption($initialCaption)
  *                          fixe le texte affiché dans la zone label du téléchargement
  * getInitialCaption()
+ * enaInitialPreviewShowDelete()
+ * disInitialPreviewShowDelete()
+ * showThumbnailContent()
+ * hideThumbnailContent()
  * showCaption()
  * hideCaption()
  * showPreview()
@@ -711,6 +715,72 @@ class ODFileUpload extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('initialCaption', $properties) ? $properties['initialCaption'] : false;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enaInitialPreviewShowDelete()
+    {
+        $properties = $this->getProperties();
+        $properties['initialPreviewShowDelete'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disInitialPreviewShowDelete()
+    {
+        $properties = $this->getProperties();
+        $properties['initialPreviewShowDelete'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enaRemoveFromPreviewOnError()
+    {
+        $properties = $this->getProperties();
+        $properties['removeFromPreviewOnError'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disRemoveFromPreviewOnError()
+    {
+        $properties = $this->getProperties();
+        $properties['removeFromPreviewOnError'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function showThumbnailContent()
+    {
+        $properties = $this->getProperties();
+        $properties['thumbnailContent'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hideThumbnailContent()
+    {
+        $properties = $this->getProperties();
+        $properties['thumbnailContent'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /**

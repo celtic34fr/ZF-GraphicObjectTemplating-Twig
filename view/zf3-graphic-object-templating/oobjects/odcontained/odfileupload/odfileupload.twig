@@ -21,6 +21,7 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
         $(document).ready(function () {
             $('#{{ objet.id }}-input').fileinput({
                 language: '{{ objet.locale }}',
+                hideThumbnailContent: {{ objet.thumbnailContent ? 'true' : 'false' }},
                 showCaption: {{ objet.caption ? 'true' : 'false' }},
                 showPreview: {{ objet.preview ? 'true' : 'false' }},
                 showRemove: {{ objet.remove ? 'true' : 'false' }},
@@ -72,7 +73,9 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
                 initialPreview: {{ initialPreview|json_encode }},
                 initialPreviewAsData: true,
                 initialPreviewConfig: {{ initialPreviewConfig|json_encode }},
+                initialPreviewShowDelete: {{ objet.initialPreviewShowDelete ? 'true' : 'false' }},
             {% endif %}
+                removeFromPreviewOnError: {{ objet.removeFromPreviewOnError ? 'true' : 'false' }},
             });
         });
     </script>
