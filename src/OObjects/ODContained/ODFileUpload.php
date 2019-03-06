@@ -1027,6 +1027,27 @@ class ODFileUpload extends ODContained
     }
 
     /**
+     * @param string $dropZoneClickTitle
+     * @return $this
+     */
+    public function setDropZoneClickTitle(string $dropZoneClickTitle)
+    {
+        $properties                         = $this->getProperties();
+        $properties['dropZoneClickTitle']   = $dropZoneClickTitle;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDropZoneClickTitle()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('dropZoneClickTitle', $properties) ? $properties['dropZoneClickTitle'] : false;
+    }
+
+    /**
      * @param string $userName
      * @param string $userExtension
      * @return $this

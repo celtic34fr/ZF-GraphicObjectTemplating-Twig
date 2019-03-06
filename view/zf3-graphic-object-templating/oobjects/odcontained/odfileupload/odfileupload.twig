@@ -37,6 +37,9 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
             {% if objet.dropZoneTitle is not empty %}
                 dropZoneTitle: {{ objet.dropZoneTitle }},
             {% endif %}
+            {% if objet.dropZoneClickTitle is not empty and objet.dropzone %}
+                dropZoneClickTitle: {{ objet.dropZoneClickTitle }},
+            {% endif %}
             {% set allowedFiles = '"' ~ implode('", "', allowedFiles) ~ '"' %}
                 allowedFileExtensions: [{{ allowedFiles|raw }}],
             {% if objet.placeholder is not empty %}
