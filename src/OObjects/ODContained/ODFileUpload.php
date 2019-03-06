@@ -8,6 +8,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * Class ODFileUpload
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
+ * enaMultiple()
+ * disMultiple()
  * setLocale(string $locale = self::LOCALE_FRANCAIS)
  * getLocale()
  * enaImageFiles()
@@ -64,6 +66,18 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getUserExtension(string $userName, string $uyserExtension)
  * setUserExtensions(array $uyserExtensions)
  * getUserExtensions()
+ * setMinFileSize(int $minFileSize)
+ * getMinFileSize()
+ * setMaxFileSize(int $maxFileSize)
+ * getMaxFileSize()
+ * setMaxFilePreviewSize(int $minFilePreviewSize)
+ * getMaxFilePreviewSize()
+ * setMinFileCount(int $minFileCount)
+ * getMinFileCount()
+ * setMaxFileCount(int $maxFileCount)
+ * getMaxFileCount()
+ * enaValidateInitialCount()
+ * disValidateInitialCount()
  */
 class ODFileUpload extends ODContained
 {
@@ -164,6 +178,28 @@ class ODFileUpload extends ODContained
     {
         parent::__construct($id, "oobjects/odcontained/odfileupload/odfileupload.config.php");
         $this->setDisplay();
+    }
+
+    /**
+     * @return $this
+     */
+    public function enaMultiple()
+    {
+        $properties             = $this->getProperties();
+        $properties['multiple'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disMultiple()
+    {
+        $properties             = $this->getProperties();
+        $properties['multiple'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /**
@@ -897,6 +933,11 @@ class ODFileUpload extends ODContained
         return $this;
     }
 
+    /**
+     * @param string $userName
+     * @param string $userExtension
+     * @return $this
+     */
     public function addUserExtension(string $userName, string $userExtension)
     {
         $properties     = $this->getProperties();
@@ -909,6 +950,11 @@ class ODFileUpload extends ODContained
         return $this;
     }
 
+    /**
+     * @param string $userName
+     * @param string $userExtension
+     * @return $this
+     */
     public function setUserExtension(string $userName, string $userExtension)
     {
         $properties     = $this->getProperties();
@@ -921,6 +967,10 @@ class ODFileUpload extends ODContained
         return $this;
     }
 
+    /**
+     * @param string $userName
+     * @return $this
+     */
     public function rmUserExtension(string $userName)
     {
         $properties     = $this->getProperties();
@@ -933,6 +983,10 @@ class ODFileUpload extends ODContained
         return $this;
     }
 
+    /**
+     * @param string $userName
+     * @return bool
+     */
     public function getUserExtension(string $userName)
     {
         $properties     = $this->getProperties();
@@ -943,6 +997,10 @@ class ODFileUpload extends ODContained
         return false;
     }
 
+    /**
+     * @param array $userExtensions
+     * @return $this
+     */
     public function setUserExtensions(array $userExtensions)
     {
         $properties     = $this->getProperties();
@@ -951,10 +1009,140 @@ class ODFileUpload extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getUserExtensions()
     {
         $properties = $this->getProperties();
         return array_key_exists('userExtensions', $properties) ? $properties['userExtensions'] : false;
+    }
+
+    /**
+     * @param int $minFileSize
+     * @return $this
+     */
+    public function setMinFileSize(int $minFileSize)
+    {
+        $properties     = $this->getProperties();
+        $properties['minFileSize'] = $minFileSize;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMinFileSize()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('minFileSize', $properties) ? $properties['minFileSize'] : false;
+    }
+
+    /**
+     * @param int $maxFileSize
+     * @return $this
+     */
+    public function setMaxFileSize(int $maxFileSize)
+    {
+        $properties     = $this->getProperties();
+        $properties['maxFileSize'] = $maxFileSize;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMaxFileSize()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('maxFileSize', $properties) ? $properties['maxFileSize'] : false;
+    }
+
+    /**
+     * @param int $maxFileSize
+     * @return $this
+     */
+    public function setMaxFilePreviewSize(int $maxFilePreviewSize)
+    {
+        $properties     = $this->getProperties();
+        $properties['maxFilePreviewSize'] = $maxFilePreviewSize;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMaxFilePreviewSize()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('maxFilePreviewSize', $properties) ? $properties['maxFilePreviewSize'] : false;
+    }
+
+    /**
+     * @param int $minFileCount
+     * @return $this
+     */
+    public function setMinFileCount(int $minFileCount)
+    {
+        $properties     = $this->getProperties();
+        $properties['minFileCount'] = $minFileCount;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMinFileCount()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('minFileCount', $properties) ? $properties['minFileCount'] : false;
+    }
+
+    /**
+     * @param int $maxFileCount
+     * @return $this
+     */
+    public function setMaxFileCount(int $maxFileCount)
+    {
+        $properties     = $this->getProperties();
+        $properties['maxFileCount'] = $maxFileCount;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMaxFileCount()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('maxFileCount', $properties) ? $properties['maxFileCount'] : false;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enaValidateInitialCount()
+    {
+        $properties     = $this->getProperties();
+        $properties['validateInitialCount'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disValidateInitialCount()
+    {
+        $properties     = $this->getProperties();
+        $properties['validateInitialCount'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************

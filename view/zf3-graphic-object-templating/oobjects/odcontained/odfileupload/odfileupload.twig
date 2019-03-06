@@ -14,7 +14,7 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
      data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
         {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
-    <input id="{{ objet.id }}-input" type="file">
+    <input id="{{ objet.id }}-input" type="file" {% if objet.multiple %}multiple{% endif %}>
 
     <script>
         {% set urlView = url ('gotFileUpload', {'action': 'view'}) %}
@@ -36,6 +36,22 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
             {% if objet.placeholder is not empty %}
                 initialCaption: "{{ objet.initialCaption }}",
             {% endif %}
+            {% if objet.minFileSize > 0 %}
+                minFileSize: {{ objet.minFileSize }},
+            {% endif %}
+            {% if objet.maxFileSize > 0 %}
+                maxFileSize: {{ objet.maxFileSize }},
+            {% endif %}
+            {% if objet.maxFilePreviewSize > -1 %}
+                maxFilePreviewSize: {{ objet.maxFilePreviewSize }},
+            {% endif %}
+            {% if objet.minFileCount > 0 %}
+                minFileCount: {{ objet.minFileCount }},
+            {% endif %}
+            {% if objet.maxFileCount > 0 %}
+                maxFileCount: {{ objet.maxFileCount }},
+            {% endif %}
+                validateInitialCount: {{ objet.validateInitialCount ? 'true' : 'false' }},
 
             {% if objet.loadedFiles is not empty %}
                 {% set initialPreview = {} %}
