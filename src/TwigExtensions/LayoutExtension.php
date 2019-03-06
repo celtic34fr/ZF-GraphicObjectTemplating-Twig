@@ -22,6 +22,7 @@ use Twig_Test;
  * strpos           : restitue la position d'uncaractère ou sous chaîne dans chaîne de caractères
  * instring         : précise l'existance d'un caractère ou sous chaîne ou non dans une chaîne de caractères
  * arraykeyexist    : recherche l'existance d'une clé d'accès dans un tableau
+ * implode          : génération d'une chaîne de caractères à partir d'un tableau lié par un délimiteur
  *
  * tests :
  * -------
@@ -36,6 +37,9 @@ use Twig_Test;
 class LayoutExtension extends \Twig_Extension
 {
 
+    /**
+     * @return array|Twig_Function[]
+     */
     public function getFunctions()
     {
         return array(
@@ -46,10 +50,15 @@ class LayoutExtension extends \Twig_Extension
             new Twig_Function('strpos', array($this, 'twigFunction_strPos'), array('is_safe' => array('html'))),
             new Twig_Function('instring', array($this, 'twigFunction_inString'), array('is_safe' => array('html'))),
             new Twig_Function('arraykeyexists', [$this, 'twigFunction_arrayKeyExists']),
+            new Twig_Function('implode', array($this, 'twigFunction_implode'), array('is_safe' => array('html'))),
+            new Twig_Function('explode', array($this, 'twigFunction_explode'), array('is_safe' => array('html'))),
         );
     }
 
 
+    /**
+     * @return array
+     */
     public function getGlobals()
     {
         return [
@@ -62,6 +71,9 @@ class LayoutExtension extends \Twig_Extension
         ];
     }
 
+    /**
+     * @return array|Twig_Test[]
+     */
     public function getTests()
     {
         return array(
@@ -70,6 +82,9 @@ class LayoutExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * @return array|Twig_Filter[]
+     */
     public function getFilters()
     {
         return array(
@@ -89,12 +104,23 @@ class LayoutExtension extends \Twig_Extension
     }
 
 
+    /**
+     * @param $object
+     * @param $class
+     * @return bool
+     * @throws \ReflectionException
+     */
     public function twigTest_instanceOf($object, $class)
     {
         $reflectionClass = new \ReflectionClass($class);
         return $reflectionClass->isInstance($object);
     }
 
+    /**
+     * @param $var1
+     * @param $var2
+     * @return bool
+     */
     public function twigFunction_inString($var1, $var2)
     { // is var1 in var2
         $var1 = (string)$var1;
@@ -102,11 +128,19 @@ class LayoutExtension extends \Twig_Extension
         return (strpos($var2, $var1) !== false) ? true : false;
     }
 
+    /**
+     * @param null $object
+     * @return string
+     */
     public function twigFunction_getType($object = NULL)
     {
         return gettype($object);
     }
 
+    /**
+     * @param null $object
+     * @return string
+     */
     public function twigFunction_getClass($object = NULL)
     {
         if (gettype($object) == "object") {
@@ -116,6 +150,10 @@ class LayoutExtension extends \Twig_Extension
         }
     }
 
+    /**
+     * @param Exception $exception
+     * @return array
+     */
     public function twigFunction_arrayException(Exception $exception)
     {
         $retArray = [];
@@ -185,6 +223,12 @@ class LayoutExtension extends \Twig_Extension
         }
     }
 
+    /**
+     * @param $str
+     * @param $start
+     * @param null $len
+     * @return bool|string
+     */
     public function twigFunction_subString($str, $start, $len = null)
     {
         if (intval($len) > 0) {
@@ -194,6 +238,12 @@ class LayoutExtension extends \Twig_Extension
         }
     }
 
+    /**
+     * @param $str
+     * @param $search
+     * @param null $offset
+     * @return bool|int
+     */
     public function twigFunction_strPos($str, $search, $offset = null)
     {
         if (intval($offset) > 0) {
@@ -205,10 +255,9 @@ class LayoutExtension extends \Twig_Extension
 
     /**
      * Merges an array with another one.
-     *
+     * syntax :
      * <pre>
      *  {% set items = { 'apple': 'fruit', 'orange': 'fruit' } %}
-     *
      *  {% set items = items|update({ 'apple': 'granny' }) %}
      *
      *  {# items now contains { 'apple': 'granny', 'orange': 'fruit' } #}
@@ -218,6 +267,7 @@ class LayoutExtension extends \Twig_Extension
      * @param array|Traversable $arr2 An array (of keys / value)
      *
      * @return array The replace values in array by array of keys / values
+     * @throws Twig_Error_Runtime
      */
     public function twigFilter_array_update($arr1, $arr2)
     {
@@ -239,8 +289,48 @@ class LayoutExtension extends \Twig_Extension
         return $arr1;
     }
 
+    /**
+     * Search in an array if a key exist
+     * syntax :
+     *      {% if arraykeyexists('key', array) %} ... {% endif %}
+     *      {% if arraykeyexists(key, array) %} ... {% endif %}
+     *
+     * @param $key
+     * @param $array
+     * @return bool
+     */
     public function twigFunction_arrayKeyExists($key, $array)
     {
         return array_key_exists($key, $array);
+    }
+
+    /**
+     * Generate string from an array glue by a delimiter
+     * syntax:
+     *      {{ implode('delimiter', array) }}
+     *      {{ implode(delimiter, array) }}
+     *
+     * @param string $delimiter
+     * @param array $array
+     * @return string
+     */
+    public function twigFunction_implode(string $delimiter, array $array)
+    {
+        return implode($delimiter, $array);
+    }
+
+    /**
+     * Generate an array from a string, each member separate by a delimiter
+     * syntax:
+     *      {{ explode('delimiter', string) }}
+     *      {{ explode(delimiter, string) }}
+     *
+     * @param string $delimiter
+     * @param array $array
+     * @return string
+     */
+    public function twigFunction_explode(string $delimiter, string $string)
+    {
+        return explode($delimiter, $string);
     }
 }
