@@ -26,6 +26,7 @@ return [
     'browse'                    => ODFileUpload::BOOLEAN_TRUE,
     'browseOnClick'             => ODFileUpload::BOOLEAN_FALSE,
     'dropZone'                  => ODFileUpload::BOOLEAN_TRUE,
+    'dropZoneTitle'             => '',
     'minFileSize'               => 0,
     'maxFileSize'               => 0,
     'maxFilePreviewSize'        => 25600,
