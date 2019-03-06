@@ -80,6 +80,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getMinFileCount()
  * setMaxFileCount(int $maxFileCount)
  * getMaxFileCount()
+ * enaAutoReplace()
+ * disAutoReplace()
  * enaValidateInitialCount()
  * disValidateInitialCount()
  */
@@ -1191,6 +1193,28 @@ class ODFileUpload extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('maxFileCount', $properties) ? $properties['maxFileCount'] : false;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enaAutoReplace()
+    {
+        $properties                 = $this->getProperties();
+        $properties['autoRTeplace'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disAutoReplace()
+    {
+        $properties                 = $this->getProperties();
+        $properties['autoRTeplace'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /**

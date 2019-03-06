@@ -7,15 +7,15 @@ return [
     "typeObj"                   => "odcontained",
     "template"                  => "odfileupload.twig",
 
-    'multiple'                  => false,
+    'multiple'                  => ODFileUpload::BOOLEAN_FALSE,
     "locale"                    => ODFileUpload::LOCALE_FRANCAIS,
     "acceptedFiles"             => [],
     "loadedFiles"               => [],
     'userExtensions'            => [],
     'initialCaption'            => '',
-    'initialPreviewShowDelete'  => false,
-    'removeFromPreviewOnError'  => false,
-    'thumbnailContent'          => false,
+    'initialPreviewShowDelete'  => ODFileUpload::BOOLEAN_FALSE,
+    'removeFromPreviewOnError'  => ODFileUpload::BOOLEAN_FALSE,
+    'thumbnailContent'          => ODFileUpload::BOOLEAN_FALSE,
     'caption'                   => ODFileUpload::BOOLEAN_TRUE,
     'preview'                   => ODFileUpload::BOOLEAN_TRUE,
     'remove'                    => ODFileUpload::BOOLEAN_TRUE,
@@ -31,7 +31,8 @@ return [
     'maxFilePreviewSize'        => 25600,
     'minFileCount'              => 0,
     'maxFileCount'              => 0,
-    'validateInitialCount'      => false,
+    'autoReplace'               => ODFileUpload::BOOLEAN_FALSE,
+    'validateInitialCount'      => ODFileUpload::BOOLEAN_FALSE,
 
     "resources"                 => array(
         "css"                       => array(

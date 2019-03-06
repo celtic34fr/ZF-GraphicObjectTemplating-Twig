@@ -18,6 +18,8 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
 
     <script>
         {% set urlView = url ('gotFileUpload', {'action': 'view'}) %}
+        {% set urlDelt = url ('gotFileUpload', {'action': 'delete'}) %}
+        {% set urlLoad = url ('gotFileUpload', {'action': 'download'}) %}
         $(document).ready(function () {
             $('#{{ objet.id }}-input').fileinput({
                 language: '{{ objet.locale }}',
@@ -52,6 +54,7 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
             {% if objet.maxFileCount > 0 %}
                 maxFileCount: {{ objet.maxFileCount }},
             {% endif %}
+                autoReplace: {{ objet.autoReplace ? 'true' : 'false' }},
                 validateInitialCount: {{ objet.validateInitialCount ? 'true' : 'false' }},
 
             {% if objet.loadedFiles is not empty %}
@@ -62,11 +65,13 @@ url télécharger url('gotFileUpload', {'action': 'download', 'id': N°image ou 
                     {% set initialPreview = initialPreview|merge({ indexFile : urlView ~ '/' ~ loadedFile.src}) %}
                     {% set initialPreviewConfig = initialPreviewConfig|merge({ indexFile :
                         {
-                            'caption': loadedFile.name,
-                            'downloadUrl': urlView ~ '/' ~ loadedFile.src,
+                            'caption': "'" ~ loadedFile.name ~ "'",
+                            'downloadUrl': "'" ~ urlLoad ~ '/' ~ loadedFile.src ~ "'",
                             'size': loadedFile.size,
                             'width': "120px",
-                            'key': loop.index
+                            'key': loop.index,
+                            'url': "'" ~ urlDelt ~ '/' ~ loadedFile.src ~ "'",
+                            'extra': { 'id': "'" ~ loadedFile.name ~ "'" }
                         }
                     }) %}
                 {% endfor %}
