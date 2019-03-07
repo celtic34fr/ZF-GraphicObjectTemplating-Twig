@@ -14,6 +14,7 @@ return [
     'userExtensions'            => [],
     'initialCaption'            => '',
     'initialPreviewShowDelete'  => ODFileUpload::BOOLEAN_FALSE,
+    'overwriteInitial'          => ODFileUpload::BOOLEAN_TRUE,
     'removeFromPreviewOnError'  => ODFileUpload::BOOLEAN_FALSE,
     'thumbnailContent'          => ODFileUpload::BOOLEAN_FALSE,
     'caption'                   => ODFileUpload::BOOLEAN_TRUE,
@@ -28,6 +29,13 @@ return [
     'dropZone'                  => ODFileUpload::BOOLEAN_TRUE,
     'dropZoneTitle'             => '',
     'dropZoneClickTitle'        => '',
+
+    'showUploadFAS'             => ODFileUpload::BOOLEAN_FALSE,
+    'showDownloadFAS'           => ODFileUpload::BOOLEAN_FALSE,
+    'showRemoveFAS'             => ODFileUpload::BOOLEAN_FALSE,
+    'showZoomFAS'               => ODFileUpload::BOOLEAN_FALSE,
+    'showDragFAS'               => ODFileUpload::BOOLEAN_FALSE,
+
     'minFileSize'               => 0,
     'maxFileSize'               => 0,
     'maxFilePreviewSize'        => 25600,

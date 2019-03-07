@@ -42,6 +42,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getInitialCaption()
  * enaInitialPreviewShowDelete()
  * disInitialPreviewShowDelete()
+ * enaOverwriteInitial()
+ * disOverwriteInitial()
  * showThumbnailContent()
  * hideThumbnailContent()
  * showCaption()
@@ -192,7 +194,7 @@ class ODFileUpload extends ODContained
     public function enaMultiple()
     {
         $properties             = $this->getProperties();
-        $properties['multiple'] = true;
+        $properties['multiple'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -203,7 +205,7 @@ class ODFileUpload extends ODContained
     public function disMultiple()
     {
         $properties             = $this->getProperties();
-        $properties['multiple'] = false;
+        $properties['multiple'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -725,7 +727,7 @@ class ODFileUpload extends ODContained
     public function enaInitialPreviewShowDelete()
     {
         $properties = $this->getProperties();
-        $properties['initialPreviewShowDelete'] = true;
+        $properties['initialPreviewShowDelete'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -736,7 +738,23 @@ class ODFileUpload extends ODContained
     public function disInitialPreviewShowDelete()
     {
         $properties = $this->getProperties();
-        $properties['initialPreviewShowDelete'] = false;
+        $properties['initialPreviewShowDelete'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaOverwriteInitial()
+    {
+        $properties = $this->getProperties();
+        $properties['overwriteInitial'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function disOverwriteInitial()
+    {
+        $properties = $this->getProperties();
+        $properties['overwriteInitial'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -747,7 +765,7 @@ class ODFileUpload extends ODContained
     public function enaRemoveFromPreviewOnError()
     {
         $properties = $this->getProperties();
-        $properties['removeFromPreviewOnError'] = true;
+        $properties['removeFromPreviewOnError'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -758,7 +776,7 @@ class ODFileUpload extends ODContained
     public function disRemoveFromPreviewOnError()
     {
         $properties = $this->getProperties();
-        $properties['removeFromPreviewOnError'] = false;
+        $properties['removeFromPreviewOnError'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -769,7 +787,7 @@ class ODFileUpload extends ODContained
     public function showThumbnailContent()
     {
         $properties = $this->getProperties();
-        $properties['thumbnailContent'] = true;
+        $properties['thumbnailContent'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -780,7 +798,7 @@ class ODFileUpload extends ODContained
     public function hideThumbnailContent()
     {
         $properties = $this->getProperties();
-        $properties['thumbnailContent'] = false;
+        $properties['thumbnailContent'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -791,7 +809,7 @@ class ODFileUpload extends ODContained
     public function showCaption()
     {
         $properties = $this->getProperties();
-        $properties['caption'] = true;
+        $properties['caption'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -802,7 +820,7 @@ class ODFileUpload extends ODContained
     public function hideCaption()
     {
         $properties = $this->getProperties();
-        $properties['caption'] = false;
+        $properties['caption'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -813,7 +831,7 @@ class ODFileUpload extends ODContained
     public function showPreview()
     {
         $properties = $this->getProperties();
-        $properties['preview'] = true;
+        $properties['preview'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -824,7 +842,7 @@ class ODFileUpload extends ODContained
     public function hidePreview()
     {
         $properties = $this->getProperties();
-        $properties['preview'] = false;
+        $properties['preview'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -835,7 +853,7 @@ class ODFileUpload extends ODContained
     public function showRemove()
     {
         $properties = $this->getProperties();
-        $properties['remove'] = true;
+        $properties['remove'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -846,7 +864,7 @@ class ODFileUpload extends ODContained
     public function hideRemove()
     {
         $properties = $this->getProperties();
-        $properties['remove'] = false;
+        $properties['remove'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -857,7 +875,7 @@ class ODFileUpload extends ODContained
     public function showUpload()
     {
         $properties = $this->getProperties();
-        $properties['upload'] = true;
+        $properties['upload'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -868,7 +886,7 @@ class ODFileUpload extends ODContained
     public function hideUpload()
     {
         $properties = $this->getProperties();
-        $properties['upload'] = false;
+        $properties['upload'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -879,7 +897,7 @@ class ODFileUpload extends ODContained
     public function showCancel()
     {
         $properties = $this->getProperties();
-        $properties['cancel'] = true;
+        $properties['cancel'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -890,7 +908,7 @@ class ODFileUpload extends ODContained
     public function hideCancel()
     {
         $properties = $this->getProperties();
-        $properties['cancel'] = false;
+        $properties['cancel'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -901,7 +919,7 @@ class ODFileUpload extends ODContained
     public function showClose()
     {
         $properties = $this->getProperties();
-        $properties['close'] = true;
+        $properties['close'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -912,7 +930,7 @@ class ODFileUpload extends ODContained
     public function hideClose()
     {
         $properties = $this->getProperties();
-        $properties['close'] = false;
+        $properties['close'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -923,7 +941,7 @@ class ODFileUpload extends ODContained
     public function showUploadedThumbs()
     {
         $properties = $this->getProperties();
-        $properties['uploadedThumbs'] = true;
+        $properties['uploadedThumbs'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -934,7 +952,7 @@ class ODFileUpload extends ODContained
     public function hideUploadedThumbs()
     {
         $properties = $this->getProperties();
-        $properties['uploadedThumbs'] = false;
+        $properties['uploadedThumbs'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -945,7 +963,7 @@ class ODFileUpload extends ODContained
     public function showBrowse()
     {
         $properties = $this->getProperties();
-        $properties['browse'] = true;
+        $properties['browse'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -956,7 +974,7 @@ class ODFileUpload extends ODContained
     public function hideBrowse()
     {
         $properties = $this->getProperties();
-        $properties['browse'] = false;
+        $properties['browse'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -967,7 +985,7 @@ class ODFileUpload extends ODContained
     public function showBrowseOnClick()
     {
         $properties = $this->getProperties();
-        $properties['browseOnClick'] = true;
+        $properties['browseOnClick'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -978,7 +996,7 @@ class ODFileUpload extends ODContained
     public function hideBrowseOnClick()
     {
         $properties = $this->getProperties();
-        $properties['browseOnClick'] = false;
+        $properties['browseOnClick'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -989,7 +1007,7 @@ class ODFileUpload extends ODContained
     public function showDropZone()
     {
         $properties = $this->getProperties();
-        $properties['dropZone'] = true;
+        $properties['dropZone'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -1000,7 +1018,7 @@ class ODFileUpload extends ODContained
     public function hideDropZone()
     {
         $properties = $this->getProperties();
-        $properties['dropZone'] = false;
+        $properties['dropZone'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -1045,6 +1063,86 @@ class ODFileUpload extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('dropZoneClickTitle', $properties) ? $properties['dropZoneClickTitle'] : false;
+    }
+
+    public function showUploadFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showUploadFAS'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideUploadFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showUploadFAS'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function showDownloadFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showDownloadFAS'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideDownloadFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showDownloadFAS'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function showRemoveFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showRemoveFAS'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideRemoveFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showRemoveFAS'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function showZoomFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showZoomFAS'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideZoomFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showZoomFAS'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function showDragFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showDragFAS'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideDragFAS()
+    {
+        $properties = $this->getProperties();
+        $properties['showDragFAS'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /**
@@ -1243,7 +1341,7 @@ class ODFileUpload extends ODContained
     public function enaAutoReplace()
     {
         $properties                 = $this->getProperties();
-        $properties['autoRTeplace'] = true;
+        $properties['autoRTeplace'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -1254,7 +1352,7 @@ class ODFileUpload extends ODContained
     public function disAutoReplace()
     {
         $properties                 = $this->getProperties();
-        $properties['autoRTeplace'] = false;
+        $properties['autoRTeplace'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
@@ -1265,7 +1363,7 @@ class ODFileUpload extends ODContained
     public function enaValidateInitialCount()
     {
         $properties     = $this->getProperties();
-        $properties['validateInitialCount'] = true;
+        $properties['validateInitialCount'] = self::BOOLEAN_TRUE;
         $this->setProperties($properties);
         return $this;
     }
@@ -1276,7 +1374,7 @@ class ODFileUpload extends ODContained
     public function disValidateInitialCount()
     {
         $properties     = $this->getProperties();
-        $properties['validateInitialCount'] = false;
+        $properties['validateInitialCount'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }
