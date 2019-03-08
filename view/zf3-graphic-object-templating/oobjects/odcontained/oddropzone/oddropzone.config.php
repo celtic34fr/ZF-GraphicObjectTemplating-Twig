@@ -1,4 +1,7 @@
 <?php
+
+use GraphicObjectTemplating\OObjects\ODContained\ODDropzone;
+
 return [
     "object"        => "oddropzone",
     "typeObj"       => "odcontained",
@@ -6,7 +9,7 @@ return [
 
     "maxFile"       => "",
     "acceptedFiles" => "",
-    "maxFilesize"   => 5,
+    "maxFileSize"   => 5,
     "loadedFiles"   => [],
 
     'view'          => true,
@@ -16,6 +19,25 @@ return [
     'message'       => '',
     'width'         => '',
     'heigth'        => '',
+
+    'event'         => [
+        'dropIn'        => [
+            'class'         => ODDropzone::class,
+            'method'        => 'evtAddFile',
+            'stopEvent'     => 'NON',
+        ],
+        'dropOut'        => [
+            'class'         => ODDropzone::class,
+            'method'        => 'evtRmFile',
+            'stopEvent'     => 'NON',
+        ],
+    ],
+
+    'dict'          => [
+        'defaultMessage'    =>
+            'Glissez et déposez les fichiers ici&hellip;<br>(ou cliquez pour sélectionner manuellement)',
+        'responseError'     => 'Erreur au téléchargement du fichier',
+    ],
 
     "resources"     => array(
         "css"           => array(

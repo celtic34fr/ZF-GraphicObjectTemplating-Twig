@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating;
 
+use GraphicObjectTemplating\Controller\DropzoneController;
 use GraphicObjectTemplating\Controller\FileUploadController;
 use GraphicObjectTemplating\Controller\Factory\MainControllerFactory;
 use GraphicObjectTemplating\Controller\MainController;
@@ -36,6 +37,16 @@ return [
                     ],
                 ],
             ],
+            'gotDropzone' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/gotDropzone[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => DropzoneController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
             'gotFileUpload' => [
                 'type' => Segment::class,
                 'options' => [
@@ -53,6 +64,7 @@ return [
         'factories' => [
             MainController::class => MainControllerFactory::class,
             DropzoneController::class => InvokableFactory::class,
+            FileUploadController::class => InvokableFactory::class,
         ],
     ],
 

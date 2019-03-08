@@ -12,11 +12,10 @@
      data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
         {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
-    <form action="{{ url('gotDropzone') }}" class="dropzone" id="{{ objet.id }}Form"></form>
+    <div action="{{ url('gotDispatch') }}" class="dropzone" id="{{ objet.id }}Div"></div>
 
     <style>
         #{{ objet.id }} {
-            height: 10em;
             max-width: 720px;
             margin-left: auto;
             margin-right: auto;
@@ -26,20 +25,50 @@
 
     <script>
         $(document).ready(function() {
-            {#Dropzone.autoDiscover = false;#}
-            {#var {{ objet.id }}Dropzone = new Dropzone("#{{ objet.id }}Form", {#}
-            $('#{{ objet.id }}Form').options({
-                init: function() {
-                    thisDropzone = this;
-                    $.get('{{ url('gotDropzone') }}', function(data) {
-                        $.each(data, function(key,value){
-                            var mockFile = { name: value.name, size: value.size };
-                            thisDropzone.options.addedfile.call(thisDropzone, mockFile);
-                            thisDropzone.options.thumbnail.call(thisDropzone, mockFile, "{{ url('gotDropzone') }}/"+value.name);
-                        });
-                    });
-                }
+            Dropzone.autoDiscover = false;
+            var {{ objet.id }}Dropzone = new Dropzone("#{{ objet.id }}Div", {
+                url:                "{{ url('gotDispatch') }}",
+                addRemoveLink: true,
             });
+
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
         });
     </script>
 </div>
+
+{#
+            Dropzone.options.{{ objet.id }}Div = ({
+                paramName : "file",
+            {% if objet.maxFile is not empty %}
+                maxFile: {{ object.maxFile }},
+            {% endif %}
+            {% if objet.acceptedFiles is not empty %}
+                acceptedFiles   : "{{ objet.acceptedFiles }}",
+            {% endif %}
+                maxFilesize: {{ objet.maxFileSize }},
+                addRemoveLink: true,
+
+            {% set dict = objet.dict %}
+            {% if dict.defaultMessage is defined and dict.defaultMessage is not empty %}
+                dictDefaultMessge: '{{ dict.defaultMessage|raw }}',
+            {% endif %}
+            {% if dict.responseError is defined and dict.responseError is not empty %}
+                dictResponseError: '{{ dict.responseError|raw }}',
+            {% endif %}
+
+
+            });
+
+                init: function() {
+                },
+
+                accept: function(file, done) {
+                    // function executed when file is uploaded
+                    this.trigger( "dropIn" );
+                },
+
+                error: function(file, message, xhr) {
+                    // remove file when any error raise up
+                    $(file.previewElement).remove();
+                },
+#}

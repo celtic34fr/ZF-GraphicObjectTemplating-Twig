@@ -79,7 +79,9 @@ class ZF3GotServices
                     break;
             }
             $renduHtml = $this->_twigRender->render($html);
-            return str_replace(array("\r\n", "\r", "\n"), "", $renduHtml);
+            $renduHtml = preg_replace('/(\s)\s+/', '$1', $renduHtml);
+            $renduHtml =  str_replace(array("\r\n", "\r", "\n"), "", $renduHtml);
+            return $renduHtml;
         }
         return false;
     }

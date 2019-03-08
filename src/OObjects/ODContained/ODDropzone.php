@@ -11,6 +11,8 @@ use Zend\ServiceManager\ServiceManager;
  *
  * setMaxFiles(int $maxFiles)
  * getMaxFiles()
+ * setMaxFileSize(int $maxFileSize)
+ * getMaxFileSize()
  *
  * enaImageFiles()
  * enaWordFiles()
@@ -49,6 +51,23 @@ use Zend\ServiceManager\ServiceManager;
  * addLoadedFileHDD(string $fileName, string $path)
  * addLoadedFileDB(object $fileObject)
  * setLoadedFiles(array $loadedFiles)
+ *
+ * evtDropIn($class, $method, $stopEvent = false)
+ *                          déclaration et paramétrage de l'évènement acquisition fichier avec traitements induits
+ * getDropIn()              récupération des paramètres de l'évènement acquisition fichier
+ * disDropIn()              suppression / déactivation de l'évènement acquisition fichier
+ * evtDropOut($class, $method, $stopEvent = false)
+ *                          déclaration et paramétrage de l'évènement suppression fichier avec traitements induits
+ * getDropOut()             récupération des paramètres de l'évènement suppression fichier
+ * disDropOut()             suppression / déactivation de l'évènement suppression fichier
+ *
+ * setDictMessages(array $dictMessages)
+ * getDictMessages()
+ * setDictDefaultMessage(string $dicDefaultMessage)
+ * getDictDefaultMessage()
+ * setResponseError(string $responseError)
+ * getResponseError()
+ *
  */
 class ODDropzone extends ODContained
 {
@@ -132,6 +151,30 @@ class ODDropzone extends ODContained
     {
         $properties = $this->getProperties();
         return ((!empty($properties['maxFiles'])) ? $properties['maxFiles'] : array());
+    }
+
+    /**
+     * @param int $maxFileSize
+     * @return $this|bool
+     */
+    public function setMaxFileSize(int $maxFileSize)
+    {
+        if ($maxFileSize > 0) {
+            $properties                 = $this->getProperties();
+            $properties['maxFileSize']  = $maxFileSize;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaxFileSize()
+    {
+        $properties = $this->getProperties();
+        return ((!empty($properties['maxFileSize'])) ? $properties['maxFileSize'] : '');
     }
 
     /**
@@ -698,11 +741,152 @@ class ODDropzone extends ODContained
         return $this;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return bool|ODDropzone
+     */
+    public function evtDropIn($class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('dropIn', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|ODDropzone
+     */
+    public function getDropIn()
+    {
+        return $this->getEvent('dropIn');
+    }
+
+    /**
+     * @return bool|ODDropzone
+     */
+    public function disDropIn()
+    {
+        return $this->disEvent('dropIn');
+    }
+
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return bool|ODDropzone
+     */
+    public function evtDropOut($class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('dropOut', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|ODDropzone
+     */
+    public function getDropOut()
+    {
+        return $this->getEvent('dropOut');
+    }
+
+    /**
+     * @return bool|ODDropzone
+     */
+    public function disDropOut()
+    {
+        return $this->disEvent('dropOut');
+    }
+
+    public function setDictMessages(array $dictMessages)
+    {
+        if (!empty($dictMessages)) {
+            $properties          = $this->getProperties();
+            $properties['dict']  = $dictMessages;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getDictMessages()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('dict', $properties) ? $properties['dict'] : false;
+    }
+
+    public function setDictDefaultMessage(string $dictDefaultMessage)
+    {
+        if (!empty($dictDefaultMessage)) {
+            $properties                             = $this->getProperties();
+            $properties['dict']['defaultMessage']   = $dictDefaultMessage;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getDictDefaultMessage()
+    {
+        $properties = $this->getProperties();
+        $dict       = array_key_exists('dict', $properties) ? $properties['dict'] : [];
+
+        return array_key_exists('defaultMessage', $dict) ? $dict['defaultMessage'] : false;
+    }
+
+    public function setDictResponseError(string $dictResponseError)
+    {
+        if (!empty($dictResponseError)) {
+            $properties                             = $this->getProperties();
+            $properties['dict']['responseError']    = $dictResponseError;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function getDictResponseError()
+    {
+        $properties = $this->getProperties();
+        $dict       = array_key_exists('dict', $properties) ? $properties['dict'] : [];
+
+        return array_key_exists('responseError', $dict) ? $dict['responseError'] : false;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
     public function dispatchEvents(ServiceManager $sm, $params)
+    {
+        var_dump($params); exit();
+    }
+
+    public function evtAddFile(ServiceManager $sm, $params)
+    {
+        var_dump($params); exit();
+
+        $ds          = DIRECTORY_SEPARATOR;  //1
+
+        $storeFolder = 'uploads';   //2
+
+        if (!empty($_FILES)) {
+
+            $tempFile = $_FILES['file']['tmp_name'];          //3
+
+            $targetPath = dirname( __FILE__ ) . $ds. $storeFolder . $ds;  //4
+
+            $targetFile =  $targetPath. $_FILES['file']['name'];  //5
+
+            move_uploaded_file($tempFile,$targetFile); //6
+
+        }
+    }
+
+    public function evtRmFile(ServiceManager $sm, $params)
     {
     }
 
