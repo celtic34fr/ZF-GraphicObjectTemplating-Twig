@@ -183,7 +183,7 @@ class ZF3GotServices
                 $localRscs = $properties['resources'];
 
                 if (array_key_exists('prefix', $localRscs)) {
-                    $prefix = 'gotextension/'.$localRscs['prefix'];
+                    $prefix = 'gotextension/'.$localRscs['prefix'].'oeobjects/';
                 } else {
                     $prefix = 'graphicobjecttemplating/oobjects/';
                 }

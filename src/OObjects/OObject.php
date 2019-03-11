@@ -24,6 +24,7 @@ namespace GraphicObjectTemplating\OObjects;
  * static function formatBootstrap($widthBT)
  * static function formatRetour($idSource, $idCible, $mode, $code = null)
  *
+ * getProperty(string $name)
  * getProperties()
  * setProperties(array $properties)
  * getId()
@@ -551,6 +552,11 @@ class OObject
     /** **************************************************************************************************
      * méthodes de l'objet proprement dites                                                              *
      * *************************************************************************************************** */
+
+    public function getProperty(string $name)
+    {
+        return (array_key_exists($name, $this->properties)) ? $this->properties[$name] : false;
+    }
 
     /**
      * @return bool|mixed

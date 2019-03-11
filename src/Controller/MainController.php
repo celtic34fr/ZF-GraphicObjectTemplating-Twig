@@ -62,38 +62,42 @@ class MainController extends AbstractActionController
                     // si retour false de la création d'objet => redirection sur la route home de l'application
                     $results = [OObject::formatRetour($params['id'], $params['id'], 'redirect', '/')];
                 } else {
-                    switch ($callingObj->getObject()) {
-                        case 'odcheckbox':
-                        case 'odmessage':
-                        case 'oddropzone':
-                            // appel de la méthode de l'objet passée en paramètre
-                            $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
-                            break;
-                        default:
-                            $event      = $callingObj->getEvent($params['event']);
-                            if ($event['class'] != $callingObj->getClassName()) {
-                                $object     = $this->buildObject($event['class'], $sessionObj);
-                            } else {
-                                $object     = $callingObj;
-                            }
-                            $objMethod  = $event['method'];
-
-                            // traitement en cas de formulaire
-                            if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
-                                /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                                list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
-
-                                if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
-                                    $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
-                                    $hiddens        = $form->getHiddenValues();
-                                    $params['form'] = array_merge($params['form'], $hiddens);
+                    if ($callingObj->getProperty('dispatchEvents')) {
+                        $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
+                    } else {
+                        switch ($callingObj->getObject()) {
+                            case 'odcheckbox':
+                            case 'odmessage':
+                            case 'oddropzone':
+                                // appel de la méthode de l'objet passée en paramètre
+                                $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
+                                break;
+                            default:
+                                $event      = $callingObj->getEvent($params['event']);
+                                if ($event['class'] != $callingObj->getClassName()) {
+                                    $object     = $this->buildObject($event['class'], $sessionObj);
+                                } else {
+                                    $object     = $callingObj;
                                 }
+                                $objMethod  = $event['method'];
 
-                                $sessionObj->objects    = $objects;
-                            }
-                            // appel de la méthode de l'objet passée en paramètre
-                            $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
-                            break;
+                                // traitement en cas de formulaire
+                                if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
+                                    /** reformatage et mise à jour des données du formulaire niveau objets de la page */
+                                    list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
+
+                                    if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
+                                        $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
+                                        $hiddens        = $form->getHiddenValues();
+                                        $params['form'] = array_merge($params['form'], $hiddens);
+                                    }
+
+                                    $sessionObj->objects    = $objects;
+                                }
+                                // appel de la méthode de l'objet passée en paramètre
+                                $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
+                                break;
+                        }
                     }
                 }
 
