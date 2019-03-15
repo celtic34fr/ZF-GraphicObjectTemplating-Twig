@@ -101,7 +101,7 @@
                         var acceptedFiles = $(this).data('accepted-files');
                         /* Main function to upload */
                         var objetDOM = $(this).parent();
-                        var dragNDrop = new oeddragndrop(objetDOM);
+                        var dragNDrop = new oddragndrop(objetDOM);
                         dragNDrop.upload(evt.originalEvent.dataTransfer.files, acceptedFiles);
                     }
                 } else {
@@ -121,14 +121,14 @@
                 $('#{{ objet.id }}DragNDrop').css('border', '3px dashed green');
                 /* Main function to upload */
                 var objetDOM = $(this).parent();
-                var dragNDrop = new oeddragndrop(objetDOM);
+                var dragNDrop = new oddragndrop(objetDOM);
                 dragNDrop.upload(this.files, 'dropIn');
             });
 
             $('body').on('click', '#{{ objet.id }} .vignette button', function(event) {
                 event.preventDefault();
                 event.stopPropagation();
-                var dragNDrop = new oeddragndrop($('#{{ objet.id }}'));
+                var dragNDrop = new oddragndrop($('#{{ objet.id }}'));
                 dragNDrop.remove($(this),'dropOut')
             });
 
