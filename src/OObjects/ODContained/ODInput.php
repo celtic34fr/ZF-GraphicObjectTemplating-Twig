@@ -81,7 +81,7 @@ class ODInput extends ODContained
             if (!$this->getWidthBT() || empty($this->getWidthBT())) {
                 $this->setWidthBT(12);
             }
-            $this->setDisplay(OObject::DISPLAY_BLOCK);
+            $this->setDisplay(self::DISPLAY_BLOCK);
             $this->enable();
         }
 

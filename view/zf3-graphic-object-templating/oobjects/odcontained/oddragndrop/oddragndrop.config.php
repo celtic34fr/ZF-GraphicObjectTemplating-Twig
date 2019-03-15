@@ -26,7 +26,6 @@ return [
     'thumbRmove'        => ODDragNDrop::BOOLEAN_FALSE,
 
     'resources'         => [        // resources fichiers CSS et JS nécessaires au fonctionnement de lm'objet
-        'prefix'            => 'application/',
         'css'		        => [
             'oddragndrop.css' => 'css/oddragndrop.css',
         ],

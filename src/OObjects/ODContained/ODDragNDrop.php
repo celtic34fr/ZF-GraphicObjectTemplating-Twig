@@ -5,6 +5,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\Service\ZF3GotServices;
+use phpDocumentor\Reflection\Types\Self_;
 use ReflectionClass;
 use Zend\ServiceManager\ServiceManager;
 
@@ -175,20 +176,21 @@ class ODDragNDrop extends ODContained
      * @throws \ReflectionException
      * @throws Exception
      */
-    public function __construct($id)
+    public function __construct($id, $core = true)
     {
-        $oeopath    = __DIR__ .'/../../../view/zf3-graphic-object-templating/oeobjects/ODcontained/ODdragndrop/ODdragndrop.config.php';
-        $oopath     = '';
-        parent::__construct($id, $oeopath, $oopath);
-        $this->setClassName(self::class);
+        parent::__construct($id, "oobjects/odcontained/oddragndrop/oddragndrop.config.php");
 
-        if (!$this->getWidthBT() || empty($this->getWidthBT())) {
-            $this->setWidthBT(12);
+        $properties = $this->getProperties();
+        if ($properties['id'] != 'dummy') {
+            if (!$this->getWidthBT() || empty($this->getWidthBT())) {
+                $this->setWidthBT(12);
+            }
+            $this->setDisplay(self::DISPLAY_BLOCK);
+            $this->enable();
+            $this->setClassName(self::class);
         }
-        $this->setDisplay(self::DISPLAY_BLOCK);
-        $this->enable();
 
-        $this->saveProperties();
+        if ($core){ $this->saveProperties(); }
         return $this;
     }
 
@@ -1087,17 +1089,17 @@ class ODDragNDrop extends ODContained
 
         if ($maxCountFile === 0 || sizeof($loadedFiles) < $maxCountFile) {
             $tempFolder = $objet->getTempFolder();
-            $pathPublic  = $this->getDir().'/../../../../..';
+            $pathPublic  = $sm->get('Config')['publicFolder'];
             /** si tempFolder vide, voir de créer un répertoire uploadFile dans public */
             if (empty($tempFolder)) {
-                if (!file_exists($pathPublic.'/public/uploadedFiles')) {
+                if (!file_exists($pathPublic.'/uploadedFiles')) {
                     $returnCall  = shell_exec('cd '.$pathPublic.' 2>&1');
 
                     $returnCall .= shell_exec('mkdir public/uploadedFiles 2>&1');
                     $returnCall .= shell_exec('chmod 777 public/uploadedFiles/ 2>&1');
                     if (!empty($returnCall)) { throw new \Exception($returnCall); }
                 }
-                $tempFolder  = $pathPublic.'/public/uploadedFiles';
+                $tempFolder  = $pathPublic.'/uploadedFiles';
             }
 
             /**
