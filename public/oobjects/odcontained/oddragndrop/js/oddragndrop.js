@@ -1,7 +1,8 @@
 
-function creaateThumbnailSrc(imgSrc, width, height, keepRatio = true) {
+function creaateThumbnailSrc(imgSrc, width, height, keepRatio) {
 	var iw	= imgSrc.width;
 	var ih	= imgSrc.height;
+	if (keepRatio.length === 0 || keepRatio === undefined) { keepRatio = true; }
 
 	if (width !== 0 || height !== 0) {
 	    if (width === 0) { width = iw; }
@@ -150,7 +151,7 @@ function callAjax(chps, image) {
     });
 }
 
-function oeddragndrop(obj) {
+function oddragndrop(obj) {
     this.id         = obj.attr('id');
     this.form       = obj.data('form') ? obj.data('form') : '';
     this.objet      = obj.data('objet');
@@ -165,7 +166,7 @@ function oeddragndrop(obj) {
     this.datas  = obj.data();
 }
 
-oeddragndrop.prototype = {
+oddragndrop.prototype = {
     validate: function(files) {
         var f = files[0];
         var extension = f.name.substr( (f.name.lastIndexOf('.') +1) );
