@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   version="1.1"
+   id="svg24"
+   sodipodi:docname="iconfinder-icon-writer-odt.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata30">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs28" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     id="namedview26"
+     showgrid="false"
+     inkscape:zoom="1.6"
+     inkscape:cx="81.43304"
+     inkscape:cy="204.64112"
+     inkscape:window-x="1366"
+     inkscape:window-y="40"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g22" />
+  <g
+     id="g5">
+    <title
+       id="title2">background</title>
+    <rect
+       fill="none"
+       id="canvas_background"
+       height="402"
+       width="582"
+       y="-1"
+       x="-1" />
+  </g>
+  <g
+     id="g22">
+    <title
+       id="title7">Layer 1</title>
+    <rect
+       y="158.6"
+       x="120.3"
+       width="227.1"
+       id="XMLID_260_"
+       height="19.1"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <rect
+       y="189.6"
+       x="120.3"
+       width="227.1"
+       id="XMLID_259_"
+       height="19.1"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <rect
+       y="220.7"
+       x="120.3"
+       width="227.1"
+       id="XMLID_258_"
+       height="19.1"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <rect
+       y="251.7"
+       x="120.3"
+       width="227.1"
+       id="XMLID_257_"
+       height="19.1"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <rect
+       y="282.7"
+       x="120.3"
+       width="176.5"
+       id="XMLID_256_"
+       height="19.1"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <path
+       id="XMLID_255_"
+       d="m456.1,75.1l-58.5,-67.8c-1.8,-1.8 -4.9,-1.8 -6.7,0l-58.5,67.8c-2.6,2.6 -0.6,6.7 3.3,6.7l27.4,0l0,53.2l62.1,0l0,-53.2l27.4,0c4.1,0 6.1,-4.1 3.5,-6.7z"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <rect
+       y="144.6"
+       x="363.2"
+       width="62.1"
+       id="XMLID_254_"
+       height="24.2"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <path
+       id="XMLID_253_"
+       d="m363.2,187.3c0,2.2 2,4 4.5,4l53.1,0c2.5,0 4.5,-1.8 4.5,-4l0,-8.9l-62.1,0l0,8.9z"
+       fill="#1d409d" />
+    <path
+       id="XMLID_252_"
+       d="m387.497007,464.2c0,15.8 -12.8,28.6 -28.6,28.6l-248.6,0c-15.8,0 -28.6,-12.8 -28.6,-28.6l0,-8.8l-13.2,0l0,13.6c0,20.5 16.6,37 37,37l258.1,0c20.5,0 37,-16.6 37,-37l0,-268.6l-13.2,0l0,263.8l0.1,0z"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <path
+       id="XMLID_251_"
+       d="m80.9,110.3c0,-15.8 12.8,-28.6 28.6,-28.6l213.2,0c-1.4,-4.4 -0.3,-9.3 3,-12.7l0.4,-0.4l-221.3,0c-20.5,0 -37,16.6 -37,37l0,227.4l13.2,0l0,-222.7l-0.1,0z"
+       style="fill:#2a5699;fill-opacity:1"
+       fill="#1d409d" />
+    <path
+       style="fill:#2a5699;fill-opacity:1;"
+       d="M 59.123047 344.42383 L 59.123047 448.52539 L 297.82422 448.52539 C 326.52422 448.52539 349.82422 425.22539 349.82422 396.52539 C 349.82422 367.82539 326.52461 344.42383 297.72461 344.42383 L 59.123047 344.42383 z M 113.92188 368.63867 C 121.55382 368.63867 127.65517 371.20161 132.22461 376.33008 C 136.79405 381.43424 139.07812 388.28841 139.07812 396.89258 C 139.07812 405.47244 136.79405 412.32661 132.22461 417.45508 C 127.65517 422.55924 121.55382 425.11133 113.92188 425.11133 C 106.26563 425.11133 100.14062 422.55924 95.546875 417.45508 C 90.977431 412.35091 88.693359 405.49674 88.693359 396.89258 C 88.693359 388.28841 90.977431 381.43424 95.546875 376.33008 C 100.14062 371.20161 106.26563 368.63867 113.92188 368.63867 z M 150.59961 369.62305 L 165.72852 369.62305 C 176.27713 369.62305 184.0191 371.8214 188.95312 376.2207 C 193.88715 380.5957 196.35352 387.44987 196.35352 396.7832 C 196.35352 406.16515 193.87435 413.05577 188.91602 417.45508 C 183.95768 421.85438 176.22852 424.05469 165.72852 424.05469 L 150.59961 424.05469 L 150.59961 369.62305 z M 200.50977 369.62305 L 246.55664 369.62305 L 246.55664 375.82031 L 227.23438 375.82031 L 227.23438 424.05469 L 219.83398 424.05469 L 219.83398 375.82031 L 200.50977 375.82031 L 200.50977 369.62305 z M 113.92188 374.61719 C 108.57465 374.61719 104.32183 376.60959 101.16211 380.5957 C 98.026693 384.58181 96.458984 390.01411 96.458984 396.89258 C 96.458984 403.74674 98.026693 409.16819 101.16211 413.1543 C 104.32183 417.14041 108.57465 419.13281 113.92188 419.13281 C 119.2691 419.13281 123.49826 417.14041 126.60938 413.1543 C 129.74479 409.16819 131.3125 403.74674 131.3125 396.89258 C 131.3125 390.01411 129.74479 384.58181 126.60938 380.5957 C 123.49826 376.60959 119.2691 374.61719 113.92188 374.61719 z M 157.96289 375.67383 L 157.96289 418.00195 L 166.85938 418.00195 C 174.36979 418.00195 179.8622 416.30122 183.33789 412.89844 C 186.83789 409.49566 188.58789 404.12348 188.58789 396.7832 C 188.58789 389.49154 186.83789 384.15777 183.33789 380.7793 C 179.8622 377.37652 174.36979 375.67383 166.85938 375.67383 L 157.96289 375.67383 z "
+       id="XMLID_1062_" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot887"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:0;stroke:none;"><flowRegion
+         id="flowRegion889"
+         style="fill:#ff0000;fill-opacity:0;"><rect
+           id="rect891"
+           width="108.125"
+           height="51.25"
+           x="80.625"
+           y="364.5"
+           style="fill:#ff0000;fill-opacity:0;" /></flowRegion><flowPara
+         id="flowPara893"
+         style="fill:#ff0000;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:53.33333333px;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;fill-opacity:0;">ODS</flowPara></flowRoot>  </g>
+</svg>

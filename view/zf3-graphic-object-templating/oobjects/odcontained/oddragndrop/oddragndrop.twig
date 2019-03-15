@@ -1,0 +1,148 @@
+{# template object OEDDragNDrop #}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
+    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
+    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    {% if objet.state == false %} disabled {% endif %}
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+    <style>
+        #{{ objet.id }}DragNDrop {
+            width: 100%;
+            line-height: {{ objet.lineHeightDND }};
+            height: {{ objet.heightDND }};
+            border: 3px dashed #BBBBBB;
+            text-align: center;
+        }
+
+        #{{ objet.id }}DragNDrop .previewDND {
+            text-align: left;
+            margin: 2px;
+        }
+
+        #{{ objet.id }}DragNDrop .previewDND img {
+            height: {{ objet.lineHeightDND }};
+            margin: 0 2px;
+        }
+
+        #{{ objet.id }} .vignette {
+            position: relative;
+            display:inline;
+            margin: 0 0.2em;
+        }
+
+        #{{ objet.id }} .thumb {
+            margin: 0 2px;
+            position: absolute;
+            width: 2em;
+            font-size: 11px !important;
+            top: {{ (objet.lineHeightDND|number_format(2, '.') / 2)|number_format(1, '.') }}em;
+        }
+
+        #{{ objet.id }} .thumb.first {
+            left: 0em;
+        }
+
+        #{{ objet.id }} .thumb.other1 {
+            left: 2.5em;
+        }
+
+        #{{ objet.id }} .thumb.other2 {
+            left: 5em;
+        }
+    </style>
+
+    <div id="{{ objet.id }}DragNDrop" type="file" name="{{ objet.id }}DragNDrop" class="dragNDrop"
+            {% if objet.acceptedFiles is not empty %}
+                data-accepted-files="{{ implode(' ', objet.acceptedFiles) }}"
+            {% endif %}
+            {% if objet.minFileSize > 0 %} data-minFileSize="{{ objet.minFileSize }}" {% endif %}
+            {% if objet.maxFileSize > 0 %} data-maxFileSize="{{ objet.maxFileSize }}" {% endif %}
+    >
+        <div class="messageDND">{{ objet.message }}</div>
+        <div class="previewDND" style="display:none;"
+             data-thumb-width="{{ objet.thumbWidth }}" data-thumb-height="{{ objet.thumbHeight }}"
+             data-thumb-ratio="{{ objet.thumbRatio }}" data-thumb-view="{{ objet.thumbView }}"
+             data-thumb-dload="{{ objet.thumbDload }}" data-thumb-rmove="{{ objet.thumbRmove }}"
+        ></div>
+    </div>
+    <input id="{{ objet.id }}InputFile" name="{{ objet.id }}InputFile" type="file" style="display:none;" class="dragNDropInput">
+
+    <script>
+        $(document).ready(function (evt) {
+            $('#{{ objet.id }}DragNDrop').on('dragenter', function () {
+                $(this).css('border', '3px dashed red');
+                return false;
+            });
+
+            $('#{{ objet.id }}DragNDrop').on('dragover', function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                $(this).css('border', '3px dashed red');
+                return false;
+            });
+
+            $('#{{ objet.id }}DragNDrop').on('dragleave', function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                $(this).css('border', '3px dashed #BBBBBB');
+                return false;
+            });
+
+            $('#{{ objet.id }}DragNDrop').on('drop', function(evt) {
+                if (evt.originalEvent.dataTransfer) {
+                    if (evt.originalEvent.dataTransfer.files.length) {
+                        /* Stop the propagation of the event */
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                        $(this).css('border', '3px dashed green');
+                        var acceptedFiles = $(this).data('accepted-files');
+                        /* Main function to upload */
+                        var objetDOM = $(this).parent();
+                        var dragNDrop = new oeddragndrop(objetDOM);
+                        dragNDrop.upload(evt.originalEvent.dataTransfer.files, acceptedFiles);
+                    }
+                } else {
+                    $(this).css('border', '3px dashed #BBBBBB');
+                }
+                return false;
+            });
+
+            $('body').on('click', '#{{ objet.id }}DragNDrop', function(evt) {
+                $('#{{ objet.id }}InputFile').trigger('click');
+            });
+
+            $('body').on('change', '#{{ objet.id }}InputFile', function(evt) {
+                /* Stop the propagation of the event */
+                evt.preventDefault();
+                evt.stopPropagation();
+                $('#{{ objet.id }}DragNDrop').css('border', '3px dashed green');
+                /* Main function to upload */
+                var objetDOM = $(this).parent();
+                var dragNDrop = new oeddragndrop(objetDOM);
+                dragNDrop.upload(this.files, 'dropIn');
+            });
+
+            $('body').on('click', '#{{ objet.id }} .vignette button', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                var dragNDrop = new oeddragndrop($('#{{ objet.id }}'));
+                dragNDrop.remove($(this),'dropOut')
+            });
+
+            $('body').on('click', '#{{ objet.id }} .vignette', function() {
+                event.preventDefault();
+                event.stopPropagation();
+            });
+        });
+    </script>
+</div>
+
+{#
+    <script>
+        $(document).ready(function (evt) {
+        });
+    </script>
+#}
