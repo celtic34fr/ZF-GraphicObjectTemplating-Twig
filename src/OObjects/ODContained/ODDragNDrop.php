@@ -85,6 +85,8 @@ use Zend\ServiceManager\ServiceManager;
  *                                              fichier des fichiers téléchargés
  * disThumbRmove()                          : désactive la présentation d'une icône pour délencher la suppression du
  *                                              fichier des fichiers téléchargés
+ * enaThumbFileName()                       : déclenche l'affichage du nom de fichier sous sa miniature
+ * disThumbFileName()                       : interdit l'affichage du nom de fichier sous sa miniature
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -1035,6 +1037,30 @@ class ODDragNDrop extends ODContained
     {
         $properties = $this->getProperties();
         $properties['thumbRmove'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * déclenche l'affichage du nom de fichier sous sa miniature
+     * @return ODDragNDrop
+     */
+    public function enaThumbFileName()
+    {
+        $properties = $this->getProperties();
+        $properties['thumbFileName'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * interdit l'affichage du nom de fichier sous sa miniature
+     * @return $this
+     */
+    public function disThumbFileName()
+    {
+        $properties = $this->getProperties();
+        $properties['thumbFileName'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
     }

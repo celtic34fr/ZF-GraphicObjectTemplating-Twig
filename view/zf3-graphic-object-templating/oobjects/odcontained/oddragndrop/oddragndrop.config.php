@@ -24,6 +24,7 @@ return [
     'thumbView'         => ODDragNDrop::BOOLEAN_TRUE,
     'thumbDload'        => ODDragNDrop::BOOLEAN_FALSE,
     'thumbRmove'        => ODDragNDrop::BOOLEAN_FALSE,
+    'thumbFileName'     => ODDragNDrop::BOOLEAN_TRUE,
 
     'resources'         => [        // resources fichiers CSS et JS nécessaires au fonctionnement de lm'objet
         'css'		        => [

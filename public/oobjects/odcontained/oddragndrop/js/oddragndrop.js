@@ -95,6 +95,7 @@ function callAjax(chps, image) {
                             break;
                     }
                 });
+                console.log(id);
                 switch (mode) {
                     case 'addFile':
                         $('#'+id+' .messageDND').css('display', 'none');
@@ -105,6 +106,7 @@ function callAjax(chps, image) {
                         var thumbView = $('#'+id+' .previewDND').data('thumb-view');
                         var thumbDload = $('#'+id+' .previewDND').data('thumb-dload');
                         var thumbRmove = $('#'+id+' .previewDND').data('thumb-rmove');
+                        var thumbName = $('#'+id+' .previewDND').data('thumb-name');
                         var thumbCtrls = {'view': thumbView, 'dload': thumbDload, 'rmove': thumbRmove};
                         var thumbOccur = document.createElement('div');
                         var thumbImg = new Image();
@@ -114,9 +116,7 @@ function callAjax(chps, image) {
                         } else {
                             var files       = name.split('.');
                             var ext         = files[files.length - 1];
-                            console.log(window.location.hostname);
                             thumbImg.src    = 'http://'+window.location.hostname + '/graphicobjecttemplating/icons/'+ext+'.svg';
-                            console.log(thumbImg.src);
                         }
                         name = name.replace(/\./g, '-');
                         thumbImg.id = id+'_'+name;
@@ -125,13 +125,20 @@ function callAjax(chps, image) {
                         $(thumbOccur).append(makeBtnsCtrl(name, code.name, thumbCtrls));
                         $(thumbOccur).addClass('vignette');
                         $(thumbOccur).data('fichier', code.name);
+                        $(thumbOccur).append('<h4>'+code.name+'</h4>');
                         $(thumbOccur).appendTo('#'+id+' .previewDND');
+                        if (thumbName) {
+                            var heightPreview   = parseInt($('#'+id).css('height'));
+                            heightPreview       = parseInt(heightPreview * 1.4);
+                            $('#'+id+' .dragNDrop').css('height', heightPreview+'px');
+                        }
                         break;
                     case 'rmFile':
                         $('#'+code.name).remove();
                         if (code.count == 0) {
                             $('#'+id+' .messageDND').css('display', 'block');
                             $('#'+id+' .previewDND').css('display', 'none');
+                            $('#'+id+' .dragNDrop').css('height', '');
                         }
                         break;
                     default:
