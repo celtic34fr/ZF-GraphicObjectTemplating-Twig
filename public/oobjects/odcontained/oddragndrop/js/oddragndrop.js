@@ -108,8 +108,14 @@ function callAjax(chps, image) {
                         var thumbCtrls = {'view': thumbView, 'dload': thumbDload, 'rmove': thumbRmove};
                         var thumbOccur = document.createElement('div');
                         var thumbImg = new Image();
-                        thumbImg.src = creaateThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
                         var name = code.name;
+                        if (code.mime.indexOf('image') == 0) {
+                            thumbImg.src = creaateThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
+                        } else {
+                            var files       = name.split('.');
+                            var ext         = files[files.length - 1];
+                            thumbImg.src    = 'graphicobjecttemplating/icons/'+ext+'.svg';
+                        }
                         name = name.replace(/\./g, '-');
                         thumbImg.id = id+'_'+name;
                         $(thumbImg).appendTo(thumbOccur);
