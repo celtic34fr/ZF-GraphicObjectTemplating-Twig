@@ -125,7 +125,7 @@ function callAjax(chps, image) {
                         $(thumbOccur).append(makeBtnsCtrl(name, code.name, thumbCtrls));
                         $(thumbOccur).addClass('vignette');
                         $(thumbOccur).data('fichier', code.name);
-                        $(thumbOccur).append('<h4>'+code.name+'</h4>');
+                        $(thumbOccur).append('<h6>'+code.name+'</h6>');
                         $(thumbOccur).appendTo('#'+id+' .previewDND');
                         if (thumbName) {
                             var heightPreview   = parseInt($('#'+id).css('height'));
