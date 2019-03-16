@@ -125,9 +125,9 @@ function callAjax(chps, image) {
                         $(thumbOccur).append(makeBtnsCtrl(name, code.name, thumbCtrls));
                         $(thumbOccur).addClass('vignette');
                         $(thumbOccur).data('fichier', code.name);
-                        $(thumbOccur).append('<h6>'+code.name+'</h6>');
                         $(thumbOccur).appendTo('#'+id+' .previewDND');
                         if (thumbName) {
+                            $(thumbOccur).append('<h6>'+code.name+'</h6>');
                             var heightPreview   = parseInt($('#'+id).css('height'));
                             heightPreview       = parseInt(heightPreview * 1.4);
                             $('#'+id+' .dragNDrop').css('height', heightPreview+'px');
@@ -236,4 +236,53 @@ oddragndrop.prototype = {
             callAjax(datas, null);
         }
     },
+    getData: function (evt) {
+        var valeur = (this.value != undefined) ? this.value : '';
+        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        chps = chps + "&object='" + this.objet + "'";
+
+        var selection   = $('#'+this.id+' .previewDND .vignette');
+        var loadedFiles = [];
+        $.each(selection, function (i, div) {
+            loadedFiles.push($(this).data('fichier'));
+        });
+        chps = chps + "&files='"+loadedFiles.join("$")+"'";
+
+        return chps;
+    },
+    setData: function (data) {
+        $('#'+this.id+' .messageDND').css('display', 'none');
+        $('#'+this.id+' .previewDND').css('display', 'block');
+        var thumbWidth = $('#'+this.id+' .previewDND').data('thumb-width');
+        var thumbHeight = $('#'+this.id+' .previewDND').data('thumb-height');
+        var thumbRatio = $('#'+this.id+' .previewDND').data('thumb-ratio');
+        var thumbView = $('#'+this.id+' .previewDND').data('thumb-view');
+        var thumbDload = $('#'+this.id+' .previewDND').data('thumb-dload');
+        var thumbRmove = $('#'+this.id+' .previewDND').data('thumb-rmove');
+        var thumbName = $('#'+this.id+' .previewDND').data('thumb-name');
+        var thumbCtrls = {'view': thumbView, 'dload': thumbDload, 'rmove': thumbRmove};
+        var thumbOccur = document.createElement('div');
+        var thumbImg = new Image();
+        var objetId = this.id;
+
+        $(thumbOccur).addClass('vignette');
+        if (thumbName) {
+            var heightPreview   = parseInt($('#'+this.id).css('height'));
+            heightPreview       = parseInt(heightPreview * 1.4);
+            $('#'+this.id+' .dragNDrop').css('height', heightPreview+'px');
+        }
+
+        $.each(data, function (i, img) {
+            var name    = this.name;
+            var idDiv   = name.replace(/\./g, '-');
+            var url     = this.thumb-url;
+            thumbOccur.id = idDiv + '-Vignette';
+            $(thumbOccur).append(makeBtnsCtrl(idDiv, name, thumbCtrls));
+            $(thumbOccur).data('fichier', name);
+            if (thumbName) {
+                $(thumbOccur).append('<h6>'+code.name+'</h6>');
+            }
+            $(thumbOccur).appendTo('#'+objetId+' .previewDND');
+        })
+    }
 };
