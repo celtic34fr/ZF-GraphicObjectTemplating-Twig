@@ -2,8 +2,6 @@
 
 namespace GraphicObjectTemplating;
 
-use GraphicObjectTemplating\Controller\DropzoneController;
-use GraphicObjectTemplating\Controller\FileUploadController;
 use GraphicObjectTemplating\Controller\Factory\MainControllerFactory;
 use GraphicObjectTemplating\Controller\MainController;
 use GraphicObjectTemplating\Service\Factory\ZF3GotServicesFactory;
@@ -17,8 +15,8 @@ use GraphicObjectTemplating\ViewHelpers\ZF3GotHeader;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotRender;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotVersion;
 use Zend\Router\Http\Literal;
-use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
+//use Zend\Router\Http\Segment;
+//use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'parameters' => [
@@ -37,34 +35,12 @@ return [
                     ],
                 ],
             ],
-            'gotDropzone' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route'    => '/gotDropzone[/:action[/:id]]',
-                    'defaults' => [
-                        'controller' => DropzoneController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-            'gotFileUpload' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route'    => '/gotFileUpload[/:action[/:id]]',
-                    'defaults' => [
-                        'controller' => FileUploadController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
         ],
     ],
 
     'controllers' => [
         'factories' => [
             MainController::class => MainControllerFactory::class,
-            DropzoneController::class => InvokableFactory::class,
-            FileUploadController::class => InvokableFactory::class,
         ],
     ],
 

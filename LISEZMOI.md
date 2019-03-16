@@ -45,6 +45,18 @@ Dans un environnement **Windows** utiliser seulement **cmd.exe** pour lancer la 
 Copier le fichier **zfGraphicObjectTemplting.local.php.dist** que vous trouverez dans le répertoire *config* de **GraphicObjectTemplating** sans l'extension **.dist** dans le répertoire *config/autoload* de votre projet.
 Ceci activera tous les paramètres de bases nécessaires au bon fonctionnement de **GraphicObjectTemplating**.
 
+Afin de pouvoir utiliser l'objet ODDragNDrop, téléchargement de fichier par glisser - déposer, il vous faudra réaliser 2 opérationss.
+
+Dans le répertoire config/autoload de votre projet, php le ligne suivante : 
+
+    return [
+        ...
+        'publicFolder' => __DIR__.'/../../public',
+        ...
+    ];
+    
+Dans le répertoire public de votre projet, il faut créer le répertoire uploadFiles en affectant les droit sur les répertoires public et uploadedFiles à tous les utlisateurs (sous Linux 'chmod 777 ...').
+
 Avec l'utilisation du *moteur de rendu de page TWIG*, vous devrez remplacer quelques modèles et paramètres. Vous pouvez trouver des modèles de remplacement dans le répertoire *view/twigtemplates* du module **GraphicObjectTemplating** utilisables pour votre projet :
 
 * dans le répertoire *application/index*, vous avez le modèle *index.twig* à l'identique à celui d'un projet de base *index.phtml*,

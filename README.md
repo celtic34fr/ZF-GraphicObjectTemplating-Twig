@@ -44,6 +44,18 @@ If you're on Windows, run the following command as an administrator using cmd.ex
 Copy the files **zfGraphicObjectTemplting.local.php.dist** and **zfGrpahicObjectTemplating.development.local.php.dist** found in the config folder of **GraphicObjectTemplating** without **.dist** extension in *config/autoload* folder of your project.
 They will activate all the basics needed parameters by **GraphicObjectTemplating**. 
 
+In order to be able to use the ODDragNDrop object, file download by drag and drop, you will need to perform 2 operations.
+
+In the config/autoload folder of your project, you must add the following line in the global.php file:
+
+    return [
+        ...
+        'publicFolder' => __DIR__.'/../../public',
+        ...
+    ];
+    
+In the public folder of your project, create the uploadfiles folder, then assigning write permissions to all users on public and uploadedfiles folders (Linux 'chmod 777 ... ').
+
 By using the *Twig Templating Engine*, you have to replace some templates and parameters. You can find templates in view/twigtemplates for your project:
 * in the *application/index* folder, you have the *index.twig* template, which is the same as index.phtml in a standard project,
 * in the *error* folder, you'll find the *index.twig* and *404.twig* files. Use them to replace the *index.phtml* and *404.phtml* files in your project's *error* folder,
