@@ -114,7 +114,9 @@ function callAjax(chps, image) {
                         } else {
                             var files       = name.split('.');
                             var ext         = files[files.length - 1];
-                            thumbImg.src    = 'graphicobjecttemplating/icons/'+ext+'.svg';
+                            console.log(window.location.hostname);
+                            thumbImg.src    = 'http://'+window.location.hostname + '/graphicobjecttemplating/icons/'+ext+'.svg';
+                            console.log(thumbImg.src);
                         }
                         name = name.replace(/\./g, '-');
                         thumbImg.id = id+'_'+name;
