@@ -35,7 +35,7 @@ return [
         ],
         'fonts'             => [
             'MonospaceTypewriter.ttf'   => 'fonts/MonospaceTypewriter.ttf',
-            'ufonts.com_courier.ttf'    => 'fonts/ufonts.com_courier.ttf'
+            'ufonts.com_courier.ttf'    => 'fonts/ufonts_com_courier.ttf'
         ]
     ],
 ];
