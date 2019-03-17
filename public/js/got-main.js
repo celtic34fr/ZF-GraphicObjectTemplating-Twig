@@ -148,6 +148,14 @@ function invokeAjax(datas, idSource, event, e) {
                 treeview = new odtreeview($('#'+id));
                 treeview.appendTreeNode(code);
                 break;
+            case 'setData': // réaffectation valeur ou contenu associé à un objet
+                var objectDOM   = $('#'+id);
+                var objet       = objectDOM.data('objet');
+                var evalStr     = 'var jQryObj = new '+objet+'(objectDOM)';
+                if (!eval(evalStr)) {
+                    jQryObj.setData(code);
+                }
+                break;
         }
     });
 }

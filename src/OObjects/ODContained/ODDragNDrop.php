@@ -1115,7 +1115,7 @@ class ODDragNDrop extends ODContained
 
         if ($maxCountFile === 0 || sizeof($loadedFiles) < $maxCountFile) {
             $tempFolder = $objet->getTempFolder();
-            $pathPublic  = $sm->get('Config')['publicFolder'];
+            $pathPublic = $_SERVER['DOCUMENT_ROOT'];
             /** si tempFolder vide, voir de créer un répertoire uploadFile dans public */
             if (empty($tempFolder)) {
                 if (!file_exists($pathPublic.'/uploadedFiles')) {
@@ -1198,6 +1198,54 @@ class ODDragNDrop extends ODContained
 
         return $ret;
     }
+
+    /** **************************************************************************************************
+     * méthodes de gestion de retour de callback                                                         *
+     * ****************************************************************************************************/
+
+     public function returnSetData()
+     {
+         $thisID        = $this->getId();
+         $code          = [];
+         $loadedFiles   = $this->getLoadedFiles();
+         if (!empty($loadedFiles)) {
+             /* récupération et préparation du répertoire des miniatures */
+            $tempFolder = $this->getTempFolder();
+            $pathPublic = $_SERVER['DOCUMENT_ROOT'];
+            if (empty($tempFolder)) {
+                if (!file_exists($pathPublic.'/uploadedFiles')) {
+                    $returnCall  = shell_exec('cd '.$pathPublic.' 2>&1');
+
+                    $returnCall .= shell_exec('mkdir public/uploadedFiles 2>&1');
+                    $returnCall .= shell_exec('chmod 777 public/uploadedFiles/ 2>&1');
+                    if (!empty($returnCall)) { throw new \Exception($returnCall); }
+                }
+                $tempFolderPath  = $pathPublic.'/uploadedFiles';
+            }
+            $tempFolderPath     .= 'thumbnails';
+            if (!file_exists($tempFolderPath.'/thumbnails')) {
+                $returnCall  = shell_exec('cd '.$tempFolder.' 2>&1');
+
+                $returnCall .= shell_exec('mkdir '.$tempFolderPath.'/thumbnails 2>&1');
+                $returnCall .= shell_exec('chmod 777 '.$tempFolderPath.'/thumbnails 2>&1');
+                if (!empty($returnCall)) { throw new \Exception($returnCall); }
+            }
+            $tempFolderPath     .= '/thumbnails';
+
+            foreach($loadedFiles as $fileName => $filePath) {
+                $item   = [];
+                $item['name']       = $fileName;
+                if (strpos(\mime_content_type($filePath), 'image') === 0) {
+                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$fileName;
+                } else {
+                    $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$ext.'.svg';
+                }
+                $code[] = $item;
+            }
+     }
+         return  [OObject::formatRetour($thisID, $thisID, 'setData', $code)];
+     }
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *

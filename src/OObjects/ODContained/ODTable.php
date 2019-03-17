@@ -95,6 +95,14 @@ use Zend\Session\Container;
  * addTableClass($class)
  * getTableClasses()
  * setTableClasses($classes)
+ * 
+ * méthodes de gestion de retour de callback 
+ * -----------------------------------------
+ * returnAppendLine($idTable, $noLine)
+ * returnUpdateLine($idTable, $noLine)
+ * returnUpdateCell($idTable, $noLine, $noCol, $code)
+ * returnUpdateCol($noCol)
+ * returnRmLine($noLine)
  *
  * méthodes privées de la classe
  * -----------------------------
