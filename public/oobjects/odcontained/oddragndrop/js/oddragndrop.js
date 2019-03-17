@@ -141,6 +141,9 @@ function callAjax(chps, image) {
                             $('#'+id+' .dragNDrop').css('height', '');
                         }
                         break;
+                    case "exec": // exécution de code JavaScript contenu dans une chaîne de caracrtères
+                        $.globalEval(code);
+                        break;
                     default:
                         break;
                 };

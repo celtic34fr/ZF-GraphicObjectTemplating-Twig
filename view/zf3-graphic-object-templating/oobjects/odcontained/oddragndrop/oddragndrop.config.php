@@ -33,5 +33,9 @@ return [
         'js'		        => [
             'oddragndrop.js' => 'js/oddragndrop.js',
         ],
+        'fonts'             => [
+            'MonospaceTypewriter.ttf'   => 'fonts/MonospaceTypewriter.ttf',
+            'ufonts.com_courier.ttf'    => 'fonts/ufonts.com_courier.ttf'
+        ]
     ],
 ];

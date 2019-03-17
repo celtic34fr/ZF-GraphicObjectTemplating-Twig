@@ -1150,6 +1150,9 @@ class ODDragNDrop extends ODContained
                 $html   = ['name'=> $params['name'], 'mime'=> $mimeType];
                 $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), $mode, $html);
             }
+        } else if ($maxCountFile != 0) {
+            $alertMsg = 'alert("Maximum de '.$maxCountFile.' fichier(s) atteint");';
+            $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), 'exec', $alertMsg);
         }
 
         return $ret;

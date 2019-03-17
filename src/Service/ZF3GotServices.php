@@ -86,7 +86,11 @@ class ZF3GotServices
         return false;
     }
 
-    /** récupération et formatage des entêtes chargement ressources CSS & Js */
+    /** récupération et formatage des entêtes chargement ressources CSS & Js
+     * @param $object
+     * @return bool|string|null
+     * @throws \Exception
+     */
     public function header($object)
     {
         if ($object instanceof OObject) {
@@ -98,7 +102,8 @@ class ZF3GotServices
             if ($scripts) {
                 $view = new ViewModel();
                 $view->setTemplate('zf3-graphic-object-templating/main/got-header.twig');
-                $view->setVariable('scripts', array('css' => $scripts['cssScripts'], 'js' => $scripts['jsScripts']));
+                $view->setVariable('scripts',
+                    ['css' => $scripts['cssScripts'], 'js' => $scripts['jsScripts'], 'font' => $scripts['fontsStyles']]);
                 $renduHtml = $this->_twigRender->render($view);
                 return $renduHtml;
             }
@@ -106,6 +111,10 @@ class ZF3GotServices
         return false;
     }
 
+    /**
+     * @param $widthBT
+     * @return string
+     */
     public function bootstrap($widthBT)
     {
         $classesObj = '';
@@ -153,6 +162,7 @@ class ZF3GotServices
             $rscsTab                = [];
             $rscsTab['cssScripts']  = [];
             $rscsTab['jsScripts']   = [];
+            $rscsTab['fontsStyles'] = [];
 
             /** cas des objets OSContainer -> contenant d'autres objets */
             if (in_array($properties['typeObj'] ,['oscontainer', 'oescontainer'] )) {
@@ -170,6 +180,12 @@ class ZF3GotServices
                             if (!array_key_exists($name, $resources)) {
                                 $rscsTab['cssScripts'][$name]   = $path;
                                 $resources[$name]               = $path;
+                            }
+                        }
+                        foreach ($newRscsTab['fontsStyles'] as $name => $path) {
+                            if (!array_key_exists($name, $resources)) {
+                                $rscsTab['fontsStyles'][$name]   = $path;
+                                $resources[$name]                = $path;
                             }
                         }
                     }
@@ -195,6 +211,9 @@ class ZF3GotServices
                 if (array_key_exists('js', $localRscs)) {
                     $jsList = $localRscs['js'];
                 }
+                if (array_key_exists('fonts', $localRscs)) {
+                    $fontsList = $localRscs['fonts'];
+                }
                 if (!empty($cssList)) {
                     foreach ($cssList as $nomCss => $pathCss) {
                         if (!array_key_exists($nomCss, $resources)) {
@@ -211,6 +230,14 @@ class ZF3GotServices
                         }
                     }
                 }
+                if (!empty($fontsList)) {
+                    foreach ($fontsList as $nomFont => $pathFont) {
+                        if (!array_key_exists($nomFont, $resources)) {
+                            $rscsTab['fontsStyles'][$nomFont]   = $prefix.$pathFont;
+                            $resources[$nomFont]                = $prefix.$pathFont;
+                        }
+                    }
+                }
 
             }
             $gotObjList->resources = $resources;
@@ -221,6 +248,11 @@ class ZF3GotServices
         return false;
     }
 
+    /**
+     * @param $menuRef
+     * @param $menuTableRef
+     * @throws \Exception
+     */
     public function loadMainMenu($menuRef, $menuTableRef)
     {
         /** @var EntityManager $entityManager */
@@ -237,6 +269,9 @@ class ZF3GotServices
         $menuGlobal->saveProperties();
     }
 
+    /**
+     * @return string
+     */
     public function getTheme()
     {
         $gotCfg = $this->_config['gotParameters'];

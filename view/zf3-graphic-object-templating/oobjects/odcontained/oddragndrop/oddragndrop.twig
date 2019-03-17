@@ -52,6 +52,10 @@
         #{{ objet.id }} .thumb.other2 {
             left: 5em;
         }
+
+        #{{ objet.id }} .thumb.other2 {
+            font-family: MonospaceTypewriter;
+        }
     </style>
 
     <div id="{{ objet.id }}DragNDrop" type="file" name="{{ objet.id }}DragNDrop" class="dragNDrop"
@@ -140,10 +144,3 @@
         });
     </script>
 </div>
-
-{#
-    <script>
-        $(document).ready(function (evt) {
-        });
-    </script>
-#}

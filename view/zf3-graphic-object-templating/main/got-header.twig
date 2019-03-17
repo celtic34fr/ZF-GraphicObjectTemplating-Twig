@@ -1,7 +1,8 @@
 {# template de rendu de GotHeader #}
 
-{% set cssS    = scripts.css %}
-{% set jsS     = scripts.js %}
+{% set cssS     = scripts.css %}
+{% set jsS      = scripts.js %}
+{% set fonts    = scripts.font %}
 
 {% for css in cssS %}
     <link href="{{ basePath() }}/{{ css }}" rel="stylesheet" type="text/css">
@@ -9,3 +10,15 @@
 {% for js in jsS %}
     <script type="text/javascript" src="{{ basePath() }}/{{ js }}"></script>
 {% endfor %}
+
+{% if fonts is defined and fonts is not empty %}
+    <style>
+        {% for name, fontURL in fonts %}
+        {% set name = name|split('.') %}
+        @font-face {
+            font-family: "{{ name|first }}";
+            src: url('{{ basePath() }}/{{ fontURL }}') format("truetype");
+        }
+        {% endfor %}
+    </style>
+{% endif %}
