@@ -98,6 +98,8 @@ use Zend\ServiceManager\ServiceManager;
  * evtRmFile(ServiceManager $sm, array $params)
  *                                          : méthode traitant de la suppression d'un fichier à la liste des fichiers
  *                                              chargés (avec les différents impacts sur l'objet)
+ * returnSetData()                          : alimentation pour retour de callbacjk visant à réaffecter le contenu de
+ *                                              l'objet
  *
  * méthodes privées de la classe
  * ------------------------------
@@ -929,6 +931,7 @@ class ODDragNDrop extends ODContained
      */
     public function setThumbWidth(int $thumbWidth)
     {
+        if ($thumbWidth == 0) { $thumbWidth = 150; }
         $properties                 = $this->getProperties();
         $properties['thumbWidth']   = $thumbWidth;
         $this->setProperties($properties);
@@ -953,6 +956,7 @@ class ODDragNDrop extends ODContained
      */
     public function setThumbHeight(int $thumbHeight)
     {
+        if ($thumbHeight == 0) { $thumbHeight = 150; }
         $properties                 = $this->getProperties();
         $properties['thumbHeight']  = $thumbHeight;
         $this->setProperties($properties);
@@ -1199,11 +1203,12 @@ class ODDragNDrop extends ODContained
         return $ret;
     }
 
-    /** **************************************************************************************************
-     * méthodes de gestion de retour de callback                                                         *
-     * ****************************************************************************************************/
-
-     public function returnSetData()
+    /**
+     * alimentation pour retour de callbacjk visant à réaffecter le contenu de l'objet
+     * @return array
+     * @throws Exception
+     */
+    public function returnSetData()
      {
          $thisID        = $this->getId();
          $code          = [];
@@ -1243,8 +1248,8 @@ class ODDragNDrop extends ODContained
                 }
                 $code[] = $item;
             }
-     }
-         return  [OObject::formatRetour($thisID, $thisID, 'setData', $code)];
+         }
+         return  [self::formatRetour($thisID, $thisID, 'setData', $code)];
      }
 
     /** **************************************************************************************************

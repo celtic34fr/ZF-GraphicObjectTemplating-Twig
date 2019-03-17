@@ -18,8 +18,8 @@ return [
 
     'loadedFiles'       => [],  // tableau des fichiers déjà téléchargés (pouvant être supprimés)
     'tempFolder'        => '',
-    'thumbWidth'        => 0,
-    'thumbHeight'       => 0,
+    'thumbWidth'        => 150,
+    'thumbHeight'       => 150,
     'thumbRatio'        => ODDragNDrop::BOOLEAN_TRUE,
     'thumbView'         => ODDragNDrop::BOOLEAN_TRUE,
     'thumbDload'        => ODDragNDrop::BOOLEAN_FALSE,

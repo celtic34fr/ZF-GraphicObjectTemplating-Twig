@@ -58,6 +58,10 @@ use phpDocumentor\Reflection\Types\Self_;
  * getValMin()
  * validateContent();
  *
+ * méthodes de gestion de retour de callback
+ * -----------------------------------------
+ * returnSetData()          alimentation pour retour de callback visant à réaffecter la valeur de l'objet
+ *
  * méthodes privées de la classe
  * -----------------------------
  * getTypeConstants()       récupération des constantes 'BUTTONTYPE_*' dans un tableau associatif
@@ -479,6 +483,17 @@ class ODInput extends ODContained
                 $retour = 'Erreur inconnue';
         }
         return $retour;
+    }
+
+    /** **************************************************************************************************
+     * méthodes de gestion de retour de callback                                                         *
+     * ***************************************************************************************************
+     */
+
+    public function returnSetData()
+    {
+        $thisID        = $this->getId();
+        return  [self::formatRetour($thisID, $thisID, 'setData', $this->getValue())];
     }
 
     /** **************************************************************************************************
