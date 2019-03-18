@@ -1135,14 +1135,16 @@ class ODDragNDrop extends ODContained
             /**
              * traitement d'ajout d'un fichier
              */
-            $fileName = explode('.',$params['name']);
-            $mimeType = $this->getMimeString($fileName[1]);
-            $imgSrc 	= $params['file'];
-            $imgFile	= base64_decode($imgSrc);
-            $file		= fopen($tempFolder.'/'.$params['name'], 'wb');
+            $fileName   = $params['name'];
+            $fileExt    = pathinfo($fileName, PATHINFO_EXTENSION);
+            $mimeType   = $this->getMimeString($fileExt);
+            $imgSrc     = $params['file'];
+            $imgFile    = base64_decode($imgSrc);
+            $dest       = $tempFolder.'/'.$fileName;
+            $file       = fopen($dest, 'wb');
             fwrite($file, $imgFile);
             fclose($file);
-            if ( $objet->addLoadedFile($params['name'], $tempFolder.'/'.$params['name']) !== false ) {
+            if ( $objet->addLoadedFile($params['name'], $dest) !== false ) {
                 $objet->setTempFolder($tempFolder);
                 $objet->saveProperties();
 
@@ -1501,7 +1503,7 @@ class ODDragNDrop extends ODContained
      *                                      valide et gérée par le système
      * @throws \ReflectionException
      */
-    private function getMimeString($ext)
+    public function getMimeString($ext)
     {
         $key            = "";
         $extConstants   = $this->getAllExtensionConstant();
