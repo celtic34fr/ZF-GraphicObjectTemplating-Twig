@@ -1809,9 +1809,9 @@ class OObject
      * @return array
      * @throws \ReflectionException
      */
-    protected function getConstants()
+    protected static function getConstants()
     {
-        $ref = new \ReflectionClass($this);
+        $ref = new \ReflectionClass(static::class);
         return $ref->getConstants();
     }
 

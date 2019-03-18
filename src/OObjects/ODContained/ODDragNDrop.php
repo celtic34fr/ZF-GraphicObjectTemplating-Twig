@@ -167,7 +167,7 @@ class ODDragNDrop extends ODContained
     const   EXT_ARCH_ZIP    = 'zip';
     const   EXT_ARCH_TAR    = 'tar';
 
-    private $const_allExt;
+    private static $const_allExt;
     private $const_imagExt;
     private $const_wordExt;
     private $const_exclExt;
@@ -1264,20 +1264,20 @@ class ODDragNDrop extends ODContained
      * @return array                    : tableau des extensions de fichier autorisées
      * @throws \ReflectionException
      */
-    private function getAllExtensionConstant()
+    private static function getAllExtensionConstant()
     {
         $retour = [];
-        if (empty($this->const_allExt)) {
-            $constants = $this->getConstants();
+        if (empty(self::$const_allExt)) {
+            $constants = self::getConstants();
             foreach ($constants as $key => $constant) {
                 $pos = strpos($key, 'EXT_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }
             }
-            $this->const_allExt = $retour;
+            self::$const_allExt = $retour;
         } else {
-            $retour = $this->const_allExt;
+            $retour = self::$const_allExt;
         }
         return $retour;
     }
@@ -1501,10 +1501,10 @@ class ODDragNDrop extends ODContained
      *                                      valide et gérée par le système
      * @throws \ReflectionException
      */
-    private function getMimeString($ext)
+    public static function getMimeString($ext)
     {
         $key            = "";
-        $extConstants   = $this->getAllExtensionConstant();
+        $extConstants   = self::getAllExtensionConstant();
         foreach ($extConstants as $extKey => $extConstant) {
             if ($ext == $extConstant) {
                 $key = $extKey;
