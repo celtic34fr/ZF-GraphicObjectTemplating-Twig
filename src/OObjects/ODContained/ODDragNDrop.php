@@ -1141,16 +1141,20 @@ class ODDragNDrop extends ODContained
             $imgSrc     = $params['file'];
             $imgFile    = base64_decode($imgSrc);
             $dest       = $tempFolder.'/'.$fileName;
-            $file       = fopen($dest, 'wb');
-            fwrite($file, $imgFile);
-            fclose($file);
             if ( $objet->addLoadedFile($params['name'], $dest) !== false ) {
+                $file       = fopen($dest, 'wb');
+                fwrite($file, $imgFile);
+                fclose($file);
+
                 $objet->setTempFolder($tempFolder);
                 $objet->saveProperties();
 
                 $mode   = 'addFile';
                 $html   = ['name'=> $params['name'], 'mime'=> $mimeType];
                 $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), $mode, $html);
+            } else {
+                $alertMsg = 'alert("Nom de fichier '.$$params['name'].' existe dèjà, veuillez changer");';
+                $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), 'exec', $alertMsg);
             }
         } else if ($maxCountFile != 0) {
             $alertMsg = 'alert("Maximum de '.$maxCountFile.' fichier(s) atteint");';
