@@ -24,6 +24,19 @@
         {% endblock Hstyle %}
         <!-- Le styles -->
 
+        <style>
+
+            #dpi {
+                height: 1in;
+                width: 1in;
+                position: absolute;
+                left: -100%;
+                top: -100%;
+                display: none;
+            }
+
+        </style>
+
         {% block Hscript %}
             <!-- Scripts -->
             {{ headScript()
@@ -42,6 +55,7 @@
     <body class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div id="gotcallback" style="display: none;">{{ url("gotDispatch", {}, {'force_canonical':true}) }}</div>
         <div id="divwork" style="display: none"></div>
+        <div id="dpi" ></div>
 
         {% block Bcontent %}
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
