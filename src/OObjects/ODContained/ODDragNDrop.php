@@ -834,7 +834,7 @@ class ODDragNDrop extends ODContained
     {
         $properties                     = $this->getProperties();
         $loadedFiles                    = $properties['loadedFiles'];
-        if (file_exists($pathFile) && !array_key_exists($name, $loadedFiles)) {
+        if (!array_key_exists($name, $loadedFiles)) {
             $loadedFiles[$name]         = $pathFile;
             $properties['loadedFiles']  = $loadedFiles;
             $this->setProperties($properties);
