@@ -192,6 +192,7 @@ class MainController extends AbstractActionController
             $idF    = '';
             $val    = '';
             $object = '';
+            $files  = '';
             foreach ($data as $item) {
                 switch (true) {
                     case (strpos($item, 'id=') !== false):
@@ -203,6 +204,9 @@ class MainController extends AbstractActionController
                     case (strpos($item, 'object=') !== false):
                         $object = $this->trimQuote(substr($item, 7), '*');
                         break;
+                    case (strpos($item, 'files=') !== false):
+                        $files  = $this->trimQuote(substr($item, 7), '*');
+                        break;
                 }
             }
             // formatage en sortie en tableau idObj => valeur
@@ -213,6 +217,9 @@ class MainController extends AbstractActionController
                     if (empty($val)) { $val = []; }
                     if (!is_array($val)) { $val[] = $val; }
                     $formDatas[$idF] = $val;
+                    break;
+                case 'oddragndrop':
+                    $formDatas[$idF] = $files;
                     break;
                 default:
                     $formDatas[$idF] = $val;
