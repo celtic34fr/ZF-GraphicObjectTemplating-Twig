@@ -1,3 +1,6 @@
+function getDPI() {
+    return jQuery('#dpi').height();
+}
 
 function creaateThumbnailSrc(imgSrc, width, height, keepRatio) {
 	var iw	= imgSrc.width;
@@ -69,6 +72,19 @@ function makeBtnsCtrl(imgId, fileName, thumbCtrls) {
     return btnCtrls;
 }
 
+function formatNameThumb(name, thumbWidth, thumbFontSize) {
+    var screenDPI   = getDPI();
+    var thumbCm		= thumbWidth / screenDPI * 2.54;
+    var thumbVW		= parseInt(thumbFontSize) * 0.5;
+    var thumbChars	= thumbCm / thumbVW;
+    var strLength	= name.length;
+    var chainePrint	= name;
+    if (strLength > thumbChars) {
+        chainePrint	= name.substring(0, thumbChars);
+    }
+    return chainePrint;
+}
+
 function callAjax(chps, image) {
     $.ajax({
         type: 'POST',
@@ -127,7 +143,8 @@ function callAjax(chps, image) {
                         $(thumbOccur).data('fichier', code.name);
                         $(thumbOccur).appendTo('#'+id+' .previewDND');
                         if (thumbName) {
-                            $(thumbOccur).append('<h6>'+code.name+'</h6>');
+                            var printName = formatNameThumb(code.name, thumbWidth, '1.25vw');
+                            $(thumbOccur).append('<h6>'+printName+'</h6>');
                             var heightPreview   = parseInt($('#'+id).css('height'));
                             heightPreview       = parseInt(heightPreview * 1.4);
                             $('#'+id+' .dragNDrop').css('height', heightPreview+'px');
@@ -283,7 +300,9 @@ oddragndrop.prototype = {
             $(thumbOccur).append(makeBtnsCtrl(idDiv, name, thumbCtrls));
             $(thumbOccur).data('fichier', name);
             if (thumbName) {
-                $(thumbOccur).append('<h6>'+code.name+'</h6>');
+                var thumbFontSize = $('#'+id+'.vignette h6').css('font-size');
+                var printName = formatNameThumb(code.name, thumbWidth, thumbFontSize);
+                $(thumbOccur).append('<h6>'+printName+'</h6>');
             }
             $(thumbOccur).appendTo('#'+objetId+' .previewDND');
         })

@@ -117,8 +117,8 @@ function invokeAjax(datas, idSource, event, e) {
                 $.globalEval(code);
                 break;
             case "execID": // exécution de code JavaScript contenu dans un objet DOM
-                let objet = $("#"+code);
-                let script = objet.html();
+                var objet = $("#"+code);
+                var script = objet.html();
                 $.globalEval(script);
                 break;
             case "redirect": // redirection HTML
@@ -128,8 +128,8 @@ function invokeAjax(datas, idSource, event, e) {
                 }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
-                let evt = code.substring(0, strpos(code, '|'));
-                let flg = code.substring(strpos(code, '|') + 1);
+                var evt = code.substring(0, strpos(code, '|'));
+                var flg = code.substring(strpos(code, '|') + 1);
                 $('#'+id).attr('data-'+evt+'-stopevt', flg);
                 break;
             case 'updCols': // mise à jour colonne ODTable
@@ -150,8 +150,8 @@ function invokeAjax(datas, idSource, event, e) {
                 break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
                 var objectDOM   = $('#'+id);
-                var objet       = objectDOM.data('objet');
-                var evalStr     = 'var jQryObj = new '+objet+'(objectDOM)';
+                var objetJS     = objectDOM.data('objet');
+                var evalStr     = 'var jQryObj = new '+objetJS+'(objectDOM)';
                 if (!eval(evalStr)) {
                     jQryObj.setData(code);
                 }
@@ -237,7 +237,6 @@ function updateForm(formId) {
     })
 }
 
-
 function showHideTableNodata(id, nbrLines) {
     if (nbrLines < 1) {
         $("#"+id+" tr.line.nodata").removeClass('hide');
@@ -246,4 +245,6 @@ function showHideTableNodata(id, nbrLines) {
     }
 }
 
-
+function getDPI(){
+    return jQuery('#dpi').height();
+}
