@@ -121,6 +121,7 @@ class OSForm extends OSDiv
      * @param string|null $mode
      * @param null $params
      * @return $this|bool|OSDiv
+     * @throws \Exception
      */
     public function addChild(OObject $child, $require = false, $mode = self::MODE_LAST, $params = null)
     {
@@ -714,7 +715,7 @@ class OSForm extends OSDiv
             /** @var OObject $localChild */
             foreach ($localChildren as $localChild) {
                 $this->propageFormParams($localChild, $child->getId(), $formID, $require);
-                $localChild->saveProperties();
+//                $localChild->saveProperties();
             }
         } else { // if ($child instanceof ODContained)
             /** @var ODContained $child */
