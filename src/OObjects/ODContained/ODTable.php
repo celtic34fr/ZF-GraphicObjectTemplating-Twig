@@ -1155,9 +1155,11 @@ class ODTable extends ODContained
         $code = '';
         $idTarget = $idTable . ' .lno' . $noLine;
         foreach ($line as $noCol => $valCol) {
-            $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
-            $code .= $valCol;
-            $code .= '</td>';
+            if ($this->stateCol($noCol)) {
+                $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
+                $code .= $valCol;
+                $code .= '</td>';
+            }
         }
         return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
     }
@@ -1165,24 +1167,34 @@ class ODTable extends ODContained
     public function returnUpdateCell($idTable, $noLine, $noCol, $code)
     {
         $idTarget = $idTable . " .lno" . $noLine . " .cno" . $noCol;
-        return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
+        if ($this->stateCol($noCol)) {
+            return [OObject::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
+        }
+        return false;
     }
 
     public function returnUpdateCol($noCol)
     {
-        $idTable = $this->getId();
-        $cols = $this->getColValues($noCol);
-        $params['col'] = $noCol;
-        $params['datas'] = $cols;
-        return [OObject::formatRetour($idTable, $idTable, 'updCols', $params)];
+        if ($this->stateCol($noCol)) {
+
+            $idTable = $this->getId();
+            $cols = $this->getColValues($noCol);
+            $params['col'] = $noCol;
+            $params['datas'] = $cols;
+            return [OObject::formatRetour($idTable, $idTable, 'updCols', $params)];
+        }
+        return false;
     }
 
     public function returnRmLine($noLine)
     {
-        $idTable = $this->getId();
-        $params['noLine'] = $noLine;
-        $params['maxLine'] = sizeof($this->getLines()) + 1;
-        return [OObject::formatRetour($idTable, $idTable, 'rmLineUpd', $params)];
+        if ($noLine <= (sizeof($this->getLines()) + 1)) {
+            $idTable = $this->getId();
+            $params['noLine'] = $noLine;
+            $params['maxLine'] = sizeof($this->getLines()) + 1;
+            return [OObject::formatRetour($idTable, $idTable, 'rmLineUpd', $params)];
+        }
+        return false;
     }
 
     /** **************************************************************************************************
