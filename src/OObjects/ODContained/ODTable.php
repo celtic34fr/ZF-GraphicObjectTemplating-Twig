@@ -72,6 +72,7 @@ use Zend\Session\Container;
  *                          suppression de l'évènement onClick sur la cellule en ligne $nLine, colonne $nCol
  * showCol($nCol)           rend visible une colonne ($ncol)
  * hideCol($nCol)           cache une colonne ($nCol) pour l'affichage
+ * stateCol($nCol)          état de visibilité de la colonne $nCol
  * findNolineOnColValue($nCol, $value)
  *                          recherche le numéro de ligne sur une valeur de colonne
  * findNolineOnOrderedColsValue(array $fColsVals)
@@ -673,6 +674,14 @@ class ODTable extends ODContained
         return $this;
     }
 
+    public function stateCol(int $nCol)
+    {
+        $properties = $this->getProperties();
+        $nbCols = sizeof($properties['cols']);
+        if ($nCol < 1 || $nCol > $nbCols) return false;
+        return $properties['cols'][$nCol]['view'];
+    }
+
     public function findNolineOnColValue($nCol, $value)
     {
         $nCol = (int)$nCol;
@@ -1130,9 +1139,11 @@ class ODTable extends ODContained
         $line = $this->getLine($noLine);
         $code = '<tr class="line lno' . $noLine . '" data-lno="' . $noLine . '">';
         foreach ($line as $noCol => $valCol) {
-            $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
-            $code .= $valCol;
-            $code .= '</td>';
+            if ($this->stateCol($noCol)) {
+                $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
+                $code .= $valCol;
+                $code .= '</td>';
+            }
         }
         $code .= "</tr>";
         return [OObject::formatRetour($idTable, $idTable . " tbody", 'append', $code)];
