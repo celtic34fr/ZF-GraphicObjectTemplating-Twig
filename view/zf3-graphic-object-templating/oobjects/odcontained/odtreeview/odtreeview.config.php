@@ -18,11 +18,11 @@ return array(
     'resources' => [
         'css' => [
             'odtreeview.css' => 'css/odtreeview.css',
-            'hummingbird_treeview.css' => 'css/hummingbird_treeview.css',
+//            'hummingbird_treeview.css' => 'css/hummingbird_treeview.css',
             ],
         'js'  => [
             'odtreeview.js' => 'js/odtreeview.js',
-            'hummingbird_treeview.js' => 'js/hummingbird_treeview.js',
+//            'hummingbird_treeview.js' => 'js/hummingbird_treeview.js',
         ],
     ],
 );
