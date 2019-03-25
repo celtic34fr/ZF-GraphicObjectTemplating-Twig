@@ -35,6 +35,16 @@ return [
                     ],
                 ],
             ],
+            'gotDownload' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/download/:idDND/:loadedFileID',
+                    'defaults' => [
+                        'controller' => MainController::class,
+                        'action'     => 'gotDownload',
+                    ],
+                ],
+            ],
         ],
     ],
 

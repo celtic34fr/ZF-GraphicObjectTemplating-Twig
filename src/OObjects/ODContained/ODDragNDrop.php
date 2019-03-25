@@ -834,8 +834,16 @@ class ODDragNDrop extends ODContained
     {
         $properties                     = $this->getProperties();
         $loadedFiles                    = $properties['loadedFiles'];
-        if (!array_key_exists($name, $loadedFiles)) {
+        $names                          = array_column($loadedFiles, 'name');
+        if (!in_array($name, $names)) {
+            $loadedFiles                = ksort($loadedFiles);
+            /** @var array $loadedFiles */
+            $key                        = ((int) array_key_last($loadedFiles) + 1).'ld';
+            $item                       = [];
+            $item['name']               = $name;
+            $item['pathFile']           = $pathFile;
             $loadedFiles[$name]         = $pathFile;
+            $loadedFiles[$key]          = $item;
             $properties['loadedFiles']  = $loadedFiles;
             $this->setProperties($properties);
             return $this;
@@ -853,8 +861,10 @@ class ODDragNDrop extends ODContained
     {
         $properties                     = $this->getProperties();
         $loadedFiles                    = $properties['loadedFiles'];
-        if (file_exists($pathFile) && array_key_exists($name, $loadedFiles)) {
-            unset($loadedFiles[$name]);
+        $names                          = array_column($loadedFiles, 'name');
+        if (file_exists($pathFile) && array_key_exists($name, $names)) {
+            $key = array_search($name, array_column($loadedFiles, 'name'));
+            unset($loadedFiles[$key]);
             $properties['loadedFiles']  = $loadedFiles;
             $this->setProperties($properties);
             return $this;
@@ -870,11 +880,13 @@ class ODDragNDrop extends ODContained
      */
     public function setLoadedFile(string $name, string $pathFile)
     {
-        $properties                     = $this->getProperties();
-        $loadedFiles                    = $properties['loadedFiles'];
-        if (file_exists($pathFile) && array_key_exists($name, $loadedFiles)) {
-            $loadedFiles[$name]         = $pathFile;
-            $properties['loadedFiles']  = $loadedFiles;
+        $properties                         = $this->getProperties();
+        $loadedFiles                        = $properties['loadedFiles'];
+        $names                              = array_column($loadedFiles, 'name');
+        if (file_exists($pathFile) && array_key_exists($name, $names)) {
+            $key = array_search($name, array_column($loadedFiles, 'name'));
+            $loadedFiles[$key]['pathFile']  = $pathFile;
+            $properties['loadedFiles']      = $loadedFiles;
             $this->setProperties($properties);
             return $this;
         }
@@ -890,7 +902,12 @@ class ODDragNDrop extends ODContained
     {
         $properties                     = $this->getProperties();
         $loadedFiles                    = $properties['loadedFiles'];
-        return $loadedFiles[$name] ?? false;
+        $names                          = array_column($loadedFiles, 'name');
+        if (in_array($name, $names)) {
+            $key = array_search($name, array_column($loadedFiles, 'name'));
+            return $loadedFiles[$key];
+        }
+        return false;
     }
 
     /**
@@ -900,15 +917,22 @@ class ODDragNDrop extends ODContained
      */
     public function setLoadedFiles(array $loadedFiles)
     {
+        $formatedLoadedFiles = [];
+        $idLoadedFiles      = 0;
         // validation du tableau
         foreach ($loadedFiles as $loadedFile) {
             if (!array_key_exists('name', $loadedFile) || !array_key_exists('pathFile', $loadedFile)) {
                 return false;
             }
+            $idLoadedFiles++;
+            $item                                       = [];
+            $item['name']                               = $loadedFile['name'];
+            $item['pathFile']                           = $loadedFile['pathFile'];
+            $formatedLoadedFiles[$idLoadedFiles.'ld']   = $item;
         }
 
         $properties                     = $this->getProperties();
-        $properties['loadedFiles']      = $loadedFiles;
+        $properties['loadedFiles']      = $formatedLoadedFiles;
         $this->setProperties($properties);
         return $this;
     }
@@ -1213,7 +1237,7 @@ class ODDragNDrop extends ODContained
     }
 
     /**
-     * alimentation pour retour de callbacjk visant à réaffecter le contenu de l'objet
+     * alimentation pour retour de callback visant à réaffecter le contenu de l'objet
      * @return array
      * @throws Exception
      */
@@ -1249,12 +1273,14 @@ class ODDragNDrop extends ODContained
             foreach($loadedFiles as $fileName => $filePath) {
                 $item   = [];
                 $item['name']       = $fileName;
-                if (strpos(\mime_content_type($filePath), 'image') === 0) {
-                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$fileName;
-                } else {
-                    $ext = pathinfo($filePath, PATHINFO_EXTENSION);
-                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$ext.'.svg';
-                }
+                $item['mime']       = \mime_content_type($filePath);
+                $item['url']        = $filePath;
+//                if (strpos(\mime_content_type($filePath), 'image') === 0) {
+//                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$fileName;
+//                } else {
+//                    $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+//                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$ext.'.svg';
+//                }
                 $code[] = $item;
             }
          }

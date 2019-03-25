@@ -3,7 +3,10 @@
 namespace GraphicObjectTemplating\Controller;
 
 use GraphicObjectTemplating\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\ODContained\ODDragNDrop;
+use Zend\Http\Headers;
 use Zend\Http\Request;
+use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
@@ -146,6 +149,34 @@ class MainController extends AbstractActionController
             }
         }
         return false;
+    }
+
+    public function gotDownloadAction()
+    {
+        $sessionObjects = OObject::validateSession();
+        $idDND          = (int)$this->params()->fromRoute('idDND', 0);
+        $LoadedFileID   = (int)$this->params()->fromRoute('loadedFileID', 0);
+
+        /** @var ODDragNDrop $objet */
+        $objet          = $this->buildObject($idDND, $sessionObjects);
+        $loadedFiles    = $objet->getLoadedFiles();
+
+        $file           = $loadedFiles[$LoadedFileID]['pathFile'];
+        $response       = new Stream();
+        $response->setStream(fopen($file, 'r'));
+        $response->setStatusCode(200);
+        $response->setStreamName(basename($file));
+        $headers        = new Headers();
+        $headers->addHeaders(array(
+            'Content-Disposition' => 'attachment; filename="' . basename($file) .'"',
+            'Content-Type' => 'application/octet-stream',
+            'Content-Length' => filesize($file),
+            'Expires' => '@0', // @0, because zf2 parses date as string to \DateTime() object
+            'Cache-Control' => 'must-revalidate',
+            'Pragma' => 'public'
+        ));
+        $response->setHeaders($headers);
+        return $response;
     }
 
 

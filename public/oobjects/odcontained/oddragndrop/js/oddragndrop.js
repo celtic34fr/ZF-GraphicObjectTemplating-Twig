@@ -282,27 +282,39 @@ oddragndrop.prototype = {
         var thumbName = $('#'+this.id+' .previewDND').data('thumb-name');
         var thumbCtrls = {'view': thumbView, 'dload': thumbDload, 'rmove': thumbRmove};
         var thumbOccur = document.createElement('div');
+        var image = new Image();
         var thumbImg = new Image();
         var objetId = this.id;
 
         $(thumbOccur).addClass('vignette');
-        if (thumbName) {
-            var heightPreview   = parseInt($('#'+this.id).css('height'));
-            heightPreview       = parseInt(heightPreview * 1.4);
-            $('#'+this.id+' .dragNDrop').css('height', heightPreview+'px');
-        }
 
         $.each(data, function (i, img) {
             var name    = this.name;
             var idDiv   = name.replace(/\./g, '-');
-            var url     = this.thumb-url;
-            thumbOccur.id = idDiv + '-Vignette';
+            var mime    = this.mime;
+
             $(thumbOccur).append(makeBtnsCtrl(idDiv, name, thumbCtrls));
             $(thumbOccur).data('fichier', name);
+
+            if (mime.indexOf('image') == 0) {
+                image.src = this.url;
+                thumbImg.src = creaateThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
+            } else {
+                var files       = name.split('.');
+                var ext         = files[files.length - 1];
+                thumbImg.src    = 'http://'+window.location.hostname + '/graphicobjecttemplating/icons/'+ext+'.svg';
+            }
+            name = name.replace(/\./g, '-');
+            thumbImg.id = id+'_'+name;
+            $(thumbImg).appendTo(thumbOccur);
+            thumbOccur.id = idDiv + '-Vignette';
+
             if (thumbName) {
-                var thumbFontSize = $('#'+id+'.vignette h6').css('font-size');
-                var printName = formatNameThumb(code.name, thumbWidth, thumbFontSize);
+                var printName = formatNameThumb(name, thumbWidth, '1.25vw');
                 $(thumbOccur).append('<h6>'+printName+'</h6>');
+                var heightPreview   = parseInt($('#'+id).css('height'));
+                heightPreview       = parseInt(heightPreview * 1.4);
+                $('#'+id+' .dragNDrop').css('height', heightPreview+'px');
             }
             $(thumbOccur).appendTo('#'+objetId+' .previewDND');
         })
