@@ -305,16 +305,16 @@ oddragndrop.prototype = {
                 thumbImg.src    = 'http://'+window.location.hostname + '/graphicobjecttemplating/icons/'+ext+'.svg';
             }
             name = name.replace(/\./g, '-');
-            thumbImg.id = id+'_'+name;
+            thumbImg.id = objetId+'_'+name;
             $(thumbImg).appendTo(thumbOccur);
             thumbOccur.id = idDiv + '-Vignette';
 
             if (thumbName) {
                 var printName = formatNameThumb(name, thumbWidth, '1.25vw');
                 $(thumbOccur).append('<h6>'+printName+'</h6>');
-                var heightPreview   = parseInt($('#'+id).css('height'));
+                var heightPreview   = parseInt($('#'+objetId+' .dragNDrop').css('height'));
                 heightPreview       = parseInt(heightPreview * 1.4);
-                $('#'+id+' .dragNDrop').css('height', heightPreview+'px');
+                $('#'+objetId+' .dragNDrop').css('height', heightPreview+'px');
             }
             $(thumbOccur).appendTo('#'+objetId+' .previewDND');
         })

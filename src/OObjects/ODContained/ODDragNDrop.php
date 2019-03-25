@@ -87,6 +87,8 @@ use Zend\ServiceManager\ServiceManager;
  *                                              fichier des fichiers téléchargés
  * enaThumbFileName()                       : déclenche l'affichage du nom de fichier sous sa miniature
  * disThumbFileName()                       : interdit l'affichage du nom de fichier sous sa miniature
+ * validFiles($files)                       : valide l'existance des fichiers contenus dans $files dans loadedFiles,
+ *                                              retourne la différence
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -836,13 +838,17 @@ class ODDragNDrop extends ODContained
         $loadedFiles                    = $properties['loadedFiles'];
         $names                          = array_column($loadedFiles, 'name');
         if (!in_array($name, $names)) {
-            $loadedFiles                = ksort($loadedFiles);
-            /** @var array $loadedFiles */
-            $key                        = ((int) array_key_last($loadedFiles) + 1).'ld';
+            $key                        = '1ld';
+            if (!empty($loadedFiles)) {
+                $loadedFiles                = ksort($loadedFiles);
+                /** @var array $loadedFiles */
+                $key                        = ((int) array_key_last($loadedFiles) + 1).'ld';
+            }
             $item                       = [];
             $item['name']               = $name;
             $item['pathFile']           = $pathFile;
-            $loadedFiles[$name]         = $pathFile;
+            $item['mime']               = \mime_content_type($pathFile);
+//            $loadedFiles[$name]         = $pathFile;
             $loadedFiles[$key]          = $item;
             $properties['loadedFiles']  = $loadedFiles;
             $this->setProperties($properties);
@@ -1091,6 +1097,18 @@ class ODDragNDrop extends ODContained
         $properties['thumbFileName'] = self::BOOLEAN_FALSE;
         $this->setProperties($properties);
         return $this;
+    }
+
+    public function validFiles(array $files)
+    {
+        $loadedFiles    = $this->getLoadedFiles();
+        $names          = array_column($loadedFiles, 'name');
+        foreach ($files as $ind => $file) {
+            if (in_array($file, $names)) {
+                unset($files[$ind]);
+            }
+        }
+        return $files;
     }
 
     /** **************************************************************************************************

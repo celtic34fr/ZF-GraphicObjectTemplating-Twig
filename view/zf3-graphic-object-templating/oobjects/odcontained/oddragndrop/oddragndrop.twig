@@ -1,7 +1,7 @@
 {# template object OEDDragNDrop #}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}"
-    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
+    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
     {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
@@ -79,6 +79,14 @@
 
     <script>
         $(document).ready(function (evt) {
+            {% if objet.loadedFiles is not empty %}
+            var datasJSON   = '{{ objet.loadedFiles|json_encode|raw }}';
+            var datas       = JSON.parse(datasJSON);
+            var objet       = new {{ objet.object }}($('#{{ objet.id }}'));
+            objet.setData(datas);
+            {% endif %}
+            {# activation des évènement jQuery/JS que l'object est enable : state = true (!= false) #}
+            {% if objet.state != false %}
             $('#{{ objet.id }}DragNDrop').on('dragenter', function () {
                 $(this).css('border', '3px dashed red');
                 return false;
@@ -143,6 +151,7 @@
                 event.preventDefault();
                 event.stopPropagation();
             });
+            {% endif %}
         });
     </script>
 </div>
