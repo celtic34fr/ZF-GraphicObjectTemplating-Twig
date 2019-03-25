@@ -1,0 +1,124 @@
+{# template de l'objet ODTreeview #}
+
+{% import _self as macros %}
+
+{% macro drawLeaf(item, path, icon, objet, level) %}
+    {#{ dump(objet.colorClasses[level].normal['bg-color']) }#}
+    {% import _self as macros %}
+    {% if item.children|length == 0 %}
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
+            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1">
+            {% if objet.icon %}
+                {% switch(item.icon) %}
+                {% case 'none' %}
+                    <i class="{{ objet.leafIco }} icon leaf"></i>
+                {% default %}
+                    <i class="{{ item.icon }} icon leaf"></i>
+                {% endswitch %}
+            {% endif %}
+            <label>
+                <input id="{{ objet.id }}-{{ path[item.ref] }}" data-id="{{ path[item.ref] }}" type="checkbox">
+                {{ item.libel }}
+            </label>
+        </li>
+    {% else %}
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
+            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1">
+            {% if objet.icon %}
+                <i class="{{ objet.nodeClosedIco }}"></i>
+            {% endif %}
+            <label>
+                <input id="{{ objet.id }}-{{ path[item.ref] }}" data-id="{{ path[item.ref] }}" type="checkbox">
+                {{ item.libel }}
+            </label>
+            <ul class="t-sortable-inner">
+                {% for id,leaf in item.children %}
+                    {{ macros.drawLeaf(leaf, path, icon, objet, level + 1) }}
+                {% endfor %}
+            </ul>
+        </li>
+    {% endif %}
+{% endmacro %}
+
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-objet="{{ objet.object }}"
+     {% if widthBT is not empty %}data-widthbt="{{ widthBT }}" {% endif %}
+        {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
+        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+     data-role="{{ objet.type }}" data-default="{{ objet.default ? 'true' : 'false' }}"
+
+        {% if objet.type != 'reset' and objet.type != 'link' %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+        {% endif %}
+>
+
+    <div id="{{ objet.id }}Li-0-0" data-id="0-0">
+        <label>
+            {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
+        </label>
+        <ul class="t-sortable ml4">
+            {% for leaf in objet.dataTree %}
+                {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet, 1) }}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+
+        sortable('#{{ objet.id }} .t-sortable', {
+            forcePlaceholderSize: true,
+            placeholderClass: 'bg-navi border border-yellow',
+            hoverClass: 'bg-maroon yellow',
+            itemSerializer: function (item, container) {
+                item.parent = '[parentNode]';
+                item.node = '[Node]';
+                item.html = item.html.replace('<', '&lt;');
+                return item;
+            },
+            containerSerializer: function (container) {
+                container.node = '[Node]';
+                return container;
+            },
+        });
+
+        sortable('.t-sortable-inner', {
+            forcePlaceholderSize: true,
+            items: ':not(.disabled)',
+            placeholderClass: 'border border-maroon',
+            hoverClass: 'bg-maroon yellow',
+        });
+
+        function parcoursLis(liItem, arrayTree) {
+            var LIs = $('#'+liItem.attr('id')+' > ul > li');
+            var arrayItrem  = new Array();
+            if (LIs.length > 0) {
+                LIs.each(function () {
+                    arrayItrem.push($(this).attr("id"));
+                    if ($(this.selector+' > ul')) {
+                        var ret = parcoursLis($(this), arrayItrem)
+                    }
+                });
+                arrayTree.push(arrayItrem);
+            }
+            return arrayTree;
+        }
+
+        $(document).ready(function (evt) {
+            $('#{{ objet.id }} .t-sortable').on('sortupdate', function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                var treeObj = new Array();
+                parcoursLis($('#{{ objet.id }}Li-0-0'), treeObj);
+            });
+
+            $('#{{ objet.id }} .t-sortable-inner').on('sortupdate', function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                var treeObj = new Array();
+                treeObj = parcoursLis($('#{{ objet.id }}Li-0-0'), treeObj);
+                console.log(treeObj);
+            });
+        })
+
+    </script>
+
+</div>

@@ -1,9 +1,9 @@
 <?php
 
 return array(
-    'object'        => 'odtreeview',
+    'object'        => 'odtreeviewold',
     'typeObj'       => 'odcontained',
-    'template'      => 'odtreeview.twig',
+    'template'      => 'odtreeviewold.twig',
 
     'dataTree'      => [],
     'dataPath'      => [],
@@ -17,11 +17,11 @@ return array(
 
     'resources' => [
         'css' => [
-            'odtreeview.css' => 'css/odtreeview.css',
+            'odtreeviewold.css' => 'css/odtreeviewold.css',
 //            'hummingbird_treeview.css' => 'css/hummingbird_treeview.css',
             ],
         'js'  => [
-            'odtreeview.js' => 'js/odtreeview.js',
+            'odtreeviewold.js' => 'js/odtreeviewold.js',
 //            'hummingbird_treeview.js' => 'js/hummingbird_treeview.js',
         ],
     ],

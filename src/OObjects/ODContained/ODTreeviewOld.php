@@ -3,6 +3,7 @@
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\OObject;
 
 /**
  * Class ODTreeview
@@ -31,7 +32,7 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getTitle()
  * setLeafLink($ref, $link, $target)
  * getLeafLink($ref)
- *
+ * 
  * méthodes de gestion de retour de callback
  * -----------------------------------------
  * returnAddLeaf($parentPath, $ord)
@@ -43,7 +44,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * rmLeafTree($dataTree, $dataPath)
  * getTargetConstants()
  */
-class ODTreeview extends ODContained
+
+class ODTreeviewOld extends ODContained
 {
 
     const ODTREEVIEWTARGET_SELF     = '_self';
@@ -51,39 +53,15 @@ class ODTreeview extends ODContained
     const ODTREEVIEWTARGET_PARENT   = '_parent';
     const ODTREEVIEWTARGET_TOP      = '_top';
 
-    const COLORCLASS_BLACK          = 'black';
-    const COLORCLASS_DARKGREY       = 'dark-gray';
-    const COLORCLASS_GRAY           = 'gray';
-    const COLORCLASS_MIDGRAY        = 'mid-gray';
-    const COLORCLASS_SILVER         = 'silver';
-    const COLORCLASS_LIGHTGRAY      = 'light-gray';
-    const COLORCLASS_WHITE          = 'white';
-
-    const COLORCLASS_AQUA           = 'aqua';
-    const COLORCLASS_BLUE           = 'blue';
-    const COLORCLASS_NAVY           = 'navy';
-    const COLORCLASS_TEAL           = 'teal';
-    const COLORCLASS_GREEN          = 'green';
-    const COLORCLASS_OLIVE          = 'olive';
-    const COLORCLASS_LIME           = 'lime';
-
-    const COLORCLASS_YELLOW         = 'yellow';
-    const COLORCLASS_ORANGE         = 'orange';
-    const COLORCLASS_RED            = 'red';
-    const COLORCLASS_FUCHSIA        = 'fuchsia';
-    const COLORCLASS_PURPLE         = 'purple';
-    const COLORCLASS_MAROON         = 'maroon';
-
-
     private $const_target;
 
     /**
      * ODTreeview constructor.
      * @param $id
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public function __construct($id)
-    {
+    public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odtreeview/odtreeview.config.php");
 
         $properties = $this->getProperties();
@@ -117,7 +95,7 @@ class ODTreeview extends ODContained
         $dataPath   = $properties['dataPath'];
         $validAct   = false;
 
-        if ($this->validRefUnique($ref)) {
+            if ($this->validRefUnique($ref)) {
             if ($parent == '0') {
                 if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
                 if (!isset($dataTree[$ord])) {
@@ -364,7 +342,7 @@ class ODTreeview extends ODContained
      * @param $class
      * @param $method
      * @param bool $stopEvent
-     * @return bool|ODTreeview
+     * @return bool|ODTreeviewOld
      */
     public function evtClick($class, $method, $stopEvent = false)
     {
@@ -383,7 +361,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return bool|ODTreeview
+     * @return bool|ODTreeviewOld
      */
     public function disClick()
     {

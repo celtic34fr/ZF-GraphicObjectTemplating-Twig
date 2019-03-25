@@ -1,4 +1,4 @@
-function odtreeview(obj) {
+function odtreeviewold(obj) {
     this.id = obj.attr('id');
     this.form   = obj.data('form');
     this.objet  = obj.data('objet');
@@ -36,7 +36,7 @@ function updateNodeStatus(node) {
     }
 };
 
-odtreeview.prototype = {
+odtreeviewold.prototype = {
     getData: function (evt) {
         var selected = [];
         $('#'+this.id+' li.selected').each(function () {
