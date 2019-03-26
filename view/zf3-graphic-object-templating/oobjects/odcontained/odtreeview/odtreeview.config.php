@@ -17,6 +17,9 @@ return [
     'nodeOpenedIco' => 'fa fa-folder-open',
     'multiSelect'   => false,
     'title'         => '',
+    'sortable'      => false,
+    'selection'     => true,
+
     'colorClasses'  => [
         0   => [
             'normal'    => [

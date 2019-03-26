@@ -64,6 +64,22 @@
 
     <script type="text/javascript">
 
+        function parcoursLis(liItem, arrayTree) {
+            var LIs = $('#'+liItem.attr('id')+' > ul > li');
+            var arrayItrem  = new Array();
+            if (LIs.length > 0) {
+                LIs.each(function () {
+                    arrayItrem.push($(this).attr("id"));
+                    if ($(this.selector+' > ul')) {
+                        var ret = parcoursLis($(this), arrayItrem)
+                    }
+                });
+                arrayTree.push(arrayItrem);
+            }
+            return arrayTree;
+        }
+
+        {% if objet.sortable != false %}
         sortable('#{{ objet.id }} .t-sortable', {
             forcePlaceholderSize: true,
             placeholderClass: 'bg-navi border border-yellow',
@@ -86,23 +102,10 @@
             placeholderClass: 'border border-maroon',
             hoverClass: 'bg-maroon yellow',
         });
-
-        function parcoursLis(liItem, arrayTree) {
-            var LIs = $('#'+liItem.attr('id')+' > ul > li');
-            var arrayItrem  = new Array();
-            if (LIs.length > 0) {
-                LIs.each(function () {
-                    arrayItrem.push($(this).attr("id"));
-                    if ($(this.selector+' > ul')) {
-                        var ret = parcoursLis($(this), arrayItrem)
-                    }
-                });
-                arrayTree.push(arrayItrem);
-            }
-            return arrayTree;
-        }
+        {% endif %}
 
         $(document).ready(function (evt) {
+            {% if objet.sortable != false %}
             $('#{{ objet.id }} .t-sortable').on('sortupdate', function (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
@@ -117,7 +120,25 @@
                 treeObj = parcoursLis($('#{{ objet.id }}Li-0-0'), treeObj);
                 console.log(treeObj);
             });
-        })
+            {% endif %}
+
+            {% if objet.selection != false %}
+            $('li:not(.unselect)').on('click', function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                {% if objet.multiSelect != false %}
+                if ($(this).find(' > label > span').hasClass('check')) {
+                    $(this).find(' > label > span').addClass('check').removeClass('check');
+                } else {
+                    $(this).find(' > label > span').addClass('check');
+                }
+                {% else %}
+                $('#{{ objet.id }}').find(' label span').addClass('check').removeClass('check');
+                $(this).find(' > label > span').addClass('check');
+                {% endif %}
+            });
+            {% endif %}
+        });
 
     </script>
 

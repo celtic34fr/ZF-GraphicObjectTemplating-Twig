@@ -31,6 +31,10 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getTitle()
  * setLeafLink($ref, $link, $target)
  * getLeafLink($ref)
+ * enaSortable()
+ * disSortable()
+ * enaSelection()
+ * disSelection()
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -490,6 +494,63 @@ class ODTreeview extends ODContained
             return $this;
         }
         return false;
+    }
+
+    /**
+     * @param $ref
+     * @return bool|string
+     */
+    public function getLeafLink($ref)
+    {
+        $leaf = $this->getLeaf($ref);
+        if ($leaf) {
+            return $leaf['link'];
+        }
+        return false;
+    }
+
+    /**
+     * @return ODTreeview
+     */
+    public function enaSortable()
+    {
+        $properties = $this->getProperties();
+        $properties['sortable'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODTreeview
+     */
+    public function disSortable()
+    {
+        $properties = $this->getProperties();
+        $properties['sortable'] = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODTreeview
+     */
+    public function enaSelection()
+    {
+        $properties = $this->getProperties();
+        $properties['selection'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODTreeview
+     */
+    public function disSelection()
+    {
+        $properties = $this->getProperties();
+        $properties['selection'] = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************

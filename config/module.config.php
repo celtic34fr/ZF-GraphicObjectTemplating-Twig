@@ -12,9 +12,13 @@ use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotRenderFactory;
 use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotVersionFactory;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotBootstrap;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotHeader;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotHostname;
+use GraphicObjectTemplating\ViewHelpers\ZF3GotHttpHost;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotRender;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotVersion;
 use Zend\Router\Http\Literal;
+use Zend\ServiceManager\Factory\InvokableFactory;
+
 //use Zend\Router\Http\Segment;
 //use Zend\ServiceManager\Factory\InvokableFactory;
 
@@ -69,12 +73,14 @@ return [
             ZF3GotBootstrap::class  => ZF3GotBootstrapFactory::class,
             ZF3GotHeader::class     => ZF3GotHeaderFactory::class,
             ZF3GotVersion::class    => ZF3GotVersionFactory::class,
+            ZF3GotHttpHost::class   => InvokableFactory::class,
         ],
         'aliases' => [
             'gotRender'     => ZF3GotRender::class,
             'gotBootstrap'  => ZF3GotBootstrap::class,
             'gotHeader'     => ZF3GotHeader::class,
             'gotversion'    => ZF3GotVersion::class,
+            'gotHttpHost'   => ZF3GotHttpHost::class,
         ],
     ],
     'view_manager' => [
