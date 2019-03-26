@@ -35,6 +35,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * disSortable()
  * enaSelection()
  * disSelection()
+ * selectNode($ref)
+ * unselectNode($ref)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -133,9 +135,10 @@ class ODTreeview extends ODContained
                     $item['link']       = 'none';
                     $item['targetL']    = 'none';
                     $item['parent']     = '0';
+                    $item['select']     = false;
 
                     $dataTree[$ord]     = $item;
-                    $dataPath[$ref]     = "0-".$ord;
+                    $dataPath[$ref]     = $ord;
                     $validAct           = true;
                     ksort($dataTree);
                 }
@@ -151,11 +154,12 @@ class ODTreeview extends ODContained
                     $item['link']       = 'none';
                     $item['targetL']    = 'none';
                     $item['parent']     = $parent;
+                    $item['select']     = false;
 
                     $path               = explode('-', $dataPath[$parent]);
                     if ((int) $path[0] == 0) { unset($path[0]); }
 
-                    $dataTree           = $this->updateTree($dataTree, $path, $item);
+                    $dataTree           = $this->updateTree($dataTree, $path, $item, true);
                     $dataPath[$ref]     = $dataPath[$parent].'-'.$ord;
                     $validAct           = true;
                 }
@@ -553,6 +557,42 @@ class ODTreeview extends ODContained
         return $this;
     }
 
+    public function selectNode($ref)
+    {
+        $leaf   = $this->getLeaf($ref);
+        if ($leaf) {
+            $properties     = $this->getProperties();
+            $dataTree       = $properties['dataTree'];
+            $dataPath       = $properties['dataPath'];
+
+            $leaf['select'] = true;
+
+            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    public function unselectNode($ref)
+    {
+        $leaf   = $this->getLeaf($ref);
+        if ($leaf) {
+            $properties     = $this->getProperties();
+            $dataTree       = $properties['dataTree'];
+            $dataPath       = $properties['dataPath'];
+
+            $leaf['check']  = false;
+
+            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -646,16 +686,31 @@ class ODTreeview extends ODContained
      * @param $item
      * @return mixed
      */
-    private function updateTree($tree, $path, $item)
+    private function updateTree($tree, $path, $item, $addNode = false)
     {
-        if (!empty($path)) {
+            if (!is_array($path)) { $path = explode('-', $path); }
             $id = array_shift($path);
-            if (!isset($tree[$id]['children'])) { $tree[$id]['children'] = []; }
-            $leaves = $tree[$id]['children'];
-            $tree[$id]['children'] = $this->updateTree($leaves, $path, $item);
-        } else {
-            $tree[$item['ord']] = $item;
-        }
+            if (empty($path)) {
+                if ($addNode) {
+                    if (!isset($tree[$id]['children'])) { $tree[$id]['children'] = []; }
+                    $tree[$id]['children'][$item['ord']] = $item;
+                } else {
+                    $tree[$id] = $item;
+                }
+            } else {
+                $leaves = $tree[$id]['children'];
+                $tree[$id]['children'] = $this->updateTree($leaves, $path, $item, $addNode);
+            }
+
+//        if (!empty($path)) {
+//            if (!is_array($path)) { $path = explode('-', $path); }
+//            $id = array_shift($path);
+//            if (!isset($tree[$id]['children'])) { $tree[$id]['children'] = []; }
+//            $leaves = $tree[$id]['children'];
+//            $tree[$id]['children'] = $this->updateTree($leaves, $path, $item);
+//        } else {
+//            $tree[$item['ord']] = $item;
+//        }
         ksort($tree);
         return $tree;
     }

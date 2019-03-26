@@ -17,8 +17,7 @@
                 {% endswitch %}
             {% endif %}
             <label>
-                <input id="{{ objet.id }}-{{ path[item.ref] }}" data-id="{{ path[item.ref] }}" type="checkbox">
-                {{ item.libel }}
+                {{ item.libel }}<span {% if item.select %} class="check"{% endif %} ></span>
             </label>
         </li>
     {% else %}
@@ -28,8 +27,7 @@
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
             <label>
-                <input id="{{ objet.id }}-{{ path[item.ref] }}" data-id="{{ path[item.ref] }}" type="checkbox">
-                {{ item.libel }}
+                {{ item.libel }}<span {% if item.select %} class="check"{% endif %} ></span>
             </label>
             <ul class="t-sortable-inner">
                 {% for id,leaf in item.children %}
@@ -50,6 +48,17 @@
             {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
         {% endif %}
 >
+    <style>
+        li .check {
+            background: url("http://{{ gotHttpHost() }}/img/checkGreen.svg") left top;
+            background-size: 16px 16px;
+            width:16px;
+            height:16px;
+            display: block;
+            float: right;
+            background-repeat: no-repeat;
+        }
+    </style>
 
     <div id="{{ objet.id }}Li-0-0" data-id="0-0">
         <label>
@@ -133,8 +142,9 @@
                     $(this).find(' > label > span').addClass('check');
                 }
                 {% else %}
+                var selected = $('#{{ objet.id }}').find(' label span').hasClass('check');
                 $('#{{ objet.id }}').find(' label span').addClass('check').removeClass('check');
-                $(this).find(' > label > span').addClass('check');
+                if (!selected) { $(this).find(' > label > span').addClass('check'); }
                 {% endif %}
             });
             {% endif %}
