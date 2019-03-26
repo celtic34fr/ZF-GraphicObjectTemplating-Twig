@@ -39,6 +39,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * unselectNode($ref)
  * enaSelectNode($ref)
  * disSelectNode($ref)
+ * enaSortableNode($ref, $andChilmdren = false)
+ * disSortableNode($ref, $andChilmdren = false)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -139,6 +141,7 @@ class ODTreeview extends ODContained
                     $item['parent']     = '0';
                     $item['check']      = false;
                     $leaf['selectable'] = true;
+                    $item['sortable']	= true;
 
                     $dataTree[$ord]     = $item;
                     $dataPath[$ref]     = $ord;
@@ -159,6 +162,7 @@ class ODTreeview extends ODContained
                     $item['parent']     = $parent;
                     $item['check']      = false;
                     $leaf['selectable'] = true;
+                    $item['sortable']	= true;
 
                     $path               = explode('-', $dataPath[$parent]);
                     if ((int) $path[0] == 0) { unset($path[0]); }
@@ -596,33 +600,16 @@ class ODTreeview extends ODContained
         }
         return false;
     }
-    
+
     public function enaSelectNode($ref) {
         $leaf   = $this->getLeaf($ref);
         if ($leaf) {
             $properties     = $this->getProperties();
             $dataTree       = $properties['dataTree'];
             $dataPath       = $properties['dataPath'];
-        
+
             $leaf['selectable']  = true;
-        
-            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
-            $properties['dataTree'] = $dataTree;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-    
-    public function disSelectNode($ref) {
-        $leaf   = $this->getLeaf($ref);
-        if ($leaf) {
-            $properties     = $this->getProperties();
-            $dataTree       = $properties['dataTree'];
-            $dataPath       = $properties['dataPath'];
-        
-            $leaf['selectable']  = false;
-        
+
             $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
             $properties['dataTree'] = $dataTree;
             $this->setProperties($properties);
@@ -631,6 +618,72 @@ class ODTreeview extends ODContained
         return false;
     }
 
+    public function disSelectNode($ref) {
+        $leaf   = $this->getLeaf($ref);
+        if ($leaf) {
+            $properties     = $this->getProperties();
+            $dataTree       = $properties['dataTree'];
+            $dataPath       = $properties['dataPath'];
+
+            $leaf['selectable']  = false;
+
+            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+	public function enaSortableNode($ref, $anfChildren = false) {
+		$leaf	= $this-getLeaf($ref);
+		if (!empty($leaf)) {
+			$properties				= $this->getProperties();
+			$dataTree       		= $properties['dataTree'];
+            $dataPath       		= $properties['dataPath'];
+
+			$leaf['sortable']		= true;
+
+			if (isset($leaf['children']) && !empty($leaf['children']) && $andChildren) {
+				foreach ($leaf['children'] as $child) {
+					if (!$this->enaSortableNode($child['ref'], $andChildren)) {
+						return false;
+					}
+				}
+			}
+
+            $dataTree       		= $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+		}
+		return false;
+	}
+
+	public function disSortableNode($ref, $anfChildren = false) {
+		$leaf	= $this-getLeaf($ref);
+		if (!empty($leaf)) {
+			$properties				= $this->getProperties();
+			$dataTree       		= $properties['dataTree'];
+            $dataPath       		= $properties['dataPath'];
+
+			$leaf['sortable']		= false;
+
+			if (isset($leaf['children']) && !empty($leaf['children']) && $andChildren) {
+				foreach ($leaf['children'] as $child) {
+					if (!$this->enaSortableNode($child['ref'], $andChildren)) {
+						return false;
+					}
+				}
+			}
+
+            $dataTree       		= $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+		}
+		return false;
+	}
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */

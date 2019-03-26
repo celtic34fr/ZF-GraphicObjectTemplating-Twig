@@ -29,7 +29,7 @@
             <label>
                 {{ item.libel }}<span {% if item.check %} class="check"{% endif %} ></span>
             </label>
-            <ul class="t-sortable-inner">
+            <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}">
                 {% for id,leaf in item.children %}
                     {{ macros.drawLeaf(leaf, path, icon, objet, level + 1) }}
                 {% endfor %}
@@ -64,7 +64,7 @@
         <label>
             {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
         </label>
-        <ul class="t-sortable ml4">
+        <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}">
             {% for leaf in objet.dataTree %}
                 {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet, 1) }}
             {% endfor %}
