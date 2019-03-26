@@ -7,7 +7,9 @@
     {% import _self as macros %}
     {% if item.children|length == 0 %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
-            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1">
+            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1
+        {% if item.selectable == false %} unselect{% endif %}"
+        >
             {% if objet.icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -22,7 +24,9 @@
         </li>
     {% else %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
-            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1">
+            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1
+        {% if item.selectable == false %} unselect{% endif %}"
+        >
             {% if objet.icon %}
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
