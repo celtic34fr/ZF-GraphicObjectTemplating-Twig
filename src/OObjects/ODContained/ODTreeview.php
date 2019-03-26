@@ -701,16 +701,6 @@ class ODTreeview extends ODContained
                 $leaves = $tree[$id]['children'];
                 $tree[$id]['children'] = $this->updateTree($leaves, $path, $item, $addNode);
             }
-
-//        if (!empty($path)) {
-//            if (!is_array($path)) { $path = explode('-', $path); }
-//            $id = array_shift($path);
-//            if (!isset($tree[$id]['children'])) { $tree[$id]['children'] = []; }
-//            $leaves = $tree[$id]['children'];
-//            $tree[$id]['children'] = $this->updateTree($leaves, $path, $item);
-//        } else {
-//            $tree[$item['ord']] = $item;
-//        }
         ksort($tree);
         return $tree;
     }
