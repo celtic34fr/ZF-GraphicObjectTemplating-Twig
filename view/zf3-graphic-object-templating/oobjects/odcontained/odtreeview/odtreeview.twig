@@ -17,7 +17,7 @@
                 {% endswitch %}
             {% endif %}
             <label>
-                {{ item.libel }}<span {% if item.select %} class="check"{% endif %} ></span>
+                {{ item.libel }}<span {% if item.check %} class="check"{% endif %} ></span>
             </label>
         </li>
     {% else %}
@@ -27,7 +27,7 @@
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
             <label>
-                {{ item.libel }}<span {% if item.select %} class="check"{% endif %} ></span>
+                {{ item.libel }}<span {% if item.check %} class="check"{% endif %} ></span>
             </label>
             <ul class="t-sortable-inner">
                 {% for id,leaf in item.children %}

@@ -37,6 +37,8 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * disSelection()
  * selectNode($ref)
  * unselectNode($ref)
+ * enaSelectNode($ref)
+ * disSelectNode($ref)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -135,7 +137,8 @@ class ODTreeview extends ODContained
                     $item['link']       = 'none';
                     $item['targetL']    = 'none';
                     $item['parent']     = '0';
-                    $item['select']     = false;
+                    $item['check']      = false;
+                    $leaf['selectable'] = true;
 
                     $dataTree[$ord]     = $item;
                     $dataPath[$ref]     = $ord;
@@ -154,7 +157,8 @@ class ODTreeview extends ODContained
                     $item['link']       = 'none';
                     $item['targetL']    = 'none';
                     $item['parent']     = $parent;
-                    $item['select']     = false;
+                    $item['check']      = false;
+                    $leaf['selectable'] = true;
 
                     $path               = explode('-', $dataPath[$parent]);
                     if ((int) $path[0] == 0) { unset($path[0]); }
@@ -565,7 +569,7 @@ class ODTreeview extends ODContained
             $dataTree       = $properties['dataTree'];
             $dataPath       = $properties['dataPath'];
 
-            $leaf['select'] = true;
+            $leaf['check'] = true;
 
             $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
             $properties['dataTree'] = $dataTree;
@@ -585,6 +589,40 @@ class ODTreeview extends ODContained
 
             $leaf['check']  = false;
 
+            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+    
+    public function enaSelectNode($ref) {
+        $leaf   = $this->getLeaf($ref);
+        if ($leaf) {
+            $properties     = $this->getProperties();
+            $dataTree       = $properties['dataTree'];
+            $dataPath       = $properties['dataPath'];
+        
+            $leaf['selectable']  = true;
+        
+            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
+            $properties['dataTree'] = $dataTree;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+    
+    public function disSelectNode($ref) {
+        $leaf   = $this->getLeaf($ref);
+        if ($leaf) {
+            $properties     = $this->getProperties();
+            $dataTree       = $properties['dataTree'];
+            $dataPath       = $properties['dataPath'];
+        
+            $leaf['selectable']  = false;
+        
             $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
             $properties['dataTree'] = $dataTree;
             $this->setProperties($properties);
