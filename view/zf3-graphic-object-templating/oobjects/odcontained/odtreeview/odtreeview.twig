@@ -7,8 +7,8 @@
     {% import _self as macros %}
     {% if item.children|length == 0 %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
-            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1
-        {% if item.selectable == false %} unselect{% endif %}"
+            data-id = "{{ path[item.ref] }}"
+            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect{% endif %} leaf"
         >
             {% if objet.icon %}
                 {% switch(item.icon) %}
@@ -23,9 +23,8 @@
             </label>
         </li>
     {% else %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
-            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1
-        {% if item.selectable == false %} unselect{% endif %}"
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
+            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect {% endif %} node"
         >
             {% if objet.icon %}
                 <i class="{{ objet.nodeClosedIco }}"></i>
@@ -54,21 +53,20 @@
 >
     <style>
         li .check {
-            background: url("http://{{ gotHttpHost() }}/img/checkGreen.svg") left top;
+            background: url("http://{{ gotHttpHost() }}/img/checkGreen.svg") no-repeat left top;
             background-size: 16px 16px;
             width:16px;
             height:16px;
             display: block;
             float: right;
-            background-repeat: no-repeat;
         }
     </style>
 
-    <div id="{{ objet.id }}Li-0-0" data-id="0-0">
+    <div id="{{ objet.id }}Li-0-0">
         <label>
             {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
         </label>
-        <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}">
+        <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}{% if objet.dataTree is not empty %}node{% endif %}">
             {% for leaf in objet.dataTree %}
                 {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet, 1) }}
             {% endfor %}
@@ -79,7 +77,7 @@
 
         function parcoursLis(liItem, arrayTree) {
             var LIs = $('#'+liItem.attr('id')+' > ul > li');
-            var arrayItrem  = new Array();
+            var arrayItrem  = Array();
             if (LIs.length > 0) {
                 LIs.each(function () {
                     arrayItrem.push($(this).attr("id"));
@@ -122,15 +120,15 @@
             $('#{{ objet.id }} .t-sortable').on('sortupdate', function (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
-                var treeObj = new Array();
-                parcoursLis($('#{{ objet.id }}Li-0-0'), treeObj);
+                var treeObj = Array();
+                parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
             });
 
             $('#{{ objet.id }} .t-sortable-inner').on('sortupdate', function (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
-                var treeObj = new Array();
-                treeObj = parcoursLis($('#{{ objet.id }}Li-0-0'), treeObj);
+                var treeObj = Array();
+                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
                 console.log(treeObj);
             });
             {% endif %}
@@ -140,15 +138,16 @@
                 evt.preventDefault();
                 evt.stopPropagation();
                 {% if objet.multiSelect != false %}
-                if ($(this).find(' > label > span').hasClass('check')) {
-                    $(this).find(' > label > span').addClass('check').removeClass('check');
+                let elem = $(this).find('> label > span');
+                if (elem.hasClass('check')) {
+                    elem.addClass('check').removeClass('check');
                 } else {
-                    $(this).find(' > label > span').addClass('check');
+                    elem.addClass('check');
                 }
                 {% else %}
                 var selected = $('#{{ objet.id }}').find(' label span').hasClass('check');
-                $('#{{ objet.id }}').find(' label span').addClass('check').removeClass('check');
-                if (!selected) { $(this).find(' > label > span').addClass('check'); }
+                $('#{{ objet.id }}').find('label span').addClass('check').removeClass('check');
+                if (!selected) { $(this).find('> label > span').addClass('check'); }
                 {% endif %}
             });
             {% endif %}
