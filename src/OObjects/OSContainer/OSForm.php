@@ -2,6 +2,8 @@
 
 namespace GraphicObjectTemplating\OObjects\OSContainer;
 
+use Exception;
+use ReflectionException;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 use GraphicObjectTemplating\OObjects\ODContained\ODSpan;
@@ -79,7 +81,7 @@ class OSForm extends OSDiv
      * OSForm constructor.
      *
      * @param $id
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($id)
     {
@@ -121,7 +123,7 @@ class OSForm extends OSDiv
      * @param string|null $mode
      * @param null $params
      * @return $this|bool|OSDiv
-     * @throws \Exception
+     * @throws Exception
      */
     public function addChild(OObject $child, $require = false, $mode = self::MODE_LAST, $params = null)
     {
@@ -139,6 +141,7 @@ class OSForm extends OSDiv
      * @param OObject $child
      * @param bool $require
      * @return $this|bool
+     * @throws Exception
      */
     public function setChild(OObject $child, $require = false)
     {
@@ -155,7 +158,7 @@ class OSForm extends OSDiv
      * @param ODContained $field
      * @param bool $require
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function addExtField(ODContained $field, $require = false)
     {
@@ -233,7 +236,7 @@ class OSForm extends OSDiv
     /**
      * @param OObject $field
      * @return $this|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function removeField(OObject $field)
     {
@@ -277,7 +280,7 @@ class OSForm extends OSDiv
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getFormDatas()
     {
@@ -311,7 +314,7 @@ class OSForm extends OSDiv
 
     /**
      * @param array $datas
-     * @throws \Exception
+     * @throws Exception
      */
     public function setFormDatas(array $datas)
     {
@@ -361,7 +364,7 @@ class OSForm extends OSDiv
      * @param null $method
      * @param bool $stopEvent
      * @return $this|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
@@ -478,7 +481,7 @@ class OSForm extends OSDiv
     /**
      * @param $name
      * @return $this|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function rmBtn($name)
     {
@@ -536,7 +539,7 @@ class OSForm extends OSDiv
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function rmBtns()
     {
@@ -562,7 +565,7 @@ class OSForm extends OSDiv
 
     /**
      * @param $name
-     * @throws \Exception
+     * @throws Exception
      */
     public function setDefaultBtn($name)
     {
@@ -706,7 +709,7 @@ class OSForm extends OSDiv
      * @param $formID
      * @param $require
      * @return OSForm
-     * @throws \Exception
+     * @throws Exception
      */
     private function propageFormParams(OObject $child, $sourceID, $formID, $require )
     {
@@ -786,7 +789,7 @@ class OSForm extends OSDiv
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getBtnConstants()
     {
@@ -812,7 +815,7 @@ class OSForm extends OSDiv
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateFormDatas()
     {
@@ -852,7 +855,7 @@ class OSForm extends OSDiv
      * @param string $type
      * @param null $objID
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function appendField($objet, $type = 'append', $objID = null)
     {
@@ -867,7 +870,7 @@ class OSForm extends OSDiv
      * @param $objID
      * @param $objPrev
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function appendFieldAfter($objID, $objPrev)
     {
@@ -888,7 +891,7 @@ class OSForm extends OSDiv
      * @param $objID
      * @param $objPrev
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function appendFieldBefore($objID, $objPrev)
     {
