@@ -286,16 +286,18 @@ class ODButton extends ODContained
     /**
      * @param Container $sessionObj
      * @param $ord
-     * @return array
+     * @return ODButton
      * @throws \Exception
      */
-    public function createSimpleControl(Container $sessionObj, $ord) {
+    public function createSimpleControl(Container &$sessionObj, $ord)
+    {
+        /** @var $btn ODButton */
     	$btn = self::cloneObject($this, $sessionObj);
 		$sessionObjects = $btn->setId($this->getId().$ord)
 			->setValue($ord)
 			->setDisplay(self::DISPLAY_BLOCK)
 			->saveProperties();
-		return ['ctrl' => $btn, 'session' => $sessionObjects];
+		return $btn;
 	}
     
     /** **************************************************************************************************

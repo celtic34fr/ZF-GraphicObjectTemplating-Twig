@@ -212,8 +212,9 @@ class OObject
     /**
      * OObject constructor.
      *
-     * @param $id           identifiant de l'objet
-     * @param $pathObjArray chemin partiel du fichier config de l'objet étendu
+     * @param $id           int     identifiant de l'objet
+     * @param $pathObjArray string  chemin partiel du fichier config de l'objet étendu
+     * @throws \Exception
      * @throws \Exception
      */
     public function __construct($id, $pathObjArray)
