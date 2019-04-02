@@ -36,7 +36,7 @@ tinymce.addI18n('en_GB',{
 "Header 5": "Header 5",
 "Decrease indent": "Decrease indent",
 "Header 4": "Header 4",
-"Paste is now in plain text mode. Contents will now be pasted as plain text until you toggle this option off.": "Paste is now in plain text mode. Contents will now be pasted as plain text until you toggle this option off.",
+"Paste is now in plain text mode. Contents will now be pasted as plain text until you toggle this option off.": "Paste is now in plain text mode. Contenus will now be pasted as plain text until you toggle this option off.",
 "Underline": "Underline",
 "Cancel": "Cancel",
 "Justify": "Justify",
