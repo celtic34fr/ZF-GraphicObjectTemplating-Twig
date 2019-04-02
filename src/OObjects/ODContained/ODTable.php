@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use function Couchbase\basicEncoderV1;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
 use Zend\Session\Container;
@@ -765,7 +766,7 @@ class ODTable extends ODContained
      * @param $method           : nom de la méthode callback )à exécuter
      * @param bool $stopEvent   : top de propagation (true) ou non (false) de l'evènement click
      * @return ODTable|bool     : retourne false si nCol et/ou nLine ne sont pas cohérent avec le contenu du tableau
-     *                                           si classes et/ou méthode n'existe pas
+     *                                           si classes et/ou méthode n'existe pas ou vide
      */
     public function evtCellClick($nCol, $nLine, $class, $method, $stopEvent = true)
     {
@@ -777,17 +778,53 @@ class ODTable extends ODContained
         $nbLines = sizeof($properties['datas']);
         if ($nLine > $nbLines || $nLine < 1) return false;
 
-        if (!isset($properties['events'])) $properties['events'] = [];
-        if (!is_array($properties['events'])) $properties['events'] = [];
-        if (!isset($properties['events'][$nLine])) $properties['events'][$nLine] = [];
+        $events = $properties['event'];
+        if (!array_key_exists('click', $events)) { $events['clieck'] = []; }
+        $evtDef = $events['click'];
 
-        $properties['events'][$nLine][$nCol] = [];
-        $properties['events'][$nLine][$nCol]['class'] = $class;
-        $properties['events'][$nLine][$nCol]['method'] = $method;
-        $properties['events'][$nLine][$nCol]['stopEvent'] = ($stopEvent) ? 'OUI' : 'NON';
+        if (!empty($class) && !empty($method)) {
+            switch (true) {
+                case (class_exists($class)) :
+                    if ($class != $properties['className']) {
+                        $obj = new $class();
+                    } else {
+                        $obj = $this;
+                    }
+                    if (method_exists($obj, $method)) {
+                        $evtDef['class']        = $class;
+                        $evtDef['method']       = $method;
+                        $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                    }
+                    break;
+                case ($class == "javascript:") :
+                    $evtDef['class']        = $class;
+                    $evtDef['method']       = $method;
+                    $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                    break;
+                case ($properties['object'] == 'odbutton' && $properties['type'] == ODButton::BUTTONTYPE_LINK):
+                    $params = [];
+                    if ($method != 'none') {
+                        $method = explode('|', $method);
+                        foreach ($method as $item) {
+                            $item = explode(':', $item);
+                            $params[$item[0]] = $item[1];
+                        }
+                    }
+                    $evtDef['class']        = $class;
+                    $evtDef['method']       = $params;
+                    $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                    break;
+            }
 
-        $this->setProperties($properties);
-        return $this;
+            $properties['events'][$nLine][$nCol]                = [];
+            $properties['events'][$nLine][$nCol]['class']       = $evtDef['class'];
+            $properties['events'][$nLine][$nCol]['method']      = $evtDef['method'];
+            $properties['events'][$nLine][$nCol]['stopEvent']   = $evtDef['stopEvent'];
+
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -1471,7 +1508,7 @@ class ODTable extends ODContained
      */
     public function returnRmLine($noLine)
     {
-        if ($noLine <= (sizeof($this->getLines()) + 1)) {
+        if ($noLine < 1 || $noLine <= (sizeof($this->getLines()) + 1)) {
             $idTable = $this->getId();
             $params['noLine'] = $noLine;
             $params['maxLine'] = sizeof($this->getLines()) + 1;

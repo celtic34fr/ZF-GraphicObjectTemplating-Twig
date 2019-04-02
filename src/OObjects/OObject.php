@@ -1375,8 +1375,9 @@ class OObject
                     $evtDef['class']        = $class;
                     $evtDef['method']       = $params;
                     $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                    break;
             }
-            $events[$event]         = $evtDef;
+            $events[$event]      = $evtDef;
             $properties['event'] = $events;
             $this->setProperties($properties);
             return $this;
