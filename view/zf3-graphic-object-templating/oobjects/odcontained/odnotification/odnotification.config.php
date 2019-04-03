@@ -25,13 +25,4 @@ return [
     'width'             => 600,
     'height'            => 'auto',
     'closeOnClick'      => true,
-
-    'resources' => [
-        'css' => [
-                'lobibox.css' => 'css/lobibox.css'
-        ],
-        'js'  => [
-            'notifications.js' => 'js/notifications.js'
-        ],
-    ]
 ];

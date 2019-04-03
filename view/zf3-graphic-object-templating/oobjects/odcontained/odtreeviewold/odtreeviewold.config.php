@@ -14,15 +14,4 @@ return array(
     'nodeOpenedIco' => 'fa fa-folder-open',
     'multiSelect'   => false,
     'title'         => '',
-
-    'resources' => [
-        'css' => [
-            'odtreeviewold.css' => 'css/odtreeviewold.css',
-//            'hummingbird_treeview.css' => 'css/hummingbird_treeview.css',
-            ],
-        'js'  => [
-            'odtreeviewold.js' => 'js/odtreeviewold.js',
-//            'hummingbird_treeview.js' => 'js/hummingbird_treeview.js',
-        ],
-    ],
 );

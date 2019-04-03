@@ -8,8 +8,4 @@ return array(
     'badgeColor' => 'badge',
     'content'    => '&nbsp;',
     'event'      => [],
-    'resources' => [
-        'css' => [],
-        'js'  => ['odbadge.js' => 'js/odbadge.js',],
-    ],
 );

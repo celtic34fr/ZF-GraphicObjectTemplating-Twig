@@ -12,13 +12,4 @@ return [
     'icon'          => '',
     'nature'        => ODButton::BUTTONNATURE_DEFAULT,
     'default'       => false,
-
-    'resources' => [
-        'css'		=> [
-            'odbutton.css' => 'css/odbutton.css',
-        ],
-        'js'		=> [
-            'odbutton.js' => 'js/odbutton.js',
-        ],
-    ],
 ];

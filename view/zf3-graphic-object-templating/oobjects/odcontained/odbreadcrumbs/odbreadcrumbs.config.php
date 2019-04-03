@@ -5,9 +5,4 @@ return [
     "template"   => "odbreadcrumbs.twig",
 
     "tree"       => [],
-
-    "resources" => [
-        "css" => [],
-        "js"  => [],
-    ]
 ];

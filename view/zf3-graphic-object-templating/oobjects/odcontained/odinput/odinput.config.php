@@ -21,11 +21,4 @@ return [
     'mask'          => '',
     'valMin'        => '',
     'valMax'        => '',
-
-    'resources' => [
-        'js'		=> [
-            'odinput.js' => 'js/odinput.js',
-            'jquery.maskedinput.min.js' => 'js/jquery.maskedinput.min.js',
-        ],
-    ],
 ];

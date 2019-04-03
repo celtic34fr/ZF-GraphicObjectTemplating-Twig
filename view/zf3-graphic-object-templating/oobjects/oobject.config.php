@@ -35,9 +35,4 @@ return [
         'content'       => '',
         'trigger'       => OObject::IBTRIGGER_HOVER,
     ],
-
-    'resources'     => [
-        'css'           => [],
-        'js'            => [],
-    ],
 ];

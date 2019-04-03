@@ -19,10 +19,4 @@ return [
     'checkLabelWidthBT' => '',
     'checkInputWidthBT' => '',
     'placement'         => ODCheckbox::CHECKPLACEMENT_LEFT,
-
-    'resources' => [
-        'js'		    => [
-            'odcheckbox.js' => 'js/odcheckbox.js',
-        ],
-    ],
 ];

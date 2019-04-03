@@ -25,17 +25,4 @@ return [
     'thumbDload'        => ODDragNDrop::BOOLEAN_FALSE,
     'thumbRmove'        => ODDragNDrop::BOOLEAN_FALSE,
     'thumbFileName'     => ODDragNDrop::BOOLEAN_TRUE,
-
-    'resources'         => [        // resources fichiers CSS et JS nécessaires au fonctionnement de lm'objet
-        'css'		        => [
-            'oddragndrop.css' => 'css/oddragndrop.css',
-        ],
-        'js'		        => [
-            'oddragndrop.js' => 'js/oddragndrop.js',
-        ],
-        'fonts'             => [
-            'MonospaceTypewriter.ttf'   => 'fonts/MonospaceTypewriter.ttf',
-            'ufonts.com_courier.ttf'    => 'fonts/ufonts_com_courier.ttf'
-        ]
-    ],
 ];

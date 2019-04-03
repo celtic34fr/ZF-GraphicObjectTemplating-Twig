@@ -6,9 +6,4 @@ return [
     'template'      => 'odspan.twig',
 
     'contenu'       => '',
-    
-    'resources' => [
-        'css'		=> [ ],
-        'js'		=> [ ],
-    ],
 ];

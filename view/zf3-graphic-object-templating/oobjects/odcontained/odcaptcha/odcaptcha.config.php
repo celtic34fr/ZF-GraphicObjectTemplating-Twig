@@ -19,11 +19,4 @@ return [
     'imgWidth'          => 300,
     'imgHeight'         => 75,
     'charSize'          => 35,
-
-    'resources' => [
-        'css'		=> [],
-        'js'		=> [
-            'odcaptcha.js' => 'js/odcaptcha.js',
-        ],
-    ],
 ];

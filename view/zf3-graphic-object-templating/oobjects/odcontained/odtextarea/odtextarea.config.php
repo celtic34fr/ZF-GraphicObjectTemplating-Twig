@@ -21,12 +21,4 @@ return array(
     'toolbar'       => '',
     'imgListUrl'    => '',
     'lnkListUrl'    => '',
-
-    'resources' => [
-        'css' => [],
-        'js'  => [
-            'odtextarea.js' => 'js/odtextarea.js',
-            'tinymce.min.js' => 'js/tinymce/tinymce.min.js'
-        ],
-    ],
 );
