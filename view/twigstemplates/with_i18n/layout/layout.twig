@@ -47,10 +47,8 @@
             <!--[if lt IE 9]><script type="text/javascript" src="{{ basePath() }}/js/respond.min.js"></script><![endif]-->
             <!--[if lt IE 9]><script type="text/javascript" src="{{ basePath() }}/js/html5shiv.js"></script><![endif]-->
             <!-- Scripts -->
-            <!-- menu principal formatage resources -->
-            {#{ gotHeader('menuGlobal') }#}
-            <!-- menu principal formatage resources -->
         {% endblock Hscript %}
+        {{ gotHeader() }}
     </head>
     <body class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div id="gotcallback" style="display: none;">{{ url("gotDispatch", {}, {'force_canonical':true}) }}</div>

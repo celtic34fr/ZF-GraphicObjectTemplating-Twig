@@ -87,26 +87,23 @@ class ZF3GotServices
     }
 
     /** récupération et formatage des entêtes chargement ressources CSS & Js
-     * @param $object
      * @return bool|string|null
      * @throws \Exception
      */
-    public function header($object)
+    public function header()
     {
-        if ($object instanceof OObject) {
-            $object = $object->getId();
-        }
-        if (!empty($object)) {
-            $scripts = $this->rscs($object);
+        $gotObjList             = OObject::validateSession();
+        $now                    = new \DateTime();
+        $scripts                = $gotObjList->resources;
+        $gotObjList->lastAccess = $now->format("Y-m-d H:i:s");
 
-            if ($scripts) {
-                $view = new ViewModel();
-                $view->setTemplate('zf3-graphic-object-templating/main/got-header.twig');
-                $view->setVariable('scripts',
-                    ['css' => $scripts['cssScripts'], 'js' => $scripts['jsScripts'], 'font' => $scripts['fontsStyles']]);
-                $renduHtml = $this->_twigRender->render($view);
-                return $renduHtml;
-            }
+        if ($scripts) {
+            $view = new ViewModel();
+            $view->setTemplate('zf3-graphic-object-templating/main/got-header.twig');
+            $view->setVariable('scripts',
+                ['css' => $scripts['css'] ?? [], 'js' => $scripts['js'] ?? [], 'font' => $scripts['fonts'] ?? []]);
+            $renduHtml = $this->_twigRender->render($view);
+            return $renduHtml;
         }
         return false;
     }
@@ -151,11 +148,8 @@ class ZF3GotServices
     public function rscs($object)
     {
         if ($object instanceof OObject) { $object = $object->getId(); }
-        $now                = new \DateTime();
         $gotObjList         = OObject::validateSession();
-        $resources          = $gotObjList->resources;
         $objects            = $gotObjList->objects;
-        if (empty($resources)) { $resources = []; }
 
         if (!empty($object) && $object != null && array_key_exists($object, $objects)) {
             $properties             = unserialize($objects[$object]);
@@ -170,24 +164,24 @@ class ZF3GotServices
                 if (!empty($children)) {
                     foreach ($children as $child => $value) {
                         $newRscsTab = $this->rscs($child);
-                        foreach ($newRscsTab['jsScripts'] as $name => $path) {
-                            if (!array_key_exists($name, $resources)) {
-                                $rscsTab['jsScripts'][$name]    = $path;
-                                $resources[$name]               = $path;
-                            }
-                        }
-                        foreach ($newRscsTab['cssScripts'] as $name => $path) {
-                            if (!array_key_exists($name, $resources)) {
-                                $rscsTab['cssScripts'][$name]   = $path;
-                                $resources[$name]               = $path;
-                            }
-                        }
-                        foreach ($newRscsTab['fontsStyles'] as $name => $path) {
-                            if (!array_key_exists($name, $resources)) {
-                                $rscsTab['fontsStyles'][$name]   = $path;
-                                $resources[$name]                = $path;
-                            }
-                        }
+                        $rscsTab['jsScripts']   = array_merge($rscsTab['jsScripts'], $newRscsTab['jsScripts']);
+                        $rscsTab['cssScripts']  = array_merge($rscsTab['cssScripts'], $newRscsTab['cssScripts']);
+                        $rscsTab['fontsStyles'] = array_merge($rscsTab['fontsStyles'], $newRscsTab['fontsStyles']);
+//                        foreach ($newRscsTab as $name => $path) {
+//                            if (!array_key_exists($name, $rscsTab['jsScripts'])) {
+//                                $rscsTab['jsScripts'][$name]    = $path;
+//                            }
+//                        }
+//                        foreach ($newRscsTab['cssScripts'] as $name => $path) {
+//                            if (!array_key_exists($name, $rscsTab['cssScripts'])) {
+//                                $rscsTab['cssScripts'][$name]   = $path;
+//                            }
+//                        }
+//                        foreach ($newRscsTab['fontsStyles'] as $name => $path) {
+//                            if (!array_key_exists($name, $rscsTab['fontsStyles'])) {
+//                                $rscsTab['fontsStyles'][$name]   = $path;
+//                            }
+//                        }
                     }
                 }
             }
@@ -206,42 +200,53 @@ class ZF3GotServices
                 $prefix .= $properties['typeObj'].'/'.$properties['object'].'/';
 
                 if (array_key_exists('css', $localRscs)) {
-                    $cssList = $localRscs['css'];
+                    foreach ($localRscs['css'] as $nomCss => $pathCss) {
+                        if (!array_key_exists($nomCss, $rscsTab['cssScripts'])) {
+                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
+                        }
+                    }
                 }
                 if (array_key_exists('js', $localRscs)) {
-                    $jsList = $localRscs['js'];
+                    foreach ($localRscs['js'] as $nomJs => $pathJs) {
+                        if (!array_key_exists($nomCss, $rscsTab['jsScripts'])) {
+                            $rscsTab['jsScripts'][$nomJs]   = $prefix.$pathJs;
+                        }
+                    }
                 }
                 if (array_key_exists('fonts', $localRscs)) {
-                    $fontsList = $localRscs['fonts'];
-                }
-                if (!empty($cssList)) {
-                    foreach ($cssList as $nomCss => $pathCss) {
-                        if (!array_key_exists($nomCss, $resources)) {
-                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
-                            $resources[$nomCss]               = $prefix.$pathCss;
-                        }
-                    }
-                }
-                if (!empty($jsList)) {
-                    foreach ($jsList as $nomJs => $pathJs) {
-                        if (!array_key_exists($nomJs, $resources)) {
-                            $rscsTab['jsScripts'][$nomJs] = $prefix.$pathJs;
-                            $resources[$nomJs]            = $prefix.$pathJs;
-                        }
-                    }
-                }
-                if (!empty($fontsList)) {
-                    foreach ($fontsList as $nomFont => $pathFont) {
-                        if (!array_key_exists($nomFont, $resources)) {
-                            $rscsTab['fontsStyles'][$nomFont]   = $prefix.$pathFont;
-                            $resources[$nomFont]                = $prefix.$pathFont;
+                    foreach ($localRscs['fonts'] as $nomFont => $pathFont) {
+                        if (!array_key_exists($nomFont, $rscsTab['fontsStyles'])) {
+                            $rscsTab['fontsStyles'][$nomFont] = $prefix.$pathFont;
                         }
                     }
                 }
 
+//                if (!empty($cssList)) {
+//                    foreach ($cssList as $nomCss => $pathCss) {
+//                        if (!array_key_exists($nomCss, $resources)) {
+//                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
+//                            $resources[$nomCss]               = $prefix.$pathCss;
+//                        }
+//                    }
+//                }
+//                if (!empty($jsList)) {
+//                    foreach ($jsList as $nomJs => $pathJs) {
+//                        if (!array_key_exists($nomJs, $resources)) {
+//                            $rscsTab['jsScripts'][$nomJs] = $prefix.$pathJs;
+//                            $resources[$nomJs]            = $prefix.$pathJs;
+//                        }
+//                    }
+//                }
+//                if (!empty($fontsList)) {
+//                    foreach ($fontsList as $nomFont => $pathFont) {
+//                        if (!array_key_exists($nomFont, $resources)) {
+//                            $rscsTab['fontsStyles'][$nomFont]   = $prefix.$pathFont;
+//                            $resources[$nomFont]                = $prefix.$pathFont;
+//                        }
+//                    }
+//                }
+
             }
-            $gotObjList->resources = $resources;
-            $gotObjList->lastAccess = $now->format("Y-m-d H:i:s");
 
             return $rscsTab;
         }
