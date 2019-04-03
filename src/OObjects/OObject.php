@@ -549,6 +549,17 @@ class OObject
         if (empty($idCible)) { $idCible = $idSource; }
         return ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
     }
+    
+    
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public static function getPersistantObjs() {
+        $gotObjList = self::validateSession();
+        $persistentObjs = $gotObjList->persistObjs;
+        return unserialize($persistentObjs);
+    }
 
     /** **************************************************************************************************
      * méthodes de l'objet proprement dites                                                              *
