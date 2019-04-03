@@ -257,6 +257,24 @@ class OObject
                 $properties[$key] = $objProperty;
             }
             $this->setProperties($properties);
+
+            $pathRscs   = __DIR__ ;
+            $pathRscs  .= '/../../view/zf3-graphic-object-templating/'.$properties['typeObj'].'/'.$properties['object'];
+            $pathRscs  .= '/'.$properties['object'].'.rscs.php';
+            $rscsObj        = include $pathRscs;
+            $rscsSession    = $sessionObj->resources ?? [];
+            $prefix         = 'graphicobjecttemplating/oobjects/';
+            if (array_key_exists('prefix', $rscsObj)) {
+                $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
+                unset($rscsObj['prefix']);
+            }
+            foreach ($rscsObj as $type => $filesInfo) {
+                if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
+                foreach ($filesInfo as $name => $path) {
+                    $rscsSession[$type][$name] = $prefix.$path;
+                }
+            }
+            $sessionObj->resources = $rscsSession;
         } else {
             $this->id = $id;
             $properties = unserialize($object[$id]);
