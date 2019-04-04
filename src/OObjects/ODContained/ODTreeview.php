@@ -122,6 +122,7 @@ class ODTreeview extends ODContained
         $parent     = (string) $parent;
         $ref        = (string) $ref;
         $libel      = (string) $libel;
+        if (empty($parent)) { $parent = '0'; }
 
         $dataTree   = $properties['dataTree'];
         $dataPath   = $properties['dataPath'];

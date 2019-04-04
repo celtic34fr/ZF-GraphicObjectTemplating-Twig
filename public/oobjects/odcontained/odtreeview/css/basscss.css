@@ -18,14 +18,14 @@ button, input, select, textarea {
 img { max-width: 100% }
 svg { max-height: 100% }
 
-input,
-select,
-textarea,
-fieldset {
-  font-size: 1rem;
-  margin-top: 0;
-  margin-bottom: 0;
-}
+/*input,*/
+/*select,*/
+/*textarea,*/
+/*fieldset {*/
+/*  font-size: 1rem;*/
+/*  margin-top: 0;*/
+/*  margin-bottom: 0;*/
+/*}*/
 
 input[type=text],
 input[type=datetime],
@@ -46,16 +46,16 @@ input[type=week] {
   -webkit-appearance: none;
 }
 
-select {
-  box-sizing: border-box;
-  line-height: 1.75;
-  padding: .5rem .5rem;
-}
+/*select {*/
+/*  box-sizing: border-box;*/
+/*  line-height: 1.75;*/
+/*  padding: .5rem .5rem;*/
+/*}*/
 
-select:not([multiple]) {
-  height: 2.25rem;
-  vertical-align: middle;
-}
+/*select:not([multiple]) {*/
+/*  height: 2.25rem;*/
+/*  vertical-align: middle;*/
+/*}*/
 
 textarea {
   box-sizing: border-box;
