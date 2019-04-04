@@ -23,6 +23,7 @@ namespace GraphicObjectTemplating\OObjects;
  * static function cloneObject($object)
  * static function formatBootstrap($widthBT)
  * static function formatRetour($idSource, $idCible, $mode, $code = null)
+ * static function getPersistantObjs()
  *
  * getProperty(string $name)
  * getProperties()
@@ -115,7 +116,6 @@ use GraphicObjectTemplating\OObjects\ODContained\ODMenu;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 use GraphicObjectTemplating\OObjects\OSContainer;
-use GraphicObjectTemplating\OObjects\OESContainer;
 
 class OObject
 {
@@ -411,9 +411,13 @@ class OObject
                     }
                 }
                 $objects = $sessionObj->objects;
+                $persistantObjs = $sessionObj->persistObjs;
+
                 unset($objects[$id]);
-                $sessionObj->objects = $objects;
-                $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
+                if (array_key_exists($id, $persistantObjs)) { unset($persistantObjs[$id]); }
+                $sessionObj->objects        = $objects;
+                $sessionObj->persistObjs    = $persistantObjs;
+                $sessionObj->lastAccess     = $now->format("Y-m-d H:i:s");
                 return true;
             }
             return false;
@@ -567,22 +571,25 @@ class OObject
         if (empty($idCible)) { $idCible = $idSource; }
         return ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
     }
-    
-    
+
     /**
      * @return array
      * @throws \Exception
      */
     public static function getPersistantObjs() {
         $gotObjList = self::validateSession();
-        $persistentObjs = $gotObjList->persistObjs;
-        return unserialize($persistentObjs);
+        $persistantObjs = $gotObjList->persistObjs;
+        return $persistantObjs;
     }
 
     /** **************************************************************************************************
      * méthodes de l'objet proprement dites                                                              *
      * *************************************************************************************************** */
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function getProperty(string $name)
     {
         return (array_key_exists($name, $this->properties)) ? $this->properties[$name] : false;
@@ -649,7 +656,7 @@ class OObject
     }
 
     /**
-     * @return identifiant|string
+     * @return string
      */
     public function getName()
     {
@@ -1519,6 +1526,17 @@ class OObject
     {
         $properties = $this->getProperties();
         return array_key_exists('height', $properties) ? $properties['height'] : false;
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function isPersistantObjs()
+    {
+        $gotObjList = self::validateSession();
+        $persistentObjs = $gotObjList->persistObjs;
+        return (array_key_exists($this->id, $persistentObjs));
     }
 
     /** **************************************************************************************************

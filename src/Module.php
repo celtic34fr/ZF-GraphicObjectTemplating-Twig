@@ -97,7 +97,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface,
     public function initPersistantObjs(ServiceManager $sm, array $persistantObjects)
     {
         $container = new Container('gotObjList');
-        $container->persistObjs = serialize($persistantObjects);
+        $container->persistObjs = $persistantObjects;
 
         foreach ($persistantObjects as $id => $class) {
             if (is_subclass_of($class, PersistObjectInterface::class)) {

@@ -41,6 +41,12 @@ class OSContainer extends OObject
     const MODE_AFTER    = 'after';
     const MODE_NTH      = 'nth';
 
+    /**
+     * OSContainer constructor.
+     * @param $id
+     * @param $pathObjArray
+     * @throws \Exception
+     */
     public function __construct($id, $pathObjArray)
     {
         parent::__construct($id, $pathObjArray);
@@ -56,6 +62,11 @@ class OSContainer extends OObject
         return $this;
     }
 
+    /**
+     * @param $nameChild
+     * @return bool|mixed
+     * @throws \Exception
+     */
     public function __get($nameChild) {
         $sessionObj = OObject::validateSession();
         $objects    = $sessionObj->objects;
@@ -74,6 +85,11 @@ class OSContainer extends OObject
     }
 
 
+    /**
+     * @param $nameChild
+     * @return bool
+     * @throws \Exception
+     */
     public function __isset($nameChild) {
         $sessionObj = OObject::validateSession();
         $objects    = $sessionObj->objects;
@@ -90,12 +106,19 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getValue()
     {
         $properties = $this->getProperties();
         return $properties['children'];
     }
 
+    /**
+     * @param null $form
+     * @return $this|bool
+     */
     public function setForm($form = null)
     {
         if (!empty($form)) {
@@ -107,12 +130,22 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getForm()
     {
         $properties = $this->getProperties();
         return array_key_exists('form', $properties) ? $properties['form'] : false;
     }
 
+    /**
+     * @param OObject $child
+     * @param string $mode
+     * @param null $params
+     * @return $this|bool
+     * @throws \Exception
+     */
     public function addChild(OObject $child, $mode =self::MODE_LAST, $params=null)
     {
         if (!empty($child)) {
@@ -161,12 +194,24 @@ class OSContainer extends OObject
                 }
                 $properties['children'] = $children;
                 $this->setProperties($properties);
+
+                if ($this->isPersistantObjs()) {
+                    $persistentObjs = $sessionObjects->persistObjs;
+                    $persistentObjs[$child->getId()] = "";
+                    $sessionObjects->persistObjs = $persistentObjs;
+                }
+
                 return $this;
             }
         }
         return false;
     }
 
+    /**
+     * @param OObject $child
+     * @param null $value
+     * @return $this|bool
+     */
     public function setChildValue(OObject $child, $value = null)
     {
         $properties = $this->getProperties();
@@ -179,6 +224,10 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @param OObject $child
+     * @return $this|bool
+     */
     public function removeChild(OObject $child)
     {
         $properties = $this->getProperties();
@@ -192,6 +241,10 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @param string $child
+     * @return bool
+     */
     public function isChild(string $child)
     {
         $properties = $this->getProperties();
@@ -199,17 +252,27 @@ class OSContainer extends OObject
         return array_key_exists($child, $children);
     }
 
+    /**
+     * @return bool
+     */
     public function hasChild()
     {
         return ($this->countChildren() > 0);
     }
 
+    /**
+     * @return int
+     */
     public function countChildren()
     {
         $properties = $this->getProperties();
         return count($properties['children']);
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function getChildren()
     {
         $enfants = [];
@@ -230,6 +293,9 @@ class OSContainer extends OObject
         return $enfants;
     }
 
+    /**
+     * @return $this
+     */
     public function removeChildren()
     {
         $properties = $this->getProperties();
@@ -238,6 +304,11 @@ class OSContainer extends OObject
         return $this;
     }
 
+    /**
+     * @param $selector
+     * @param $code
+     * @return $this|bool
+     */
     public function addCodeCss($selector, $code)
     {
         $selector = (string) $selector;
@@ -256,6 +327,11 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @param $selector
+     * @param $code
+     * @return $this|bool
+     */
     public function setCodeCss($selector, $code)
     {
         $selector = (string) $selector;
@@ -273,6 +349,10 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @param $selector
+     * @return $this|bool
+     */
     public function rmCodeCss($selector)
     {
         $selector = (string) $selector;
@@ -289,6 +369,10 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @param $selector
+     * @return bool
+     */
     public function getCodeCss($selector)
     {
         $selector = (string) $selector;
@@ -302,6 +386,10 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @param array $allCss
+     * @return $this|bool
+     */
     public function setAllCss(array $allCss)
     {
         if (!empty($allCss)) {
@@ -313,6 +401,9 @@ class OSContainer extends OObject
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getAllCss()
     {
         $properties = $this->getProperties();
