@@ -517,7 +517,7 @@ class OObject
                         $lmd = (int) substr($key, 2);
                         $imd = 12 - $lmd;
                         break;
-                    case 'WX' :
+                    case 'WL' :
                         $llg = (int) substr($key, 2);
                         $ilg = 12 - $llg;
                         break;
