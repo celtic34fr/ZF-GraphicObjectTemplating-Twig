@@ -113,6 +113,7 @@ namespace GraphicObjectTemplating\OObjects;
  */
 
 use GraphicObjectTemplating\OObjects\ODContained\ODMenu;
+use GraphicObjectTemplating\Service\ZF3GotServices;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 use GraphicObjectTemplating\OObjects\OSContainer;
@@ -259,7 +260,7 @@ class OObject
             $this->setProperties($properties);
 
             $pathRscs   = __DIR__ ;
-            $pathRscs  .= '/../../view/zf3-graphic-object-templating/'.$properties['typeObj'].'/'.$properties['object'];
+            $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
             $pathRscs  .= '/'.$properties['object'].'.rscs.php';
             $rscsObj        = include $pathRscs;
             $rscsSession    = $sessionObj->resources ?? [];
@@ -388,16 +389,20 @@ class OObject
         $sessionObj = self::validateSession();
 
         if ($session) {
-            $objects    = $sessionObj->objects;
-            $menuGlobal = $objects['menuGlobal'] ?? [];
-            $sessionObj->objects = [];
-            $sessionObj->resources = [];
-            $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
-            if (!empty($menuGlobal)) {
-                $menu = new ODMenu('menuGlobal');
-                $menu->setProperties(unserialize($menuGlobal));
-                $menu->saveProperties();
+            $objects                = $sessionObj->objects;
+            $persistantObjs         = $sessionObj->persistObjs;
+
+            $tmpObjects             = [];
+            $tmpResources           = [];
+            foreach ($persistantObjs as $id => $classe) {
+                $tmpObjects[$id]    = $objects[$id];
+                $tmpResources       = ZF3GotServices::rscs($id, $objects, $tmpResources);
             }
+
+            $sessionObj->objects    = $tmpObjects;
+            $sessionObj->resources  = $tmpResources;
+            $sessionObj->lastAccess = $now->format("Y-m-d H:i:s");
+
             return true;
         } else {
             if (self::existObject($id, $sessionObj)) {
@@ -408,6 +413,9 @@ class OObject
                     $children = $objet->getChildren();
                     foreach ($children as $child) {
                         self::destroyObject($child->getId());
+                        $persistantObjs = $sessionObj->persistObjs;
+                        if (array_key_exists($id, $persistantObjs)) { unset($persistantObjs[$id]); }
+                        $sessionObj->persistObjs    = $persistantObjs;
                     }
                 }
                 $objects = $sessionObj->objects;

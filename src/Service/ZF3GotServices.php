@@ -145,110 +145,141 @@ class ZF3GotServices
      * 2018-08 GARM : Ajout de la mise en session des références des ressources pour éviter de les charger
      * plusieurs fois
      */
-    public function rscs($object)
+    public static function rscs($object, $objects = null, $rscsSession = null)
     {
         if ($object instanceof OObject) { $object = $object->getId(); }
-        $gotObjList         = OObject::validateSession();
-        $objects            = $gotObjList->objects;
+        if (empty($objects)) {
+            $gotObjList         = OObject::validateSession();
+            $objects            = $gotObjList->objects;
+        }
+        if (empty($rscsSession)) { $rscsSession    = $sessionObj->resources ?? []; }
 
         if (!empty($object) && $object != null && array_key_exists($object, $objects)) {
-            $properties             = unserialize($objects[$object]);
-            $rscsTab                = [];
-            $rscsTab['cssScripts']  = [];
-            $rscsTab['jsScripts']   = [];
-            $rscsTab['fontsStyles'] = [];
+            $properties = unserialize($objects[$object]);
 
-            /** cas des objets OSContainer -> contenant d'autres objets */
-            if (in_array($properties['typeObj'] ,['oscontainer', 'oescontainer'] )) {
-                $children = $properties['children'];
-                if (!empty($children)) {
-                    foreach ($children as $child => $value) {
-                        $newRscsTab = $this->rscs($child);
-                        $rscsTab['jsScripts']   = array_merge($rscsTab['jsScripts'], $newRscsTab['jsScripts']);
-                        $rscsTab['cssScripts']  = array_merge($rscsTab['cssScripts'], $newRscsTab['cssScripts']);
-                        $rscsTab['fontsStyles'] = array_merge($rscsTab['fontsStyles'], $newRscsTab['fontsStyles']);
-//                        foreach ($newRscsTab as $name => $path) {
-//                            if (!array_key_exists($name, $rscsTab['jsScripts'])) {
-//                                $rscsTab['jsScripts'][$name]    = $path;
-//                            }
-//                        }
-//                        foreach ($newRscsTab['cssScripts'] as $name => $path) {
-//                            if (!array_key_exists($name, $rscsTab['cssScripts'])) {
-//                                $rscsTab['cssScripts'][$name]   = $path;
-//                            }
-//                        }
-//                        foreach ($newRscsTab['fontsStyles'] as $name => $path) {
-//                            if (!array_key_exists($name, $rscsTab['fontsStyles'])) {
-//                                $rscsTab['fontsStyles'][$name]   = $path;
-//                            }
-//                        }
+            if (!empty($properties['children'])) {
+                foreach ($properties['children'] as $child) {
+                    $rscsSession = self::rscs($child, $objects, $rscsSession);
+                    if (!$rscsSession) {
+                        throw new \Exception("objet $object non trouvé, veuillez avertir l'administrateur");
                     }
                 }
             }
 
-            /** traitement de l'objet courrant $object */
-            if (!empty($properties['resources'])) {
-                $cssList = [];
-                $jsList = [];
-                $localRscs = $properties['resources'];
+            $pathRscs   = __DIR__ ;
+            $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
+            $pathRscs  .= '/'.$properties['object'].'.rscs.php';
+            $rscsObj        = include $pathRscs;
+            $prefix         = 'graphicobjecttemplating/oobjects/';
+            if (array_key_exists('prefix', $rscsObj)) {
+                $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
+                unset($rscsObj['prefix']);
+            }
+            foreach ($rscsObj as $type => $filesInfo) {
+                if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
+                foreach ($filesInfo as $name => $path) {
+                    $rscsSession[$type][$name] = $prefix.$path;
+                }
+            }
 
-                if (array_key_exists('prefix', $localRscs)) {
-                    $prefix = 'gotextension/'.$localRscs['prefix'].'oeobjects/';
-                } else {
-                    $prefix = 'graphicobjecttemplating/oobjects/';
-                }
-                $prefix .= $properties['typeObj'].'/'.$properties['object'].'/';
+            return $rscsSession;
 
-                if (array_key_exists('css', $localRscs)) {
-                    foreach ($localRscs['css'] as $nomCss => $pathCss) {
-                        if (!array_key_exists($nomCss, $rscsTab['cssScripts'])) {
-                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
-                        }
-                    }
-                }
-                if (array_key_exists('js', $localRscs)) {
-                    foreach ($localRscs['js'] as $nomJs => $pathJs) {
-                        if (!array_key_exists($nomCss, $rscsTab['jsScripts'])) {
-                            $rscsTab['jsScripts'][$nomJs]   = $prefix.$pathJs;
-                        }
-                    }
-                }
-                if (array_key_exists('fonts', $localRscs)) {
-                    foreach ($localRscs['fonts'] as $nomFont => $pathFont) {
-                        if (!array_key_exists($nomFont, $rscsTab['fontsStyles'])) {
-                            $rscsTab['fontsStyles'][$nomFont] = $prefix.$pathFont;
-                        }
-                    }
-                }
-
-//                if (!empty($cssList)) {
-//                    foreach ($cssList as $nomCss => $pathCss) {
-//                        if (!array_key_exists($nomCss, $resources)) {
+//            $rscsTab                = [];
+//            $rscsTab['cssScripts']  = [];
+//            $rscsTab['jsScripts']   = [];
+//            $rscsTab['fontsStyles'] = [];
+//
+//            /** cas des objets OSContainer -> contenant d'autres objets */
+//            if (in_array($properties['typeObj'] ,['oscontainer', 'oescontainer'] )) {
+//                $children = $properties['children'];
+//                if (!empty($children)) {
+//                    foreach ($children as $child => $value) {
+//                        $newRscsTab = self::rscs($child);
+//                        $rscsTab['jsScripts']   = array_merge($rscsTab['jsScripts'], $newRscsTab['jsScripts']);
+//                        $rscsTab['cssScripts']  = array_merge($rscsTab['cssScripts'], $newRscsTab['cssScripts']);
+//                        $rscsTab['fontsStyles'] = array_merge($rscsTab['fontsStyles'], $newRscsTab['fontsStyles']);
+////                        foreach ($newRscsTab as $name => $path) {
+////                            if (!array_key_exists($name, $rscsTab['jsScripts'])) {
+////                                $rscsTab['jsScripts'][$name]    = $path;
+////                            }
+////                        }
+////                        foreach ($newRscsTab['cssScripts'] as $name => $path) {
+////                            if (!array_key_exists($name, $rscsTab['cssScripts'])) {
+////                                $rscsTab['cssScripts'][$name]   = $path;
+////                            }
+////                        }
+////                        foreach ($newRscsTab['fontsStyles'] as $name => $path) {
+////                            if (!array_key_exists($name, $rscsTab['fontsStyles'])) {
+////                                $rscsTab['fontsStyles'][$name]   = $path;
+////                            }
+////                        }
+//                    }
+//                }
+//            }
+//
+//            /** traitement de l'objet courrant $object */
+//            if (!empty($properties['resources'])) {
+//                $cssList = [];
+//                $jsList = [];
+//                $localRscs = $properties['resources'];
+//
+//                if (array_key_exists('prefix', $localRscs)) {
+//                    $prefix = 'gotextension/'.$localRscs['prefix'].'oeobjects/';
+//                } else {
+//                    $prefix = 'graphicobjecttemplating/oobjects/';
+//                }
+//                $prefix .= $properties['typeObj'].'/'.$properties['object'].'/';
+//
+//                if (array_key_exists('css', $localRscs)) {
+//                    foreach ($localRscs['css'] as $nomCss => $pathCss) {
+//                        if (!array_key_exists($nomCss, $rscsTab['cssScripts'])) {
 //                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
-//                            $resources[$nomCss]               = $prefix.$pathCss;
 //                        }
 //                    }
 //                }
-//                if (!empty($jsList)) {
-//                    foreach ($jsList as $nomJs => $pathJs) {
-//                        if (!array_key_exists($nomJs, $resources)) {
-//                            $rscsTab['jsScripts'][$nomJs] = $prefix.$pathJs;
-//                            $resources[$nomJs]            = $prefix.$pathJs;
+//                if (array_key_exists('js', $localRscs)) {
+//                    foreach ($localRscs['js'] as $nomJs => $pathJs) {
+//                        if (!array_key_exists($nomCss, $rscsTab['jsScripts'])) {
+//                            $rscsTab['jsScripts'][$nomJs]   = $prefix.$pathJs;
 //                        }
 //                    }
 //                }
-//                if (!empty($fontsList)) {
-//                    foreach ($fontsList as $nomFont => $pathFont) {
-//                        if (!array_key_exists($nomFont, $resources)) {
-//                            $rscsTab['fontsStyles'][$nomFont]   = $prefix.$pathFont;
-//                            $resources[$nomFont]                = $prefix.$pathFont;
+//                if (array_key_exists('fonts', $localRscs)) {
+//                    foreach ($localRscs['fonts'] as $nomFont => $pathFont) {
+//                        if (!array_key_exists($nomFont, $rscsTab['fontsStyles'])) {
+//                            $rscsTab['fontsStyles'][$nomFont] = $prefix.$pathFont;
 //                        }
 //                    }
 //                }
-
-            }
-
-            return $rscsTab;
+//
+////                if (!empty($cssList)) {
+////                    foreach ($cssList as $nomCss => $pathCss) {
+////                        if (!array_key_exists($nomCss, $resources)) {
+////                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
+////                            $resources[$nomCss]               = $prefix.$pathCss;
+////                        }
+////                    }
+////                }
+////                if (!empty($jsList)) {
+////                    foreach ($jsList as $nomJs => $pathJs) {
+////                        if (!array_key_exists($nomJs, $resources)) {
+////                            $rscsTab['jsScripts'][$nomJs] = $prefix.$pathJs;
+////                            $resources[$nomJs]            = $prefix.$pathJs;
+////                        }
+////                    }
+////                }
+////                if (!empty($fontsList)) {
+////                    foreach ($fontsList as $nomFont => $pathFont) {
+////                        if (!array_key_exists($nomFont, $resources)) {
+////                            $rscsTab['fontsStyles'][$nomFont]   = $prefix.$pathFont;
+////                            $resources[$nomFont]                = $prefix.$pathFont;
+////                        }
+////                    }
+////                }
+//
+//            }
+//
+//            return $rscsTab;
         }
         return false;
     }
