@@ -16,9 +16,9 @@ class ZF3GotHeader extends AbstractHelper
         return $this;
     }
 
-    public function __invoke($object)
+    public function __invoke()
     {
-        $html = $this->gs->header($object);
+        $html = $this->gs->header();
         return $html;
     }
 }
