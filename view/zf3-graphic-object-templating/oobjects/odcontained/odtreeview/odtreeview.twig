@@ -42,7 +42,7 @@
 {% endmacro %}
 
 <div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-objet="{{ objet.object }}"
-     {% if widthBT is not empty %}data-widthbt="{{ widthBT }}" {% endif %}
+     {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
         {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
         {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
      data-role="{{ objet.type }}" data-default="{{ objet.default ? 'true' : 'false' }}"
