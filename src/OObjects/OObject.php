@@ -272,7 +272,7 @@ class OObject
             foreach ($rscsObj as $type => $filesInfo) {
                 if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
                 foreach ($filesInfo as $name => $path) {
-                    $rscsSession[$type][$name] = $prefix.$path;
+                    $rscsSession[$type][$name] = $prefix.$properties['typeObj'].'/'.$properties['object'].'/'.$path;
                 }
             }
             $sessionObj->resources = $rscsSession;
