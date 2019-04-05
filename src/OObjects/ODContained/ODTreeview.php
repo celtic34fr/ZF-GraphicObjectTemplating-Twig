@@ -454,6 +454,7 @@ class ODTreeview extends ODContained
             }
             unset($dataPath[$ref]);
             $properties['dataPath'] = $dataPath;
+            $properties['dataTree'] = $dataTree;
 
             $this->setProperties($properties);
             return $this;
