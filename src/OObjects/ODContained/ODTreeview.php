@@ -636,7 +636,7 @@ class ODTreeview extends ODContained
         return false;
     }
 
-	public function enaSortableNode($ref, $anfChildren = false) {
+	public function enaSortableNode($ref, $andChildren = false) {
 		$leaf	= $this-getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
@@ -661,7 +661,7 @@ class ODTreeview extends ODContained
 		return false;
 	}
 
-	public function disSortableNode($ref, $anfChildren = false) {
+	public function disSortableNode($ref, $andChildren = false) {
 		$leaf	= $this-getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
