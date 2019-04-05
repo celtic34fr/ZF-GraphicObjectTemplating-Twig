@@ -141,7 +141,7 @@ class ODTreeview extends ODContained
                     $item['targetL']    = 'none';
                     $item['parent']     = '0';
                     $item['check']      = false;
-                    $leaf['selectable'] = true;
+                    $item['selectable'] = true;
                     $item['sortable']	= true;
 
                     $dataTree[$ord]     = $item;
@@ -162,7 +162,7 @@ class ODTreeview extends ODContained
                     $item['targetL']    = 'none';
                     $item['parent']     = $parent;
                     $item['check']      = false;
-                    $leaf['selectable'] = true;
+                    $item['selectable'] = true;
                     $item['sortable']	= true;
 
                     $path               = explode('-', $dataPath[$parent]);
