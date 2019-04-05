@@ -19,7 +19,7 @@
                 {% endswitch %}
             {% endif %}
             <label>
-                {{ item.libel }}<span {% if item.check %} class="check"{% endif %} ></span>
+                {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
         </li>
     {% else %}
@@ -138,16 +138,16 @@
                 evt.preventDefault();
                 evt.stopPropagation();
                 {% if objet.multiSelect != false %}
-                let elem = $(this).find('> label > span');
+                let elem = $(this).find('> label > span.odtcheck');
                 if (elem.hasClass('check')) {
                     elem.addClass('check').removeClass('check');
                 } else {
                     elem.addClass('check');
                 }
                 {% else %}
-                var selected = $('#{{ objet.id }}').find(' label span').hasClass('check');
-                $('#{{ objet.id }}').find('label span').addClass('check').removeClass('check');
-                if (!selected) { $(this).find('> label > span').addClass('check'); }
+                var selected = $('#{{ objet.id }}').find(' label span.odtcheck').hasClass('check');
+                $('#{{ objet.id }}').find('label span.odtcheck').addClass('check').removeClass('check');
+                if (!selected) { $(this).find('> label > span.odtcheck').addClass('check'); }
                 {% endif %}
             });
             {% endif %}
