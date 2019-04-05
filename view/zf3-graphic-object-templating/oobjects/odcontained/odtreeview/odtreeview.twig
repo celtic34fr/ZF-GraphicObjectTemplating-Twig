@@ -121,7 +121,10 @@
                 evt.preventDefault();
                 evt.stopPropagation();
                 var treeObj = Array();
-                parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
+                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
+                console.log('sortable');
+                console.log(treeObj);
+				{#invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
             });
 
             $('#{{ objet.id }} .t-sortable-inner').on('sortupdate', function (evt) {
@@ -129,7 +132,9 @@
                 evt.stopPropagation();
                 var treeObj = Array();
                 treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
+                console.log('sortable-inner');
                 console.log(treeObj);
+				{#invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
             });
             {% endif %}
 
@@ -149,6 +154,10 @@
                 $('#{{ objet.id }}').find('label span.odtcheck').addClass('check').removeClass('check');
                 if (!selected) { $(this).find('> label > span.odtcheck').addClass('check'); }
                 {% endif %}
+
+                let objectDOM = $('#{{ objet.id }}');
+                let object    = new odtreeview(objectDOM);
+                invokeAjax(object.getData('click'), '{{ objet.id }}', 'click', evt);
             });
             {% endif %}
         });

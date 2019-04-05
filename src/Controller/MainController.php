@@ -72,6 +72,7 @@ class MainController extends AbstractActionController
                             case 'odcheckbox':
                             case 'odmessage':
                             case 'oddropzone':
+                            case 'odtreeview':
                                 // appel de la méthode de l'objet passée en paramètre
                                 $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
                                 break;

@@ -3,6 +3,7 @@
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use GraphicObjectTemplating\OObjects\ODContained;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class ODTreeview
@@ -689,6 +690,17 @@ class ODTreeview extends ODContained
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
+
+    public function dispatchEvents(ServiceManager $sm, array $params) {
+		switch ($params['event']) {
+			case 'click':
+			    $value = json_decode($params['value']);
+				break;
+			case 'sortupdate':
+				break;
+		}
+	}
+
 
     /**
      * @param $parentPath

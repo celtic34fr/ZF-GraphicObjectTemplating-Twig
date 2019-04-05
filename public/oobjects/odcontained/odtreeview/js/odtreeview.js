@@ -17,8 +17,8 @@ odtreeview.prototype = {
     getData: function (evt) {
         let obj = $('#'+this.id);
 
-        let selected = obj.find('li.selected').map(function () {
-            return ($(this).data('id'));
+        let selected = obj.find('li label span.check').map(function () {
+            return ($(this).parent().parent().data('id'));
         }).get();
         let li = obj.children("div").children("ul").children("li");
         let tree = Object();
@@ -26,7 +26,9 @@ odtreeview.prototype = {
             extend(tree, this.getNodeData(elem))
         }, this);
 //        console.log(tree);
-        let value = [selected, tree];
+        let value = {};
+        value['selected'] = selected;
+        value['tree']     = tree;
         return "id=" + this.id +
             "&value='" + JSON.stringify(value) + "'" +
             "&event='click'&object='" + this.objet + "'";
