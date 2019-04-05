@@ -216,7 +216,6 @@ class OObject
      * @param $id           int     identifiant de l'objet
      * @param $pathObjArray string  chemin partiel du fichier config de l'objet étendu
      * @throws \Exception
-     * @throws \Exception
      */
     public function __construct($id, $pathObjArray)
     {
@@ -232,6 +231,7 @@ class OObject
                 $path .= '/../../view/zf3-graphic-object-templating/' . trim($pathObjArray);
                 $objProperties = include $path;
             }
+
             $objProperties['id']    = $id;
             $objProperties['name']  = $id;
             $this->id               = $id;
@@ -259,23 +259,25 @@ class OObject
             }
             $this->setProperties($properties);
 
-            $pathRscs   = __DIR__ ;
-            $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
-            $pathRscs  .= '/'.$properties['object'].'.rscs.php';
+            $pathRscs   = __DIR__;
+            $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'];
+            $pathRscs  .= '/'.$properties['object'] .'/'.$properties['object'].'.rscs.php';
             $rscsObj        = include $pathRscs;
-            $rscsSession    = $sessionObj->resources ?? [];
-            $prefix         = 'graphicobjecttemplating/oobjects/';
-            if (array_key_exists('prefix', $rscsObj)) {
-                $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
-                unset($rscsObj['prefix']);
-            }
-            foreach ($rscsObj as $type => $filesInfo) {
-                if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
-                foreach ($filesInfo as $name => $path) {
-                    $rscsSession[$type][$name] = $prefix.$properties['typeObj'].'/'.$properties['object'].'/'.$path;
+            if ($rscsObj) {
+                $rscsSession    = $sessionObj->resources ?? [];
+                $prefix         = 'graphicobjecttemplating/oobjects/';
+                if (array_key_exists('prefix', $rscsObj)) {
+                    $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
+                    unset($rscsObj['prefix']);
                 }
+                foreach ($rscsObj as $type => $filesInfo) {
+                    if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
+                    foreach ($filesInfo as $name => $path) {
+                        $rscsSession[$type][$name] = $prefix.$properties['typeObj'].'/'.$properties['object'].'/'.$path;
+                    }
+                }
+                $sessionObj->resources = $rscsSession;
             }
-            $sessionObj->resources = $rscsSession;
         } else {
             $this->id = $id;
             $properties = unserialize($object[$id]);
