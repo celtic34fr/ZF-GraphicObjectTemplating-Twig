@@ -88,9 +88,11 @@ class ODTreeview extends ODContained
 
     private $const_target;
 
+
     /**
      * ODTreeview constructor.
      * @param $id
+     * @throws \ReflectionException
      * @throws \Exception
      */
     public function __construct($id)
@@ -114,7 +116,7 @@ class ODTreeview extends ODContained
      * @param $libel
      * @param null $ord
      * @param string $parent
-     * @return $this|bool
+     * @return ODTreeview|bool
      */
     public function addLeaf($ref, $libel, $ord = null, $parent = "0")
     {
@@ -188,7 +190,7 @@ class ODTreeview extends ODContained
     /**
      * @param $libel
      * @param $path
-     * @return $this|bool
+     * @return ODTreeview|bool
      */
     public function setLeaf($libel, $path)
     {
@@ -270,7 +272,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODTreeview
      */
     public function enaIcon()
     {
@@ -281,7 +283,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODTreeview
      */
     public function disIcon()
     {
@@ -293,7 +295,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param $leafIco
-     * @return $this
+     * @return ODTreeview
      */
     public function setLeafIco($leafIco)
     {
@@ -315,7 +317,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param $nodeOpenedIco
-     * @return $this
+     * @return ODTreeview
      */
     public function setNodeOpenedIco($nodeOpenedIco)
     {
@@ -337,7 +339,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param $nodeClosedIco
-     * @return $this
+     * @return ODTreeview
      */
     public function setNodeClosedIco($nodeClosedIco)
     {
@@ -359,7 +361,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param array $selectedLeaves
-     * @return $this
+     * @return ODTreeview
      */
     public function setSelectedLeaves(array $selectedLeaves)
     {
@@ -409,7 +411,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODTreeview
      */
     public function enaMultiSelect()
     {
@@ -420,7 +422,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODTreeview
      */
     public function disMultiSelect()
     {
@@ -433,7 +435,7 @@ class ODTreeview extends ODContained
     /**
      * @param $ref
      * @param bool $root
-     * @return $this|bool
+     * @return ODTreeview|bool
      */
     public function rmLeafNode($ref, $root = true)
     {
@@ -465,7 +467,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param string $title
-     * @return $this
+     * @return ODTreeview
      */
     public function setTitle($title = "")
     {
@@ -489,7 +491,8 @@ class ODTreeview extends ODContained
      * @param $ref
      * @param $link
      * @param string $target
-     * @return $this|bool
+     * @return ODTreeview|bool
+     * @throws \ReflectionException
      */
     public function setLeafLink($ref, $link, $target = self::ODTREEVIEWTARGET_SELF)
     {
@@ -586,6 +589,10 @@ class ODTreeview extends ODContained
         return false;
     }
 
+    /**
+     * @param $ref
+     * @return ODTreeview|bool
+     */
     public function unselectNode($ref)
     {
         $leaf   = $this->getLeaf($ref);
@@ -604,6 +611,10 @@ class ODTreeview extends ODContained
         return false;
     }
 
+    /**
+     * @param $ref
+     * @return ODTreeview|bool
+     */
     public function enaSelectNode($ref) {
         $leaf   = $this->getLeaf($ref);
         if ($leaf) {
@@ -621,6 +632,10 @@ class ODTreeview extends ODContained
         return false;
     }
 
+    /**
+     * @param $ref
+     * @return ODTreeview|bool
+     */
     public function disSelectNode($ref) {
         $leaf   = $this->getLeaf($ref);
         if ($leaf) {
@@ -638,8 +653,13 @@ class ODTreeview extends ODContained
         return false;
     }
 
-	public function enaSortableNode($ref, $andChildren = false) {
-		$leaf	= $this-getLeaf($ref);
+    /**
+     * @param $ref
+     * @param bool $andChildren
+     * @return ODTreeview|bool
+     */
+    public function enaSortableNode($ref, $andChildren = false) {
+		$leaf	= $this->getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
 			$dataTree       		= $properties['dataTree'];
@@ -663,8 +683,13 @@ class ODTreeview extends ODContained
 		return false;
 	}
 
-	public function disSortableNode($ref, $andChildren = false) {
-		$leaf	= $this-getLeaf($ref);
+    /**
+     * @param $ref
+     * @param bool $andChildren
+     * @return ODTreeview|bool
+     */
+    public function disSortableNode($ref, $andChildren = false) {
+		$leaf	= $this->getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
 			$dataTree       		= $properties['dataTree'];
@@ -773,9 +798,9 @@ class ODTreeview extends ODContained
             $code   = ['html' => $line, 'selector' => $selector.' > ul'];
             $mode       = 'appendTreeNode';
         }
-        $ret[] = OObject::formatRetour($this->getId(), $this->getId(), $mode, $code);
-        $ret[] = OObject::formatRetour($this->getId(), $this->getId(), 'exec', '$("#'.$this->getId().' .treeview").off().find("*").off();');
-        $ret[] = OObject::formatRetour($this->getId(), $this->getId(), 'execID', $this->getId().'Script');
+        $ret[] = self::formatRetour($this->getId(), $this->getId(), $mode, $code);
+        $ret[] = self::formatRetour($this->getId(), $this->getId(), 'exec', '$("#'.$this->getId().' .treeview").off().find("*").off();');
+        $ret[] = self::formatRetour($this->getId(), $this->getId(), 'execID', $this->getId().'Script');
         return $ret ;
     }
 
@@ -789,7 +814,7 @@ class ODTreeview extends ODContained
         $leaf     = $this->getLeaf($leafPath);
         $selector = $this->getId().'Li-'.$leaf['parent'].'-'.$leaf['ord'];
 
-        $ret[] = OObject::formatRetour($this->getId(), $selector, 'delete');
+        $ret[] = self::formatRetour($this->getId(), $selector, 'delete');
 
         return $ret ;
     }
