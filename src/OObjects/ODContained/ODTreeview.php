@@ -691,14 +691,27 @@ class ODTreeview extends ODContained
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
-    public function dispatchEvents(ServiceManager $sm, array $params) {
+    /**
+     * @param ServiceManager $sm
+     * @param array $params
+     * @return array
+     * @throws \Exception
+     */
+    public function dispatchEvents(ServiceManager $sm, array $params)
+    {
+        $sessionObjects     = self::validateSession();
+        /** @var ODTreeview $object */
+        $object             = self::buildObject($params['id'], $sessionObjects);
 		switch ($params['event']) {
 			case 'click':
 			    $value = json_decode($params['value']);
+			    $object->setSelectedLeaves($value->selected);
 				break;
 			case 'sortupdate':
 				break;
 		}
+		$object->saveProperties();
+		return [];
 	}
 
 
