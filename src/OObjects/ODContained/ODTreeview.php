@@ -372,7 +372,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return bool
+     * @return bool|array
      */
     public function getSelectedLeaves()
     {
@@ -571,6 +571,10 @@ class ODTreeview extends ODContained
         return $this;
     }
 
+    /**
+     * @param $ref
+     * @return ODTreeview|bool
+     */
     public function selectNode($ref)
     {
         $leaf   = $this->getLeaf($ref);
@@ -712,6 +716,37 @@ class ODTreeview extends ODContained
 		}
 		return false;
 	}
+
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return bool|ODTreeview
+     */
+    public function evtClickNode($class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('clickNode', $class, $method, $stopEvent);
+        }
+        return false;
+	}
+
+    /**
+     * @return bool
+     */
+    public function getClickNode()
+    {
+        return $this->getEvent('clickNode');
+    }
+
+    /**
+     * @return bool|ODTreeview
+     */
+    public function disClickNode()
+    {
+        return $this->disEvent('clickNode');
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -725,20 +760,32 @@ class ODTreeview extends ODContained
     public function dispatchEvents(ServiceManager $sm, array $params)
     {
         $sessionObjects     = self::validateSession();
+        $ret                = [];
         /** @var ODTreeview $object */
         $object             = self::buildObject($params['id'], $sessionObjects);
 		switch ($params['event']) {
 			case 'click':
-			    $value = json_decode($params['value']);
+			    $value      = json_decode($params['value']);
+			    $leaves     = $object->getSelectedLeaves();
+                foreach ($leaves as $leaf) {
+                    $object->unselectNode($leaf);
+			    }
 			    $object->setSelectedLeaves($value->selected);
+                foreach ($value->selected as $select) {
+                    $object->selectNode($select);
+			    }
+                $object->saveProperties();
+
+                $callback   = $this->getClickNode();
+                $results = call_user_func_array([$callback['class'], $callback['method']], [$sm, $params]);
+                $ret        = array_merge($ret, $results);
 				break;
 			case 'sortupdate':
 				break;
 		}
 		$object->saveProperties();
-		return [];
+		return $ret;
 	}
-
 
     /**
      * @param $parentPath

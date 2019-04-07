@@ -11,16 +11,16 @@
             {% case 'javascript:' %}
                 {{ event.method | raw }};
             {% default %}
-                let {{ objet.id }}DOM = $('#{{ objet.id }}');
-                let {{ objet.id }} = new {{ objet.object }}({{ objet.id }}DOM);
+                let objetDOM = $('#{{ objet.id }}');
+                let objet = new {{ objet.object }}(objetDOM);
                 var invalid = '';
-                if (typeof {{ objet.id }}.invalidate === 'function') {
-                    invalid = {{ objet.id }}.invalidate();
+                if (typeof objet.invalidate === 'function') {
+                    invalid = objet.invalidate();
                 }
                 if (invalid.length == 0) {
                     $('#{{ objet.id }}').remove('has-error');
                     $('#{{ objet.id }} span').removeClass('hidden').addClass('hidden');
-                    invokeAjax({{ objet.id }}.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
+                    invokeAjax(objet.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
                 } else {
                     $('#{{ objet.id }}').remove('has-error').addClass('has-error');
                     $('#{{ objet.id }} span').removeClass('hidden');

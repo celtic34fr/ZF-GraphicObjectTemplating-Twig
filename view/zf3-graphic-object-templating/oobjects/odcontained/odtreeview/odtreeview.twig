@@ -30,7 +30,7 @@
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
             <label>
-                {{ item.libel }}<span {% if item.check %} class="check"{% endif %} ></span>
+                {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
             <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}">
                 {% for id,leaf in item.children %}
@@ -60,6 +60,8 @@
             display: block;
             float: right;
         }
+
+        .p1  { padding-right: 0 !important }
     </style>
 
     <div id="{{ objet.id }}Li-0-0">
@@ -142,18 +144,16 @@
             $('li:not(.unselect)').on('click', function (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
-                {% if objet.multiSelect != false %}
-                let elem = $(this).find('> label > span.odtcheck');
-                if (elem.hasClass('check')) {
-                    elem.addClass('check').removeClass('check');
+
+                if ($(this).find('> label > span.odtcheck').hasClass('check')) {
+                    $(this).find('> label > span.odtcheck').removeClass('check');
                 } else {
-                    elem.addClass('check');
+                    {% if objet.multiSelect == false %}
+                    var selected = $('#{{ objet.id }}').find(' label span.odtcheck').hasClass('check');
+                    $('#{{ objet.id }}').find('label span.odtcheck').addClass('check').removeClass('check');
+                    {% endif %}
+                    $(this).find('> label > span.odtcheck').addClass('check');
                 }
-                {% else %}
-                var selected = $('#{{ objet.id }}').find(' label span.odtcheck').hasClass('check');
-                $('#{{ objet.id }}').find('label span.odtcheck').addClass('check').removeClass('check');
-                if (!selected) { $(this).find('> label > span.odtcheck').addClass('check'); }
-                {% endif %}
 
                 let objectDOM = $('#{{ objet.id }}');
                 let object    = new odtreeview(objectDOM);

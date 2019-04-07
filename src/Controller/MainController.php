@@ -36,7 +36,7 @@ class MainController extends AbstractActionController
 
     /* méthode appelé pour l'exécution des demandes Ajax */
     /**
-     * @return bool
+     * @return bool|ViewModel
      * @throws \Exception
      */
     public function gotDispatchAction()
@@ -124,6 +124,7 @@ class MainController extends AbstractActionController
                     }
                     $updDatas[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];
                 }
+                $updDatas[] = ['id'=>'', 'mode'=>'execID', 'code'=>'layoutScripts'];
 
                 // traitement des ressources pour injection de fichiers sans doublons
                 $rscsObjs = [];
