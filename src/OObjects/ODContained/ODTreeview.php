@@ -777,8 +777,10 @@ class ODTreeview extends ODContained
                 $object->saveProperties();
 
                 $callback   = $this->getClickNode();
-                $results = call_user_func_array([$callback['class'], $callback['method']], [$sm, $params]);
-                $ret        = array_merge($ret, $results);
+                if (!empty($callback['class']) && !empty($callback['method'])) {
+                    $results = call_user_func_array([$callback['class'], $callback['method']], [$sm, $params]);
+                    $ret        = array_merge($ret, $results);
+                }
 				break;
 			case 'sortupdate':
 				break;
