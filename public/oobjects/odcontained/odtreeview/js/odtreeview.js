@@ -14,9 +14,7 @@ odtreeview.prototype = {
             return ($(this).parent().parent().data('id'));
         }).get();
         let li = obj.children("div").children("ul").children("li");
-        let tree = li.get().map(function (elem) {
-            return this.getNodeData(elem)
-        }, this);
+        let tree = li.get().map(this.getNodeData, this);
 //        console.log(tree);
         let value = {};
         value['selected'] = selected;
