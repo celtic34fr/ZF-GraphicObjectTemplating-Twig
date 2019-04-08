@@ -6,13 +6,6 @@ function odtreeview(obj) {
 
 }
 
-function extend(obj, src) {
-    for (var key in src) {
-        if (src.hasOwnProperty(key)) obj[key] = src[key];
-    }
-    return obj;
-}
-
 odtreeview.prototype = {
     getData: function (evt) {
         let obj = $('#'+this.id);
@@ -21,9 +14,8 @@ odtreeview.prototype = {
             return ($(this).parent().parent().data('id'));
         }).get();
         let li = obj.children("div").children("ul").children("li");
-        let tree = Object();
-        li.get().forEach(function (elem) {
-            extend(tree, this.getNodeData(elem))
+        let tree = li.get().map(function (elem) {
+            return this.getNodeData(elem)
         }, this);
 //        console.log(tree);
         let value = {};
@@ -63,17 +55,13 @@ odtreeview.prototype = {
     getNodeData: function (domObj) {
         let obj = $(domObj);
         let id = obj.data("id");
-        let ret = Object();
+        let a = [];
         if (obj.hasClass("node")) {
             let children = obj.children("ul").children("li");
-            let a = Object();
-            children.get().forEach(function (elem) {
-                extend(a, this.getNodeData(elem))
-            }, this);
-            ret[id] = a;
-        } else {
-            ret[id] = id;
+            a = children.get().map(this.getNodeData, this);
         }
-        return ret
+        ret = Object();
+        ret[id] = a;
+        return ret;
     }
 };
