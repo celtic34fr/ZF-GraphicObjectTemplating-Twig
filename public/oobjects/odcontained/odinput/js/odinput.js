@@ -30,7 +30,6 @@ odinput.prototype = {
         //
         // TOUTE MODIFICATION DANS LES TRAITEMENTS CI-DESSOUS DEVRA ÊTRE IMPÉRATIVEMENT REPORTÉS DANS LE FICHIER JAVASCRIPT
         // DONT LE NOM ET LE CHEMIN D'ACCÈS À ÉTÉ DONNÉ CI-AVANT POUR GARANTIR L'INTÉGRITÉ DE L'APPLICATION
-        //
         // ------------------------------------------------------
         var data    = this.value;
         var type    = this.type;
@@ -40,9 +39,7 @@ odinput.prototype = {
             case 'hidden':
                 break;
             case 'text':
-                if (this.data('mask') != undefined && this.data('mask').length > 0) {
-                    break;
-                }
+                if (this.data('mask') != undefined && this.data('mask').length > 0) { break; }
             case 'password':
                 var minlength = (input.attr('minlength') != undefined) ? input.attr('minlength'): -1;
                 var maxlength = (input.attr('maxlength') != undefined) ? input.attr('maxlength'): -1;
@@ -58,9 +55,8 @@ odinput.prototype = {
                 }
                 break;
             case 'number':
-                if (!$.isNumeric(this.value)) {
-                    retour = 'Le champs doit être numérique seulement';
-                } else {
+                if (!$.isNumeric(this.value)) { retour = 'Le champs doit être numérique seulement'; }
+                else {
                     var valMin = (this.data('valMin') != undefined) ? this.data('valMin') : '';
                     var valMax = (this.data('valMax') != undefined) ? this.data('valMax') : '';
                     if ($.isNumeric(valMin) && this.value < valMin) {
@@ -78,9 +74,52 @@ odinput.prototype = {
                     retour = 'Veuillez saisir une adresse courriel (email) valide';
                 }
                 break;
-            default:
-                retour = 'Erreur inconnue';
+            default: retour = 'Erreur inconnue';
         }
         return retour;
-    },
+    }
 };
+
+
+jQuery(document).ready(function (evt) {
+    $inputMask = $('.gotObject[data-objet=odinput]');
+    $.each($inputMask, function () {
+        if (typeof $(this).data('mask') !== 'undefined') { $(this).find("input").mask($(this).data('mask')); }
+    });
+
+    if ($("[autofocus=autofocus]").length > 0) {
+        setTimeout(function obj_method(){$("[autofocus=autofocus]").first().focus()},50);
+    }
+
+    if ($('.gotObject.inputChg').length > 0) {
+        $('.gotObject.inputChg').on('change', function (evt) {
+            let objet = new odinput($(this));
+            var invalid = '';
+            if (typeof objet.invalidate === 'function') { invalid = objet.invalidate(); }
+            if (invalid.length == 0) {
+                $(this).remove('has-error');
+                $(this).find('span').removeClass('hidden').addClass('hidden');
+                invokeAjax(objet.getData('change'), $(this).attr('id'), 'change', e);
+            } else {
+                $(this).remove('has-error').addClass('has-error');
+                $(this).find('span').removeClass('hidden').html(invalid);
+            }
+        });
+    }
+
+    if ($('.gotObject.inputKup').length > 0) {
+        $('.gotObject.inputKup').on('keyup', function (evt) {
+            let objet = new odinput($(this));
+            var invalid = '';
+            if (typeof objet.invalidate === 'function') { invalid = objet.invalidate(); }
+            if (invalid.length == 0) {
+                $(this).remove('has-error');
+                $(this).find('span').removeClass('hidden').addClass('hidden');
+                invokeAjax(objet.getData('keyup'), $(this).attr('id'), 'keyup', e);
+            } else {
+                $(this).remove('has-error').addClass('has-error');
+                $(this).find('span').removeClass('hidden').html(invalid);
+            }
+        });
+    }
+});

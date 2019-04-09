@@ -1,29 +1,36 @@
 {# template de l'objet ODInput #}
 
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }} form-group"
+{# traitement de la génération des classes pour event #}
+{% set events = objet.event %}
+{% set evtChange = '' %}
+{% set evtKeyup = '' %}
+{%  for evt, event in events %}
+    {% switch(evt) %}
+        {% case 'change' %} {% set evtChange = 'inputChg' %}
+        {% case 'keyup'  %} {% set evtKeyup  = 'inputKup' %}
+    {% endswitch %}
+{% endfor %}
+
+<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }} form-group {{ evtChange }} {{ evtKeyup }}"
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+    {%  if objet.mask is not empty %} data-mask="{{ objet.mask }}" {% endif %}
 >
     <label for="{{ objet.id }}Input"
     {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
-    >{{ objet.label }}</label>
+    > {{ objet.label }} </label>
     <input id="{{ objet.id }}Input" name="{{ objet.name }}" type="{{ objet.type }}"
     {% if objet.value is not empty %} value="{{ objet.value }}" {% endif %}
     {% if objet.size is not empty %} size="{{ objet.size }}" {% endif %}
     {% if objet.minlength is not empty %} minlength="{{ objet.minlength }}" {% endif %}
     {% if objet.maxlength is not empty %} maxlength="{{ objet.maxlength }}" {% endif %}
-    {% if objet.state == false %} disabled {% endif %}
     {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
-    {% if objet.autoFocus %} autofocus {% endif %}
+    {% if objet.autoFocus %} autofocus="autofocus" {% endif %} {% if objet.state == false %} disabled {% endif %}
     class="form-control-got"
     {% if objet.type == 'number' %}
-        {% if objet.valMin is defined and objet.valMin is not empty %}
-    data-valMin="{{ objet.valMin }}"
-        {% endif %}
-        {% if objet.valMax is defined and objet.valMax is not empty %}
-    data-valMax="{{ objet.valMax }}"
-        {% endif %}
+        {% if objet.valMin is defined and objet.valMin is not empty %} data-valMin="{{ objet.valMin }}" {% endif %}
+        {% if objet.valMax is defined and objet.valMax is not empty %} data-valMax="{{ objet.valMax }}" {% endif %}
     {% endif %}
     {% if objet.mask is not empty %}data-mask="{{ objet.mask }}"{% endif %}
     {% if objet.placeholder is not empty %}placeholder="{{ objet.placeholder }}"{% endif %}
@@ -31,21 +38,23 @@
     <span class="help-block hidden"></span>
 
     <script>
-        $(document).ready(function (e) {
+        $(document).ready(function (evt) {
+            {% if objet.labelWidthBT is not empty %}
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
+            {% endif %}
+            {% if objet.inputWidthBT is not empty %}
             setBtClasses("#{{ objet.id }} input", $("#{{ objet.id }} input").data("widthbt"));
-
-            {% if objet.mask is not empty %}
-            $("#{{ objet.id }} input").mask("{{ objet.mask }}");
             {% endif %}
 
-			{% if objet.autoFocus %}
-			{% include "zf3-graphic-object-templating/oobjects/autoFocus.js.twig" with {id : (objet.id ~ 'Input')} %}
-			{% endif %}
+{#          {% if objet.mask is not empty %} $("#{{ objet.id }} input").mask("{{ objet.mask }}"); {% endif %}#}
 
-            {% if objet.event is not empty %}
-            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
-            {% endif %}
-        })
+{#			{% if objet.autoFocus %}#}
+{#			{% include "zf3-graphic-object-templating/oobjects/autoFocus.js.twig" with {id : (objet.id ~ 'Input')} %}#}
+{#			{% endif %}#}
+
+{#          {% if objet.event is not empty %}#}
+{#          {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}#}
+{#          {% endif %}#}
+        });
     </script>
 </div>

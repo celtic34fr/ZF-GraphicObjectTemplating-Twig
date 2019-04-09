@@ -1,9 +1,17 @@
 {# template de l'objet ODSelect #}
 
+{% set evtChange = '' %}
+{% set events = objet.event %}
+{%  for evt, event in events %}
+    {% switch(evt) %}
+    {% case 'change' %} {% set evtChange = 'selectChg' %}
+    {% endswitch %}
+{% endfor %}
+
 <div id="{{ objet.id }}"
      data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
     {% if objet.form|length > 0 %} data-form="{{ objet.form }}" {% endif %}
-    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
+    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %} {{ evtChange }}"
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
 
@@ -11,22 +19,21 @@
         {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
     >{{ objet.label }}</label>
     <span class="{{ objet.format }}">
-    <select id="{{ objet.id }}Select" class="{{ selectClass }}"
-            {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
-            {#% include "zf3-graphic-object-templating/oobjects/objEvents.twig" with { event:objet.event } %#}
-            {% if objet.multiple %} multiple {% endif %}
-            {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
-            {% if objet.state == false %} disabled {% endif %}
-    >
-        {% if objet.placeholder is not empty %}
+        <select id="{{ objet.id }}Select" class="{{ selectClass }}"
+        {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
+        {% if objet.multiple %} multiple {% endif %} {% if objet.state == false %} disabled {% endif %}
+        {% if objet.selectWidthBT is not empty %} data-widthbt="{{ objet.selectWidthBT }}" {% endif %}
+        >
+            {% if objet.placeholder is not empty %}
             <option value="" disabled selected>{{ objet.placeholder }}</option>
-        {% endif %}
-        {% for value, item in objet.options %}
-            <option value="{{ value }}"{% if item.selected %} selected {% endif %} {% if not item.enable %} disabled {% endif %} >
+            {% endif %}
+            {% for value, item in objet.options %}
+            <option value="{{ value }}"
+                    {% if item.selected %} selected {% endif %} {% if not item.enable %} disabled {% endif %} >
                 {{ item.libel }}
             </option>
-        {% endfor %}
-    </select>
+            {% endfor %}
+        </select>
     </span>
 
     <script>
@@ -34,9 +41,9 @@
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} select", $("#{{ objet.id }} select").data("widthbt"));
 
-            {% if objet.event is not empty %}
-            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
-            {% endif %}
+{#            {% if objet.event is not empty %}#}
+{#            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}#}
+{#            {% endif %}#}
         })
     </script>
 </div>
