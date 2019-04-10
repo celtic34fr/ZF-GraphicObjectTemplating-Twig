@@ -81,45 +81,46 @@
 
     <script type="text/javascript">
 
-        // function parcoursLis(liItem, arrayTree) {
-        //     var LIs = $('#'+liItem.attr('id')+' > ul > li');
-        //     var arrayItrem  = Array();
-        //     if (LIs.length > 0) {
-        //         LIs.each(function () {
-        //             arrayItrem.push($(this).attr("id"));
-        //             if ($(this.selector+' > ul')) {
-        //                 var ret = parcoursLis($(this), arrayItrem)
-        //             }
-        //         });
-        //         arrayTree.push(arrayItrem);
-        //     }
-        //     return arrayTree;
-        // }
+// {% if objet.sortable != false %}
 
-{#        {% if objet.sortable != false %}#}
-{#        sortable('#{{ objet.id }} .t-sortable', {#}
-{#            forcePlaceholderSize: true,#}
-{#            placeholderClass: 'bg-navi border border-yellow',#}
-{#            hoverClass: 'bg-maroon yellow',#}
-{#            itemSerializer: function (item, container) {#}
-{#                item.parent = '[parentNode]';#}
-{#                item.node = '[Node]';#}
-{#                item.html = item.html.replace('<', '&lt;');#}
-{#                return item;#}
-{#            },#}
-{#            containerSerializer: function (container) {#}
-{#                container.node = '[Node]';#}
-{#                return container;#}
-{#            },#}
-{#        });#}
+// function parcoursLis(liItem, arrayTree) {
+//     var LIs = $('#'+liItem.attr('id')+' > ul > li');
+//     var arrayItrem  = Array();
+//     if (LIs.length > 0) {
+//         LIs.each(function () {
+//             arrayItrem.push($(this).attr("id"));
+//             if ($(this.selector+' > ul')) {
+//                 var ret = parcoursLis($(this), arrayItrem)
+//             }
+//         });
+//         arrayTree.push(arrayItrem);
+//     }
+//     return arrayTree;
+// }
 
-        {#sortable('.t-sortable-inner', {#}
-        {#    forcePlaceholderSize: true,#}
-        {#    items: ':not(.disabled)',#}
-        {#    placeholderClass: 'border border-maroon',#}
-        {#    hoverClass: 'bg-maroon yellow',#}
-        {#});#}
-        {#{% endif %}#}
+//        sortable('#{{ objet.id }} .t-sortable', {
+//            forcePlaceholderSize: true,#}
+//            placeholderClass: 'bg-navi border border-yellow',
+//            hoverClass: 'bg-maroon yellow',#}
+//            itemSerializer: function (item, container) {
+//                item.parent = '[parentNode]';
+//                item.node = '[Node]';
+//                item.html = item.html.replace('<', '&lt;');
+//                return item;
+//            },
+//            containerSerializer: function (container) {
+//                container.node = '[Node]';
+//                return container;
+//            },
+//        });
+//
+//         sortable('.t-sortable-inner', {
+//             forcePlaceholderSize: true,
+//             items: ':not(.disabled)',
+//             placeholderClass: 'border border-maroon',
+//             hoverClass: 'bg-maroon yellow',
+//         });
+        {% endif %}
 
         $(document).ready(function (evt) {
 {#            {% if objet.sortable != false %}#}
