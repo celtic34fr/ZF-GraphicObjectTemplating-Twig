@@ -79,9 +79,9 @@ function parcoursLis(liItem, arrayTree) {
     return arrayTree;
 }
 
-
 $(document).ready(function (evt) {
-    sortable('.t-sortable.sortable', {
+
+    sortable('.gotObject[data-objet="odtreeview"] .t-sortable.sortable', {
         forcePlaceholderSize: true,
         placeholderClass: 'bg-navi border border-yellow',
         hoverClass: 'bg-maroon yellow',
@@ -97,13 +97,14 @@ $(document).ready(function (evt) {
         },
     });
 
-    sortable('.t-sortable-inner.sortable', {
+    sortable('.gotObject[data-objet="odtreeview"] .t-sortable-inner.sortable', {
         forcePlaceholderSize: true,
         items: ':not(.disabled)',
         placeholderClass: 'border border-maroon',
         hoverClass: 'bg-maroon yellow',
     });
-    $(".gotObject[data-objet='odtreeview'] .t-sortable.sortable").on("sortupdate", function (evt) {
+
+    $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable.sortable' , function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
         var treeObj = Array();
@@ -111,13 +112,31 @@ $(document).ready(function (evt) {
         // invokeAjax(treeObj, $(".gotObject[data-objet='odtreeview']").attr('id'), 'update', evt);
     });
 
-    $(".gotObject[data-objet='odtreeview'] .t-sortable-inner.sortable").on("sortupdate", function (evt) {
+    $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable-inner.sortable' , function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
         var treeObj = Array();
         treeObj = parcoursLis($(".gotObject[data-objet='odtreeview']"), treeObj);
         // invokeAjax(treeObj, $('[data-objet=odtreeview]').attr('id'), 'update', evt);
     });
+
+    $(document).on("click", '.gotObject.selectable[data-objet="odtreeview"] li:not(.unselect)' , function(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        if ($(this).find('> label > span.odtcheck').hasClass('check')) {
+            $(this).find('> label > span.odtcheck').removeClass('check');
+        } else {
+            var idObject    = $(this).attr('id');
+            idObject        = idObject.substr(0, idObject.indexOf('Li-'));
+            var objectDOM   = $('#'+idObject);
+            if (objectDOM.data('multiselect') == 'false') {
+                objectDOM.find('label span.odtcheck').removeClass('check');
+            }
+            $(this).find('> label > span.odtcheck').addClass('check');
+        }
+
+        var object          = new odtreeview(objectDOM);
+        invokeAjax(object.getData('click'), idObject, 'click', evt);
+    });
 });
-
-

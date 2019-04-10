@@ -1,16 +1,14 @@
 {# template de l'objet ODInput #}
 
 {# traitement de la génération des classes pour event #}
+{% set objClasses = 'gotObject hidden form-group ' ~ objet.classes %}
 {% set events = objet.event %}
-{% set evtChange = '' %}
-{% set evtKeyup = '' %}
 {%  for evt, event in events %}
     {% switch(evt) %}
-        {% case 'change' %} {% set evtChange = 'inputChg' %}
-        {% case 'keyup'  %} {% set evtKeyup  = 'inputKup' %}
+        {% case 'change' %} {% set objClasses = objClasses ~ ' inputChg' %}
+        {% case 'keyup'  %} {% set objClasses = objClasses ~ ' inputKup' %}
     {% endswitch %}
 {% endfor %}
-{% set objClasses = 'gotObject hidden form-group ' ~ objet.classes ~ ' ' ~ evtChange ~ ' ' ~ evtKeyup %}
 
 <div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
      data-widthbt="{{ objet.widthBT }}" {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}

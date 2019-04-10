@@ -43,9 +43,10 @@
 {% endmacro %}
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% if objet.selection != false %} {% set objClasses = objClasses ~ ' selectable' %} {% endif %}
 
 <div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-role="{{ objet.type }}"
- data-default="{{ objet.default ? 'true' : 'false' }}"
+ data-default="{{ objet.default ? 'true' : 'false' }}" data-multiselect="{{ (objet.multiSelect) ? 'true' : 'false' }}"
 {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
 {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
 {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
@@ -78,95 +79,4 @@
             {% endfor %}
         </ul>
     </div>
-
-    <script type="text/javascript">
-
-// {% if objet.sortable != false %}
-
-// function parcoursLis(liItem, arrayTree) {
-//     var LIs = $('#'+liItem.attr('id')+' > ul > li');
-//     var arrayItrem  = Array();
-//     if (LIs.length > 0) {
-//         LIs.each(function () {
-//             arrayItrem.push($(this).attr("id"));
-//             if ($(this.selector+' > ul')) {
-//                 var ret = parcoursLis($(this), arrayItrem)
-//             }
-//         });
-//         arrayTree.push(arrayItrem);
-//     }
-//     return arrayTree;
-// }
-
-//        sortable('#{{ objet.id }} .t-sortable', {
-//            forcePlaceholderSize: true,#}
-//            placeholderClass: 'bg-navi border border-yellow',
-//            hoverClass: 'bg-maroon yellow',#}
-//            itemSerializer: function (item, container) {
-//                item.parent = '[parentNode]';
-//                item.node = '[Node]';
-//                item.html = item.html.replace('<', '&lt;');
-//                return item;
-//            },
-//            containerSerializer: function (container) {
-//                container.node = '[Node]';
-//                return container;
-//            },
-//        });
-//
-//         sortable('.t-sortable-inner', {
-//             forcePlaceholderSize: true,
-//             items: ':not(.disabled)',
-//             placeholderClass: 'border border-maroon',
-//             hoverClass: 'bg-maroon yellow',
-//         });
-        {% endif %}
-
-        $(document).ready(function (evt) {
-{#            {% if objet.sortable != false %}#}
-{#            $('#{{ objet.id }} .t-sortable').on('sortupdate', function (evt) {#}
-{#                evt.preventDefault();#}
-{#                evt.stopPropagation();#}
-{#                var treeObj = Array();#}
-{#                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);#}
-{#                console.log('sortable');#}
-{#                console.log(treeObj);#}
-{#				invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
-{#            });#}
-
-{#            $('#{{ objet.id }} .t-sortable-inner').on('sortupdate', function (evt) {#}
-{#                evt.preventDefault();#}
-{#                evt.stopPropagation();#}
-{#                var treeObj = Array();#}
-{#                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);#}
-{#                console.log('sortable-inner');#}
-{#                console.log(treeObj);#}
-{#				invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
-{#            });#}
-{#            {% endif %}#}
-
-            {% if objet.selection != false %}
-            $('li:not(.unselect)').on('click', function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-
-                if ($(this).find('> label > span.odtcheck').hasClass('check')) {
-                    $(this).find('> label > span.odtcheck').removeClass('check');
-                } else {
-                    {% if objet.multiSelect == false %}
-                    var selected = $('#{{ objet.id }}').find(' label span.odtcheck').hasClass('check');
-                    $('#{{ objet.id }}').find('label span.odtcheck').addClass('check').removeClass('check');
-                    {% endif %}
-                    $(this).find('> label > span.odtcheck').addClass('check');
-                }
-
-                let objectDOM = $('#{{ objet.id }}');
-                let object    = new odtreeview(objectDOM);
-                invokeAjax(object.getData('click'), '{{ objet.id }}', 'click', evt);
-            });
-            {% endif %}
-        });
-
-    </script>
-
 </div>
