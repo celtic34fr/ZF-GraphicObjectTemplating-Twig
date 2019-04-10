@@ -82,43 +82,43 @@ odinput.prototype = {
 
 
 jQuery(document).ready(function (evt) {
-    $inputMask = $('.gotObject[data-objet=odinput]');
+    $inputMask = $(".gotObject[data-objet='odinput']");
     $.each($inputMask, function () {
-        if (typeof $(this).data('mask') !== 'undefined') { $(this).find("input").mask($(this).data('mask')); }
+        if (typeof $(this).data("mask") !== "undefined") { $(this).find("input").mask($(this).data("mask")); }
     });
 
     if ($("[autofocus=autofocus]").length > 0) {
-        setTimeout(function obj_method(){$("[autofocus=autofocus]").first().focus()},50);
+        setTimeout(function obj_method(){$("[autofocus='autofocus']").first().focus()},50);
     }
 
-    if ($('.gotObject.inputChg').length > 0) {
-        $('.gotObject.inputChg').on('change', function (evt) {
+    if ($(".gotObject.inputChg[data-objet='odinput']").length > 0) {
+        $(".gotObject.inputChg[data-objet='odinput']").on("change", function (evt) {
             let objet = new odinput($(this));
-            var invalid = '';
-            if (typeof objet.invalidate === 'function') { invalid = objet.invalidate(); }
+            var invalid = "";
+            if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
             if (invalid.length == 0) {
-                $(this).remove('has-error');
-                $(this).find('span').removeClass('hidden').addClass('hidden');
-                invokeAjax(objet.getData('change'), $(this).attr('id'), 'change', e);
+                $(this).remove("has-error");
+                $(this).find("span").removeClass("hidden").addClass("hidden");
+                invokeAjax(objet.getData("change"), $(this).attr("id"), "change", evt);
             } else {
-                $(this).remove('has-error').addClass('has-error');
-                $(this).find('span').removeClass('hidden').html(invalid);
+                $(this).remove("has-error").addClass("has-error");
+                $(this).find("span").removeClass("hidden").html(invalid);
             }
         });
     }
 
-    if ($('.gotObject.inputKup').length > 0) {
-        $('.gotObject.inputKup').on('keyup', function (evt) {
+    if ($(".gotObject.inputKup[data-objet='odinput']").length > 0) {
+        $(".gotObject.inputKup[data-objet='odinput']").on("keyup", function (evt) {
             let objet = new odinput($(this));
-            var invalid = '';
-            if (typeof objet.invalidate === 'function') { invalid = objet.invalidate(); }
+            var invalid = "";
+            if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
             if (invalid.length == 0) {
-                $(this).remove('has-error');
-                $(this).find('span').removeClass('hidden').addClass('hidden');
-                invokeAjax(objet.getData('keyup'), $(this).attr('id'), 'keyup', e);
+                $(this).remove("has-error");
+                $(this).find("span").removeClass("hidden").addClass("hidden");
+                invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", evt);
             } else {
-                $(this).remove('has-error').addClass('has-error');
-                $(this).find('span').removeClass('hidden').html(invalid);
+                $(this).remove("has-error").addClass("has-error");
+                $(this).find("span").removeClass("hidden").html(invalid);
             }
         });
     }

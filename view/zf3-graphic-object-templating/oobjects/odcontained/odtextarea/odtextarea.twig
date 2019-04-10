@@ -5,13 +5,12 @@
 
 {% set labelClass = labelClass ~ gotBootstrap(substr(labelWidth, 0, labelWidth|length - 1)) %}
 {% set textareaClass = textareaClass ~ gotBootstrap(textareaWidth) %}
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
-<div id="{{ objet.id }}"
-     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
-    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-    data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
-    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
-     data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
+<div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
+data-widthbt="{{ objet.widthBT }}" {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+{% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
 >
     <style>
         #{{ objet.id }} textarea {

@@ -32,7 +32,8 @@
             <label>
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
-            <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}">
+            <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}
+            {% if objet.sortable != false and item.sortable != false %} sortable {% endif %}">
                 {% for id,leaf in item.children %}
                     {{ macros.drawLeaf(leaf, path, icon, objet, level + 1) }}
                 {% endfor %}
@@ -41,15 +42,17 @@
     {% endif %}
 {% endmacro %}
 
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}" data-objet="{{ objet.object }}"
-     {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
-        {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
-        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-     data-role="{{ objet.type }}" data-default="{{ objet.default ? 'true' : 'false' }}"
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
-        {% if objet.type != 'reset' and objet.type != 'link' %}
-            {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
-        {% endif %}
+<div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-role="{{ objet.type }}"
+ data-default="{{ objet.default ? 'true' : 'false' }}"
+{% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
+{% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
+{% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+
+{% if objet.type != 'reset' and objet.type != 'link' %}
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+{% endif %}
 >
     <style>
         li .check {
@@ -68,7 +71,8 @@
         <label>
             {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
         </label>
-        <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}{% if objet.dataTree is not empty %}node{% endif %}">
+        <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}
+        {% if objet.dataTree is not empty %}node{% endif %} {% if objet.sortable != false %} sortable {% endif %}">
             {% for leaf in objet.dataTree %}
                 {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet, 1) }}
             {% endfor %}
@@ -77,68 +81,68 @@
 
     <script type="text/javascript">
 
-        function parcoursLis(liItem, arrayTree) {
-            var LIs = $('#'+liItem.attr('id')+' > ul > li');
-            var arrayItrem  = Array();
-            if (LIs.length > 0) {
-                LIs.each(function () {
-                    arrayItrem.push($(this).attr("id"));
-                    if ($(this.selector+' > ul')) {
-                        var ret = parcoursLis($(this), arrayItrem)
-                    }
-                });
-                arrayTree.push(arrayItrem);
-            }
-            return arrayTree;
-        }
+        // function parcoursLis(liItem, arrayTree) {
+        //     var LIs = $('#'+liItem.attr('id')+' > ul > li');
+        //     var arrayItrem  = Array();
+        //     if (LIs.length > 0) {
+        //         LIs.each(function () {
+        //             arrayItrem.push($(this).attr("id"));
+        //             if ($(this.selector+' > ul')) {
+        //                 var ret = parcoursLis($(this), arrayItrem)
+        //             }
+        //         });
+        //         arrayTree.push(arrayItrem);
+        //     }
+        //     return arrayTree;
+        // }
 
-        {% if objet.sortable != false %}
-        sortable('#{{ objet.id }} .t-sortable', {
-            forcePlaceholderSize: true,
-            placeholderClass: 'bg-navi border border-yellow',
-            hoverClass: 'bg-maroon yellow',
-            itemSerializer: function (item, container) {
-                item.parent = '[parentNode]';
-                item.node = '[Node]';
-                item.html = item.html.replace('<', '&lt;');
-                return item;
-            },
-            containerSerializer: function (container) {
-                container.node = '[Node]';
-                return container;
-            },
-        });
+{#        {% if objet.sortable != false %}#}
+{#        sortable('#{{ objet.id }} .t-sortable', {#}
+{#            forcePlaceholderSize: true,#}
+{#            placeholderClass: 'bg-navi border border-yellow',#}
+{#            hoverClass: 'bg-maroon yellow',#}
+{#            itemSerializer: function (item, container) {#}
+{#                item.parent = '[parentNode]';#}
+{#                item.node = '[Node]';#}
+{#                item.html = item.html.replace('<', '&lt;');#}
+{#                return item;#}
+{#            },#}
+{#            containerSerializer: function (container) {#}
+{#                container.node = '[Node]';#}
+{#                return container;#}
+{#            },#}
+{#        });#}
 
-        sortable('.t-sortable-inner', {
-            forcePlaceholderSize: true,
-            items: ':not(.disabled)',
-            placeholderClass: 'border border-maroon',
-            hoverClass: 'bg-maroon yellow',
-        });
-        {% endif %}
+        {#sortable('.t-sortable-inner', {#}
+        {#    forcePlaceholderSize: true,#}
+        {#    items: ':not(.disabled)',#}
+        {#    placeholderClass: 'border border-maroon',#}
+        {#    hoverClass: 'bg-maroon yellow',#}
+        {#});#}
+        {#{% endif %}#}
 
         $(document).ready(function (evt) {
-            {% if objet.sortable != false %}
-            $('#{{ objet.id }} .t-sortable').on('sortupdate', function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                var treeObj = Array();
-                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
-                console.log('sortable');
-                console.log(treeObj);
-				{#invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
-            });
+{#            {% if objet.sortable != false %}#}
+{#            $('#{{ objet.id }} .t-sortable').on('sortupdate', function (evt) {#}
+{#                evt.preventDefault();#}
+{#                evt.stopPropagation();#}
+{#                var treeObj = Array();#}
+{#                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);#}
+{#                console.log('sortable');#}
+{#                console.log(treeObj);#}
+{#				invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
+{#            });#}
 
-            $('#{{ objet.id }} .t-sortable-inner').on('sortupdate', function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                var treeObj = Array();
-                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);
-                console.log('sortable-inner');
-                console.log(treeObj);
-				{#invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
-            });
-            {% endif %}
+{#            $('#{{ objet.id }} .t-sortable-inner').on('sortupdate', function (evt) {#}
+{#                evt.preventDefault();#}
+{#                evt.stopPropagation();#}
+{#                var treeObj = Array();#}
+{#                treeObj = parcoursLis($('#{{ objet.id }}Li-Root'), treeObj);#}
+{#                console.log('sortable-inner');#}
+{#                console.log(treeObj);#}
+{#				invokeAjax(treeObj, '{{ objet.id }}', 'update', e);#}
+{#            });#}
+{#            {% endif %}#}
 
             {% if objet.selection != false %}
             $('li:not(.unselect)').on('click', function (evt) {

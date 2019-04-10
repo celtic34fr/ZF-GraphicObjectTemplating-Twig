@@ -1,20 +1,17 @@
 {# template de l'objet ODCheckbox #}
 
-<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
-     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
     {% if objet.state == false %} checkbox disabled {% endif %}"
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
     {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-    {% if objet.state == false %} disabled {% endif %}
+    {% if objet.state == false %} disabled {% endif %} {% if objet.event is not empty %} checkboxCback {% endif %}
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
     <style>
-        {% if objet.placement == "right" %}
-        #{{ objet.id }} label {
-            padding-left: 2em;
-        }
-        {% endif %}
+        {% if objet.placement == "right" %} #{{ objet.id }} label { padding-left: 2em; } {% endif %}
 
         #{{ objet.id }} input {
             position: relative !important;
@@ -74,11 +71,11 @@
         $("#{{ objet.id }} label").each(function () { setBtClasses($(this), $(this).data("widthbt")); });
         $("#{{ objet.id }} input").each(function () { setBtClasses($(this), $(this).data("widthbt")); });
 
-        {% if objet.event is not empty %}
-        $(document).ready(function () {
-            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
-        });
-        {% endif %}
+{#        {% if objet.event is not empty %}#}
+{#        $(document).ready(function () {#}
+{#            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}#}
+{#        });#}
+{#        {% endif %}#}
     </script>
 </div>
 

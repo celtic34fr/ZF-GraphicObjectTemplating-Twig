@@ -1,12 +1,13 @@
 {# template object OEDDragNDrop #}
 
-<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
-    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
-    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
-    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
-    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-    {% if objet.state == false %} disabled {% endif %}
-    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+{% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+{% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+{% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+{% if objet.state == false %} disabled {% endif %}
+{% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
     <style>
         #{{ objet.id }}DragNDrop {

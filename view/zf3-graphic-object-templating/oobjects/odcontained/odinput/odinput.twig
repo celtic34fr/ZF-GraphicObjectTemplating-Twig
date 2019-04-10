@@ -10,10 +10,10 @@
         {% case 'keyup'  %} {% set evtKeyup  = 'inputKup' %}
     {% endswitch %}
 {% endfor %}
+{% set objClasses = 'gotObject hidden form-group ' ~ objet.classes ~ ' ' ~ evtChange ~ ' ' ~ evtKeyup %}
 
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }} form-group {{ evtChange }} {{ evtKeyup }}"
-    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-    data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
+<div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
+     data-widthbt="{{ objet.widthBT }}" {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
     {%  if objet.mask is not empty %} data-mask="{{ objet.mask }}" {% endif %}
 >

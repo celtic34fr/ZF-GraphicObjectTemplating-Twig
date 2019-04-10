@@ -10,7 +10,7 @@ odtable.prototype = {
     setData: function (data) {
 
     },
-    rmLineUpdate(params) {
+    rmLineUpdate: function(params) {
         let noLine  = parseInt(params['noLine']);
         let maxLine = parseInt(params['maxLine']);
         $("#" + this.id+" .lno"+noLine).remove()
@@ -29,7 +29,7 @@ odtable.prototype = {
             $("#"+this.id+" .line.nodata").removeClass('hide').addClass('hide');
         }
     },
-    updateCol(params) {
+    updateCol: function(params) {
         let col   = params['col'];
         let datas = params['datas'];
         let id    = this.id;
@@ -39,7 +39,7 @@ odtable.prototype = {
             $(selector).html(val);
         });
     },
-    filterSearch(search) {
+    filterSearch: function(search) {
         if (!this.pager) {
             $("#"+this.id+" tr").each(function () {
                 this.find("td").each(function () {

@@ -1,9 +1,9 @@
 {# template de l'objet ODTable  #}
 
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }}"
-     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
-     data-pager={{ objet.pagination }}
->
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+
+<div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
+data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
     <style>
         #{{ objet.id }} .navBtn .btn {
             margin: 0.8em 0 !important;

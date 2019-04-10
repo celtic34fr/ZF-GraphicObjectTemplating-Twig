@@ -1,13 +1,9 @@
 {# template objet ODImage #}
 
 {#{ dump(objet.classes) }#}
-{% set objClass = "gotObject "~gotBootstrap(objet.widthBT) %}
-{% if objet.classes is not empty %}
-    {% set objClass = objClass ~ " " ~ objet.classes %}
-{% endif %}
+{% set objClass = "gotObject hidden " ~ gotBootstrap(objet.widthBT) ~ " " ~ objet.classes %}
 
-<div id="{{ objet.id }}" 
-{% if objClass is not empty %} class="{{ objClass }}" {% endif %}>
+<div id="{{ objet.id }}" class="{{ objClass }}" >
     <style>
         #{{ objet.id }} {
         {% if objet.autoCenter == true %}

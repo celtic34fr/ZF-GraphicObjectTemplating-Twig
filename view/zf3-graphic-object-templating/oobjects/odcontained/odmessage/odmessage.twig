@@ -1,7 +1,7 @@
 {# template de l'objet ODNotification #}
 
 {% if objet.action == 'init' %}
-    <div id="{{ objet.id }}_div">
+    <div id="{{ objet.id }}_div" class="gotObject hidden">
         {# initialisation à mettre au niveau du header de la page #}
         <script>
             let {{ objet.id }}Lobibox = Lobibox;

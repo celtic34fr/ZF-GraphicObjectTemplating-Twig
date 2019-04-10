@@ -1,7 +1,7 @@
+{# tremplate pour l'objet ODCaptcha #}
 
-<!--div id="{{ objet.id }}"-->
-<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
-    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
+{% set objClasses = "gotObject hidden " ~ objet.classes %}
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
     {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}

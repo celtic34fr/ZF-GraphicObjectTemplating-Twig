@@ -1,13 +1,14 @@
 {# template de l'objet ODDatetimepicker #}
 
-<div id="{{ objet.id }}" data-objet="{{ objet.object }}"
-     class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}
-    {% if objet.state == false %} checkbox disabled {% endif %}"
-        {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
-        {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
-        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-        {% if objet.state == false %} disabled {% endif %}
-        {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% if objet.state == false %} {% objClasses = objClasses ~ ' checkbox disabled' %} {% endif %}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+{% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+{% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+{% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+{% if objet.state == false %} disabled {% endif %}
+{% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
     <label for="{{ objet.id }}Input"
             {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}

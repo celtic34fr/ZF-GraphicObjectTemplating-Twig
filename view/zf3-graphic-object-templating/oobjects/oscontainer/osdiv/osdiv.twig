@@ -1,10 +1,10 @@
 {# template de l'objet OSDiv #}
 
-<div id="{{ objet.id }}" class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %}"
-     data-display="{{ objet.display }}"
-     {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
->
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
+<div id="{{ objet.id }}" class="{{ objClasses }}" data-display="{{ objet.display }}"
+{% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
+>
     <style>
         {% if objet.codeCss is defined and objet.codeCss is not empty %}
         {% include 'zf3-graphic-object-templating/oobjects/oscontainer/style.twig'  with { id:objet.id, codeCss:objet.codeCss} %}

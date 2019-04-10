@@ -3,6 +3,8 @@
 {% set btnClasses = '' %}
 {% set widthBT = '' %}
 {% if objet.width is empty and objet.height is empty %} {% set widthBT = objet.widthBT %} {% endif %}
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% if objet.event is not empty and objet.type != 'link' %}{% set objClasses = objClasses ~ ' btnCback ' %}{% endif %}
 
 <style>
     {% if objet.width is not empty %}
@@ -35,8 +37,8 @@
     {% endif %}
 {% endif %}
 
-<div id="{{ objet.id }}" class="gotObject hidden {{ objet.classes }} {% if objet.type != 'link' %} btnCback {% endif %}"
-    data-objet="{{ objet.object }}" data-role="{{ objet.type }}" data-default="{{ objet.default ? 'true' : 'false' }}"
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+    data-role="{{ objet.type }}" data-default="{{ objet.default ? 'true' : 'false' }}"
     {% if widthBT is not empty %}data-widthbt="{{ widthBT }}" {% endif %}
     {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}

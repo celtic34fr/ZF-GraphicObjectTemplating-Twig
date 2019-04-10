@@ -7,11 +7,10 @@
     {% case 'change' %} {% set evtChange = 'selectChg' %}
     {% endswitch %}
 {% endfor %}
+{% set objClasses = 'gotObject hidden ' ~ objet.classes ~ ' ' ~ evtChange %}
 
-<div id="{{ objet.id }}"
-     data-objet="{{ objet.object }}" data-display="{{ objet.display }}" data-widthbt="{{ objet.widthBT }}"
-    {% if objet.form|length > 0 %} data-form="{{ objet.form }}" {% endif %}
-    class="gotObject hidden {% if objet.classes is not empty %}{{ objet.classes }}{% endif %} {{ evtChange }}"
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}" class="{{ objClasses }}"
+     data-widthbt="{{ objet.widthBT }}" {% if objet.form|length > 0 %} data-form="{{ objet.form }}" {% endif %}
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
 
