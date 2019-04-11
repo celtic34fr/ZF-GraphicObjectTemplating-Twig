@@ -293,7 +293,7 @@ class ODButton extends ODContained
     {
         /** @var $btn ODButton */
     	$btn = self::cloneObject($this, $sessionObj);
-		$sessionObjects = $btn->setId($this->getId().$ord)
+        $sessionObj = $btn->setId($this->getId().$ord)
 			->setValue($ord)
 			->setDisplay(self::DISPLAY_BLOCK)
 			->saveProperties();

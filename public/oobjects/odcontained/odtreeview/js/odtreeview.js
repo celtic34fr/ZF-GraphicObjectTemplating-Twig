@@ -131,7 +131,7 @@ $(document).ready(function (evt) {
         if ($(this).find('> label > span.odtcheck').hasClass('check')) {
             $(this).find('> label > span.odtcheck').removeClass('check');
         } else {
-            if (objectDOM.data('multiselect') === 'false') {
+            if (objectDOM.data('multiselect') === false) {
                 objectDOM.find('label span.odtcheck').removeClass('check');
             }
             $(this).find('> label > span.odtcheck').addClass('check');
