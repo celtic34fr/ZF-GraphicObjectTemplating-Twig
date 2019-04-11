@@ -370,12 +370,14 @@ class ODTable extends ODContained
         $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
 
-        $datas = $properties['datas'];
-        $cols = [];
-        foreach ($datas as $nLine => $data) {
-            $cols[$nLine] = $data[$nCol];
-        }
-        return $cols;
+        return array_combine(array_keys($properties['datas']), array_column($properties['datas'], $nCol));
+
+//        $datas = $properties['datas'];
+//        $cols = [];
+//        foreach ($datas as $nLine => $data) {
+//            $cols[$nLine] = $data[$nCol];
+//        }
+//        return $cols;
     }
 
     /**
@@ -904,7 +906,7 @@ class ODTable extends ODContained
 
         $rslt = [];
         foreach ($lines as $noLine => $line) {
-            if ($line[$nCol] == $value) {
+            if ($line[$nCol] === $value) {
                 $rslt[] = $noLine;
             }
         }
