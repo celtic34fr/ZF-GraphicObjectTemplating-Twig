@@ -45,6 +45,8 @@ use Zend\ServiceManager\ServiceManager;
  * evtClickNode($class, $method, $stopEvent = false)
  * getClickNode()
  * disClickNode()
+ * getParent($ref)
+ * getChildLeaves($ref, $level = 0)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -160,6 +162,7 @@ class ODTreeview extends ODContained
                 $leaf   = $this->getLeaf($parent);
                 if ($ord == 0 || !isset($leaf['children'][$ord])) {
                     if ($ord == 0) { $ord = sizeof($leaf['children']) + 1; }
+
                     $item = [];
                     $item['libel']      = $libel;
                     $item['ord']        = $ord;
@@ -707,7 +710,7 @@ class ODTreeview extends ODContained
 
 			if (isset($leaf['children']) && !empty($leaf['children']) && $andChildren) {
 				foreach ($leaf['children'] as $child) {
-					if (!$this->enaSortableNode($child['ref'], $andChildren)) {
+					if (!$this->disSortableNode($child['ref'], $andChildren)) {
 						return false;
 					}
 				}
@@ -749,6 +752,40 @@ class ODTreeview extends ODContained
     public function disClickNode()
     {
         return $this->disEvent('clickNode');
+    }
+
+    /**
+     * @param $ref
+     * @return bool|mixed
+     */
+    public function getParent($ref)
+    {
+        $leaf   = $this->getLeaf($ref);
+        if ($leaf) { return $leaf['parent']; }
+        return false;
+    }
+
+    /**
+     * @param $ref
+     * @param bool $level
+     * @return array
+     */
+    public function getChildLeaves($ref, $level = false)
+    {
+        $leaf       = $this->getLeaf($ref);
+        $children   = [];
+
+        if (array_key_exists('children', $leaf)) {
+            foreach ($leaf['children'] as $child) {
+                if ($level && $level > 0 || $level === false) {
+                    if (!$level) { $level--; }
+                    $children[] = $child['ref'];
+
+                    $children = array_merge($children, $this->getChildLeaves($child['ref'], $level));
+                }
+            }
+        }
+        return $children;
     }
 
     /** **************************************************************************************************

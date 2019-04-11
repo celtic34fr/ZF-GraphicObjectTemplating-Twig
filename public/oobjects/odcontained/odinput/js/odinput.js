@@ -91,35 +91,32 @@ jQuery(document).ready(function (evt) {
         setTimeout(function obj_method(){$("[autofocus='autofocus']").first().focus()},50);
     }
 
-    if ($(".gotObject.inputChg[data-objet='odinput']").length > 0) {
-        $(".gotObject.inputChg[data-objet='odinput']").on("change", function (evt) {
-            let objet = new odinput($(this));
-            var invalid = "";
-            if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-            if (invalid.length == 0) {
-                $(this).remove("has-error");
-                $(this).find("span").removeClass("hidden").addClass("hidden");
-                invokeAjax(objet.getData("change"), $(this).attr("id"), "change", evt);
-            } else {
-                $(this).remove("has-error").addClass("has-error");
-                $(this).find("span").removeClass("hidden").html(invalid);
-            }
-        });
-    }
+    $(document).on("change", ".gotObject.inputChg[data-objet='odinput']", function (evt) {
+        let objet = new odinput($(this));
+        var invalid = "";
+        if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
+        if (invalid.length == 0) {
+            $(this).remove("has-error");
+            $(this).find("span").removeClass("hidden").addClass("hidden");
+            invokeAjax(objet.getData("change"), $(this).attr("id"), "change", evt);
+        } else {
+            $(this).remove("has-error").addClass("has-error");
+            $(this).find("span").removeClass("hidden").html(invalid);
+        }
+    });
 
-    if ($(".gotObject.inputKup[data-objet='odinput']").length > 0) {
-        $(".gotObject.inputKup[data-objet='odinput']").on("keyup", function (evt) {
-            let objet = new odinput($(this));
-            var invalid = "";
-            if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-            if (invalid.length == 0) {
-                $(this).remove("has-error");
-                $(this).find("span").removeClass("hidden").addClass("hidden");
-                invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", evt);
-            } else {
-                $(this).remove("has-error").addClass("has-error");
-                $(this).find("span").removeClass("hidden").html(invalid);
-            }
-        });
-    }
+    $(document).on("keyup", ".gotObject.inputKup[data-objet='odinput']", function (evt) {
+        let objet = new odinput($(this));
+        var invalid = "";
+        if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
+        if (invalid.length == 0) {
+            $(this).remove("has-error");
+            $(this).find("span").removeClass("hidden").addClass("hidden");
+            invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", evt);
+        } else {
+            $(this).remove("has-error").addClass("has-error");
+            $(this).find("span").removeClass("hidden").html(invalid);
+        }
+    });
+
 });

@@ -31,7 +31,7 @@ odbutton.prototype = {
 jQuery(document).ready(function (evt) {
     // si il existe au moins un bouton avec callback
     if ($(".gotObject.btnCback[data-objet='odbutton']").length > 0 ) {
-        $(".gotObject.btnCback[data-objet='odbutton']").on("click", function (evt) {
+        $(document).on("click", ".gotObject.btnCback[data-objet='odbutton']", function (evt) {
             let objet = new odbutton($(this));
             var invalid = "";
             if (typeof objet.invalidate === "function") {
