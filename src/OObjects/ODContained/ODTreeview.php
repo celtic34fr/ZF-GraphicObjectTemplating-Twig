@@ -42,9 +42,13 @@ use Zend\ServiceManager\ServiceManager;
  * disSelectNode($ref)
  * enaSortableNode($ref, $andChilmdren = false)
  * disSortableNode($ref, $andChilmdren = false)
+ * evtClickNode($class, $method, $stopEvent = false)
+ * getClickNode()
+ * disClickNode()
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
+ * dispatchEvents(ServiceManager $sm, array $params)
  * returnAddLeaf($parentPath, $ord)
  *
  * méthodes privées de la classe

@@ -3,7 +3,6 @@ function odtreeview(obj) {
     this.form   = obj.data('form');
     this.objet  = obj.data('objet');
     this.data   = obj.data();
-
 }
 
 odtreeview.prototype = {
@@ -15,7 +14,6 @@ odtreeview.prototype = {
         }).get();
         let li = obj.children("div").children("ul").children("li");
         let tree = li.get().map(this.getNodeData, this);
-//        console.log(tree);
         let value = {};
         value['selected'] = selected;
         value['tree']     = tree;
@@ -79,9 +77,8 @@ function parcoursLis(liItem, arrayTree) {
     return arrayTree;
 }
 
-$(document).ready(function (evt) {
-
-    sortable('.gotObject[data-objet="odtreeview"] .t-sortable.sortable', {
+function initTreeview(idObject) {
+    sortable('#'+idObject+' .t-sortable.sortable', {
         forcePlaceholderSize: true,
         placeholderClass: 'bg-navi border border-yellow',
         hoverClass: 'bg-maroon yellow',
@@ -94,15 +91,18 @@ $(document).ready(function (evt) {
         containerSerializer: function (container) {
             container.node = '[Node]';
             return container;
-        },
+        }
     });
 
-    sortable('.gotObject[data-objet="odtreeview"] .t-sortable-inner.sortable', {
+    sortable('#'+idObject+' .t-sortable-inner.sortable', {
         forcePlaceholderSize: true,
         items: ':not(.disabled)',
         placeholderClass: 'border border-maroon',
-        hoverClass: 'bg-maroon yellow',
+        hoverClass: 'bg-maroon yellow'
     });
+}
+
+$(document).ready(function (evt) {
 
     $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable.sortable' , function(evt) {
         evt.preventDefault();
@@ -124,13 +124,14 @@ $(document).ready(function (evt) {
         evt.preventDefault();
         evt.stopPropagation();
 
+        var idObject    = $(this).attr('id');
+        idObject        = idObject.substr(0, idObject.indexOf('Li-'));
+        var objectDOM   = $('#'+idObject);
+
         if ($(this).find('> label > span.odtcheck').hasClass('check')) {
             $(this).find('> label > span.odtcheck').removeClass('check');
         } else {
-            var idObject    = $(this).attr('id');
-            idObject        = idObject.substr(0, idObject.indexOf('Li-'));
-            var objectDOM   = $('#'+idObject);
-            if (objectDOM.data('multiselect') == 'false') {
+            if (objectDOM.data('multiselect') === 'false') {
                 objectDOM.find('label span.odtcheck').removeClass('check');
             }
             $(this).find('> label > span.odtcheck').addClass('check');
