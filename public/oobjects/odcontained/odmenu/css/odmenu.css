@@ -43,3 +43,28 @@
 .red{color:#FF0000}
 
 .orange{color:#ffe100}
+
+.isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+}
+
+.navbar-nav>li>a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.navbar-nav>li>span.noLink {
+    position: absolute;
+    padding: 15px;
+}
+
+.navbar-right>li>span {
+    right: 0.5em;
+}
+
+ul.dropdown-menu li {
+    padding-left: 10px;
+}
