@@ -51,16 +51,6 @@
     text-decoration: none;
 }
 
-.navbar-nav>li>a {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-
-.navbar-nav>li>span.noLink {
-    position: absolute;
-    padding: 15px;
-}
-
 .navbar-right>li>span {
     right: 0.5em;
 }

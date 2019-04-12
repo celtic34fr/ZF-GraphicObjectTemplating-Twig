@@ -8,13 +8,13 @@
         {% set active = (menus.active) ? 'active' : '' %}
         {% if menus.dropdown is not defined or menus.dropdown |length == 0 %}
     <li>
-            {% if menus.link is defined and menus.link is not empty %}
-            <a href="{{ menus.link | raw }}" target="{{ menus.target }}"
+            
+            <a {% if menus.link is defined and menus.link is not empty %} href="{{ menus.link | raw }}" target="{{ menus.target }}" {% endif %}
             {% if menus.enable == false %} onclick="return false;" class="isDisabled" {% endif %} >
             {{ menus.label }}</a>
-            {% else %}
+            {# {% else %}
             <span class="noLink">{{ menus.label }}</span>
-            {% endif %}
+            {% endif %} #}
     </li>
         {% else %}
         <li class="dropdown-submenu">
@@ -54,12 +54,13 @@
                 {% if menu.float == 'left' %}
                     {% if menu.dropdown is not defined or menu.dropdown |length == 0 %}
                         <li>
-                            {% if menu.link is defined and menu.link is not empty %}
-                                <a href="{{ menu.link | raw }}" target="{{ menu.target }}"
+                            
+                                <a {% if menu.link is defined and menu.link is not empty %} href="{{ menu.link | raw }}" target="{{ menu.target }}" {% endif %}
+                                 
                                 {% if not (menu.enable) %} onclick="return false;" class="isDisabled" {% endif %} >{{ menu.label }}</a>
-                            {% else %}
+                            {#{% else %}
                                 <span class="noLink">{{ menu.label }}</span>
-                            {% endif %}
+                            {% endif %} #}
                         </li>
                     {% else %}
                         <li class="dropdown">
@@ -82,12 +83,12 @@
                 {% if menu.float == 'right' %}
                     {% if menu.dropdown is not defined or menu.dropdown |length == 0 %}
                         <li>
-                            {% if menu.link is defined and menu.link is not empty %}
-                                <a href="{{ menu.link | raw }}" target="{{ menu.target }}"
+                            
+                                <a {% if menu.link is defined and menu.link is not empty %} href="{{ menu.link | raw }}" target="{{ menu.target }}" {% endif %}
                                 {% if menu.enable == false %} onclick="return false;" class="isDisabled" {% endif %} >{{ menu.label }}</a>
-                            {% else %}
+                            {# {% else %}
                                 <span class="noLink">{{ menu.label }}</span>
-                            {% endif %}
+                            {% endif %} #}
                         </li>
                     {% else %}
                         <li class="dropdown">
