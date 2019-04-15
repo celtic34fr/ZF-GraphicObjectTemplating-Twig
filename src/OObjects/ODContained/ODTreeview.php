@@ -28,6 +28,7 @@ use Zend\ServiceManager\ServiceManager;
  * #disClick()
  * enaMultiSelect
  * disMultiSelect
+ * rmLeafNode($ref, $root = true)
  * setTitle($title)
  * getTitle()
  * setLeafLink($ref, $link, $target)

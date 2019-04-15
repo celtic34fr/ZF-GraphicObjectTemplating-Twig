@@ -112,7 +112,6 @@ namespace GraphicObjectTemplating\OObjects;
  *
  */
 
-use GraphicObjectTemplating\OObjects\ODContained\ODMenu;
 use GraphicObjectTemplating\Service\ZF3GotServices;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;

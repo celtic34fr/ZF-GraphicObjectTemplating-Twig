@@ -141,11 +141,11 @@ function invokeAjax(datas, idSource, event, e) {
                 table.rmLineUpdate(code);
                 break;
             case 'updtTreeLeaf': // ajout noeud et feuille Treeview sur ancienne feuille
-                treeview = new odtreeviewold($('#'+id));
+                treeview = new odtreeview($('#'+id));
                 treeview.updtTreeLeaf(code);
                 break;
             case 'appendTreeNode': // mise à jour feuille Treeview
-                treeview = new odtreeviewold($('#'+id));
+                treeview = new odtreeview($('#'+id));
                 treeview.appendTreeNode(code);
                 break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
