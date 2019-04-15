@@ -232,7 +232,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param $ref
-     * @return bool
+     * @return bool|array
      */
     public function getLeaf($ref)
     {
@@ -244,7 +244,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param null $path
-     * @return bool
+     * @return bool|array
      */
     public function getLeafByPath($path = null)
     {

@@ -10,7 +10,7 @@ odtreeview.prototype = {
         let obj = $('#'+this.id);
 
         let selected = obj.find('li label span.check').map(function () {
-            return ($(this).parent().parent().data('id'));
+            return String($(this).parent().parent().data('id'));
         }).get();
         let li = obj.children("div").children("ul").children("li");
         let tree = li.get().map(this.getNodeData, this);
