@@ -140,7 +140,7 @@ class ODTreeview extends ODContained
 
         if ($this->validRefUnique($ref)) {
             if ($parent == '0') {
-                if ($ord == 0) { $ord = sizeof($dataTree) + 1; }
+                if ($ord == 0) { $ord = max(array_keys($dataTree)) + 1; }
                 if (!isset($dataTree[$ord])) {
                     $item = [];
                     $item['libel']      = $libel;
@@ -162,7 +162,7 @@ class ODTreeview extends ODContained
             } else {
                 $leaf   = $this->getLeaf($parent);
                 if ($ord == 0 || !isset($leaf['children'][$ord])) {
-                    if ($ord == 0) { $ord = sizeof($leaf['children']) + 1; }
+                    if ($ord == 0) { $ord = max(array_keys($leaf['children'])) + 1; }
 
                     $item = [];
                     $item['libel']      = $libel;
@@ -461,7 +461,8 @@ class ODTreeview extends ODContained
             $dataPath   = $properties['dataPath'];
             if ($root) {
                 $dataTree   = $properties['dataTree'];
-                $dataTree   = $this->rmLeafTree($dataTree, $dataPath[$ref]);
+                $dataPathL  = explode('-', $dataPath[$ref]);
+                $dataTree   = $this->rmLeafTree($dataTree, $dataPathL);
             }
             unset($dataPath[$ref]);
             $properties['dataPath'] = $dataPath;
@@ -952,26 +953,21 @@ class ODTreeview extends ODContained
 
     /**
      * @param $dataTree
-     * @param $dataPath
+     * @param $refs
      * @return mixed
      */
-    private function rmLeafTree($dataTree, $dataPath)
+    private function rmLeafTree(array $dataTree, array $refs)
     {
-        $refs       = explode('-', $dataPath);
         if ((int) $refs[0] == 0) { unset($refs[0]); }
+
         if (sizeof($refs) > 1) {
-            $localTree = $dataTree['children'][$refs[0]];
-            unset($refs[0]);
-            $refs = implode('-', $refs);
-            $this->rmLeafTree($localTree, $refs);
-            $dataTree['children'][$refs[0]] = $localTree;
+            $ref        = array_shift($refs);
+            $localTree  = $this->rmLeafTree($dataTree[$ref]['children'], $refs);
+            $dataTree[$ref]['children'] = $localTree;
         } else {
-            if (array_key_exists('children', $dataTree)) {
-                unset($dataTree['children'][$dataPath]);
-            } else {
-                unset($dataTree[$dataPath]);
-            }
+            unset($dataTree[$refs[0]]);
         }
+
         return $dataTree;
     }
 
