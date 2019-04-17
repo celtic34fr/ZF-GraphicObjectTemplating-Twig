@@ -459,7 +459,7 @@ class ODInput extends ODContained
                 } else {
                     $valMin = $this->getValMin();
                     $valMax = $this->getValMax();
-                    if ($minLength != -1 || $maxLength != -1) {
+                    if ($valMin != -1 || $valMax != -1) {
                         // si tous 2 = -1 rien à faire, sinon test
                         $value = (int) $value;
                         if ($value < $valMin) {
@@ -493,7 +493,7 @@ class ODInput extends ODContained
     public function returnSetData()
     {
         $thisID        = $this->getId();
-        return  [self::formatRetour($thisID, $thisID, 'setData', $this->getValue())];
+        return  self::formatRetour($thisID, $thisID, 'setData', $this->getValue());
     }
 
     /** **************************************************************************************************

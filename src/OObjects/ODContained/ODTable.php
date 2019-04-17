@@ -1444,7 +1444,7 @@ class ODTable extends ODContained
             }
         }
         $code .= "</tr>";
-        return [self::formatRetour($idTable, $idTable . " tbody", 'append', $code)];
+        return self::formatRetour($idTable, $idTable . " tbody", 'append', $code);
     }
 
     /**
@@ -1465,7 +1465,7 @@ class ODTable extends ODContained
                 $code .= '</td>';
             }
         }
-        return [self::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
+        return self::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
     }
 
     /**
@@ -1480,7 +1480,7 @@ class ODTable extends ODContained
     {
         $idTarget = $idTable . " .lno" . $noLine . " .cno" . $noCol;
         if ($this->stateCol($noCol)) {
-            return [self::formatRetour($idTable, $idTarget, 'innerUpdate', $code)];
+            return self::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
         }
         return false;
     }
@@ -1498,7 +1498,7 @@ class ODTable extends ODContained
             $cols = $this->getColValues($noCol);
             $params['col'] = $noCol;
             $params['datas'] = $cols;
-            return [self::formatRetour($idTable, $idTable, 'updCols', $params)];
+            return self::formatRetour($idTable, $idTable, 'updateCol', $params);
         }
         return false;
     }
@@ -1514,7 +1514,7 @@ class ODTable extends ODContained
             $idTable = $this->getId();
             $params['noLine'] = $noLine;
             $params['maxLine'] = sizeof($this->getLines()) + 1;
-            return [self::formatRetour($idTable, $idTable, 'rmLineUpd', $params)];
+            return self::formatRetour($idTable, $idTable, 'rmLineUpdate', $params);
         }
         return false;
     }

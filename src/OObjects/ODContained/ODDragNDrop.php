@@ -5,8 +5,10 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\Service\ZF3GotServices;
+use function mime_content_type;
 use phpDocumentor\Reflection\Types\Self_;
 use ReflectionClass;
+use ReflectionException;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -175,11 +177,12 @@ class ODDragNDrop extends ODContained
     private $const_exclExt;
     private $const_pptsExt;
     private $const_sndsExt;
+    private $const_archExt;
 
     /**
      * ODDragNDrop constructor.
      * @param $id                       : identifiant de l'objet pour GOT
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function __construct($id, $core = true)
@@ -343,7 +346,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiers image au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaImageFiles()
     {
@@ -364,7 +367,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiers texte au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaWordFiles()
     {
@@ -386,7 +389,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les feuilles de calcul au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaExcelFiles()
     {
@@ -408,7 +411,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiers diaporama au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaPresentationFiles()
     {
@@ -430,7 +433,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiers son au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaSoundFiles()
     {
@@ -452,7 +455,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiers vidéo au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaVideoFiles()
     {
@@ -474,7 +477,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiier Document au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaDocumentFiles()
     {
@@ -496,7 +499,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise les fichiers archive compressé au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaArchiveFiles()
     {
@@ -518,7 +521,7 @@ class ODDragNDrop extends ODContained
     /**
      * autorise tout type de fichiers (relativement aux extensions paramétrées)
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function enaAllTypeFiles()
     {
@@ -541,7 +544,7 @@ class ODDragNDrop extends ODContained
      * fixe avec le tableau $acceptedFiles les fichiers téléchargeables
      * @param string $acceptedFiles
      * @return ODDragNDrop|bool        : (false si une extension de $acceptedFiles n'est pas valide)
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setAcceptedFiles(array $acceptedFiles)
     {
@@ -559,7 +562,7 @@ class ODDragNDrop extends ODContained
      * ajoute une extension $acceptedFile à la liste des fichiers téléchageables
      * @param string $acceptedFile
      * @return ODDragNDrop|bool        : (false si l'extension de $acceptedFile n'est pas valide)
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function addAccepetdFile(string $acceptedFile)
     {
@@ -576,7 +579,7 @@ class ODDragNDrop extends ODContained
      * supprime une extension $acceptedFile de la liste des fichiers autorisés
      * @param string $acceptedFile
      * @return ODDragNDrop|bool        : (false si l'extension de $acceptedFile n'est pas valide ou n'est pas présente)
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function rmAcceptedFile(string $acceptedFile)
     {
@@ -603,7 +606,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les fichiers image au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disImageFiles()
     {
@@ -619,7 +622,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les fichiers texte au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disWordFiles()
     {
@@ -635,7 +638,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les feuilles de calcul au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disExcelFiles()
     {
@@ -651,7 +654,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les fichiers diaporama au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disPresentationFiles()
     {
@@ -667,7 +670,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les fichiers son au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disSoundFiles()
     {
@@ -683,7 +686,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les fichiers vidéo au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disVideoFiles()
     {
@@ -699,7 +702,7 @@ class ODDragNDrop extends ODContained
     /**
      * interidt les fichiers Document au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disDocumentFiles()
     {
@@ -715,7 +718,7 @@ class ODDragNDrop extends ODContained
     /**
      * interdit les fichiers archive compressé au téléchargement
      * @return ODDragNDrop
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function disArchiveFiles()
     {
@@ -847,7 +850,7 @@ class ODDragNDrop extends ODContained
             $item                       = [];
             $item['name']               = $name;
             $item['pathFile']           = $pathFile;
-            $item['mime']               = \mime_content_type($pathFile);
+            $item['mime']               = mime_content_type($pathFile);
 //            $loadedFiles[$name]         = $pathFile;
             $loadedFiles[$key]          = $item;
             $properties['loadedFiles']  = $loadedFiles;
@@ -1169,7 +1172,7 @@ class ODDragNDrop extends ODContained
 
                     $returnCall .= shell_exec('mkdir public/uploadedFiles 2>&1');
                     $returnCall .= shell_exec('chmod 777 public/uploadedFiles/ 2>&1');
-                    if (!empty($returnCall)) { throw new \Exception($returnCall); }
+                    if (!empty($returnCall)) { throw new Exception($returnCall); }
                 }
                 $tempFolder  = $pathPublic.'/uploadedFiles';
             }
@@ -1274,7 +1277,7 @@ class ODDragNDrop extends ODContained
 
                     $returnCall .= shell_exec('mkdir public/uploadedFiles 2>&1');
                     $returnCall .= shell_exec('chmod 777 public/uploadedFiles/ 2>&1');
-                    if (!empty($returnCall)) { throw new \Exception($returnCall); }
+                    if (!empty($returnCall)) { throw new Exception($returnCall); }
                 }
                 $tempFolderPath  = $pathPublic.'/uploadedFiles';
             }
@@ -1284,14 +1287,14 @@ class ODDragNDrop extends ODContained
 
                 $returnCall .= shell_exec('mkdir '.$tempFolderPath.'/thumbnails 2>&1');
                 $returnCall .= shell_exec('chmod 777 '.$tempFolderPath.'/thumbnails 2>&1');
-                if (!empty($returnCall)) { throw new \Exception($returnCall); }
+                if (!empty($returnCall)) { throw new Exception($returnCall); }
             }
             $tempFolderPath     .= '/thumbnails';
 
             foreach($loadedFiles as $fileName => $filePath) {
                 $item   = [];
                 $item['name']       = $fileName;
-                $item['mime']       = \mime_content_type($filePath);
+                $item['mime']       = mime_content_type($filePath);
                 $item['url']        = $filePath;
 //                if (strpos(\mime_content_type($filePath), 'image') === 0) {
 //                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$fileName;
@@ -1302,7 +1305,7 @@ class ODDragNDrop extends ODContained
                 $code[] = $item;
             }
          }
-         return  [self::formatRetour($thisID, $thisID, 'setData', $code)];
+         return  self::formatRetour($thisID, $thisID, 'setData', $code);
      }
 
     /** **************************************************************************************************
@@ -1312,7 +1315,7 @@ class ODDragNDrop extends ODContained
     /**
      * récupération de l'ensemble des constantes de définition des extensions de fichier autorisées au téléchargement
      * @return array                    : tableau des extensions de fichier autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private static function getAllExtensionConstant()
     {
@@ -1336,7 +1339,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier image autorisées au
      * téléchargement
      * @return array                    : tableau des extensions de fichier image autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getImageExtensionConstant()
     {
@@ -1360,7 +1363,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier texte autorisées au
      * téléchargement
      * @return array                    : tableau des extensions de fichier texte autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getWordExtensionConstant()
     {
@@ -1384,7 +1387,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier feuilles de calcul autorisées
      * au téléchargement
      * @return array                    : tableau des extensions de fichier feuilles de calcul autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getExcelExtensionConstant()
     {
@@ -1408,7 +1411,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier diaporama autorisées au
      * téléchargement
      * @return array                    : tableau des extensions de fichier diaporama autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getPresentationExtensionConstant()
     {
@@ -1432,7 +1435,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier son autorisées au
      * téléchargement
      * @return array                    : tableau des extensions de fichier son autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getSoundExtensionConstant()
     {
@@ -1456,7 +1459,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier vidéo autorisées au
      * téléchargement
      * @return array                    : tableau des extensions de fichier vidéo autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getVideoExtensionConstant()
     {
@@ -1480,7 +1483,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier Document autorisées au
      * téléchargement
      * @return array                    : tableau des extensions de fichier Document autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getDocumentExtensionConstant()
     {
@@ -1504,7 +1507,7 @@ class ODDragNDrop extends ODContained
      * récupération de l'ensemble des constantes de définition des extensions de fichier archive compressée autorisées
      * au téléchargement
      * @return array                    : tableau des extensions de fichier archive compressée autorisées
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getArchiveExtensionConstant()
     {
@@ -1549,7 +1552,7 @@ class ODDragNDrop extends ODContained
      * @param $ext                      : extension de fichier fournie
      * @return bool|string              : restitue la chaine de typde fichier MIME ou false si l'extension n'est pas
      *                                      valide et gérée par le système
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function getMimeString($ext)
     {

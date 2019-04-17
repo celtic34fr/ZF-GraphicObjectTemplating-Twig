@@ -72,27 +72,29 @@ function invokeAjax(datas, idSource, event, e) {
         let updId       = "";
         let table       = "";
         let treeview    = "";
+        let objectDOM   = $("#" + id);
+        let jQryObj     = "";
         switch (mode) {
             case 'rscs': //extraction des ressources CSS / Js avec injection
                 loadResources(id, code);
                 break;
             case "append": // ajout à un objet DOM existant
-                $("#" + id).append(code);
-                if ($("#" + id).find("#" + id + "Script").length > 0) {
+                objectDOM.append(code);
+                if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
                     updatePage();
                 }
                 break;
             case "appendAfter": // ajout à un objet DOM existant
-                $("#" + id).after(code);
-                if ($("#" + id).find("#" + id + "Script").length > 0) {
+                objectDOM.after(code);
+                if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
                     updatePage();
                 }
                 break;
             case "appendBefore": // ajout à un objet DOM existant
-                $("#" + id).before(code);
-                if ($("#" + id).find("#" + id + "Script").length > 0) {
+                objectDOM.before(code);
+                if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
                     updatePage();
                 }
@@ -103,22 +105,21 @@ function invokeAjax(datas, idSource, event, e) {
                 updatePage();
                 break;
             case "innerUpdate": // remplacement du contenu d’un objet DOM
-                updId = "#" + id;
-                $(updId).html(code);
+                objectDOM.html(code);
                 updatePage();
                 break;
             case "raz": // vidage du contenu d’un objet DOM
-                $("#" + id).html("");
+                objectDOM.html("");
                 break;
             case "delete": // suppression d’un objet DOM
-                $("#" + id).remove();
+                objectDOM.remove();
                 break;
             case "exec": // exécution de code JavaScript contenu dans une chaîne de caracrtères
                 $.globalEval(code);
                 break;
             case "execID": // exécution de code JavaScript contenu dans un objet DOM
-                var objet = $("#"+code);
-                var script = objet.html();
+                let objet = $("#"+code);
+                let script = objet.html();
                 $.globalEval(script);
                 break;
             case "redirect": // redirection HTML
@@ -128,34 +129,42 @@ function invokeAjax(datas, idSource, event, e) {
                 }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
-                var evt = code.substring(0, strpos(code, '|'));
-                var flg = code.substring(strpos(code, '|') + 1);
-                $('#'+id).attr('data-'+evt+'-stopevt', flg);
+                let evt = code.substring(0, strpos(code, '|'));
+                let flg = code.substring(strpos(code, '|') + 1);
+                objectDOM.attr('data-'+evt+'-stopevt', flg);
                 break;
-            case 'updCols': // mise à jour colonne ODTable
-                table = new odtable($('#'+id));
-                table.updateCol(code);
-                break;
-            case 'rmLineUpd': // mise à jour colonne ODTable
-                table = new odtable($('#'+id));
-                table.rmLineUpdate(code);
-                break;
-            case 'updtTreeLeaf': // ajout noeud et feuille Treeview sur ancienne feuille
-                treeview = new odtreeview($('#'+id));
-                treeview.updtTreeLeaf(code);
-                break;
-            case 'appendTreeNode': // mise à jour feuille Treeview
-                treeview = new odtreeview($('#'+id));
-                treeview.appendTreeNode(code);
-                break;
+            // case 'updCols': // mise à jour colonne ODTable
+            //     table = new odtable(objectDOM);
+            //     table.updateCol(code);
+            //     break;
+            // case 'rmLineUpd': // mise à jour colonne ODTable
+            //     table = new odtable(objectDOM);
+            //     table.rmLineUpdate(code);
+            //     break;
+            // case 'updtTreeLeaf': // ajout noeud et feuille Treeview sur ancienne feuille
+            //     treeview = new odtreeview(objectDOM);
+            //     treeview.updtTreeLeaf(code);
+            //     break;
+            // case 'appendTreeNode': // mise à jour feuille Treeview
+            //     treeview = new odtreeview(objectDOM);
+            //     treeview.appendTreeNode(code);
+            //     break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
-                var objectDOM   = $('#'+id);
-                var objetJS     = objectDOM.data('objet');
-                var evalStr     = 'var jQryObj = new '+objetJS+'(objectDOM)';
-                if (!eval(evalStr)) {
+                let objetJS     = objectDOM.data('objet');
+                jQryObj = new window[objetJS](objectDOM);
+                if (jQryObj) {
                     jQryObj.setData(code);
                 }
                 break;
+            default:
+                let cls = objectDOM.data("objet");
+                jQryObj = new window[cls](objectDOM);
+                if (mode in jQryObj && typeof jQryObj[mode] == "function") {
+                    jQryObj[mode](code); // TODO: Remove this check in production environment.
+                } else {
+                    console.log(mode + " is not a function of not in " + cls);
+                    console.log(jQryObj);
+                }
         }
     });
 }
@@ -227,7 +236,7 @@ function updatePage() {
 }
 
 function updateForm(formId) {
-    let require = '<p style="color:red;float:left;";>*&nbsp;</p>';
+    let require = '<p style="color:red;float:left;">*&nbsp;</p>';
     let topRequire = false;
     $('#'+formId+" .gotObject").each(function () {
         let id = $(this).attr('id');

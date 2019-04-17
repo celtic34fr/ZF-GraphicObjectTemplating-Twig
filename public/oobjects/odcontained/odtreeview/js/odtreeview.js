@@ -50,7 +50,7 @@ odtreeview.prototype = {
     },
     getNodeData: function (domObj) {
         let obj = $(domObj);
-        let id = obj.data("id");
+        let id = String(obj.data("id"));
         let children = [];
         if (obj.hasClass("node")) {
             let domChildren = obj.children("ul").children("li");
