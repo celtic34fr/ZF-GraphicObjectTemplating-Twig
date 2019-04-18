@@ -23,13 +23,14 @@
     </li>
 {% endmacro %}
 
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' %}
+{% set navClasses = 'navbar ' ~ objet.classes %}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
      {% if objet.widthBT is defined and objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
         {% if objet.display is defined and objet.display is not empty %}data-display="{{ objet.display }}"{% endif %}
 >
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar {{ navClasses }}" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
@@ -48,5 +49,4 @@
             </ul>
         </div>
     </nav>
-    <p>Coucou</p>
 </div>

@@ -410,7 +410,8 @@ class ODMenu extends ODContained
     {
         $properties     = $this->getProperties();
         $properties['optionsPath']  = [];
-        $properties['optionsTree']  = [];
+        $properties['optionsTree']['left']  = [];
+        $properties['optionsTree']['right']  = [];
         $this->setProperties($properties);
         return $this;
     }
