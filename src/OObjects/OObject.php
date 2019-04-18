@@ -258,24 +258,30 @@ class OObject
             }
             $this->setProperties($properties);
 
-            $pathRscs   = __DIR__;
-            $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'];
-            $pathRscs  .= '/'.$properties['object'] .'/'.$properties['object'].'.rscs.php';
-            $rscsObj        = include $pathRscs;
-            if ($rscsObj) {
-                $rscsSession    = $sessionObj->resources ?? [];
-                $prefix         = 'graphicobjecttemplating/oobjects/';
-                if (array_key_exists('prefix', $rscsObj)) {
-                    $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
-                    unset($rscsObj['prefix']);
-                }
-                foreach ($rscsObj as $type => $filesInfo) {
-                    if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
-                    foreach ($filesInfo as $name => $path) {
-                        $rscsSession[$type][$name] = $prefix.$properties['typeObj'].'/'.$properties['object'].'/'.$path;
+            if (!empty($pathObjArray)) {
+                $pathRscs = __DIR__;
+                $pathRscs .= '/../../view/zf3-graphic-object-templating/oobjects/' . $properties['typeObj'];
+                $pathRscs .= '/' . $properties['object'] . '/' . $properties['object'] . '.rscs.php';
+                if (is_file($pathRscs)) {
+                    $rscsObj = include $pathRscs;
+                    if ($rscsObj) {
+                        $rscsSession = $sessionObj->resources ?? [];
+                        $prefix = 'graphicobjecttemplating/oobjects/';
+                        if (array_key_exists('prefix', $rscsObj)) {
+                            $prefix = 'gotextension/' . $rscsObj['prefix'] . 'oeobjects/';
+                            unset($rscsObj['prefix']);
+                        }
+                        foreach ($rscsObj as $type => $filesInfo) {
+                            if (!array_key_exists($type, $rscsSession)) {
+                                $rscsSession[$type] = [];
+                            }
+                            foreach ($filesInfo as $name => $path) {
+                                $rscsSession[$type][$name] = $prefix . $properties['typeObj'] . '/' . $properties['object'] . '/' . $path;
+                            }
+                        }
+                        $sessionObj->resources = $rscsSession;
                     }
                 }
-                $sessionObj->resources = $rscsSession;
             }
         } else {
             $this->id = $id;

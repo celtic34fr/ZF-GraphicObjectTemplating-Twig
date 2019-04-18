@@ -169,16 +169,18 @@ class ZF3GotServices
             $pathRscs   = __DIR__ ;
             $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
             $pathRscs  .= '/'.$properties['object'].'.rscs.php';
-            $rscsObj        = include $pathRscs;
-            $prefix         = 'graphicobjecttemplating/oobjects/';
-            if (array_key_exists('prefix', $rscsObj)) {
-                $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
-                unset($rscsObj['prefix']);
-            }
-            foreach ($rscsObj as $type => $filesInfo) {
-                if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
-                foreach ($filesInfo as $name => $path) {
-                    $rscsSession[$type][$name] = $prefix.$path;
+            if (is_file($pathRscs)) {
+                $rscsObj        = include $pathRscs;
+                $prefix         = 'graphicobjecttemplating/oobjects/';
+                if (array_key_exists('prefix', $rscsObj)) {
+                    $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
+                    unset($rscsObj['prefix']);
+                }
+                foreach ($rscsObj as $type => $filesInfo) {
+                    if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
+                    foreach ($filesInfo as $name => $path) {
+                        $rscsSession[$type][$name] = $prefix.$path;
+                    }
                 }
             }
 
