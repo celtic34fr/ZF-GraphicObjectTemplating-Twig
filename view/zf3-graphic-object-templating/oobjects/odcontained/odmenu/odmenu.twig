@@ -1,42 +1,33 @@
-{# template objet ODMenu #}
-{% import _self as menusMacro %}
+{# template de l'objet ODMenu #}
 
-{% macro afficheLeaf(menus, side) %}
-    {% import _self as menusMacro %}
+{% import _self as macros %}
 
-    {% if menus.float == side %}
-        {% set active = (menus.active) ? 'active' : '' %}
-        {% if menus.dropdown is not defined or menus.dropdown |length == 0 %}
-    <li>
-            
-            <a {% if menus.link is defined and menus.link is not empty %} href="{{ menus.link | raw }}" target="{{ menus.target }}" {% endif %}
-            {% if menus.enable == false %} onclick="return false;" class="isDisabled" {% endif %} >
-            {{ menus.label }}</a>
-            {# {% else %}
-            <span class="noLink">{{ menus.label }}</span>
-            {% endif %} #}
-    </li>
-        {% else %}
-        <li class="dropdown-submenu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
-            {% if menus.enable == false %} onclick="return false;" class="isDisabled" {% endif %} > 
-                {{ menus.label }}<b class="caret"></b>
-            </a>
+{% macro drawMenuOption(option) %}
+    {% import _self as macros %}
+    {% set children = (option.children is defined and option.children|length > 0) %}
+    {% set hrefLink = option.link|raw %} {% set target = option.target %}
+    {% if children %} {% set hrefLink = '#' %} {% set target = '_self' %} {% endif %}
+
+    <li {% if children %}class="dropdown"{% endif %}>
+        <a href="{{ hrefLink|raw }}" target="{{ target }}"
+                {% if children %} class=" dropdown-toggle " data-toggle="dropdown" {% endif %}>
+            {{ option.label }} {% if children %} <b class="caret"></b> {% endif %}
+        </a>
+        {% if children %}
             <ul class="dropdown-menu">
-            {% for item in menus.dropdown %}
-                {{ menusMacro.afficheLeaf(item) }}
-            {% endfor %}
+                {% for child in option.children %}
+                    {{ macros.drawMenuOption(child) }}
+                {% endfor %}
             </ul>
-        </li>
         {% endif %}
-    {% endif %}
+    </li>
 {% endmacro %}
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
-<div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}"
-{% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
-{% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+     {% if objet.widthBT is defined and objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
+        {% if objet.display is defined and objet.display is not empty %}data-display="{{ objet.display }}"{% endif %}
 >
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
@@ -45,78 +36,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
+                <a href="#" class="navbar-brand" target="_self">{{ objet.title }}</a>
             </button>
-            <a class="navbar-brand" href="#" target="blank">{{ objet.title }}</a>
         </div>
         <div class="collapse navbar-collapse navbar-collapse-1">
             <ul class="nav navbar-nav">
-                {% for menu in objet.dataTree %}
-                {% if menu.float == 'left' %}
-                    {% if menu.dropdown is not defined or menu.dropdown |length == 0 %}
-                        <li>
-                            
-                                <a {% if menu.link is defined and menu.link is not empty %} href="{{ menu.link | raw }}" target="{{ menu.target }}" {% endif %}
-                                 
-                                {% if not (menu.enable) %} onclick="return false;" class="isDisabled" {% endif %} >{{ menu.label }}</a>
-                            {#{% else %}
-                                <span class="noLink">{{ menu.label }}</span>
-                            {% endif %} #}
-                        </li>
-                    {% else %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                            {% if not (menu.enable) %} onclick="return false;" class="isDisabled" {% endif %} >
-                                {{ menu.label }}<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                {% for item in menu.dropdown %}
-                                    {{ menusMacro.afficheLeaf(item, 'left') }}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                {% endif %}
-                {% endfor %}
+                {% for menu in objet.optionsTree.left %} {{ macros.drawMenuOption(menu) }} {% endfor %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% for menu in objet.dataTree %}
-                {% if menu.float == 'right' %}
-                    {% if menu.dropdown is not defined or menu.dropdown |length == 0 %}
-                        <li>
-                            
-                                <a {% if menu.link is defined and menu.link is not empty %} href="{{ menu.link | raw }}" target="{{ menu.target }}" {% endif %}
-                                {% if menu.enable == false %} onclick="return false;" class="isDisabled" {% endif %} >{{ menu.label }}</a>
-                            {# {% else %}
-                                <span class="noLink">{{ menu.label }}</span>
-                            {% endif %} #}
-                        </li>
-                    {% else %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                            {% if menu.enable == false %} onclick="return false;" class="isDisabled" {% endif %} >
-                                {{ menu.label }}<b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                {% for item in menu.dropdown %}
-                                    {{ menusMacro.afficheLeaf(item, 'right') }}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                {% endif %}
-                {% endfor %}
+                {% for menu in objet.optionsTree.right %} {{ macros.drawMenuOption(menu) }} {% endfor %}
             </ul>
         </div>
     </nav>
-
-    <script>
-        $(document).ready(function () {
-            $('#{{ objet.id }} ul.dropdown-menu [datat-toggle=dropdown]').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                $(this).parent().siblings().removeClass('open');
-                $(this).parent().toggleClass('open');
-            })
-        })
-    </script>
+    <p>Coucou</p>
 </div>
