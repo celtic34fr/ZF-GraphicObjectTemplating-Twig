@@ -700,8 +700,7 @@ class OSForm extends OSDiv
     public function getHiddenValues()
     {
         $properties = $this->getProperties();
-        if (!array_key_exists('hidden', $properties)) { $properties['hidden'] = []; }
-        return $properties['hidden'];
+        return $properties['hidden'] ?? [];
     }
 
     public function setTitle(string $title)

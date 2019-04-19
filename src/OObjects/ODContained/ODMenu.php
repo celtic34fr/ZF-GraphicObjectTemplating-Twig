@@ -119,9 +119,7 @@ class ODMenu extends ODContained
             $prefix = ($item['pos'] == self::ODM_POSITION_LEFT) ? 'L' : 'R';
             $idTree = $item['pos'];
         }
-        list($pathOption, $optionsTree[$item['pos']])   =
-            $this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
-        $optionsPath[$ref]                      = $prefix.$pathOption;
+        $this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
 
         $properties['optionsPath']  = $optionsPath;
         $properties['optionsTree']  = $optionsTree;
@@ -224,7 +222,7 @@ class ODMenu extends ODContained
             $parent = $optionsPath[$parent];
             $parent = explode('-', $parent);
         }
-        list($pathOption, $optionsTree) = $this->insertOption($optionsTree, $ord, $item, $parent, false);
+        $this->insertOption($optionsTree, $ord, $item, $parent, false);
 
         $properties['optionsTree']  = $optionsTree;
         $this->setProperties($properties);
@@ -272,7 +270,7 @@ class ODMenu extends ODContained
         if (!empty($pathParent)) {
             $pathParent = explode('-', $pathParent);
         }
-        list($pathOption, $optionsTree) = $this->insertOption($optionsTree, $ord, $item, $pathParent, false);
+        $this->insertOption($optionsTree, $ord, $item, $pathParent, false);
 
         $properties['optionsTree']  = $optionsTree;
         $this->setProperties($properties);
@@ -559,35 +557,36 @@ class ODMenu extends ODContained
      * @param array $item : tableau des valeurs de l'option à insérer
      * @param array|null $parentPath : total des indices de lecture de l'arbre pour arriver à l'option parente
      * @param bool $insert : booléen indiquant si l'on doit insérer (true) ou modifier (false) une option
-     * @return array : chemin partiel d'accès à l'option (1er appel : total), arbre local de l'option (1er appel: total)
+     * @return string : chemin partiel d'accès à l'option (1er appel : total), arbre local de l'option (1er appel: total)
      * @throws Exception : si le numéro d'ordre $ord est déjà attributé
      */
-    private function insertOption(array $tree, int $ord, array $item, array $parentPath = null, bool $insert = true)
+    private function insertOption(array &$tree, int $ord, array $item, array $parentPath = null, bool $insert = true) : string
     {
-        $idOption = (!empty($parentPath)) ? array_shift($parentPath) : null;
-        if (!empty($parentPath) && sizeof($parentPath) > 0 ) {
-            $localTree                      = $tree[$idOption]['children'];
-            list($pathOption, $localTree)   = $this->insertOption($localTree, $ord, $item, $parentPath);
-            $pathOption                     = $idOption . '-' .$pathOption;
-            $tree[$idOption]['children']    = $localTree;
+        $idOption = array_shift($parentPath);
+        if (!empty($parentPath)) {
+            $localTree  = &$tree[$idOption]['children'];
+            $pathOption = $this->insertOption($localTree, $ord, $item, $parentPath);
+            $pathOption = $idOption . '-' .$pathOption;
         } else {
             if (strlen($idOption) < 1) {
                 if ($ord == 0) { $ord = sizeof($tree) + 1; }
-                $tree[(string) $ord]    = $item;
-                $pathOption             = $ord;
+                $ord = (string) $ord;
+                $tree[$ord] = $item;
+                $pathOption = $ord;
             } else {
-                if (!array_key_exists('children', $tree[$idOption])) { $tree[$idOption]['children'] = []; }
+                if (!isset($tree[$idOption]['children'])) { $tree[$idOption]['children'] = []; }
                 if ($ord == 0) { $ord = sizeof($tree[$idOption]['children']) + 1; }
                 else {
-                    if (array_key_exists($ord, $tree[$idOption]['children']) && $insert) {
+                    if ($insert && isset($tree[$idOption]['children'][$ord])) {
                         throw new Exception("Numéro d'ordre $ord d'option dèjà attribué ");
                     }
                 }
-                $tree[$idOption]['children'][(string) $ord] = $item;
-                $pathOption             = $idOption.'-'.(string)$ord;
+                $ord = (string) $ord;
+                $tree[$idOption]['children'][$ord] = $item;
+                $pathOption = $idOption.'-'.$ord;
             }
         }
-        return [$pathOption, $tree];
+        return $pathOption;
     }
 
     /**
@@ -599,43 +598,39 @@ class ODMenu extends ODContained
      * @return array : arbre partiel après suppression ou traitement, tableau global des chemin d'accès aux options de
      * menu après suppression des références des options de menu enfant de celle à supprimer
      */
-    private function removeOption(array $pathOption, array $optionsPath, array $tree)
+    private function removeOption(array $pathOption, array &$optionsPath, array &$tree)
     {
         $idOption = array_shift($pathOption);
         if (sizeof($pathOption) > 0) {
-            $localTree  = $tree[$idOption]['children'];
-            list($localTree, $optionsPath)  = $this->removeOption($pathOption, $optionsPath, $localTree);
+            $localTree  = &$tree[$idOption]['children'];
+            $this->removeOption($pathOption, $optionsPath, $localTree);
             $tree[$idOption]['children'] = $localTree;
         } else {
             if (array_key_exists('children', $tree[$idOption])) {
                 /** suppression de l'ensemble des enfants de l'option de menu quelqu'en soit le niveau de parenté */
                 foreach ($tree[$idOption]['children'] as $child) {
-                    $optionsPath = $this->removePathChildren($optionsPath, $child);
+                    $this->removePathChildren($optionsPath, $child);
                 }
             }
             unset($tree[$idOption]);
         }
-        return [$tree, $optionsPath];
     }
 
     /**
      * méthode de suppression des chemins d'accès des options de menu enfants d'une option de menu à supprimer
      *
-     * @param array $optionsPath : tableau global des chemin d'accès aux options de menu
+     * @param array &$optionsPath : Reference du tableau global des chemin d'accès aux options de menu
      * @param array $option : arbre partiel pour accèder aux enfants de l'option de menu traité
-     * @return array : tableau global des chemin d'accès aux options de menu après suppression de la référence de
-     * l'option de menu à supprimer
      */
-    private function removePathChildren(array $optionsPath, array $option)
+    private function removePathChildren(array &$optionsPath, array $option)
     {
         if (array_key_exists('children', $option)) {
             foreach ($option['children'] as $child) {
-                $optionsPath = $this->removePathChildren($optionsPath, $child);
+                $this->removePathChildren($optionsPath, $child);
             }
         } else {
             unset($optionsPath[$option['ref']]);
         }
-        return $optionsPath;
     }
 
     /**

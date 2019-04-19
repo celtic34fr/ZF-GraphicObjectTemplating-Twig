@@ -819,10 +819,10 @@ class ODTreeview extends ODContained
 			    }
                 $object->saveProperties();
 
-                $callback   = $this->getClickNode();
+                $callback = $this->getClickNode();
                 if (!empty($callback['class']) && !empty($callback['method'])) {
                     $results = call_user_func_array([$callback['class'], $callback['method']], [$sm, $params]);
-                    $ret        = array_merge($ret, $results);
+                    $ret     = array_merge($ret, $results);
                 }
 				break;
 			case 'sortupdate':
@@ -919,6 +919,7 @@ class ODTreeview extends ODContained
      * @param $tree
      * @param $path
      * @param $item
+     * @param bool $addNode
      * @return mixed
      */
     private function updateTree($tree, $path, $item, $addNode = false)

@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\Controller;
 
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained\ODDragNDrop;
+use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
 use Zend\Http\Headers;
 use Zend\Http\Request;
 use Zend\Http\Response\Stream;
@@ -68,40 +69,35 @@ class MainController extends AbstractActionController
                     if ($callingObj->getProperty('dispatchEvents')) {
                         $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
                     } else {
-                        switch ($callingObj->getObject()) {
-                            case 'odcheckbox':
-                            case 'odmessage':
-                            case 'oddropzone':
-                            case 'odtreeview':
-                                // appel de la méthode de l'objet passée en paramètre
-                                $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
-                                break;
-                            default:
-                                $event      = $callingObj->getEvent($params['event']);
-                                if ($event['class'] != $callingObj->getClassName()) {
-                                    $object     = $this->buildObject($event['class'], $sessionObj);
-                                } else {
-                                    $object     = $callingObj;
+                        if (method_exists($callingObj, 'dispatchEvents')) {
+                            $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
+                        } else {
+                            $event      = $callingObj->getEvent($params['event']);
+                            if ($event['class'] != $callingObj->getClassName()) {
+                                $object     = $this->buildObject($event['class'], $sessionObj);
+                            } else {
+                                $object     = $callingObj;
+                            }
+                            $objMethod  = $event['method'];
+    
+                            // traitement en cas de formulaire
+                            if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
+                                /** reformatage et mise à jour des données du formulaire niveau objets de la page */
+                                list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
+        
+                                if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
+                                    /** @var OSForm $form */
+                                    $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
+                                    $hiddens        = $form->getHiddenValues();
+                                    $params['form'] = array_merge($params['form'], $hiddens);
                                 }
-                                $objMethod  = $event['method'];
-
-                                // traitement en cas de formulaire
-                                if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
-                                    /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                                    list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
-
-                                    if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
-                                        $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
-                                        $hiddens        = $form->getHiddenValues();
-                                        $params['form'] = array_merge($params['form'], $hiddens);
-                                    }
-
-                                    $sessionObj->objects    = $objects;
-                                }
-                                // appel de la méthode de l'objet passée en paramètre
-                                $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
-                                break;
+        
+                                $sessionObj->objects    = $objects;
+                            }
+                            // appel de la méthode de l'objet passée en paramètre
+                            $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
                         }
+
                     }
                 }
 
