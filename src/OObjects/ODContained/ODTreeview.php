@@ -808,13 +808,13 @@ class ODTreeview extends ODContained
         $object             = self::buildObject($params['id'], $sessionObjects);
 		switch ($params['event']) {
 			case 'click':
-			    $value      = json_decode($params['value']);
+			    $value      = $params['value'];
 			    $leaves     = $object->getSelectedLeaves();
                 foreach ($leaves as $leaf) {
                     $object->unselectNode($leaf);
 			    }
-			    $object->setSelectedLeaves($value->selected);
-                foreach ($value->selected as $select) {
+			    $object->setSelectedLeaves($value["selected"]);
+                foreach ($value["selected"] as $select) {
                     $object->selectNode($select);
 			    }
                 $object->saveProperties();
