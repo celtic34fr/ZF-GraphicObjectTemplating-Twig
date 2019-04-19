@@ -11,17 +11,18 @@ function odbutton(obj) {
 odbutton.prototype = {
     getData: function (evt) {
         var valeur = this.value != undefined ? this.value : '';
-        return {id: this.id, value : valeur, event : evt, object : this.objet};
-        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        chps = chps + "&object='" + this.objet + "'";
+        // var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        // chps = chps + "&object='" + this.objet + "'";
 
+        var form    = [];
         if ( this.form.length > 0 ) {
-            let formObj = new osform($('#'+this.form));
-            let form    = formObj.getData(evt);
-            chps        = chps + "&form='"+form+"'";
+            var formObj = new osform($('#'+this.form));
+            var form    = formObj.getData(evt);
+            // chps        = chps + "&form='"+form+"'";
         }
 
-        return chps;
+        // return chps;
+        return {id: this.id, value : valeur, event : evt, object : this.objet, form: form};
     },
     setData: function (data) {
         this.value = data;

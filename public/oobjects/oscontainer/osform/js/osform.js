@@ -4,15 +4,17 @@ function osform(obj) {
 
 osform.prototype = {
     getData: function (evt) {
-        var formData = [];
+        var formData = {};
         var eltSelection = $("*[data-form~='" + this.id + "']");
 
         $.each(eltSelection, function (i, selection) {
             var object     = selection.getAttribute('data-objet');
             if (object != null && object.substring(object.length - 6, object.length) !== 'button') {
-                var instance = window[object]($(selection));
+                var instance = new window[object]($(selection));
                 var datas = instance.getData('');
-                formData.push(datas);
+                id = datas["id"];
+                delete datas["id"];
+                formData[id] = datas["value"];
             }
         });
         return formData;

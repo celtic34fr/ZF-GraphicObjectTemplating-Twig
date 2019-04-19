@@ -13,10 +13,7 @@ odtextarea.prototype = {
         } else {
             content = this.contenu;
         }
-        return {id: this.id, value: content, object: this.objet};
-        var chps = "id=" + this.id + "&value='" + content + "'";
-        chps = chps + "&object='" + this.objet + "'";
-        return chps;
+        return {id: this.id, value: content, object: this.objet, event : evt};
     },
     setData: function (data) {
         this.contenu = data;
