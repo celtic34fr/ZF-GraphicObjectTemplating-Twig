@@ -10,9 +10,11 @@ odselect.prototype = {
         var selected = '';
         $('#'+this.id+' option:selected').each(function () { selected += $(this).val() + "-" });
         selected = selected.substring(0, selected.length - 1);
-        var chps = "id=" + this.id + "&value='" + selected + "'&event='change'";
-        chps = chps + "&object='" + this.objet + "'";
-        return chps;
+        // selected = $('#'+this.id+' option:selected').map(function () { return $(this).val()}).get();
+        return {id : this.id, value: selected, event:"change", object : this.objet};
+        // var chps = "id=" + this.id + "&value='" + selected + "'&event='change'";
+        // chps = chps + "&object='" + this.objet + "'";
+        // return chps;
     },
     setData: function (data) {
         $.each(data, function (i, value) {

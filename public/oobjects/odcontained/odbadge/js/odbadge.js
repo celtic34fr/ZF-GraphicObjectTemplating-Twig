@@ -6,8 +6,9 @@ function odbadge(obj) {
 
 odbadge.prototype = {
     getData: function (evt) {
-        var chps = "id=" + this.id + "&value='" + this.contenu + "'";
-        return chps;
+        // var chps = "id=" + this.id + "&value='" + this.contenu + "'";
+        // return chps;
+        return {id : this.id, value: this.contenu, event: evt, object : this.objet};
     },
     setData: function (data) {
         this.contenu = data;

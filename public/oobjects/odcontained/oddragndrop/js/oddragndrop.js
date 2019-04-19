@@ -257,17 +257,18 @@ oddragndrop.prototype = {
         }
     },
     getData: function (evt) {
-        var valeur = (this.value != undefined) ? this.value : '';
-        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        chps = chps + "&object='" + this.objet + "'";
-
+        var value = (this.value !== undefined)? this.value : '';
         var selection   = $('#'+this.id+' .previewDND .vignette');
         var loadedFiles = [];
+
         $.each(selection, function (i, div) {
             loadedFiles.push($(this).data('fichier'));
         });
-        chps = chps + "&files='"+loadedFiles.join("$")+"'";
+        return {id: this.id, value : value, event : evt, object : this.objet, files: loadedFiles };
 
+        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        chps = chps + "&object='" + this.objet + "'";
+        chps = chps + "&files='"+loadedFiles.join("$")+"'";
         return chps;
     },
     setData: function (data) {

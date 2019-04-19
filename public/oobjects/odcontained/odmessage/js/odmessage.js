@@ -11,10 +11,11 @@ function odmessage(obj) {
 
 odmessage.prototype = {
     getData: function (type) {
-        let chps = "id=" + this.id + "&type='" + type + "'";
-        chps = chps + "&value='" + this.buttons[type] + "'";
-
-        return chps;
+        // let chps = "id=" + this.id + "&type='" + type + "'";
+        // chps = chps + "&value='" + this.buttons[type] + "'";
+        //
+        // return chps;
+        return {id : this.id, value: this.buttons[type], event: evt, object : this.objet, type: type};
     },
     setData: function (type) {
         // ??? utile ???

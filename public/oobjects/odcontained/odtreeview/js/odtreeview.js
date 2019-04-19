@@ -17,6 +17,7 @@ odtreeview.prototype = {
         let value = {};
         value['selected'] = selected;
         value['tree']     = tree;
+        return {id : this.id, value : value, object : this.objet};
         return "id=" + this.id +
             "&value='" + JSON.stringify(value) + "'" +
             "&event='click'&object='" + this.objet + "'";

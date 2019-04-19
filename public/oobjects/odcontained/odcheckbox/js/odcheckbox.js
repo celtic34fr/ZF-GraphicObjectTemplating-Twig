@@ -17,12 +17,13 @@ function odcheckbox(obj) {
 
 odcheckbox.prototype = {
     getData: function (evt) {
-        let chps = "id=" + this.id;
-        chps = chps + "&value='" + this.options.join("$") + "'";
-        chps = chps + "&evt='" + evt + "'";
-        chps = chps + "&obj='OUI'";
-        chps = chps + "&object='" + this.objet + "'";
-        return chps;
+        // let chps = "id=" + this.id;
+        // chps = chps + "&value='" + this.options.join("$") + "'";
+        // chps = chps + "&evt='" + evt + "'";
+        // chps = chps + "&obj='OUI'";
+        // chps = chps + "&object='" + this.objet + "'";
+        // return chps;
+        return {id : this.id, value: this.options.join("$"), event: evt, object : this.objet};
     },
     setData: function (data) {
         if (data === "") { // raz des options sélectionnées

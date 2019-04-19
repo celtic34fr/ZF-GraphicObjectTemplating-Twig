@@ -9,9 +9,10 @@ function odcaptcha(obj) {
 odcaptcha.prototype = {
     getData: function (evt) {
         var valeur = this.val != undefined ? this.val : '';
-        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        chps = chps + "&object='" + this.objet + "'";
-        return chps;
+        // var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
+        // chps = chps + "&object='" + this.objet + "'";
+        // return chps;
+        return {id : this.id, value: valeur, event: evt, object : this.objet};
     },
     setData: function (data) {
         this.value = data;

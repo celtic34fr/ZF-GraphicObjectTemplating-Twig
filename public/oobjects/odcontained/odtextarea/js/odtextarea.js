@@ -8,11 +8,12 @@ function odtextarea(obj) {
 odtextarea.prototype = {
     getData: function (evt) {
         var content = "";
-        if (this.data['wysiwyg'] == true) {
+        if (this.data['wysiwyg']) {
             content = tinyMCE.activeEditor.getContent();
         } else {
             content = this.contenu;
         }
+        return {id: this.id, value: content, object: this.objet};
         var chps = "id=" + this.id + "&value='" + content + "'";
         chps = chps + "&object='" + this.objet + "'";
         return chps;
