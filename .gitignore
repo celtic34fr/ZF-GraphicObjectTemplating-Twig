@@ -24,3 +24,7 @@ data/DoctrineORMModule/Proxy/
 data/DoctrineORMModule/cache/
 
 view/zf3-graphic-object-templating/oobjects/odcontained/odmenu/odmenu_v1.twig
+
+phpdox.xml
+docs/
+build/
