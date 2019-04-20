@@ -1453,7 +1453,7 @@ class OObject
     }
 
     /**
-     * @return bool
+     * @return bool|array
      */
     public function getEvents()
     {

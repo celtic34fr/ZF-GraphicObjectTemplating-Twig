@@ -48,14 +48,13 @@ class MainController extends AbstractActionController
         $gs      = $this->serviceManager->get('graphic.object.templating.services');
 
         if ($request->isPost()) { // récupération des paramètres d'appel
-            $params     = $request->getPost()->toArray();
-//            $paramsPost = $request->getPost()->toArray();
-//            $params     = [];
-//            foreach ($paramsPost as $cle => $value) {
-//                // alimentation du tableau $params avec les paramètres d'appel
-//                $value = $this->trimQuote($value);
-//                $params[$cle] = $value;
-//            }
+            $paramsPost = $request->getPost()->toArray();
+            $params     = [];
+            foreach ($paramsPost as $cle => $value) {
+                // alimentation du tableau $params avec les paramètres d'appel
+                $value = $this->trimQuote($value);
+                $params[$cle] = $value;
+            }
 
             if (!empty($params['id']) && (null !== $params['id'])) {
                 $sessionObj = OObject::validateSession();
@@ -150,6 +149,10 @@ class MainController extends AbstractActionController
         return false;
     }
 
+    /**
+     * @return Stream
+     * @throws \Exception
+     */
     public function gotDownloadAction()
     {
         $sessionObjects = OObject::validateSession();

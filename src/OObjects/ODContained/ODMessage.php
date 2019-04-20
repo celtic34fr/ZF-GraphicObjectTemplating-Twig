@@ -12,7 +12,8 @@ use Zend\ServiceManager\ServiceManager;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * setAction($action = self::ODMESSAGEACTION_INIT)
- * getAction()
+ *                  : méthode de positionnement de l'action à réaliser en focntion de celles autorisées
+ * getAction()      : méthode de récupération de l'action à réaliser
  * setHorizontalOffset($offset = 5)
  * getHorizontalOffset()
  * setVerticalOffset($offset = 5)
@@ -157,6 +158,12 @@ class ODMessage extends ODContained
     protected $const_msgNature;
 
 
+    /**
+     * ODMessage constructor.
+     * @param $id
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function __construct($id) {
         parent::__construct($id, 'oobjects/odcontained/odmessage/odmessage.config.php');
 
@@ -170,6 +177,11 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * méthode de positionnement de l'action à réaliser en focntion de celles autorisées
+     * @param string $action
+     * @return $this
+     */
     public function setAction($action = self::ODMESSAGEACTION_INIT)
     {
         $actions = $this->getActionsContants();
@@ -181,12 +193,20 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * méthode de récupération de l'action à réaliser
+     * @return bool|string
+     */
     public function getAction()
     {
         $properties                              = $this->getProperties();
         return (array_key_exists('action', $properties)) ? $properties['action'] : false ;
     }
 
+    /**
+     * @param int $offset
+     * @return ODMessage
+     */
     public function setHorizontalOffset($offset = 5)
     {
         $offset = (int) $offset;
@@ -197,12 +217,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getHorizontalOffset()
     {
         $properties = $this->getProperties();
         return array_key_exists('horizontalOffset', $properties) ? $properties['horizontalOffset'] : false;
     }
 
+    /**
+     * @param int $offset
+     * @return ODMessage
+     */
     public function setVerticalOffset($offset = 5)
     {
         $offset = (int) $offset;
@@ -213,12 +240,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getVerticalOffset()
     {
         $properties = $this->getProperties();
         return array_key_exists('verticalOffset', $properties) ? $properties['verticalOffset'] : false;
     }
 
+    /**
+     * @param $width
+     * @return ODMessage
+     */
     public function setWidth($width)
     {
         if ($width != 'auto') { $width = ((int) $width > 0) ? (int) $width : 400; }
@@ -228,12 +262,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getWidth()
     {
         $properties = $this->getProperties();
         return array_key_exists('width', $properties) ? $properties['width'] : false;
     }
 
+    /**
+     * @param $height
+     * @return ODMessage
+     */
     public function setHeight($height)
     {
         if ($height != 'auto') { $height = ((int) $height > 0) ? (int) $height : 400; }
@@ -243,12 +284,18 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getHeight()
     {
         $properties = $this->getProperties();
         return array_key_exists('height', $properties) ? $properties['height'] : false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function enaCloseButton()
     {
         $properties = $this->getProperties();
@@ -257,6 +304,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disCloseButton()
     {
         $properties = $this->getProperties();
@@ -265,12 +315,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getCloseButton()
     {
         $properties = $this->getProperties();
         return array_key_exists('closeButton', $properties) ? $properties['closeButton'] : false;
     }
 
+    /**
+     * @param string $buttonAlign
+     * @return ODMessage
+     */
     public function setButtonAlign($buttonAlign = self::ODMESSAGEBTNALIGN_CENTER)
     {
         $buttonsAlign   = $this->getBtnAlignsContants();
@@ -283,12 +340,18 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getButtonAlign()
     {
         $properties = $this->getProperties();
         return array_key_exists('buttonAlign', $properties) ? $properties['buttonAlign'] : false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function enaCloseOnEsc()
     {
         $properties = $this->getProperties();
@@ -297,6 +360,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disCloseOnEsc()
     {
         $properties = $this->getProperties();
@@ -305,12 +371,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|bool
+     */
     public function getCloseOnEsc()
     {
         $properties = $this->getProperties();
         return array_key_exists('closeOnEsc', $properties) ? $properties['closeOnEsc'] : false;
     }
 
+    /**
+     * @param int $delayToRemove
+     * @return ODMessage
+     */
     public function setDelayToRemove($delayToRemove = 200)
     {
         $delayToRemove = (int) $delayToRemove;
@@ -322,12 +395,18 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getDelayToRemove()
     {
         $properties = $this->getProperties();
         return array_key_exists('delayToRemove', $properties) ? $properties['delayToRemove'] : false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function enaDelay()
     {
         $properties = $this->getProperties();
@@ -336,6 +415,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disDelay()
     {
         $properties = $this->getProperties();
@@ -344,12 +426,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getDelay()
     {
         $properties = $this->getProperties();
         return array_key_exists('delay', $properties) ? $properties['delay'] : false;
     }
 
+    /**
+     * @param string $iconSource
+     * @return ODMessage
+     */
     public function setIconSource($iconSource = self::ODMESSAGEICON_BOOTSTRAP)
     {
         $iconsSource    = $this->getIconsContants();
@@ -362,12 +451,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getIconSource()
     {
         $properties = $this->getProperties();
         return array_key_exists('iconSource', $properties) ? $properties['iconSource'] : false;
     }
 
+    /**
+     * @param string $msgType
+     * @return ODMessage
+     */
     public function setMsgType($msgType = self::ODMESSAGETYPE_CONFIRM)
     {
         $msgTypes  = $this->getTypesContants();
@@ -380,6 +476,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getMsgType()
     {
         $properties = $this->getProperties();
@@ -390,6 +489,10 @@ class ODMessage extends ODContained
      * méthodes de gestion du type de message confirmation                                               *
      * *************************************************************************************************** */
 
+    /**
+     * @param $title
+     * @return ODMessage
+     */
     public function setTitle($title)
     {
         $title = (string) $title;
@@ -399,12 +502,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getTitle()
     {
         $properties = $this->getProperties();
         return array_key_exists('title', $properties) ? $properties['title'] : false;
     }
 
+    /**
+     * @param $body
+     * @return ODMessage
+     */
     public function setBody($body)
     {
         $body = (string) $body;
@@ -414,12 +524,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getBody()
     {
         $properties = $this->getProperties();
         return array_key_exists('body', $properties) ? $properties['body'] : false;
     }
 
+    /**
+     * @param string $nature
+     * @return ODMessage
+     */
     public function setNature($nature = self::ODMESSAGEMSGNATURE_INFO)
     {
         $natures    = $this->getMsgNatureContants();
@@ -432,12 +549,22 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getNature()
     {
         $properties = $this->getProperties();
         return array_key_exists('nature', $properties) ? $properties['nature'] : false;
     }
 
+    /**
+     * @param $type
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return ODMessage|bool
+     */
     public function evtCallback($type, $class, $method, $stopEvent = false)
     {
         $type       = (string) $type;
@@ -460,6 +587,10 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @param $type
+     * @return ODMessage|bool
+     */
     public function disCallback($type)
     {
         $properties     = $this->getProperties();
@@ -474,6 +605,9 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disCallbacks()
     {
         $properties     = $this->getProperties();
@@ -486,6 +620,10 @@ class ODMessage extends ODContained
      * méthodes de gestion du type de message prompt                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @param string $type
+     * @return ODMessage
+     */
     public function setType($type = self::ODMESSAGEPROMPT_TEXT)
     {
         $types  = $this->getPromptsContants();
@@ -498,12 +636,18 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getType()
     {
         $properties = $this->getProperties();
         return array_key_exists('type', $properties) ? $properties['type'] : false;
     }
-    
+
+    /**
+     * @return ODMessage
+     */
     public function enaMultiline()
     {
         $properties = $this->getProperties();
@@ -512,6 +656,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disMultiline()
     {
         $properties = $this->getProperties();
@@ -520,12 +667,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getMultiline()
     {
         $properties = $this->getProperties();
         return array_key_exists('multiline', $properties) ? $properties['multiline'] : false;
     }
 
+    /**
+     * @param int $lineNumber
+     * @return ODMessage|bool
+     */
     public function setLineNumber($lineNumber = 1)
     {
         $properties = $this->getProperties();
@@ -541,12 +695,19 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getLineNumber()
     {
         $properties = $this->getProperties();
         return array_key_exists('lines', $properties) ? $properties['lines'] : false;
     }
 
+    /**
+     * @param $label
+     * @return ODMessage
+     */
     public function setLabel($label)
     {
         $label = (string) $label;
@@ -556,12 +717,18 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabel()
     {
         $properties = $this->getProperties();
         return array_key_exists('label', $properties) ? $properties['label'] : false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function enaRequired()
     {
         $properties = $this->getProperties();
@@ -570,6 +737,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disRequired()
     {
         $properties = $this->getProperties();
@@ -578,12 +748,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getRequired()
     {
         $properties = $this->getProperties();
         return array_key_exists('required', $properties) ? $properties['required'] : false;
     }
 
+    /**
+     * @param string $errorMessage
+     * @return ODMessage
+     */
     public function setErrorMessage($errorMessage = '')
     {
         $errorMessage = (string) $errorMessage;
@@ -593,12 +770,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getErrorMessage()
     {
         $properties = $this->getProperties();
         return array_key_exists('errorMessage', $properties) ? $properties['errorMessage'] : false;
     }
 
+    /**
+     * @param array $attrs
+     * @return ODMessage
+     */
     public function setAttrs(array $attrs)
     {
         $properties = $this->getProperties();
@@ -613,6 +797,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getAttrs()
     {
         $properties = $this->getProperties();
@@ -623,6 +810,9 @@ class ODMessage extends ODContained
      * méthodes de gestion du type de message progress                                                   *
      * *************************************************************************************************** */
 
+    /**
+     * @return ODMessage
+     */
     public function enaProgressLabel()
     {
         $properties = $this->getProperties();
@@ -631,6 +821,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disProgressLabel()
     {
         $properties = $this->getProperties();
@@ -639,6 +832,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getProgressLabel()
     {
         $properties = $this->getProperties();
@@ -649,6 +845,10 @@ class ODMessage extends ODContained
      * méthodes de gestion du type de message window                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @param null $content
+     * @return ODMessage
+     */
     public function setContent($content = null)
     {
         $content = (string) $content;
@@ -659,12 +859,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getContent()
     {
         $properties = $this->getProperties();
         return array_key_exists('content', $properties) ? $properties['content'] : false;
     }
 
+    /**
+     * @param null $url
+     * @return ODMessage
+     */
     public function setUrl($url = null)
     {
         $url = (string) $url;
@@ -675,12 +882,18 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getUrl()
     {
         $properties = $this->getProperties();
         return array_key_exists('url', $properties) ? $properties['url'] : false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function enaAutoload()
     {
         $properties = $this->getProperties();
@@ -689,6 +902,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disAutoload()
     {
         $properties = $this->getProperties();
@@ -697,12 +913,19 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getAutoload()
     {
         $properties = $this->getProperties();
         return array_key_exists('autoload', $properties) ? $properties['autoload'] : false;
     }
 
+    /**
+     * @param string $method
+     * @return ODMessage
+     */
     public function setLoadMethod($method = self::ODMESSAGEWINDOWLOAD_GET)
     {
         $methods    = $this->getWindowLoadsContants();
@@ -710,17 +933,23 @@ class ODMessage extends ODContained
         if (!in_array($method, $methods)) { $method = self::ODMESSAGEWINDOWLOAD_GET; }
 
         $properties = $this->getProperties();
-        $properties['loadMethod'] = $errorMessage;
+        $properties['loadMethod'] = $method;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLoadMethod()
     {
         $properties = $this->getProperties();
         return array_key_exists('loadMethod', $properties) ? $properties['loadMethod'] : false;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function enaShowAfterLoad()
     {
         $properties = $this->getProperties();
@@ -729,6 +958,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODMessage
+     */
     public function disShowAfterLoad()
     {
         $properties = $this->getProperties();
@@ -737,6 +969,9 @@ class ODMessage extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getShowAfterLoad()
     {
         $properties = $this->getProperties();
@@ -747,6 +982,12 @@ class ODMessage extends ODContained
      * méthodes de customisation des boutons                                                             *
      * *************************************************************************************************** */
 
+    /**
+     * @param $label
+     * @param string $classView
+     * @param bool $closeOnClick
+     * @return ODMessage
+     */
     public function setOkButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
@@ -756,6 +997,9 @@ class ODMessage extends ODContained
         return $this->setButton('ok', $label, $classView, $closeOnClick);
     }
 
+    /**
+     * @return bool|array
+     */
     public function getOkButton()
     {
         $properties = $this->getProperties();
@@ -766,6 +1010,12 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @param $label
+     * @param string $classView
+     * @param bool $closeOnClick
+     * @return ODMessage
+     */
     public function setCancelButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
@@ -775,6 +1025,9 @@ class ODMessage extends ODContained
         return $this->setButton('cancel', $label, $classView, $closeOnClick);
     }
 
+    /**
+     * @return bool|array
+     */
     public function getCancelButton()
     {
         $properties = $this->getProperties();
@@ -785,6 +1038,13 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @param $label
+     * @param null $value
+     * @param string $classView
+     * @param bool $closeOnClick
+     * @return ODMessage
+     */
     public function setYesButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
@@ -794,6 +1054,9 @@ class ODMessage extends ODContained
         return $this->setButton('yes', $label, $value, $classView, $closeOnClick);
     }
 
+    /**
+     * @return bool|array
+     */
     public function getYesButton()
     {
         $properties = $this->getProperties();
@@ -804,6 +1067,13 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @param $label
+     * @param null $value
+     * @param string $classView
+     * @param bool $closeOnClick
+     * @return ODMessage
+     */
     public function setNoButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
@@ -813,6 +1083,9 @@ class ODMessage extends ODContained
         return $this->setButton('no', $label, $value, $classView, $closeOnClick);
     }
 
+    /**
+     * @return bool|array
+     */
     public function getNoButton()
     {
         $properties = $this->getProperties();
@@ -823,6 +1096,13 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @param $label
+     * @param $value
+     * @param string $classView
+     * @param bool $closeOnClick
+     * @return ODMessage
+     */
     public function setCustomButton($label, $value, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
@@ -832,6 +1112,9 @@ class ODMessage extends ODContained
         return $this->setButton('custom', $label, $value = null, $classView, $closeOnClick);
     }
 
+    /**
+     * @return bool|array
+     */
     public function getCustomButton()
     {
         $properties = $this->getProperties();
@@ -842,6 +1125,14 @@ class ODMessage extends ODContained
         return false;
     }
 
+    /**
+     * @param $type
+     * @param $label
+     * @param null $value
+     * @param string $classView
+     * @param bool $closeOnClick
+     * @return ODMessage
+     */
     public function setButton($type, $label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
         $label          = (string) $label;
@@ -870,15 +1161,22 @@ class ODMessage extends ODContained
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
 
+    /**
+     * @param ServiceManager $serviceManager
+     * @param array $params
+     * @return array|bool
+     * @throws \Exception
+     */
     public function dispatchEvents(ServiceManager $serviceManager, array $params)
     {
         $sessionObj     = OObject::validateSession();
         /** @var ODMessage $message */
         $message        = OObject::buildObject($params['id'], $sessionObj);
-        $type           = $params['type'];
+        $type           = (string) $params['type'];
         $events         = $message->getEvents();
         $ret            = [];
         if (!empty($events)) {
+            $keys = array_keys($events);
             if (array_key_exists($type, $events)) {
                 $event      = $events[$type];
 
@@ -902,6 +1200,10 @@ class ODMessage extends ODContained
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getActionsContants()
     {
         $retour = [];
@@ -918,6 +1220,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getTypesContants()
     {
         $retour = [];
@@ -934,6 +1240,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getPromptsContants()
     {
         $retour = [];
@@ -950,6 +1260,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getBtnAlignsContants()
     {
         $retour = [];
@@ -966,6 +1280,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getWindowLoadsContants()
     {
         $retour = [];
@@ -982,6 +1300,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getIconsContants()
     {
         $retour = [];
@@ -998,6 +1320,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getBtnClassesContants()
     {
         $retour = [];
@@ -1014,6 +1340,10 @@ class ODMessage extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getMsgNatureContants()
     {
         $retour = [];
