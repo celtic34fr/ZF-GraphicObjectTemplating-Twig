@@ -124,7 +124,7 @@ class ODMenu extends ODContained
             $prefix = ($item['pos'] == self::ODMENU_POSITION_LEFT) ? 'L' : 'R';
             $idTree = $item['pos'];
         }
-        $optionsPath[$ref] = $this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
+        $optionsPath[$ref] = $prefix.$this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
         
         $this->setProperties($properties);
 
