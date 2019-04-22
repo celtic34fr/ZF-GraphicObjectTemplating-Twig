@@ -40,13 +40,13 @@ use GraphicObjectTemplating\OObjects\ODContained;
  */
 class ODMenu extends ODContained
 {
-    const ODM_POSITION_LEFT = "left";
-    const ODM_POSITION_RIGHT = "right";
+    const ODMENU_POSITION_LEFT = "left";
+    const ODMENU_POSITION_RIGHT = "right";
 
-    const ODM_TARGET_SELF = '_self';
-    const ODM_TARGET_BLANK = '_blank';
-    const ODM_TARGET_PARENT = '_parent';
-    const ODM_TARGET_TOP = '_top';
+    const ODMENU_TARGET_SELF = '_self';
+    const ODMENU_TARGET_BLANK = '_blank';
+    const ODMENU_TARGET_PARENT = '_parent';
+    const ODMENU_TARGET_TOP = '_top';
 
     private $const_position;
     private $const_target;
@@ -72,6 +72,23 @@ class ODMenu extends ODContained
         $this->saveProperties();
         return $this;
     }
+    
+    private function validateItem(array &$item) {
+        if (!array_key_exists('label', $item) or !array_key_exists('link', $item)) return false;
+    
+        $targets    = $this->getTargetConstants();
+        $posis      = $this->getPositionConstants();
+        if (!array_key_exists('target', $item) || !in_array($item['target'], $targets)) {
+            $item['target'] = self::ODMENU_TARGET_SELF;
+        }
+        if (!array_key_exists('pos', $item) || !in_array($item['pos'], $posis)) {
+            $item['pos']    = self::ODMENU_POSITION_LEFT;
+        }
+        if (!array_key_exists('activ', $item)) { $item['activ'] = false; }
+        $item['activ']      = (bool) $item['activ'];
+        
+        return true;
+    }
 
     /**
      * méthode addOption visant à insérer une option de menu dans l'abre menu
@@ -92,37 +109,23 @@ class ODMenu extends ODContained
     public function addOption(string $ref, array $item, int $ord = 0, string $parent = null)
     {
         $properties         = $this->getProperties();
-        $optionsPath        = $properties['optionsPath'];
-        $optionsTree        = $properties['optionsTree'];
+        $optionsPath        = &$properties['optionsPath'];
+        $optionsTree        = &$properties['optionsTree'];
 
-        if (!array_key_exists('label', $item) or !array_key_exists('link', $item)) { return false; }
-        if (!empty($parent) && !array_key_exists($parent, $optionsPath)) { return false; }
-
-        $targets    = $this->getTargetConstants();
-        $posis      = $this->getPositionConstants();
-        if (!array_key_exists('target', $item) || !in_array($item['target'], $targets)) {
-            $item['target'] = self::ODM_TARGET_SELF;
-        }
-        if (!array_key_exists('pos', $item) || !in_array($item['pos'], $posis)) {
-            $item['pos']    = self::ODM_POSITION_LEFT;
-        }
-        $item['ref']        = $ref;
-        if (!array_key_exists('activ', $item)) { $item['activ'] = false; }
-        $item['activ']      = $item['activ'] && true;
-
+        if (!$this->validateItem($item)) return false;
+        
+        $item["ref"] = $ref;
         if (!empty($parent)) {
             $parent = $optionsPath[$parent];
             $prefix = substr($parent, 0, 1);
             $parent = explode('-', substr($parent, 1));
-            $idTree = ($prefix == 'L') ? self::ODM_POSITION_LEFT : self::ODM_POSITION_RIGHT;
+            $idTree = ($prefix == 'L') ? self::ODMENU_POSITION_LEFT : self::ODMENU_POSITION_RIGHT;
         } else {
-            $prefix = ($item['pos'] == self::ODM_POSITION_LEFT) ? 'L' : 'R';
+            $prefix = ($item['pos'] == self::ODMENU_POSITION_LEFT) ? 'L' : 'R';
             $idTree = $item['pos'];
         }
-        $this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
-
-        $properties['optionsPath']  = $optionsPath;
-        $properties['optionsTree']  = $optionsTree;
+        $optionsPath[$ref] = $this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
+        
         $this->setProperties($properties);
 
         return $this;
@@ -157,10 +160,10 @@ class ODMenu extends ODContained
         $targets    = $this->getTargetConstants();
         $posis      = $this->getPositionConstants();
         if (!array_key_exists('target', $item) || !in_array($item['target'], $targets)) {
-            $item['target'] = self::ODM_TARGET_SELF;
+            $item['target'] = self::ODMENU_TARGET_SELF;
         }
         if (!array_key_exists('pos', $item) || !in_array($item['pos'], $posis)) {
-            $item['pos']    = self::ODM_POSITION_LEFT;
+            $item['pos']    = self::ODMENU_POSITION_LEFT;
         }
         $item['ref']        = $ref;
         if (!array_key_exists('activ', $item)) { $item['activ'] = false; }
@@ -169,10 +172,9 @@ class ODMenu extends ODContained
         if (!empty($pathParent)) {
             $parent = explode('-', substr($pathParent, 1));
         }
-        $prefix = ($item['pos'] == self::ODM_POSITION_LEFT) ? 'L' : 'R';
-        list($pathOption, $optionsTree[$item['pos']])   =
-            $this->insertOption($optionsTree[$item['pos']], $ord, $item, $parent);
-        $optionsPath[$ref]                      = $prefix.$pathOption;
+        $prefix = ($item['pos'] == self::ODMENU_POSITION_LEFT) ? 'L' : 'R';
+        $pathOption = $this->insertOption($optionsTree[$item['pos']], $ord, $item, $parent);
+        $optionsPath[$ref] = $prefix.$pathOption;
 
         $properties['optionsPath']  = $optionsPath;
         $properties['optionsTree']  = $optionsTree;
@@ -211,10 +213,10 @@ class ODMenu extends ODContained
         $targets        = $this->getTargetConstants();
         $posis          = $this->getPositionConstants();
         if (!array_key_exists('target', $item) || !in_array($item['target'], $targets)) {
-            $item['target'] = self::ODM_TARGET_SELF;
+            $item['target'] = self::ODMENU_TARGET_SELF;
         }
         if (!array_key_exists('pos', $item) || !in_array($item['pos'], $posis)) {
-            $item['pos']    = self::ODM_POSITION_LEFT;
+            $item['pos']    = self::ODMENU_POSITION_LEFT;
         }
         $item['ref']        = $ref;
 
@@ -256,14 +258,14 @@ class ODMenu extends ODContained
         if (!array_key_exists($ref, $optionsPath)) { return false; }
         if (!in_array($pathParent, $optionsPath)) { return false; }
 
-        $optionsTree    = $properties['optionsTree'];
+        $optionsTree    = &$properties['optionsTree'];
         $targets        = $this->getTargetConstants();
         $posis          = $this->getPositionConstants();
         if (!array_key_exists('target', $item) || !in_array($item['target'], $targets)) {
-            $item['target'] = self::ODM_TARGET_SELF;
+            $item['target'] = self::ODMENU_TARGET_SELF;
         }
         if (!array_key_exists('pos', $item) || !in_array($item['pos'], $posis)) {
-            $item['pos']    = self::ODM_POSITION_LEFT;
+            $item['pos']    = self::ODMENU_POSITION_LEFT;
         }
         $item['ref']        = $ref;
 
@@ -272,7 +274,6 @@ class ODMenu extends ODContained
         }
         $this->insertOption($optionsTree, $ord, $item, $pathParent, false);
 
-        $properties['optionsTree']  = $optionsTree;
         $this->setProperties($properties);
 
         return $this;
@@ -457,7 +458,7 @@ class ODMenu extends ODContained
             /** tri en fonction de la colonne 'parent' e chaque occurence du tableau des options de menu */
             $column = 'parent';
             usort($options, function($a, $b) use ($column) {
-                return $a[$column] <=> $b[$column];
+                return strnatcmp($a[$column], $b[$column]);
             });
             foreach ($options as $option) {
                 $ref    = $option['ref'];
@@ -512,7 +513,7 @@ class ODMenu extends ODContained
         if (empty($this->const_position)) {
             $constants = $this->getConstants();
             foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODM_POSITION_');
+                $pos = strpos($key, 'ODMENU_POSITION_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }
@@ -536,7 +537,7 @@ class ODMenu extends ODContained
         if (empty($this->const_target)) {
             $constants = $this->getConstants();
             foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODM_TARGET_');
+                $pos = strpos($key, 'ODMENU_TARGET_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }
@@ -595,8 +596,6 @@ class ODMenu extends ODContained
      * @param array $pathOption : tableau des indices d'accès à l'option de menu à supprimer
      * @param array $optionsPath : tableau global des chemin d'accès aux options de menu
      * @param array $tree : arbre partiel pour accèder à l'option de menu à supprimer
-     * @return array : arbre partiel après suppression ou traitement, tableau global des chemin d'accès aux options de
-     * menu après suppression des références des options de menu enfant de celle à supprimer
      */
     private function removeOption(array $pathOption, array &$optionsPath, array &$tree)
     {
