@@ -82,6 +82,8 @@ namespace GraphicObjectTemplating\OObjects;
  * getWidth()
  * setHeight($height)
  * getHeight()
+ * isPersistantObjs()
+ * addPersistantObjs()
  *
  * méthodes de gestion des infobulles mis sur les objets
  * -----------------------------------------------------
@@ -1552,6 +1554,19 @@ class OObject
         $gotObjList = self::validateSession();
         $persistentObjs = $gotObjList->persistObjs;
         return (array_key_exists($this->id, $persistentObjs));
+    }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    public function addPersistantObjs()
+    {
+        $gotObjList = self::validateSession();
+        $persistantObjs = $gotObjList->persistObjs;
+        $persistantObjs[$this->id] = $this->id;
+        $gotObjList->persistObjs    = $persistantObjs;
+        return $this;
     }
 
     /** **************************************************************************************************
