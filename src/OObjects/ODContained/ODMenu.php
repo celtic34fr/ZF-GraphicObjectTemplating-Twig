@@ -153,22 +153,11 @@ class ODMenu extends ODContained
         $properties         = $this->getProperties();
         $optionsPath        = $properties['optionsPath'];
         $optionsTree        = $properties['optionsTree'];
-
-        if (!array_key_exists('label', $item) or !array_key_exists('link', $item)) { return false; }
-        if (!empty($pathParent) && !in_array($pathParent, $optionsPath)) { return false; }
-
-        $targets    = $this->getTargetConstants();
-        $posis      = $this->getPositionConstants();
-        if (!array_key_exists('target', $item) || !in_array($item['target'], $targets)) {
-            $item['target'] = self::ODMENU_TARGET_SELF;
-        }
-        if (!array_key_exists('pos', $item) || !in_array($item['pos'], $posis)) {
-            $item['pos']    = self::ODMENU_POSITION_LEFT;
-        }
+    
+        if (!$this->validateItem($item)) return false;
+        
         $item['ref']        = $ref;
-        if (!array_key_exists('activ', $item)) { $item['activ'] = false; }
-        $item['activ']      = $item['activ'] && true;
-
+    
         if (!empty($pathParent)) {
             $parent = explode('-', substr($pathParent, 1));
         }
