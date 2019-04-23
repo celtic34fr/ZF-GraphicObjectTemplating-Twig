@@ -48,6 +48,8 @@ use Zend\ServiceManager\ServiceManager;
  * disClickNode()
  * getParent($ref)
  * getChildLeaves($ref, $level = 0)
+ * getRef($path)
+ * getPath($ref)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -675,8 +677,8 @@ class ODTreeview extends ODContained
 		$leaf	= $this->getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
-			$dataTree       		= $properties['dataTree'];
-            $dataPath       		= $properties['dataPath'];
+			$dataTree       		= &$properties['dataTree'];
+            $dataPath       		= &$properties['dataPath'];
 
 			$leaf['sortable']		= true;
 
@@ -688,8 +690,7 @@ class ODTreeview extends ODContained
 				}
 			}
 
-            $dataTree       		= $this->updateTree($dataTree, $dataPath[$ref], $leaf);
-            $properties['dataTree'] = $dataTree;
+            $properties['dataTree'] = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
             $this->setProperties($properties);
             return $this;
 		}
@@ -788,6 +789,29 @@ class ODTreeview extends ODContained
             }
         }
         return $children;
+    }
+
+    /**
+     * @param string $path
+     * @return bool|false|int|string
+     */
+    public function getRef(string $path)
+    {
+        $properties = $this->getProperties();
+        $dataPath   = $properties['dataPath'];
+        return array_search($path, $dataPath) ?? false;
+    }
+
+    /**
+     * @param string $ref
+     * @return bool
+     */
+    public function getPath(string $ref)
+    {
+        $properties     = $this->getProperties();
+        $optionsPath    = $properties['dataPath'];
+
+        return array_key_exists($ref, $optionsPath) ? $optionsPath[$ref] : false;
     }
 
     /** **************************************************************************************************
