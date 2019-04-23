@@ -156,9 +156,9 @@ class ODTreeview extends ODContained
                     $item['selectable'] = true;
                     $item['sortable']	= true;
 
-                    $dataTree[$ord]     = $item;
-                    $dataPath[$ref]     = $ord;
-                    $validAct           = true;
+                    $dataTree[(string) $ord]    = $item;
+                    $dataPath[$ref]             = (string) $ord;
+                    $validAct                   = true;
                     ksort($dataTree);
                 }
             } else {
