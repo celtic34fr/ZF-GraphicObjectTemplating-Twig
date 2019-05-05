@@ -11,10 +11,10 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * Class OSDialog
  * @package GraphicObjectTemplating\Objects\OSContainer
  *
- * showBtnClose         : paramètre l'affichage de la croix de fermeture
- * hideBtnClose         : paramètre de ne pas afficher la croix de fermeture
- * setTitle($title)     : affecte un titre à la fenêtre modale
- * getTitle()           : restitue le titre de la fenêtre modale
+ * showBtnClose             : paramètre l'affichage de la croix de fermeture
+ * hideBtnClose             : paramètre de ne pas afficher la croix de fermeture
+ * setTitle($title)         : affecte un titre à la fenêtre modale
+ * getTitle()               : restitue le titre de la fenêtre modale
  * setWidthDialog($width)   : largeur du dialogue en unité compatible internet
  * getWidthDialog()         : restitue la largeur du dialogue en unité compatible internet
  * setMinHeight($minHeight) : hauteur minimale du dialogue en unité compatible internet
@@ -23,11 +23,15 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * getBgColor()             : restitue la couleur de fond du dialogue
  * setFgColor($fgColor)     : permet de fixer la couleur d'écriture dans le dialogue
  * getFgColor()             : restitue la couleur d'écriture dans le dialogue
- * setContent($content)     : affecte le contenu de $content en enfant du dialogue (directe si OObject, sinon via ODContent)
+ * setContent($content)     : affecte le contenu de $content en enfant du dialogue (directe si OObject,
+ *                                  sinon via ODContent)
  * getContent()             : restitue le contnu du dialogue au travers de l'objet enfant (ODContent ou autre)
- *
  * enaCloseBtnOnly()        : n'autorise la fermeture du dialogue par le bouton close ou un bouton d'annulation
  * disCloseBtnOnly()
+ * setSize($size = null)    : fixe la taille (largeur ) du dialogue modal
+ * getSize()                : récupère la taille (largeur) du dialogue modal
+ * enaAnimation()           : active l'animation de visualisation du dialogue modal
+ * disAnimation()           : supprime l'animation de visualisation du dialogue modal
  */
 class OSDialog extends OSContainer
 {
@@ -84,8 +88,20 @@ class OSDialog extends OSContainer
     const COLOR_GRAYLIGHT     = 'grayLight';
     const COLOR_GRAYLIGHTER   = 'grayLighter';
 
-    protected $const_color;
+    const SIZE_SMALL          = 'small';
+    const SIZE_NORMAL         = 'normal';
+    const SIZE_LARGE          = 'large';
 
+    protected $const_color;
+    protected $const_size;
+
+    /**
+     * OSDialog constructor.
+     * @param $id
+     * @throws \ReflectionException
+     * @throws \Exception
+     * @return OSDialog
+     */
     public function __construct($id) {
         parent::__construct($id, "oobjects/oscontainer/osdialog/osdialog.config.php");
 
@@ -101,6 +117,9 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return OSDialog
+     */
     public function showBtnClose()
     {
         $properties = $this->getProperties();
@@ -109,6 +128,9 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return OSDialog
+     */
     public function hideBtnClose()
     {
         $properties = $this->getProperties();
@@ -117,54 +139,76 @@ class OSDialog extends OSContainer
         return $this;
     }
 
-    public function setTitle($title)
+    /**
+     * @param $title
+     * @return OSDialog
+     */
+    public function setTitle(string $title)
     {
-        $title = (string) $title;
         $properties = $this->getProperties();
         $properties['title'] = $title;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getTitle()
     {
         $properties          = $this->getProperties();
-        return ((!empty($properties['title'])) ? $properties['title'] : false) ;
+        return (!empty($properties['title'])) ? $properties['title'] : false ;
     }
 
-    public function setWidthDialog($widthDialog)
+    /**
+     * @param $widthDialog
+     * @return OSDialog
+     */
+    public function setWidthDialog(string $widthDialog)
     {
-        $widthDialog = (string) $widthDialog;
         $properties = $this->getProperties();
         $properties['widthDialog'] = $widthDialog;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getWidthDialog()
     {
         $properties          = $this->getProperties();
         return ((!empty($properties['widthDialog'])) ? $properties['widthDialog'] : false) ;
     }
 
-    public function setMinHeight($minHeight)
+    /**
+     * @param $minHeight
+     * @return OSDialog
+     */
+    public function setMinHeight(string $minHeight)
     {
-        $minHeight = (string) $minHeight;
         $properties = $this->getProperties();
         $properties['minHeight'] = $minHeight;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getMinHeight()
     {
         $properties          = $this->getProperties();
         return ((!empty($properties['minHeight'])) ? $properties['minHeight'] : false) ;
     }
 
-    public function setBgColor($bgColor)
+    /**
+     * @param $bgColor
+     * @return OSDialog
+     * @throws \ReflectionException
+     */
+    public function setBgColor(string $bgColor)
     {
-        $bgColor  = (string) $bgColor;
         $colors = $this->getColorConst();
         if (!in_array($bgColor, $colors, true)) { $bgColor = self::COLOR_GRAYLIGHTER; }
         $properties = $this->getProperties();
@@ -173,15 +217,22 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getBgColor()
     {
         $properties = $this->getProperties();
         return ((!empty($properties['bgColor'])) ? $properties['bgColor'] : false);
     }
 
-    public function setFgColor($fgColor)
+    /**
+     * @param $fgColor
+     * @return OSDialog
+     * @throws \ReflectionException
+     */
+    public function setFgColor(string $fgColor)
     {
-        $fgColor  = (string) $fgColor;
         $colors = $this->getColorConst();
         if (!in_array($fgColor, $colors, true)) { $fgColor = self::COLOR_GRAYLIGHTER; }
         $properties = $this->getProperties();
@@ -190,16 +241,23 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getFgColor()
     {
         $properties = $this->getProperties();
         return ((!empty($properties['fgColor'])) ? $properties['fgColor'] : false);
     }
 
-    public function evtClose($class, $method, $stopEvent = true)
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return OSDialog
+     */
+    public function evtClose(string $class, string $method, bool $stopEvent = true)
     {
-        $class = (string)$class;
-        $method = (string)$method;
         $properties = $this->getProperties();
         if (!isset($properties['event'])) {
             $properties['event'] = [];
@@ -217,6 +275,9 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getClose()
     {
         $properties = $this->getProperties();
@@ -227,6 +288,9 @@ class OSDialog extends OSContainer
         return false;
     }
 
+    /**
+     * @return OSDialog
+     */
     public function disClose()
     {
         $properties = $this->getProperties();
@@ -238,6 +302,11 @@ class OSDialog extends OSContainer
     }
 
 
+    /**
+     * @param $content
+     * @return OSDialog
+     * @throws \Exception
+     */
     public function setContent($content)
     {
         $properties = $this->getProperties();
@@ -251,12 +320,44 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return array|bool
+     * @throws \Exception
+     */
     public function getContent()
     {
         if ($this->$this->hasChildren()) return $this->getChildren();
         return false;
     }
 
+    /**
+     * @param string|null $size
+     * @return OSDialog
+     * @throws \ReflectionException
+     */
+    public function setSize(string $size = null)
+    {
+        $sizes  = $this->getSizeConst();
+        if (!in_array($size, $sizes)) { $size = self::SIZE_NORMAL; }
+        $properties = $this->getProperties();
+        $properties['size'] = $size;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getSize()
+    {
+        $properties = $this->getProperties();
+        return ((!empty($properties['size'])) ? $properties['size'] : false);
+    }
+
+
+    /**
+     * @return array
+     */
     public function CmdOpenDialog()
     {
         $item = [];
@@ -267,6 +368,9 @@ class OSDialog extends OSContainer
         return $item;
     }
 
+    /**
+     * @return array
+     */
     public function CmdCloseDialog()
     {
         $item = [];
@@ -277,6 +381,9 @@ class OSDialog extends OSContainer
         return $item;
     }
 
+    /**
+     * @return array
+     */
     public function CmdToggleDialog()
     {
         $item = [];
@@ -289,6 +396,9 @@ class OSDialog extends OSContainer
         return $item;
     }
 
+    /**
+     * @return OSDialog
+     */
     public function enaCloseBtnOnly()
     {
         $properties = $this->getProperties();
@@ -297,6 +407,9 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return OSDialog
+     */
     public function disCloseBtnOnly()
     {
         $properties = $this->getProperties();
@@ -305,9 +418,35 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @return OSDialog
+     */
+    public function enaAnimation()
+    {
+        $properties = $this->getProperties();
+        $properties['animate'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return OSDialog
+     */
+    public function disAnimation()
+    {
+        $properties = $this->getProperties();
+        $properties['animate'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
 
     /** méthode(s) privée(s) */
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     private function getColorConst()
     {
         $retour = [];
@@ -322,6 +461,28 @@ class OSDialog extends OSContainer
             $this->const_color = $retour;
         } else {
             $retour = $this->const_color;
+        }
+        return $retour;
+    }
+
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    private function getSizeConst()
+    {
+        $retour = [];
+        if (empty($this->const_size)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'SIZE');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_size = $retour;
+        } else {
+            $retour = $this->const_size;
         }
         return $retour;
     }

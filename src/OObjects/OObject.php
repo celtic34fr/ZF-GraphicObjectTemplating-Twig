@@ -400,12 +400,13 @@ class OObject
         if ($session) {
             $objects                = $sessionObj->objects;
             $persistantObjs         = $sessionObj->persistObjs;
+            $resources              = $sessionObj->resources;
 
             $tmpObjects             = [];
             $tmpResources           = [];
             foreach ($persistantObjs as $id => $classe) {
                 $tmpObjects[$id]    = $objects[$id];
-                $tmpResources       = ZF3GotServices::rscs($id, $objects, $tmpResources);
+                $tmpResources       = ZF3GotServices::rscs($id, $objects, $resources);
             }
 
             $sessionObj->objects    = $tmpObjects;

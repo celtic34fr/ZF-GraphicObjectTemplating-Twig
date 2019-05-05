@@ -147,6 +147,8 @@ class ZF3GotServices
      */
     public static function rscs($object, $objects = null, $rscsSession = null)
     {
+        $tmpResources           = [];
+
         if ($object instanceof OObject) { $object = $object->getId(); }
         if (empty($objects)) {
             $gotObjList         = OObject::validateSession();
@@ -157,34 +159,68 @@ class ZF3GotServices
         if (!empty($object) && $object != null && array_key_exists($object, $objects)) {
             $properties = unserialize($objects[$object]);
 
-            if (!empty($properties['children'])) {
+            $objName    = $properties['object'];
+
+            if (!empty($rscsSession)) {
+                foreach ($rscsSession as $type => $resource) {
+                    foreach ($resource as $name => $path) {
+                        $posObjName     = strpos($path, $objName);
+                        if ($posObjName !== false) {
+                            if (!array_key_exists($type, $tmpResources)) {$tmpResources[$type] = []; }
+                            $tmpResources[$type][$name] = $path;
+                        }
+                    }
+                }
+
                 foreach ($properties['children'] as $child) {
-                    $rscsSession = self::rscs($child, $objects, $rscsSession);
-                    if (!$rscsSession) {
-                        throw new \Exception("objet $object non trouvé, veuillez avertir l'administrateur");
+                    $childProperties    = unserialize($objects[$child]);
+                    $objName            = $childProperties['object'];
+                    foreach ($rscsSession as $type => $resource) {
+                        foreach ($resource as $name => $path) {
+                            $posObjName     = strpos($path, $objName);
+                            if ($posObjName !== false) {
+                                if (!array_key_exists($type, $tmpResources)) {$tmpResources[$type] = []; }
+                                $tmpResources[$type][$name] = $path;
+                            }
+                        }
+                    }
+                }
+            } else {
+                $pathRscs   = __DIR__ ;
+                $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
+                $pathRscs  .= '/'.$properties['object'].'.rscs.php';
+                if (is_file($pathRscs)) {
+                    $rscsObj        = include $pathRscs;
+                    $prefix         = 'graphicobjecttemplating/oobjects/';
+                    if (array_key_exists('prefix', $rscsObj)) {
+                        $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
+                        unset($rscsObj['prefix']);
+                    }
+                    foreach ($rscsObj as $type => $filesInfo) {
+                        if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
+                        foreach ($filesInfo as $name => $path) {
+                            if (!array_key_exists($type, $tmpResources)) {$tmpResources[$type] = []; }
+                            $tmpResources[$type][$name] = $prefix.$path;
+                        }
+                    }
+                }
+
+                if (!empty($properties['children'])) {
+                    foreach ($properties['children'] as $child) {
+                        $childRscs = self::rscs($child, $objects);
+                        if (!$childRscs) {
+                            throw new \Exception("objet $child non trouvé, veuillez avertir l'administrateur");
+                        }
+                        foreach ($childRscs as $type => $childRsc) {
+                            foreach ($childRsc as $name => $path) {
+                                $tmpResources[$type][$name] = $path;
+                            }
+                        }
                     }
                 }
             }
 
-            $pathRscs   = __DIR__ ;
-            $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
-            $pathRscs  .= '/'.$properties['object'].'.rscs.php';
-            if (is_file($pathRscs)) {
-                $rscsObj        = include $pathRscs;
-                $prefix         = 'graphicobjecttemplating/oobjects/';
-                if (array_key_exists('prefix', $rscsObj)) {
-                    $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
-                    unset($rscsObj['prefix']);
-                }
-                foreach ($rscsObj as $type => $filesInfo) {
-                    if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
-                    foreach ($filesInfo as $name => $path) {
-                        $rscsSession[$type][$name] = $prefix.$path;
-                    }
-                }
-            }
-
-            return $rscsSession;
+            return $tmpResources;
 
 //            $rscsTab                = [];
 //            $rscsTab['cssScripts']  = [];
