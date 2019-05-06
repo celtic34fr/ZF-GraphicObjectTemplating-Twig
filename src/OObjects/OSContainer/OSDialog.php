@@ -308,21 +308,24 @@ class OSDialog extends OSContainer
      */
     public function addContent($content, $mode =self::MODE_LAST, $params=null)
     {
-        $properties = $this->getProperties();
+        $sessionObjects = self::validateSession();
+        $properties     = $this->getProperties();
         if (!($content instanceof OObject)) {
-            $name = $properties['id'].'Content'.(sizeof($properties['contents']) + 1);
+            $name   = $properties['id'].'Content'.(sizeof($properties['contents']) + 1);
         } else {
             $name   = $content->getId();
         }
+
+        if (self::existObject($name, $sessionObjects)) { self::destroyObject($name); }
 
         if (!($content instanceof OObject)) {
             $contenu = new ODSpan($name);
             $contenu->setContent($content);
             $contenu->saveProperties();
         }
-        $this->addChild($contenu, $mode, $params);
         $properties['contents'][$name] = $name;
         $this->setProperties($properties);
+        $this->addChild($contenu, $mode, $params);
 
         return $name;
     }
@@ -339,10 +342,10 @@ class OSDialog extends OSContainer
         if (array_key_exists($name, $contents)) {
             $sessionObjects = self::validateSession();
             $content        = self::buildObject($name, $sessionObjects);
-            $this->removeChild($content);
             unset($contents[$name]);
             $properties['contents'] = $contents;
             $this->setProperties($properties);
+            $this->removeChild($content);
             return $this;
         }
         return false;
