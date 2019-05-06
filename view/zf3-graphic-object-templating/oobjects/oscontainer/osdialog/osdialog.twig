@@ -5,7 +5,7 @@
 {% if objet.size == 'small' %} {% set modalDialogClasses =  modalDialogClasses ~ ' modal-sm' %} {% endif %}
 
 {% set modalClasses = 'modal' %}
-{% if objet.animate == true %} {% set modalClasses = modalCalsses ~ ' fade' %} {% endif %}
+{% if objet.animate == true %} {% set modalClasses = modalClasses ~ ' fade' %} {% endif %}
 
 <div class="{{ modalClasses }}" tabindex="-1" role="dialog" id="{{ objet.id }}"
      {% if objet.title is defined and objet.tile is not empty %}aria-labelledby="{{ objet.title }}"{% endif %}

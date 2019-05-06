@@ -208,9 +208,9 @@ class ZF3GotServices
                 if (!empty($properties['children'])) {
                     foreach ($properties['children'] as $child) {
                         $childRscs = self::rscs($child, $objects);
-                        if (!$childRscs) {
-                            throw new \Exception("objet $child non trouvé, veuillez avertir l'administrateur");
-                        }
+//                        if (!$childRscs) {
+//                            throw new \Exception("objet $child non trouvé, veuillez avertir l'administrateur");
+//                        }
                         foreach ($childRscs as $type => $childRsc) {
                             foreach ($childRsc as $name => $path) {
                                 $tmpResources[$type][$name] = $path;

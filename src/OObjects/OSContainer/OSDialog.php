@@ -301,6 +301,70 @@ class OSDialog extends OSContainer
         return $this;
     }
 
+    /**
+     * @param $content : contenu proprement dit à ajouter
+     * @return string : nom attribué au contenu (ID)
+     * @throws \Exception
+     */
+    public function addContent($content, $mode =self::MODE_LAST, $params=null)
+    {
+        $properties = $this->getProperties();
+        if (!($content instanceof OObject)) {
+            $name = $properties['id'].'Content'.(sizeof($properties['contents']) + 1);
+        } else {
+            $name   = $content->getId();
+        }
+
+        if (!($content instanceof OObject)) {
+            $contenu = new ODSpan($name);
+            $contenu->setContent($content);
+            $contenu->saveProperties();
+        }
+        $this->addChild($contenu, $mode, $params);
+        $properties['contents'][$name] = $name;
+        $this->setProperties($properties);
+
+        return $name;
+    }
+
+    /**
+     * @param string $name
+     * @return OSDialog|bool
+     * @throws \Exception
+     */
+    public function removeContent(string $name)
+    {
+        $properties = $this->getProperties();
+        $contents   = $properties['contents'];
+        if (array_key_exists($name, $contents)) {
+            $sessionObjects = self::validateSession();
+            $content        = self::buildObject($name, $sessionObjects);
+            $this->removeChild($content);
+            unset($contents[$name]);
+            $properties['contents'] = $contents;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @return OSDialog
+     * @throws \Exception
+     */
+    public function clearContents()
+    {
+        $sessionObjects = self::validateSession();
+        $properties     = $this->getProperties();
+        $contents       = $properties['contents'];
+        foreach ($contents as $name) {
+            $content        = self::buildObject($name, $sessionObjects);
+            $this->removeChild($content);
+        }
+        $properties['contents'] = [];
+        $this->setProperties($properties);
+        return $this;
+    }
 
     /**
      * @param $content
@@ -309,10 +373,14 @@ class OSDialog extends OSContainer
      */
     public function setContent($content)
     {
+        /** suppression detous les contenus présents */
+        $this->clearContents();
+
         $properties = $this->getProperties();
         if (!($content instanceof OObject)) {
             $contenu = new ODSpan($properties['id']."Content");
             $contenu->setContent($content);
+            $contenu->saveProperties();
             $this->addChild($contenu);
         } else {
             $this->addChild($content);
@@ -326,7 +394,7 @@ class OSDialog extends OSContainer
      */
     public function getContent()
     {
-        if ($this->$this->hasChildren()) return $this->getChildren();
+        if ($this->hasChild()) return $this->getChildren();
         return false;
     }
 
@@ -352,48 +420,6 @@ class OSDialog extends OSContainer
     {
         $properties = $this->getProperties();
         return ((!empty($properties['size'])) ? $properties['size'] : false);
-    }
-
-
-    /**
-     * @return array
-     */
-    public function CmdOpenDialog()
-    {
-        $item = [];
-        $item['idSource']   = $this->getId();
-        $item['idCible']   = $this->getId();
-        $item['mode'] = "exec";
-        $item['code'] = '$("#'.$this->getId().'").modal("show");';
-        return $item;
-    }
-
-    /**
-     * @return array
-     */
-    public function CmdCloseDialog()
-    {
-        $item = [];
-        $item['idSource']   = $this->getId();
-        $item['idCible']   = $this->getId()."Command";
-        $item['mode'] = "exec";
-        $item['code'] = '$("#'.$this->getId().'").modal("hide");';
-        return $item;
-    }
-
-    /**
-     * @return array
-     */
-    public function CmdToggleDialog()
-    {
-        $item = [];
-
-        $item['idSource']   = $this->getId();
-        $item['idCible']   = $this->getId()."Command";
-        $item['mode'] = "exec";
-        $item['code'] = '$("#'.$this->getId().'").modal("toggle");';
-
-        return $item;
     }
 
     /**
@@ -441,7 +467,55 @@ class OSDialog extends OSContainer
     }
 
 
-    /** méthode(s) privée(s) */
+    /** ------------------------- *
+     * méthode(s) retour callback *
+     * -------------------------- */
+
+    /**
+     * @return array
+     */
+    public function CmdOpenDialog()
+    {
+        $item = [];
+        $item['idSource']   = $this->getId();
+        $item['idCible']   = $this->getId();
+        $item['mode'] = "exec";
+        $item['code'] = '$("#'.$this->getId().'").modal("show");';
+        return $item;
+    }
+
+    /**
+     * @return array
+     */
+    public function CmdCloseDialog()
+    {
+        $item = [];
+        $item['idSource']   = $this->getId();
+        $item['idCible']   = $this->getId()."Command";
+        $item['mode'] = "exec";
+        $item['code'] = '$("#'.$this->getId().'").modal("hide");';
+        return $item;
+    }
+
+    /**
+     * @return array
+     */
+    public function CmdToggleDialog()
+    {
+        $item = [];
+
+        $item['idSource']   = $this->getId();
+        $item['idCible']   = $this->getId()."Command";
+        $item['mode'] = "exec";
+        $item['code'] = '$("#'.$this->getId().'").modal("toggle");';
+
+        return $item;
+    }
+
+
+    /** ------------------- *
+     * méthode(s) privée(s) *
+     * ---------------------*/
 
     /**
      * @return array

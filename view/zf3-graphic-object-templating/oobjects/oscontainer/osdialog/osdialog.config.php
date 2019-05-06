@@ -16,4 +16,5 @@ return [
     'size'          => OSDialog::SIZE_NORMAL,
     'bgColor'       => OSDialog::COLOR_WHITE,
     'fgColor'       => OSDialog::COLOR_BLACK,
+    'contents'      => [],
 ];
