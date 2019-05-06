@@ -312,17 +312,14 @@ class OSDialog extends OSContainer
         $properties     = $this->getProperties();
         if (!($content instanceof OObject)) {
             $name   = $properties['id'].'Content'.(sizeof($properties['contents']) + 1);
+            if (self::existObject($name, $sessionObjects)) { throw new \Exception("objet $name already exist"); }
+            $contenu = new ODSpan($name);
+            $contenu->setContent($content);
+            $contenu->saveProperties();
         } else {
             $name   = $content->getId();
         }
 
-        if (self::existObject($name, $sessionObjects)) { self::destroyObject($name); }
-
-        if (!($content instanceof OObject)) {
-            $contenu = new ODSpan($name);
-            $contenu->setContent($content);
-            $contenu->saveProperties();
-        }
         $properties['contents'][$name] = $name;
         $this->setProperties($properties);
         $this->addChild($contenu, $mode, $params);
