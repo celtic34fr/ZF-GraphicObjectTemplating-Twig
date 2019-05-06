@@ -317,7 +317,8 @@ class OSDialog extends OSContainer
             $contenu->setContent($content);
             $contenu->saveProperties();
         } else {
-            $name   = $content->getId();
+            $name       = $content->getId();
+            $contenu    = $content;
         }
 
         $properties['contents'][$name] = $name;
@@ -360,6 +361,7 @@ class OSDialog extends OSContainer
         foreach ($contents as $name) {
             $content        = self::buildObject($name, $sessionObjects);
             $this->removeChild($content);
+            if (strpos($name, $properties['id'].'Content') !== false) { self::destroyObject($name); }
         }
         $properties['contents'] = [];
         $this->setProperties($properties);
