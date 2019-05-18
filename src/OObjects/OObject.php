@@ -1554,7 +1554,7 @@ class OObject
     {
         $gotObjList = self::validateSession();
         $persistentObjs = $gotObjList->persistObjs;
-        return (array_key_exists($this->id, $persistentObjs));
+        return (is_array($persistentObjs)) ? (array_key_exists($this->id, $persistentObjs)) : false;
     }
 
     /**
