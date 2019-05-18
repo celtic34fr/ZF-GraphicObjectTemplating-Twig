@@ -94,7 +94,7 @@ class OSForm extends OSDiv
         $properties['object']    = 'osform';
         $properties['typeObj']   = 'oscontainer';
         $properties['template']  = 'osform.twig';
-        $properties['resources'] = $localAttributes['resources'];
+        $properties['resources'] = (array_key_exists('resources', $localAttributes)) ? $localAttributes['resources'] : [];
         foreach ($localAttributes as $key => $localAttribute) {
             if (!array_key_exists($key, $properties)) {
                 $properties[$key] = $localAttribute;

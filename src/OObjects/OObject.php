@@ -404,9 +404,11 @@ class OObject
 
             $tmpObjects             = [];
             $tmpResources           = [];
-            foreach ($persistantObjs as $id => $classe) {
-                $tmpObjects[$id]    = $objects[$id];
-                $tmpResources       = ZF3GotServices::rscs($id, $objects, $resources);
+            if (is_array($persistantObjs)) {
+                foreach ($persistantObjs as $id => $classe) {
+                    $tmpObjects[$id]    = $objects[$id];
+                    $tmpResources       = ZF3GotServices::rscs($id, $objects, $resources);
+                }
             }
 
             $sessionObj->objects    = $tmpObjects;
