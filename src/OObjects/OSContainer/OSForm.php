@@ -444,6 +444,11 @@ class OSForm extends OSDiv
                 $bouton->evtClick($class, $method, $stopEvent);
             }
 
+            $btnControls['ord'][$ord]       = $bouton->getId();
+            $btnControls[$name] = [];
+            $btnControls[$name]['object']   = $bouton->getId();
+            $btnControls[$name]['ord']      = $ord;
+
             if ($this->getBtnsCtrlP() == self::OSFORMDISPBTN_HORIZONTAL) {
                 if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
                 // reprise des taille de boutons suit à ajout d'un
@@ -469,12 +474,7 @@ class OSForm extends OSDiv
                 $widthBT[1] = 12;
                 $widthBT[2] = 12;
             }
-
             $bouton->saveProperties();
-            $btnControls['ord'][$ord]       = $bouton->getId();
-            $btnControls[$name] = [];
-            $btnControls[$name]['object']   = $bouton->getId();
-            $btnControls[$name]['ord']      = $ord;
 
             // insertion du nouveau bouton à sa place
             if (sizeof($btnControls['ord']) == 1) {
