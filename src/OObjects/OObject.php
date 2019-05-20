@@ -400,12 +400,15 @@ class OObject
         if ($session) {
             $objects                = $sessionObj->objects;
             $persistantObjs         = $sessionObj->persistObjs;
+            $resources              = $sessionObj->resources;
 
             $tmpObjects             = [];
             $tmpResources           = [];
-            foreach ($persistantObjs as $id => $classe) {
-                $tmpObjects[$id]    = $objects[$id];
-                $tmpResources       = ZF3GotServices::rscs($id, $objects, $tmpResources);
+            if (is_array($persistantObjs)) {
+                foreach ($persistantObjs as $id => $classe) {
+                    $tmpObjects[$id]    = $objects[$id];
+                    $tmpResources       = ZF3GotServices::rscs($id, $objects, $resources);
+                }
             }
 
             $sessionObj->objects    = $tmpObjects;
@@ -1553,7 +1556,7 @@ class OObject
     {
         $gotObjList = self::validateSession();
         $persistentObjs = $gotObjList->persistObjs;
-        return (array_key_exists($this->id, $persistentObjs));
+        return (is_array($persistentObjs)) ? (array_key_exists($this->id, $persistentObjs)) : false;
     }
 
     /**

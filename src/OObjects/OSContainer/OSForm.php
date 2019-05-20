@@ -9,6 +9,7 @@ use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 use GraphicObjectTemplating\OObjects\ODContained\ODSpan;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer;
+use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
 
 /**
  * Class OSForm
@@ -51,6 +52,9 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * getHiddenValue($key)
  * setTitle(string $title)
  * getTitle()
+ * enaBtnsCtrlH()
+ * enaBtnsCtrlV(int $widthBT = 2)
+ * getBtnsCtrlP()
  *
  * mérthodes privées
  * -----------------
@@ -72,9 +76,11 @@ use GraphicObjectTemplating\OObjects\OSContainer;
 class OSForm extends OSDiv
 {
 
-    const OSFORMBTN_RESET   = 'reset';
-    const OSFORMBTN_SUBMIT  = 'submit';
+    const OSFORMBTN_RESET           = 'reset';
+    const OSFORMBTN_SUBMIT          = 'submit';
 
+    const OSFORMDISPBTN_HORIZONTAL  = 'H';
+    const OSFORMDISPBTN_VERTICAL    = 'V';
     protected $const_btn;
 
     /**
@@ -94,7 +100,7 @@ class OSForm extends OSDiv
         $properties['object']    = 'osform';
         $properties['typeObj']   = 'oscontainer';
         $properties['template']  = 'osform.twig';
-        $properties['resources'] = $localAttributes['resources'];
+        $properties['resources'] = (array_key_exists('resources', $localAttributes)) ? $localAttributes['resources'] : [];
         foreach ($localAttributes as $key => $localAttribute) {
             if (!array_key_exists($key, $properties)) {
                 $properties[$key] = $localAttribute;
@@ -133,6 +139,9 @@ class OSForm extends OSDiv
             }
         }
         $sessionObj->resources = $rscsSession;
+
+        $divCtrls   = new OSDiv($this->getId().'Ctrls');
+        $divCtrls->saveProperties();
 
         return $this;
     }
@@ -227,6 +236,7 @@ class OSForm extends OSDiv
     /**
      * @param OObject $child
      * @return $this|bool|OSDiv
+     * @throws Exception
      */
     public function removeChild(OObject $child)
     {
@@ -388,6 +398,10 @@ class OSForm extends OSDiv
      */
     public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
+        $sessionObject  = self::validateSession();
+        /** @var OSDiv $btnsCtrls */
+        $btnsCtrls      = self::buildObject($this->getId().'Ctrls', $sessionObject);
+
         $name           = (string) $name;
         $type           = (string) $type;
         $types          = $this->getBtnConstants();
@@ -395,7 +409,6 @@ class OSForm extends OSDiv
         $properties     = $this->getProperties();
         $btnControls    = $properties['btnControls'] ?? [];
         if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
-        $sessionObject  = self::validateSession();
         if (empty($btnControls)) { $btnControls['ord'] = []; }
 
         if (sizeof($btnControls['ord']) < 4 && (!array_key_exists('ord', $btnControls) || !array_key_exists($ord, $btnControls['ord']))) {
@@ -425,41 +438,47 @@ class OSForm extends OSDiv
             $bouton->setValue($value);
             $bouton->setForm($this->getId());
             $bouton->setClasses("ospaddingV05");
-            if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
             if ($type == ODButton::BUTTONTYPE_RESET && (empty($class) || empty($method))){
                 $bouton->evtClick('javascript:', 'resetFormDatas('.$this->getId().')', true);
             } else {
                 $bouton->evtClick($class, $method, $stopEvent);
             }
-            $bouton->saveProperties();
+
             $btnControls['ord'][$ord]       = $bouton->getId();
             $btnControls[$name] = [];
             $btnControls[$name]['object']   = $bouton->getId();
             $btnControls[$name]['ord']      = $ord;
 
-            // reprise des taille de boutons suit à ajout d'un
-            switch (sizeof($btnControls['ord'])) {
-                case 1:
-                    $widthBT[1] = "O1:W10";
-                    $widthBT[2] = '';
-                    break;
-                case 2:
-                    $widthBT[1] = "O1:W4";
-                    $widthBT[2] = 'O2:W4';
-                    break;
-                case 3:
-                    $widthBT[1] = "O1:W3";
-                    $widthBT[2] = 'O1:W3';
-                    break;
-                case 4:
-                    $widthBT[1] = "O1:W2";
-                    $widthBT[2] = 'O1:W2';
-                    break;
+            if ($this->getBtnsCtrlP() == self::OSFORMDISPBTN_HORIZONTAL) {
+                if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
+                // reprise des taille de boutons suit à ajout d'un
+                switch (sizeof($btnControls['ord'])) {
+                    case 1:
+                        $widthBT[1] = "O1:W10";
+                        $widthBT[2] = '';
+                        break;
+                    case 2:
+                        $widthBT[1] = "O1:W4";
+                        $widthBT[2] = 'O2:W4';
+                        break;
+                    case 3:
+                        $widthBT[1] = "O1:W3";
+                        $widthBT[2] = 'O1:W3';
+                        break;
+                    case 4:
+                        $widthBT[1] = "O1:W2";
+                        $widthBT[2] = 'O1:W2';
+                        break;
+                }
+            } else {
+                $widthBT[1] = 12;
+                $widthBT[2] = 12;
             }
+            $bouton->saveProperties();
 
             // insertion du nouveau bouton à sa place
             if (sizeof($btnControls['ord']) == 1) {
-                $this->addChild($bouton, false);
+                $btnsCtrls->addChild($bouton);
             } else {
                 $btnAv      = "";
                 $btnAp      = "";
@@ -470,14 +489,15 @@ class OSForm extends OSDiv
                     }
                 }
                 if (!empty($btnAv)) {
-                    $this->addChild($bouton, false, self::MODE_BEFORE, $btnControls['ord'][$btnAv]);
+                    $btnsCtrls->addChild($bouton, self::MODE_BEFORE, $btnControls['ord'][$btnAv]);
                 } elseif (!empty($btnAp)) {
-                    $this->addChild($bouton, false, self::MODE_AFTER, $btnControls['ord'][$btnAp]);
+                    $btnsCtrls->addChild($bouton, self::MODE_AFTER, $btnControls['ord'][$btnAp]);
                 } else {
-                    $this->addChild($bouton, false);
+                    $btnsCtrls->addChild($bouton);
                 }
             }
             $this->saveProperties();
+            $btnsCtrls->saveProperties();
 
             // enregistrement des modification des contrôles du formulaire
             $properties = $this->getProperties();
@@ -703,6 +723,10 @@ class OSForm extends OSDiv
         return $properties['hidden'] ?? [];
     }
 
+    /**
+     * @param string $title
+     * @return OSForm
+     */
     public function setTitle(string $title)
     {
         $properties = $this->getProperties();
@@ -711,10 +735,47 @@ class OSForm extends OSDiv
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getTitle()
     {
         $properties = $this->getProperties();
         return array_key_exists('title', $properties) ? $properties['title'] : false;
+    }
+
+    /**
+     * @return OSForm
+     */
+    public function enaBtnsCtrlH()
+    {
+        $properties = $this->getProperties();
+        $properties['btnsDisplay'] = self::OSFORMDISPBTN_HORIZONTAL;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param int $widthBT
+     * @return OSForm
+     */
+    public function enaBtnsCtrlV(int $widthBT = 2)
+    {
+        if ($widthBT == 0) { $widthBT = 2; }
+
+        $properties = $this->getProperties();
+        $properties['btnsDisplay']  = self::OSFORMDISPBTN_VERTICAL;
+        $properties['btnsWidthBT']  = $widthBT;
+        $properties['widthBTctrls'] = self::formatBootstrap($widthBT);
+        $properties['widthBTbody']  = self::formatBootstrap(12 - $widthBT);
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function getBtnsCtrlP()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('btnsDisplay', $properties) ? $properties['btnsDisplay'] : false;
     }
 
     /** **************************************************************************************************
@@ -751,6 +812,7 @@ class OSForm extends OSDiv
     /**
      * @param OObject $child
      * @return $this
+     * @throws Exception
      */
     private function removeFormParams(OObject $child)
     {
@@ -785,6 +847,7 @@ class OSForm extends OSDiv
     /**
      * @param OObject $field
      * @param OSContainer $source
+     * @throws Exception
      */
     private function delField(OObject $field, OSContainer $source)
     {

@@ -5,11 +5,11 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained;
 
 /**
- * Class ODColorPicker
+ * Class ODColorpicker
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
- * setTitle($title = null)
- * getTitle()
+ ** setTitle($title = null)
+ ** getTitle()
  * setLabel($label)
  * getLabel()
  * setLabelWidthBT($labelWidthBT)
@@ -17,9 +17,16 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * evtChange($class, $method, $stopEvent = false)
  * getChange()
  * disChange()
+ * setColorRGB(string $red, string $green, string $blue)
+ * getColorRGB()
  */
-class ODColorPicker extends ODContained
+class ODColorpicker extends ODContained
 {
+    /**
+     * ODColorpicker constructor.
+     * @param $id
+     * @throws \ReflectionException
+     */
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odcolorpicker/odcolorpicker.config.php");
 
@@ -35,24 +42,28 @@ class ODColorPicker extends ODContained
         return $this;
     }
 
-    public function setTitle($title = null)
-    {
-        $title = (string) $title;
-        if (!empty($title)) {
-            $properties = $this->getProperties();
-            $properties['title'] = $title;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
+//    public function setTitle($title = null)
+//    {
+//        $title = (string) $title;
+//        if (!empty($title)) {
+//            $properties = $this->getProperties();
+//            $properties['title'] = $title;
+//            $this->setProperties($properties);
+//            return $this;
+//        }
+//        return false;
+//    }
+//
+//    public function getTitle()
+//    {
+//        $properties = $this->getProperties();
+//        return array_key_exists('title', $properties) ? $properties['title'] : false;
+//    }
 
-    public function getTitle()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('title', $properties) ? $properties['title'] : false;
-    }
-
+    /**
+     * @param $label
+     * @return ODColorPicker
+     */
     public function setLabel($label)
     {
         $label = (string) $label;
@@ -62,12 +73,19 @@ class ODColorPicker extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabel()
     {
         $properties = $this->getProperties();
         return array_key_exists('label', $properties) ? $properties['label'] : false;
     }
 
+    /**
+     * @param $labelWidthBT
+     * @return ODColorPicker|bool
+     */
     public function setLabelWidthBT($labelWidthBT)
     {
         if (!empty($labelWidthBT)) {
@@ -146,12 +164,21 @@ class ODColorPicker extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabelWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return ODColorPicker|bool
+     */
     public function evtChange($class, $method, $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
@@ -177,6 +204,9 @@ class ODColorPicker extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getChange()
     {
         $properties = $this->getProperties();
@@ -189,6 +219,9 @@ class ODColorPicker extends ODContained
         return false;
     }
 
+    /**
+     * @return ODColorPicker|bool
+     */
     public function disChange()
     {
         $properties = $this->getProperties();
@@ -202,5 +235,50 @@ class ODColorPicker extends ODContained
             }
         }
         return false;
+    }
+
+    /**
+     * @param string $red
+     * @param string $green
+     * @param string $blue
+     * @return ODColorPicker|bool
+     */
+    public function setColorRGB(string $red, string $green, string $blue)
+    {
+        $testRed    = $this->isHex($red);
+        $testGreen  = $this->isHex($green);
+        $testBlue   = $this->isHex($blue);
+
+        if ($testRed == $red && $testGreen == $green && $testBlue == $blue) {
+            $properties = $this->getProperties();
+            $properties['colorRGB'] = '#'.$red.$green.$blue;
+            $this->setProperties($properties);
+            return $this;
+        }
+
+        return false;
+    }
+
+    public function getColorRGB()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('colorRGB', $properties) ? $properties['colorRGB'] : false;
+    }
+
+
+    /** méthode(s) privée(s) de l'objet */
+
+    /**
+     * @param string $val
+     * @return bool|string
+     */
+    private function isHex(string $val)
+    {
+        $hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $val);
+        if (strlen($hexStr) > 2) {
+            return false;
+        }
+        $val = sprintf('%02d', $val);
+        return $val;
     }
 }

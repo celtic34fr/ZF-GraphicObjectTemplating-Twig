@@ -19,9 +19,27 @@
     <h2 id="formTitle">{{ objet.title }}</h2>
     {% endif %}
 
-    <div class="formBody">
+    {% set btnsCtrls = 'none' %}
+    {% set dataWidthBTbody  = '' %}
+    {% set dataWidthBTctrls = '' %}
+
+    {% if objet.btnControls|length > 0 %}
+        {% set btnsCtrl = objet.id ~ 'Ctrls' %}
+        {% if objet.btnsDisplay == 'V' %}
+            {% set dataWidthBTbody  = 'data-widthbt="'~objet.widthBTbody~'"' %}
+            {% set dataWidthBTctrls = 'data-widthbt="'~objet.widthBTctrls~'"' %}
+        {% endif %}
+    {% endif %}
+
+    <div class="gotObject formBody" {{ dataWidthBTbody }}>
         {{ content | raw }}
     </div>
+
+    {% if btnCtrls != 'none' %}
+    <div class="gotObject formCtrls" {{ dataWidthBTctrls }}>
+        {{ gotRender(btnsCtrl) }}
+    </div>
+    {% endif %}
 
     {# ###########################################################################################################
         ATTENTION : tout champ permettant une saisie d'information devra avoir une balise HTML label
