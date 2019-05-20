@@ -139,7 +139,7 @@ class ZF3GotServices
      * méthode de récupération filtrage des ressources
      *
      * @param $object : objet GOT passé (ODContained / OSContainer) ou ID
-     * @return array|bool : tableau de ressources si traitement OK, sinon boolée false
+     * @return array|bool : tableau de ressources si traitement OK, sinon booléen false
      * @throws \Exception
      *
      * 2018-08 GARM : Ajout de la mise en session des références des ressources pour éviter de les charger

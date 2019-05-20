@@ -431,12 +431,39 @@ class OObject
                     }
                 }
                 $objects = $sessionObj->objects;
+                $resources = $sessionObj->resources;
+                $properties = unserialize($objects[$id]);
                 $persistantObjs = $sessionObj->persistObjs;
-
                 unset($objects[$id]);
+                foreach ($objects as $object) {
+                    if ($properties["object"] != $object["object"]) {
+                        continue;
+                    }
+                    $pathRscs = __DIR__;
+                    $pathRscs .= '/../../view/zf3-graphic-object-templating/oobjects/' . $properties['typeObj'];
+                    $pathRscs .= '/' . $properties['object'] . '/' . $properties['object'] . '.rscs.php';
+                    if (is_file($pathRscs)) {
+                        $rscsObj = include $pathRscs;
+                        if ($rscsObj) {
+                            $prefix         = 'graphicobjecttemplating/oobjects/';
+                            if (array_key_exists('prefix', $rscsObj)) {
+                                unset($rscsObj['prefix']);
+                            }
+                            foreach ($rscsObj as $type => $filesInfo) {
+                                foreach ($filesInfo as $name => $path) {
+                                    unset($resources[$type][$name]);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                
+
                 if (array_key_exists($id, $persistantObjs)) { unset($persistantObjs[$id]); }
                 $sessionObj->objects        = $objects;
                 $sessionObj->persistObjs    = $persistantObjs;
+                $sessionObj->resources      = $resources;
                 $sessionObj->lastAccess     = $now->format("Y-m-d H:i:s");
                 return true;
             }
