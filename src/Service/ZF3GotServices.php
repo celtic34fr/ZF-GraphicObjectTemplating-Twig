@@ -148,13 +148,13 @@ class ZF3GotServices
     public static function rscs($object, $objects = null, $rscsSession = null)
     {
         $tmpResources           = [];
+        $gotObjList             = OObject::validateSession();
 
         if ($object instanceof OObject) { $object = $object->getId(); }
         if (empty($objects)) {
-            $gotObjList         = OObject::validateSession();
             $objects            = $gotObjList->objects;
         }
-        if (empty($rscsSession)) { $rscsSession    = $sessionObj->resources ?? []; }
+        if (empty($rscsSession)) { $rscsSession    = $gotObjList->resources ?? []; }
 
         if (!empty($object) && $object != null && array_key_exists($object, $objects)) {
             $properties = unserialize($objects[$object]);

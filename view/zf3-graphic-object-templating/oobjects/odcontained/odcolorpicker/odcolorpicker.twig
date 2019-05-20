@@ -1,0 +1,34 @@
+{# template de l'objet ODColorpicker#}
+
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+
+    <label for="{{ objet.id }}Input"
+            {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
+    > {{ objet.label }} </label>
+    <input id="{{ objet.id }}Input" class="colorPicker evo-cp0" style="width:100px;"
+        {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
+    />
+
+    <script>
+        $(document).ready(function (evt) {
+            $('#{{ objet.id }}Input').colorpicker({
+                color: "#{{ objet.colorRGB }}",
+            });
+
+            {% if objet.labelWidthBT is not empty %}
+            setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
+            {% endif %}
+            {% if objet.inputWidthBT is not empty %}
+            setBtClasses("#{{ objet.id }} .evo-cp-wrap", $("#{{ objet.id }} input").data("widthbt"));
+            $("#{{ objet.id }} > div").css('width', '');
+            {% endif %}
+        })
+    </script>
+</div>

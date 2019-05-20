@@ -360,8 +360,12 @@ class OSDialog extends OSContainer
         $contents       = $properties['contents'];
         foreach ($contents as $name) {
             $content        = self::buildObject($name, $sessionObjects);
-            $this->removeChild($content);
-            if (strpos($name, $properties['id'].'Content') !== false) { self::destroyObject($name); }
+            if ($content) {
+                $this->removeChild($content);
+                $this->saveProperties();
+                $properties     = $this->getProperties();
+                if (strpos($name, $properties['id'].'Content') !== false) { self::destroyObject($name); }
+            }
         }
         $properties['contents'] = [];
         $this->setProperties($properties);
