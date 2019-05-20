@@ -364,7 +364,7 @@ class OSDialog extends OSContainer
                 $this->removeChild($content);
                 $this->saveProperties();
                 $properties     = $this->getProperties();
-                if (strpos($name, $properties['id'].'Content') !== false) { self::destroyObject($name); }
+                self::destroyObject($name);
             }
         }
         $properties['contents'] = [];

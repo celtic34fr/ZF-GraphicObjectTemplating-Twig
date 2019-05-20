@@ -407,7 +407,7 @@ class OObject
             if (is_array($persistantObjs)) {
                 foreach ($persistantObjs as $id => $classe) {
                     $tmpObjects[$id]    = $objects[$id];
-                    $tmpResources       = ZF3GotServices::rscs($id, $objects, $resources);
+                    $tmpResources       = self::arrayMerge(ZF3GotServices::rscs($id, $objects, $resources), $tmpResources);
                 }
             }
 
@@ -435,17 +435,20 @@ class OObject
                 $properties = unserialize($objects[$id]);
                 $persistantObjs = $sessionObj->persistObjs;
                 unset($objects[$id]);
+                $notfound = true;
                 foreach ($objects as $object) {
-                    if ($properties["object"] != $object["object"]) {
-                        continue;
+                    if ($properties["object"] == $object["object"]) {
+                        $notfound = false;
+                        break;
                     }
+                }
+                if ($notfound) {
                     $pathRscs = __DIR__;
                     $pathRscs .= '/../../view/zf3-graphic-object-templating/oobjects/' . $properties['typeObj'];
                     $pathRscs .= '/' . $properties['object'] . '/' . $properties['object'] . '.rscs.php';
                     if (is_file($pathRscs)) {
                         $rscsObj = include $pathRscs;
                         if ($rscsObj) {
-                            $prefix         = 'graphicobjecttemplating/oobjects/';
                             if (array_key_exists('prefix', $rscsObj)) {
                                 unset($rscsObj['prefix']);
                             }
@@ -456,9 +459,7 @@ class OObject
                             }
                         }
                     }
-                    break;
                 }
-                
 
                 if (array_key_exists($id, $persistantObjs)) { unset($persistantObjs[$id]); }
                 $sessionObj->objects        = $objects;
@@ -2060,5 +2061,29 @@ class OObject
         }
 
         return $retour;
+    }
+
+
+    /** méthode(s) privée(s) de l'objet */
+
+    private function arrayMerge(array $array1, array $array2)
+    {
+        $resltArray     = [];
+
+        foreach ($array2 as $cle => $item) {
+            if (array_key_exists($cle, $array1)) {
+                $tmparray           = array_merge($array1[$cle], $array2[$cle]);
+                $resltArray[$cle]   = $tmparray;
+                unset($array1[$cle]);
+            } else {
+                $resltArray[$cle]   = $item;
+            }
+        }
+
+        foreach ($array1 as $cle => $item) {
+            $resltArray[$cle]   = $item;
+        }
+
+        return $resltArray;
     }
 }
