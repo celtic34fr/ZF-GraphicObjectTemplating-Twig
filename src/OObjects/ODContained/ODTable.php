@@ -96,7 +96,23 @@ use Zend\Session\Container;
  * addTableClass($class)
  * getTableClasses()
  * setTableClasses($classes)
- * 
+ * findCellOnValue($value, $noCol = '', $noLine = '')
+ * setLinesStyles(array $styles = null)
+ * setColsStyles(array $styles = null)
+ * setCellsStyles(array $style = null)
+ * clearAllStyles()
+ * clearColsStyles()
+ * clearLinesStyles()
+ * clearCellsStyles()
+ * addColClass($nCol, $class)
+ * setColClasses($nCol, $classes)
+ * getColClasses($nCol)
+ * clearColClasses($nCol)
+ * addLineClass($nLine, $class)
+ * setLineClasses($nLine, $classes)
+ * getLineClasses($nLine)
+ * clearLineClasses($nLine)
+ *
  * méthodes de gestion de retour de callback 
  * -----------------------------------------
  * returnAppendLine($idTable, $noLine)
@@ -109,6 +125,7 @@ use Zend\Session\Container;
  * -----------------------------
  * getTitlePosConstants()
  * getLengthConstants()
+ * arrayOneDim(array $ar)
  */
 class ODTable extends ODContained
 {
@@ -1422,6 +1439,312 @@ class ODTable extends ODContained
         return $this;
     }
 
+    /**
+     * @param $value
+     * @param string $noCol
+     * @param string $noLine
+     * @return array|bool
+     */
+    public function findCellOnValue($value, $noCol = '', $noLine = '')
+    {
+        $crc = false;
+        $crl = false;
+        $crr = [];
+        switch (true) {
+            case (!empty($noCol) && !empty($noLine)) :
+		        // cas noCol et noLine renseigné
+                $line = $this->getLine($noLine);
+                $crr[] = ($value == $line[$noCol]) ? [$noCol, $noLine]: false;
+                break;
+            case (!empty($noCol) && empty($noLine)) :
+        		// cas noCol renseigné
+                $lines = $this->getLines();
+                $crl = false;
+                foreach ($lines as $ind => $line) {
+                    $crl = ($line[$noCol] == $value) ? $ind : false;
+                    if ($crl !== false) {
+                        $crr[] = [$noCol, $crl];
+                    }
+                }
+                break;
+            case (empty($noCol) && empty($noLine)) :
+        		// cas noCol et noLine non renseigné
+                $lines = $this->getLines();
+                $crl   = false;
+                foreach ($lines as $ind => $cols) {
+                    $crc = false;
+                    foreach ($cols as $jnd => $col) {
+                        $crc = ($col == $value) ? $jnd : false;
+                        if ($crc !== false) {
+                            $crr[] = [$ind, $crl];
+                        }
+                    }
+                }
+                break;
+            case (empty($noCol) && !empty($noLine)) :
+        		// cas noLine renseigné
+                $line = $this->getLine($noLine);
+                foreach ($line as $ind => $col) {
+                    $crc = ($line[$noCol] == $value) ? $ind : false;
+                    if ($crc !== false) {
+                        $crr[] = [$crc, $noLine];
+                    }
+                }
+                break;
+        }
+        return (!empty($crr)) ? $crr : false;
+    }
+
+    /**
+     * @param array|null $styles
+     * @return ODTable
+     */
+    public function setLinesStyles(array $styles = null)
+    {
+        $isOneDim = $this->arrayOneDim($styles);
+        if ($isOneDim) {
+            foreach ($styles as $noLine => $style) {
+                $this->setLineStyle($noLine, $style);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param array|null $styles
+     * @return ODTable
+     */
+    public function setColsStyles(array $styles = null)
+    {
+        $isOneDim = $this->arrayOneDim($styles);
+        $properties = $this->getProperties();
+        $nbCols = count($properties['cols']);
+        if ($isOneDim && count($styles) == $nbCols) {
+            foreach ($styles as $noCol => $style) {
+                $this->setcolStyle($noCol, $style);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param array|null $style
+     */
+    public function setCellsStyles(array $style = null)
+    {
+        $properties = $this->getProperties();
+        $nbCols     = count($properties['cols']);
+        $nbLines    = count($properties['datas']);
+        $dim        = $this->arrayMaxDim($style);
+        if ($dim == [$nbLines,$nbCols]) {
+            for ($ind=1; $ind<=$nbLines; $ind++) {
+                for ($jnd=1; $jnd<=$nbCols; $jnd++) {
+                    $this->setCell($ind, $jnd, $style[$ind][$jnd]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return ODTable
+     */
+    public function clearAllStyles()
+    {
+        $properties = $this->getProperties();
+        $properties['styles'] = [];
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODTable
+     */
+    public function clearColsStyles()
+    {
+        $properties = $this->getProperties();
+        $nbCols = count($properties['cols']);
+        for ($ind=1; $ind<=$nbCols; $ind++) {
+            $properties['style'][0][$ind] = '';
+        }
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODTable
+     */
+    public function clearLinesStyles()
+    {
+        $properties = $this->getProperties();
+        $nbLines = count($properties['datas']);
+        for ($ind=1; $ind<=$nbLines; $ind++) {
+            $properties['style'][$ind][0] = '';
+        }
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODTable
+     */
+    public function clearCellsStyles()
+    {
+        $properties = $this->getProperties();
+        $nbCols = count($properties['cols']);
+        $nbLines = count($properties['datas']);
+        for ($ind = 1; $ind<=$nbLines; $ind++) {
+            for ($jnd = 1; $jnd<=$nbCols; $jnd++) {
+                $properties['style'][$ind][$jnd] = '';
+            }
+        }
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param $nCol
+     * @param $class
+     * @return ODTable|bool
+     */
+    public function addColClass($nCol, $class)
+    {
+        $class = (string) $class;
+        $nCol  = (int) $nCol;
+        $properties             = $this->getProperties();
+        $nbCols                 = sizeof($properties['cols']);
+        if ($nCol > $nbCols || $nCol < 1) return false;
+        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+        if (!isset($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] = ""; }
+        if (!empty($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] .= " "; }
+        $properties['classesTab']['col'.$nCol] .= $class;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param $nCol
+     * @param $classes
+     * @return ODTable|bool
+     */
+    public function setColClasses($nCol, $classes)
+    {
+        if (is_array($classes)) { $classes = implode(" ", $classes); }
+        if (!is_string($classes)) { return false; }
+        $nCol  = (int) $nCol;
+        $properties             = $this->getProperties();
+        $nbCols                 = sizeof($properties['cols']);
+        if ($nCol > $nbCols || $nCol < 1) return false;
+        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+        if (!isset($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] = ""; }
+        $properties['classesTab']['col'.$nCol] = $classes;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param $nCol
+     * @return bool|string
+     */
+    public function getColClasses($nCol)
+    {
+        $nCol  = (int) $nCol;
+        $properties             = $this->getProperties();
+        $nbCols                 = sizeof($properties['cols']);
+        if ($nCol > $nbCols || $nCol < 1) return false;
+        return (isset($properties['classesTab']['col'.$nCol])) ? $properties['classesTab']['col'.$nCol] : false;
+    }
+
+    /**
+     * @param $nCol
+     * @return ODTable|bool
+     */
+    public function clearColClasses($nCol)
+    {
+        $nCol  = (int) $nCol;
+        $properties             = $this->getProperties();
+        $nbCols                 = sizeof($properties['cols']);
+        if ($nCol > $nbCols || $nCol < 1) return false;
+        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+        if (isset($properties['classesTab']['col'.$nCol])) { unset($properties['classesTab']['col'.$nCol]); }
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param $nLine
+     * @param $class
+     * @return ODTable|bool
+     */
+    public function addLineClass($nLine, $class)
+    {
+        $class = (string) $class;
+        $nLine = (int) $nLine;
+        $properties             = $this->getProperties();
+        $nbLines = sizeof($properties['datas']);
+        if ($nLine > $nbLines|| $nLine< 1) return false;
+        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+        if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = ""; }
+        if (!empty($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] .= " "; }
+        $properties['classesTab']['line'.$nLine] .= $class;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param $nLine
+     * @param $classes
+     * @return ODTable|bool
+     */
+    public function setLineClasses($nLine, $classes)
+    {
+        if (is_array($classes)) { $classes = implode(" ", $classes); }
+        if (!is_string($classes)) { return false; }
+        $nLine = (int) $nLine;
+        $properties             = $this->getProperties();
+        $nbLines = sizeof($properties['datas']);
+        if ($nLine > $nbLines|| $nLine< 1) return false;
+        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+        if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = []; }
+        $properties['classesTab']['line'.$nLine] = $classes;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @param $nLine
+     * @return bool|string
+     */
+    public function getLineClasses($nLine)
+    {
+        $nLine = (int) $nLine;
+        $properties             = $this->getProperties();
+        $nbLines = sizeof($properties['datas']);
+        if ($nLine > $nbLines|| $nLine< 1) return false;
+        return (isset($properties['classesTab']['line'.$nLine])) ? $properties['classesTab']['line'.$nLine] : false;
+    }
+
+    /**
+     * @param $nLine
+     * @return ODTable|bool
+     */
+    public function clearLineClasses($nLine)
+    {
+        $nLine = (int) $nLine;
+        $properties             = $this->getProperties();
+        $nbLines = sizeof($properties['datas']);
+        if ($nLine > $nbLines|| $nLine< 1) return false;
+        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+        if (isset($properties['classesTab']['line'.$nLine])) {
+            $classes = $properties['classesTab'];
+            unset($classes['line'.$nLine]);
+            $properties['classesTab'] = $classes;
+        }
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -1561,5 +1884,14 @@ class ODTable extends ODContained
             $retour = $this->const_length;
         }
         return $retour;
+    }
+
+    private function arrayOneDim(array $ar)
+    {
+        $ret = true;
+        foreach ($ar as $item) {
+            if (is_array($item)) { $ret = (false or $ret); }
+        }
+        return $ret;
     }
 }
