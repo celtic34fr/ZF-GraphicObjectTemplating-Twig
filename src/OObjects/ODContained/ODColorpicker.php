@@ -265,8 +265,9 @@ class ODColorpicker extends ODContained
         return array_key_exists('colorRGB', $properties) ? $properties['colorRGB'] : false;
     }
 
-
-    /** méthode(s) privée(s) de l'objet */
+    /**
+     *  méthode(s) privée(s) de l'objet
+     */
 
     /**
      * @param string $val

@@ -102,6 +102,9 @@ function invokeAjax(datas, idSource, event, e) {
             case "update": // mise à jour, remplacement d’un objet DOM existant
                 updId = "#" + id;
                 $(updId).replaceWith(code);
+                if (objectDOM.find("#" + id + "Script").length > 0) {
+                    $.globalEval($("#" + id + "Script").innerText);
+                }
                 updatePage();
                 break;
             case "innerUpdate": // remplacement du contenu d’un objet DOM
@@ -176,6 +179,7 @@ function loadResources(type, url) {
         case 'js' :
             script  = document.createElement('script');
             script.src  = location.protocol + "//" + location.host + "/" + url;
+            script.async = false;
             break;
         case 'css' :
             script  = document.createElement('link');

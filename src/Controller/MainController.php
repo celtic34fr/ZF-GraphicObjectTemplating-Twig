@@ -61,6 +61,7 @@ class MainController extends AbstractActionController
                 /** @var OObject $callingObj */
                 $callingObj = OObject::buildObject($params['id'], $sessionObj);
                 $objects    = $sessionObj->objects;
+                $resources  = $sessionObj->resources;
 
                 if (!$callingObj) {
                     // si retour false de la création d'objet => redirection sur la route home de l'application
@@ -134,7 +135,7 @@ class MainController extends AbstractActionController
                 foreach ($rscsObjs as $item) {
 /*                    $id  = '';*/
                     $key = substr($item, 0, strpos($item, '|'));
-                    $key = substr($key, 0, strpos($key, 'Scripts'));
+//                    $key = substr($key, 0, strpos($key, 'Scripts'));
 /*                    if ($key == 'cssScripts') { $id = 'css'; }
                     if ($key == 'jsScripts')  { $id = 'js'; }*/
                     $result[]   = ['id'=>$key, 'mode'=>'rscs', 'code'=>substr($item, strpos($item, '|') + 1)];

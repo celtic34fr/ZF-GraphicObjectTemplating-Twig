@@ -16,19 +16,19 @@
         {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
     />
 
-    <script>
-        $(document).ready(function (evt) {
-            $('#{{ objet.id }}Input').colorpicker({
-                color: "#{{ objet.colorRGB }}",
-            });
+{#    <script id="{{ objet.id }}Script">#}
+        {#if ($.isFunction(window.colorpicker)) {#}
+        {#    $('#{{ objet.id }}Input').colorpicker({#}
+        {#        color: "#{{ objet.colorRGB }}",#}
+        {#    });#}
 
-            {% if objet.labelWidthBT is not empty %}
-            setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
-            {% endif %}
-            {% if objet.inputWidthBT is not empty %}
-            setBtClasses("#{{ objet.id }} .evo-cp-wrap", $("#{{ objet.id }} input").data("widthbt"));
-            $("#{{ objet.id }} > div").css('width', '');
-            {% endif %}
-        })
-    </script>
+        {#    {% if objet.labelWidthBT is not empty %}#}
+        {#    setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));#}
+        {#    {% endif %}#}
+        {#    {% if objet.inputWidthBT is not empty %}#}
+        {#    setBtClasses("#{{ objet.id }} .evo-cp-wrap", $("#{{ objet.id }} input").data("widthbt"));#}
+        {#    $("#{{ objet.id }} > div").css('width', '');#}
+        {#    {% endif %}#}
+        {#}#}
+{#    </script>#}
 </div>

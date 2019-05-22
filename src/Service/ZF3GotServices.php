@@ -139,185 +139,52 @@ class ZF3GotServices
      * méthode de récupération filtrage des ressources
      *
      * @param $object : objet GOT passé (ODContained / OSContainer) ou ID
+     * @param null $objects
      * @return array|bool : tableau de ressources si traitement OK, sinon booléen false
      * @throws \Exception
-     *
-     * 2018-08 GARM : Ajout de la mise en session des références des ressources pour éviter de les charger
-     * plusieurs fois
      */
-    public static function rscs($object, $objects = null, $rscsSession = null)
+    public static function rscs($object, $objects = null)
     {
-        $tmpResources           = [];
-        $gotObjList             = OObject::validateSession();
+        $tmpObjects = [];
+        $tmpRscs	= [];
+        $gotObjList = OObject::validateSession();
 
-        if ($object instanceof OObject) { $object = $object->getId(); }
-        if (empty($objects)) {
-            $objects            = $gotObjList->objects;
-        }
-        if (empty($rscsSession)) { $rscsSession    = $gotObjList->resources ?? []; }
+        if (!is_array($object))     { $object   = [$object]; }
+        if (empty($objects)) 		{ $objects  = $gotObjList->objects; }
+        $rscsSession = $gotObjList->resources;
 
-        if (!empty($object) && $object != null && array_key_exists($object, $objects)) {
-            $properties = unserialize($objects[$object]);
+        if (!empty($object)) {
+            foreach ($object as $item) {
+                if ($item instanceof OObject) { $item   = $item->getId(); }
 
-            $objName    = $properties['object'];
-
-            if (!empty($rscsSession)) {
-                foreach ($rscsSession as $type => $resource) {
-                    foreach ($resource as $name => $path) {
-                        $posObjName     = strpos($path, $objName);
-                        if ($posObjName !== false) {
-                            if (!array_key_exists($type, $tmpResources)) {$tmpResources[$type] = []; }
-                            $tmpResources[$type][$name] = $path;
+                if (!empty($item) && $item != null
+                    && array_key_exists($item, $objects)) {
+                    $properties = unserialize($objects[$item]);
+                    $tmpObjects[$properties['object']] = $properties['typeObj'];
+                    if (array_key_exists('children', $properties)) {
+                        foreach ($properties['children'] as $idChild => $valChild) {
+                            $tmpObjects = self::recupObject($idChild, $objects);
                         }
                     }
                 }
+                foreach ($tmpObjects as $object => $typeObj) {
+                    $pathRscs   = __DIR__ . '/../../' ;
+                    $pathRscs  .= 'view/zf3-graphic-object-templating/oobjects/';
+                    $pathRscs  .= $typeObj.'/'.$object.'/'.$object.'.rscs.php';
 
-                foreach ($properties['children'] as $child) {
-                    $childProperties    = unserialize($objects[$child]);
-                    $objName            = $childProperties['object'];
-                    foreach ($rscsSession as $type => $resource) {
-                        foreach ($resource as $name => $path) {
-                            $posObjName     = strpos($path, $objName);
-                            if ($posObjName !== false) {
-                                if (!array_key_exists($type, $tmpResources)) {$tmpResources[$type] = []; }
-                                $tmpResources[$type][$name] = $path;
-                            }
-                        }
-                    }
-                }
-            } else {
-                $pathRscs   = __DIR__ ;
-                $pathRscs  .= '/../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
-                $pathRscs  .= '/'.$properties['object'].'.rscs.php';
-                if (is_file($pathRscs)) {
-                    $rscsObj        = include $pathRscs;
-                    $prefix         = 'graphicobjecttemplating/oobjects/';
-                    if (array_key_exists('prefix', $rscsObj)) {
-                        $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
-                        unset($rscsObj['prefix']);
-                    }
-                    foreach ($rscsObj as $type => $filesInfo) {
-                        if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
-                        foreach ($filesInfo as $name => $path) {
-                            if (!array_key_exists($type, $tmpResources)) {$tmpResources[$type] = []; }
-                            $tmpResources[$type][$name] = $prefix.$path;
-                        }
-                    }
-                }
+                    if (is_file($pathRscs)) {
+                        $rscsObj        = include $pathRscs;
+                        foreach ($rscsObj as $type => $arrayFiles) {
+                            foreach ($arrayFiles as $name => $path) {
+                                if (!array_key_exists($type, $tmpRscs)) { $tmpRscs[$type] = []; }
 
-                if (!empty($properties['children'])) {
-                    foreach ($properties['children'] as $child) {
-                        $childRscs = self::rscs($child, $objects);
-//                        if (!$childRscs) {
-//                            throw new \Exception("objet $child non trouvé, veuillez avertir l'administrateur");
-//                        }
-                        foreach ($childRscs as $type => $childRsc) {
-                            foreach ($childRsc as $name => $path) {
-                                $tmpResources[$type][$name] = $path;
+                                $tmpRscs[$type][$name] = $rscsSession[$type][$name];
                             }
                         }
                     }
                 }
             }
-
-            return $tmpResources;
-
-//            $rscsTab                = [];
-//            $rscsTab['cssScripts']  = [];
-//            $rscsTab['jsScripts']   = [];
-//            $rscsTab['fontsStyles'] = [];
-//
-//            /** cas des objets OSContainer -> contenant d'autres objets */
-//            if (in_array($properties['typeObj'] ,['oscontainer', 'oescontainer'] )) {
-//                $children = $properties['children'];
-//                if (!empty($children)) {
-//                    foreach ($children as $child => $value) {
-//                        $newRscsTab = self::rscs($child);
-//                        $rscsTab['jsScripts']   = array_merge($rscsTab['jsScripts'], $newRscsTab['jsScripts']);
-//                        $rscsTab['cssScripts']  = array_merge($rscsTab['cssScripts'], $newRscsTab['cssScripts']);
-//                        $rscsTab['fontsStyles'] = array_merge($rscsTab['fontsStyles'], $newRscsTab['fontsStyles']);
-////                        foreach ($newRscsTab as $name => $path) {
-////                            if (!array_key_exists($name, $rscsTab['jsScripts'])) {
-////                                $rscsTab['jsScripts'][$name]    = $path;
-////                            }
-////                        }
-////                        foreach ($newRscsTab['cssScripts'] as $name => $path) {
-////                            if (!array_key_exists($name, $rscsTab['cssScripts'])) {
-////                                $rscsTab['cssScripts'][$name]   = $path;
-////                            }
-////                        }
-////                        foreach ($newRscsTab['fontsStyles'] as $name => $path) {
-////                            if (!array_key_exists($name, $rscsTab['fontsStyles'])) {
-////                                $rscsTab['fontsStyles'][$name]   = $path;
-////                            }
-////                        }
-//                    }
-//                }
-//            }
-//
-//            /** traitement de l'objet courrant $object */
-//            if (!empty($properties['resources'])) {
-//                $cssList = [];
-//                $jsList = [];
-//                $localRscs = $properties['resources'];
-//
-//                if (array_key_exists('prefix', $localRscs)) {
-//                    $prefix = 'gotextension/'.$localRscs['prefix'].'oeobjects/';
-//                } else {
-//                    $prefix = 'graphicobjecttemplating/oobjects/';
-//                }
-//                $prefix .= $properties['typeObj'].'/'.$properties['object'].'/';
-//
-//                if (array_key_exists('css', $localRscs)) {
-//                    foreach ($localRscs['css'] as $nomCss => $pathCss) {
-//                        if (!array_key_exists($nomCss, $rscsTab['cssScripts'])) {
-//                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
-//                        }
-//                    }
-//                }
-//                if (array_key_exists('js', $localRscs)) {
-//                    foreach ($localRscs['js'] as $nomJs => $pathJs) {
-//                        if (!array_key_exists($nomCss, $rscsTab['jsScripts'])) {
-//                            $rscsTab['jsScripts'][$nomJs]   = $prefix.$pathJs;
-//                        }
-//                    }
-//                }
-//                if (array_key_exists('fonts', $localRscs)) {
-//                    foreach ($localRscs['fonts'] as $nomFont => $pathFont) {
-//                        if (!array_key_exists($nomFont, $rscsTab['fontsStyles'])) {
-//                            $rscsTab['fontsStyles'][$nomFont] = $prefix.$pathFont;
-//                        }
-//                    }
-//                }
-//
-////                if (!empty($cssList)) {
-////                    foreach ($cssList as $nomCss => $pathCss) {
-////                        if (!array_key_exists($nomCss, $resources)) {
-////                            $rscsTab['cssScripts'][$nomCss] = $prefix.$pathCss;
-////                            $resources[$nomCss]               = $prefix.$pathCss;
-////                        }
-////                    }
-////                }
-////                if (!empty($jsList)) {
-////                    foreach ($jsList as $nomJs => $pathJs) {
-////                        if (!array_key_exists($nomJs, $resources)) {
-////                            $rscsTab['jsScripts'][$nomJs] = $prefix.$pathJs;
-////                            $resources[$nomJs]            = $prefix.$pathJs;
-////                        }
-////                    }
-////                }
-////                if (!empty($fontsList)) {
-////                    foreach ($fontsList as $nomFont => $pathFont) {
-////                        if (!array_key_exists($nomFont, $resources)) {
-////                            $rscsTab['fontsStyles'][$nomFont]   = $prefix.$pathFont;
-////                            $resources[$nomFont]                = $prefix.$pathFont;
-////                        }
-////                    }
-////                }
-//
-//            }
-//
-//            return $rscsTab;
+            return $tmpRscs;
         }
         return false;
     }
@@ -350,5 +217,29 @@ class ZF3GotServices
     {
         $gotCfg = $this->_config['gotParameters'];
         return $gotCfg['theme'] ?? 'layout';
+    }
+
+
+
+    /**
+     * méthode(s) privée(s) de l'objet
+     */
+
+    private static function recupObject($idObj, $objects)
+    {
+        $objRefs    = [];
+        $properties = unserialize($objects[$idObj]);
+
+        switch ($properties['typeObj']) {
+            case 'odcontained':
+                $objRefs[$properties['object']] = $properties['typeObj'];
+                break;
+            case 'oscontainer':
+                foreach ($properties['children'] as $child => $val) {
+                    $objRefs = array_merge($objRefs, self::recupObject($child, $objects));
+                }
+                break;
+        }
+         return $objRefs;
     }
 }

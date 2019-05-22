@@ -400,15 +400,23 @@ class OObject
         if ($session) {
             $objects                = $sessionObj->objects;
             $persistantObjs         = $sessionObj->persistObjs;
-            $resources              = $sessionObj->resources;
 
             $tmpObjects             = [];
             $tmpResources           = [];
+//            if (is_array($persistantObjs)) {
+//                foreach ($persistantObjs as $id => $classe) {
+//                    $tmpObjects[$id]    = $objects[$id];
+//                    $tmpResources       = self::arrayMerge(ZF3GotServices::rscs($id), $tmpResources);
+//                }
+//            }
+
             if (is_array($persistantObjs)) {
+                $objIds = [];
                 foreach ($persistantObjs as $id => $classe) {
                     $tmpObjects[$id]    = $objects[$id];
-                    $tmpResources       = self::arrayMerge(ZF3GotServices::rscs($id, $objects, $resources), $tmpResources);
+                    $objIds[]           = $id;
                 }
+                $tmpResources       = ZF3GotServices::rscs($objIds);
             }
 
             $sessionObj->objects    = $tmpObjects;
