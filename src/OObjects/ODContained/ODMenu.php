@@ -123,6 +123,7 @@ class ODMenu extends ODContained
         } else {
             $prefix = ($item['pos'] == self::ODMENU_POSITION_LEFT) ? 'L' : 'R';
             $idTree = $item['pos'];
+            $parent = [];
         }
         $optionsPath[$ref] = $prefix.$this->insertOption($optionsTree[$idTree], $ord, $item, $parent);
         
@@ -550,7 +551,7 @@ class ODMenu extends ODContained
      * @return string : chemin partiel d'accès à l'option (1er appel : total), arbre local de l'option (1er appel: total)
      * @throws Exception : si le numéro d'ordre $ord est déjà attributé
      */
-    private function insertOption(array &$tree, int $ord, array $item, array $parentPath = null, bool $insert = true) : string
+    private function insertOption(array &$tree, int $ord, array $item, array $parentPath = [], bool $insert = true) : string
     {
         $idOption = array_shift($parentPath);
         if (!empty($parentPath)) {

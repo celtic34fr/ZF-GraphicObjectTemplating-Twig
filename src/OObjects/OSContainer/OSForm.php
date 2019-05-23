@@ -408,13 +408,13 @@ class OSForm extends OSDiv
         if (!in_array($type, $types)) { $type = self::OSFORMBTN_SUBMIT; }
         $properties     = $this->getProperties();
         $btnControls    = $properties['btnControls'] ?? [];
-        if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
+//        if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
         if (empty($btnControls)) { $btnControls['ord'] = []; }
 
-        if (sizeof($btnControls['ord']) < 4 && (!array_key_exists('ord', $btnControls) || !array_key_exists($ord, $btnControls['ord']))) {
-            if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {
-                return false;
-            }
+//        if (sizeof($btnControls['ord']) < 4 && (!array_key_exists('ord', $btnControls) || !array_key_exists($ord, $btnControls['ord']))) {
+//            if ($type == ODButton::BUTTONTYPE_SUBMIT && (empty($class) || empty($method))) {
+//                return false;
+//            }
             // pas encore de bouton -> initialisation du tableau par numéro d'ordre à vide
             if (sizeof($btnControls) == 0) { $btnControls['ord'] = []; }
 
@@ -465,7 +465,7 @@ class OSForm extends OSDiv
                         $widthBT[1] = "O1:W3";
                         $widthBT[2] = 'O1:W3';
                         break;
-                    case 4:
+                    default:
                         $widthBT[1] = "O1:W2";
                         $widthBT[2] = 'O1:W2';
                         break;
@@ -514,8 +514,8 @@ class OSForm extends OSDiv
             $sessionObject->objects    = $objects;
 
             return $this;
-        }
-        return false;
+//        }
+//        return false;
     }
 
     /**
