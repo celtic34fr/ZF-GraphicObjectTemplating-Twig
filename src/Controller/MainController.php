@@ -82,9 +82,9 @@ class MainController extends AbstractActionController
                             $objMethod  = $event['method'];
     
                             // traitement en cas de formulaire
-                            if (array_key_exists('form', $params) && strlen($params['form']) > 2) {
+                            if (array_key_exists('form', $params)) {
                                 /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                                list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
+                                // list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
         
                                 if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
                                     /** @var OSForm $form */
@@ -220,7 +220,7 @@ class MainController extends AbstractActionController
      */
     private function buildFormDatas($form, $objects) {
         $datas     = explode('|', $form);
-        $formDatas = [];
+            $formDatas = [];
         foreach ($datas as $data) {
             $data   = explode('§', $data);
             $idF    = '';

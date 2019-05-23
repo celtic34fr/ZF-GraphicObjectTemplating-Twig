@@ -232,7 +232,6 @@ class OObject
                 $path .= '/../../view/zf3-graphic-object-templating/' . trim($pathObjArray);
                 $objProperties = include $path;
             }
-
             $objProperties['id']    = $id;
             $objProperties['name']  = $id;
             $this->id               = $id;
@@ -445,7 +444,7 @@ class OObject
                 unset($objects[$id]);
                 $notfound = true;
                 foreach ($objects as $object) {
-                    if ($properties["object"] == $object["object"]) {
+                    if ($properties["object"] == unserialize($object)["object"]) {
                         $notfound = false;
                         break;
                     }
