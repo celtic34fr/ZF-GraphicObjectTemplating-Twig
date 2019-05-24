@@ -17,10 +17,10 @@ odtreeview.prototype = {
         let value = {};
         value['selected'] = selected;
         value['tree']     = tree;
-        return {id : this.id, value : value, object : this.objet};
-        return "id=" + this.id +
-            "&value='" + JSON.stringify(value) + "'" +
-            "&event='click'&object='" + this.objet + "'";
+        return {id : this.id, value : value, object : this.objet, event : 'click'};
+        // return "id=" + this.id +
+        //     "&value='" + JSON.stringify(value) + "'" +
+        //     "&event='click'&object='" + this.objet + "'";
     },
     setData: function (data) {
         $.each(data, function (i, value) {

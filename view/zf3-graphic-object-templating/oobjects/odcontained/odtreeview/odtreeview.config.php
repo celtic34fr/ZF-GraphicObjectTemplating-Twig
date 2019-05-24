@@ -58,4 +58,6 @@ return [
             ],
         ],
     ],
+
+    'btnActions'    => [],
 ];

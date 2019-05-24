@@ -50,6 +50,9 @@ use Zend\ServiceManager\ServiceManager;
  * getChildLeaves($ref, $level = 0)
  * getRef($path)
  * getPath($ref)
+ * addBtnAction(string $idBtn, array $optionsBtn)
+ * setBtnAction(string $idBtn, array $optionsBtn)
+ * getBtnAction(string $idBtn)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -62,6 +65,7 @@ use Zend\ServiceManager\ServiceManager;
  * validRefUnique($ref)
  * rmLeafTree($dataTree, $dataPath)
  * getTargetConstants()
+ * validArrayOptionsBtn($optionsBtn)
  */
 class ODTreeview extends ODContained
 {
@@ -94,6 +98,16 @@ class ODTreeview extends ODContained
     const COLORCLASS_PURPLE         = 'purple';
     const COLORCLASS_MAROON         = 'maroon';
 
+    const ARRAY_OPTIONS             = [
+        'label'     => 'mixte',
+        'icon'      => 'mixte',
+        'nature'    => 'noRequire',
+        'class'     => 'require',
+        'method'    => 'require',
+        'stopEvent' => 'noRequire',
+        'position'  => 'require',
+        'ord'       => 'noRequire'
+    ];
 
     private $const_target;
 
@@ -814,6 +828,110 @@ class ODTreeview extends ODContained
         return array_key_exists($ref, $optionsPath) ? $optionsPath[$ref] : false;
     }
 
+    /**
+     * @param string $idBtn
+     * @param array $optionsBtn
+     * @return ODTreeview|bool
+     * @throws \ReflectionException
+     */
+    public function addBtnAction(string $idBtn, array $optionsBtn)
+    {
+        if ($this->validArrayOptionsBtn($optionsBtn) && !empty($idBtn)) {
+            $sessionObjects = self::validateSession();
+            $objetcs        = $sessionObjects->objects;
+            if (array_key_exists($idBtn, $objetcs)) { return false; }
+            $properties     = $this->getProperties();
+            $btnActions     = $properties['btnActions'];
+            if (array_key_exists($idBtn, $btnActions)) { return false; }
+
+            /** @var ODButton $btnAction */
+            $btnAction = new ODButton($idBtn);
+            if (isset($optionsBtn['label']) && !empty($optionsBtn['label']))
+                                                                        { $btnAction->setLabel($optionsBtn['label']);}
+            if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
+                                                                        { $btnAction->setIcon($optionsBtn['label']);}
+            if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
+                $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+            }
+            $btnAction->setNature($optionsBtn['nature']);
+            if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
+                $optionsBtn['stopEvent'] = false;
+            }
+            if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['méthod'], $optionsBtn['stopEvent'])) {
+                return false;
+            }
+            $btnAction->saveProperties();
+
+            $item                       = [];
+            $item['id']                 = $idBtn;
+            $item['position']           = $optionsBtn['position'] ?? 'right';
+            if (isset($optionsBtn['ord']) && !empty($optionsBtn['ord'])) { return false; }
+            $item['ord']                = sizeof($btnActions) + 1;
+            $btnActions[$idBtn]         = $item;
+            $properties['btnActions']   = $btnActions;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $idBtn
+     * @param array $optionsBtn
+     * @return ODTreeview|bool
+     * @throws \ReflectionException
+     */
+    public function setBtnAction(string $idBtn, array $optionsBtn)
+    {
+        if ($this->validArrayOptionsBtn($optionsBtn) && !empty($idBtn)) {
+            $properties     = $this->getProperties();
+            $btnActions     = $properties['btnActions'];
+            if (!array_key_exists($idBtn, $btnActions)) { return false; }
+
+            $sessionObjects = self::validateSession();
+            /** @var ODButton $btnAction */
+            $btnAction      = self::buildObject($idBtn);
+            $btnItem        = $btnActions[$idBtn];
+
+
+            if (isset($optionsBtn['label']) && !empty($optionsBtn['label']))
+            { $btnAction->setLabel($optionsBtn['label']);}
+            if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
+            { $btnAction->setIcon($optionsBtn['label']);}
+            if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
+                $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+            }
+            $btnAction->setNature($optionsBtn['nature']);
+            if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
+                $optionsBtn['stopEvent'] = false;
+            }
+            if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['méthod'], $optionsBtn['stopEvent'])) {
+                return false;
+            }
+            $btnAction->saveProperties();
+
+            $btnItem['id']              = $idBtn;
+            $btnItem['position']        = $optionsBtn['position'] ?? 'right';
+            $btnActions[$idBtn]         = $btnItem;
+            $properties['btnActions']   = $btnActions;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $idBtn
+     * @return bool|array
+     */
+    public function getBtnAction(string $idBtn)
+    {
+        $properties     = $this->getProperties();
+        $btnActions     = $properties['btnActions'];
+        if (!array_key_exists($idBtn, $btnActions)) { return false; }
+        else                                        { return $btnActions[$idBtn]; }
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -833,6 +951,7 @@ class ODTreeview extends ODContained
 		switch ($params['event']) {
 			case 'click':
 			    $value      = $params['value'];
+			    if (!array_key_exists('selected', $value)) { $value['selected'] = []; }
 			    $leaves     = $object->getSelectedLeaves();
                 foreach ($leaves as $leaf) {
                     $object->unselectNode($leaf);
@@ -1017,5 +1136,29 @@ class ODTreeview extends ODContained
         }
 
         return $retour;
+    }
+
+    /**
+     * @param array $optionsBtn
+     */
+    private function validArrayOptionsBtn(array $optionsBtn)
+    {
+        $valid = true;
+        foreach (self::ARRAY_OPTIONS as $cle => $isRequire) {
+            switch ($isRequire) {
+                case 'require' :
+                    $valid = $valid && array_key_exists($cle, $optionsBtn);
+                    break;
+                case 'noRequire':
+                    break;
+                case 'mixte':
+                    $valid = $valid &&
+                        (array_key_exists('label', $optionsBtn) || array_key_exists('icon', $optionsBtn));
+                    break;
+                default:
+                    $valid = false;
+            }
+            if (!$valid) { break; }
+        }
     }
 }

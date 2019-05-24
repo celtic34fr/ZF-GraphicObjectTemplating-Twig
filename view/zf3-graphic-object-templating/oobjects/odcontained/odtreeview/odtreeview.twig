@@ -2,15 +2,20 @@
 
 {% import _self as macros %}
 
-{% macro drawLeaf(item, path, icon, objet, level) %}
+{% macro drawLeaf(item, objet, level) %}
     {#{ dump(objet.colorClasses[level].normal['bg-color']) }#}
     {% import _self as macros %}
+
+    {% set path = objet.dataPath %}
+    {% set icon = objet.icon %}
+    {% set colorClasses = objet.colorClasses %}
+
     {% if item.children|length == 0 %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
             data-id = "{{ path[item.ref] }}"
-            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect{% endif %} leaf"
+            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect{% endif %} leaf"
         >
-            {% if objet.icon %}
+            {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
                     <i class="{{ objet.leafIco }} icon leaf"></i>
@@ -24,9 +29,9 @@
         </li>
     {% else %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
-            class="{{ objet.colorClasses[level].normal['fg-color'] }} bg-{{ objet.colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect {% endif %} node"
+            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect {% endif %} node"
         >
-            {% if objet.icon %}
+            {% if icon %}
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
             <label>
@@ -35,7 +40,7 @@
             <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}
             {% if objet.sortable != false and item.sortable != false %} sortable {% endif %}">
                 {% for id,leaf in item.children %}
-                    {{ macros.drawLeaf(leaf, path, icon, objet, level + 1) }}
+                    {{ macros.drawLeaf(leaf, objet, level + 1) }}
                 {% endfor %}
             </ul>
         </li>
@@ -73,7 +78,7 @@
         <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}
         {% if objet.dataTree is not empty %}node{% endif %} {% if objet.sortable != false %} sortable {% endif %}">
             {% for leaf in objet.dataTree %}
-                {{ macros.drawLeaf(leaf, objet.dataPath, objet.icon, objet, 1) }}
+                {{ macros.drawLeaf(leaf, objet, 1) }}
             {% endfor %}
         </ul>
     </div>
