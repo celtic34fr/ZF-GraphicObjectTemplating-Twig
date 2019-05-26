@@ -101,6 +101,22 @@ function initTreeview(idObject) {
     });
 }
 
+function addBtnActions(idObj) {
+    var selector = '#' + idObj + ' li > div.btnActions';
+    var nodes    = $(selector);
+    $.each(nodes, function () {
+        btnActions = $(this).data('btnactions');
+        btnActions = btnActions.split('|');
+        liNode     = $(this).parent('li');
+
+        btnActions.forEach(function (btnName) {
+            var button = $('#'+idObj+'BtnsAction #'+btnName)[0].outerHTML;
+            button = button.replace(btnName, liNode.data('id')+btnName);
+            liNode.find('> div.btnActions').append(button);
+        })
+    });
+}
+
 $(document).ready(function (evt) {
 
     $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable.sortable' , function(evt) {

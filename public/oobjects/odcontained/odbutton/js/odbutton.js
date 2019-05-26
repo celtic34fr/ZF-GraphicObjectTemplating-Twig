@@ -11,14 +11,20 @@ function odbutton(obj) {
 odbutton.prototype = {
     getData: function (evt) {
         var valeur = this.value != undefined ? this.value : '';
-        // var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        // chps = chps + "&object='" + this.objet + "'";
+        switch (valeur) {
+            case 'odtreeview':
+                var valeur = $('#'+this.id).closest("li").data("id");
+                this.id    = this.id.substr(valeur.length);
+                break;
+            case 'odtable':
+                break;
+            default:
+        }
 
         var form    = [];
         if ( this.form.length > 0 ) {
             var formObj = new osform($('#'+this.form));
             var form    = formObj.getData(evt);
-            // chps        = chps + "&form='"+form+"'";
         }
 
         // return chps;

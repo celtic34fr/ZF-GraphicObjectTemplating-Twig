@@ -9,6 +9,11 @@
     {% set path = objet.dataPath %}
     {% set icon = objet.icon %}
     {% set colorClasses = objet.colorClasses %}
+    {% set btnActions = '' %}
+    {% for btnAction in item.btnActions %}
+        {% set btnActions = btnActions ~ '|' ~ btnAction %}
+    {% endfor %}
+    {% if btnActions|length > 0 %} {% set btnActions = substr(btnActions, 1) %} {% endif %}
 
     {% if item.children|length == 0 %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
@@ -26,6 +31,7 @@
             <label>
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
+            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
         </li>
     {% else %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
@@ -43,6 +49,7 @@
                     {{ macros.drawLeaf(leaf, objet, level + 1) }}
                 {% endfor %}
             </ul>
+            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
         </li>
     {% endif %}
 {% endmacro %}
@@ -69,6 +76,20 @@
             display: block;
             float: right;
         }
+
+        li .BAright {
+            float: right;
+            position: relative;
+            top: -2em;
+            margin-left: 0.5em;
+        }
+
+        li .BAleft {
+            float: left;
+            position: relative;
+            top: -2em;
+            margin-left: 0.5em;
+        }
     </style>
 
     <div id="{{ objet.id }}Li-0-0">
@@ -83,7 +104,15 @@
         </ul>
     </div>
 
+    <div id="{{ objet.id }}BtnsAction" style="display: none;">
+        {% for btnAction, params in objet.btnActions %}
+            {{ gotRender(btnAction) }}
+        {% endfor %}
+    </div>
+
     <script id="{{ objet.id }}InitTreeview">
         initTreeview('{{ objet.id }}');
+
+        addBtnActions('{{ objet.id }}');
     </script>
 </div>
