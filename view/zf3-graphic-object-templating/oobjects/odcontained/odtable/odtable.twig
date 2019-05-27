@@ -29,6 +29,18 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
         div#{{ objet.id }} table .cno{{ loop.index }} { width: {{ col.width }}; }
             {% endif %}
         {% endfor %}
+
+        td .BAright {
+            float: right;
+            position: relative;
+            margin-left: 0.5em;
+        }
+
+        td .BAleft {
+            float: left;
+            position: relative;
+            margin-left: 0.5em;
+        }
     </style>
     {% if objet.pagination %}
     <div class="length col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -74,7 +86,12 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
                             {% endif %}
                         {% endfor %}
                 {% if btnActions %}
-                    <td class="col  {% if objet.btnsLine[noLine] is defined %}
+                    <td class="col  {% if objet.btnsLine[lno] is defined %}
+                    {% set btnLines = '' %}
+                    {% for btnLine in objet.btnsLine[lno] %}
+                        {% set btnLines  = btnLines ~ '|' ~ btnLine %}
+                    {% endfor %}
+                    {% if btnLines|length > 0 %} {% set btnLines = substr(btnLines, 1) %} {% endif %}
                         cnoActions" data-cno="action"  data-btnactions="{{ btnLines }}{% endif %}" ></td>
                 {% endif %}
             </tr>
@@ -97,11 +114,12 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
     </div>
     {% endif %}
 
-    {% if objet.event is not empty %}
     <script>
+    {% if objet.event is not empty %}
         $(document).ready(function (e) {
             {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
         })
-    </script>
     {% endif %}
+        addBtnActions('{{ objet.id }}');
+    </script>
 </div>

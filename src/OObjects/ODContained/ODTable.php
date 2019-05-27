@@ -148,6 +148,17 @@ class ODTable extends ODContained
     const ODTABLELENGTH_50 = 50;
     const ODTABLELENGTH_100 = 100;
 
+    const ARRAY_OPTIONS             = [
+        'label'     => 'mixte',
+        'icon'      => 'mixte',
+        'nature'    => 'noRequire',
+        'class'     => 'require',
+        'method'    => 'require',
+        'stopEvent' => 'noRequire',
+        'position'  => 'require',
+        'ord'       => 'noRequire'
+    ];
+
     private $const_titlePos;
     private $const_length;
 
@@ -2048,5 +2059,31 @@ class ODTable extends ODContained
             if (is_array($item)) { $ret = (false or $ret); }
         }
         return $ret;
+    }
+
+    /**
+     * @param array $optionsBtn
+     * @return bool
+     */
+    private function validArrayOptionsBtn(array $optionsBtn)
+    {
+        $valid = true;
+        foreach (self::ARRAY_OPTIONS as $cle => $isRequire) {
+            switch ($isRequire) {
+                case 'require' :
+                    $valid = $valid && array_key_exists($cle, $optionsBtn);
+                    break;
+                case 'noRequire':
+                    break;
+                case 'mixte':
+                    $valid = $valid &&
+                        (array_key_exists('label', $optionsBtn) || array_key_exists('icon', $optionsBtn));
+                    break;
+                default:
+                    $valid = false;
+            }
+            if (!$valid) { break; }
+        }
+        return $valid;
     }
 }
