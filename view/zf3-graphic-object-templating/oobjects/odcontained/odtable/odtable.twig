@@ -48,6 +48,9 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
                         <th class="col cno{{ loop.index }}" data-col="{{ loop.index }}">{{ col.libel | trim }}</th>
                     {% endif %}
                 {% endfor %}
+                {% if btnActions %}
+                    <th class="col cnoActions" data-col="action">Actions</th>
+                {% endif %}
             </tr>
         </thead>
         {% endif %}
@@ -71,7 +74,8 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
                             {% endif %}
                         {% endfor %}
                 {% if btnActions %}
-                <td class="col cnoActions" data-cno="action" data-btnactions="{{ objet.btnsLine[noLine] }}"></td>
+                    <td class="col  {% if objet.btnsLine[noLine] is defined %}
+                        cnoActions" data-cno="action"  data-btnactions="{{ btnLines }}{% endif %}" ></td>
                 {% endif %}
             </tr>
                 {% endif %}
