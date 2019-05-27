@@ -111,6 +111,8 @@ class ODTinyMCE extends ODTextarea
 
     /**
      * @param string $plugin
+     * @return bool|ODTinyMCE
+     * @throws \ReflectionException
      */
     public function addPlugin(string $plugin)
     {

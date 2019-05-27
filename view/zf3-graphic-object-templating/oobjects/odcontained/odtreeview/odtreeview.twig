@@ -20,6 +20,7 @@
             data-id = "{{ path[item.ref] }}"
             class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect{% endif %} leaf"
         >
+            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -31,12 +32,12 @@
             <label>
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
-            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
         </li>
     {% else %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
             class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect {% endif %} node"
         >
+            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
             {% if icon %}
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
@@ -49,7 +50,6 @@
                     {{ macros.drawLeaf(leaf, objet, level + 1) }}
                 {% endfor %}
             </ul>
-            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
         </li>
     {% endif %}
 {% endmacro %}
@@ -63,7 +63,7 @@
 {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
 {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
 
-{% if objet.type != 'reset' and objet.type != 'link' %}
+{% if objet.event is not empty %}
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 {% endif %}
 >
@@ -80,14 +80,12 @@
         li .BAright {
             float: right;
             position: relative;
-            top: -2em;
             margin-left: 0.5em;
         }
 
         li .BAleft {
             float: left;
             position: relative;
-            top: -2em;
             margin-left: 0.5em;
         }
     </style>
@@ -98,9 +96,9 @@
         </label>
         <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}
         {% if objet.dataTree is not empty %}node{% endif %} {% if objet.sortable != false %} sortable {% endif %}">
-            {% for leaf in objet.dataTree %}
-                {{ macros.drawLeaf(leaf, objet, 1) }}
-            {% endfor %}
+        {% for leaf in objet.dataTree %}
+            {{ macros.drawLeaf(leaf, objet, 1) }}
+        {% endfor %}
         </ul>
     </div>
 
@@ -113,6 +111,6 @@
     <script id="{{ objet.id }}InitTreeview">
         initTreeview('{{ objet.id }}');
 
-        addBtnActions('{{ objet.id }}');
+        addBtnActionsTV('{{ objet.id }}');
     </script>
 </div>

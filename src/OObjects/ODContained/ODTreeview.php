@@ -33,8 +33,6 @@ use Zend\ServiceManager\ServiceManager;
  * rmLeafNode(string $ref, bool $root = true)
  * setTitle($title)
  * getTitle()
- * setLeafLink(string $ref, string $link, string $target = self::ODTREEVIEWTARGET_SELF)
- * getLeafLink(string $ref)
  * enaSortable()
  * disSortable()
  * enaSelection()
@@ -70,16 +68,10 @@ use Zend\ServiceManager\ServiceManager;
  * updateTree(array $tree, $path, array $item, bool $addNode = false)
  * validRefUnique(string $ref)
  * rmLeafTree(array $dataTree, array $refs)
- * getTargetConstants()
  * validArrayOptionsBtn(array $optionsBtn)
  */
 class ODTreeview extends ODContained
 {
-
-    const ODTREEVIEWTARGET_SELF     = '_self';
-    const ODTREEVIEWTARGET_BLANK    = '_blank';
-    const ODTREEVIEWTARGET_PARENT   = '_parent';
-    const ODTREEVIEWTARGET_TOP      = '_top';
 
     const COLORCLASS_BLACK          = 'black';
     const COLORCLASS_DARKGREY       = 'dark-gray';
@@ -165,8 +157,6 @@ class ODTreeview extends ODContained
                     $item['ord']        = $ord;
                     $item['ref']        = $ref;
                     $item['icon']       = 'none';
-                    $item['link']       = 'none';
-                    $item['targetL']    = 'none';
                     $item['parent']     = '0';
                     $item['check']      = false;
                     $item['selectable'] = true;
@@ -187,8 +177,6 @@ class ODTreeview extends ODContained
                     $item['ord']        = $ord;
                     $item['ref']        = $ref;
                     $item['icon']       = 'none';
-                    $item['link']       = 'none';
-                    $item['targetL']    = 'none';
                     $item['parent']     = $parent;
                     $item['check']      = false;
                     $item['selectable'] = true;
@@ -519,46 +507,6 @@ class ODTreeview extends ODContained
     {
         $properties             = $this->getProperties();
         return (array_key_exists('title', $properties)) ? $properties['title'] : false ;
-    }
-
-    /**
-     * @param $ref
-     * @param $link
-     * @param string $target
-     * @return ODTreeview|bool
-     * @throws \ReflectionException
-     */
-    public function setLeafLink(string $ref, string $link, string $target = self::ODTREEVIEWTARGET_SELF)
-    {
-        $leaf = $this->getLeaf($ref);
-        if ($leaf) {
-            $properties     = $this->getProperties();
-            $dataTree       = $properties['dataTree'];
-            $dataPath       = $properties['dataPath'];
-
-            $leaf['link']   = $link;
-            $targets        = $this->getTargetConstants();
-            if (!in_array($target, $targets)) { $target = self::ODTREEVIEWTARGET_SELF; }
-
-            $dataTree       = $this->updateTree($dataTree, $dataPath[$ref], $leaf);
-            $properties['dataTree'] = $dataTree;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * @param $ref
-     * @return bool|string
-     */
-    public function getLeafLink(string $ref)
-    {
-        $leaf = $this->getLeaf($ref);
-        if ($leaf) {
-            return $leaf['link'];
-        }
-        return false;
     }
 
     /**
@@ -1202,29 +1150,6 @@ class ODTreeview extends ODContained
         }
 
         return $dataTree;
-    }
-
-    /**
-     * @return array
-     * @throws \ReflectionException
-     */
-    public function getTargetConstants()
-    {
-        $retour = [];
-        if (empty($this->const_target)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODTREEVIEWTARGET_');
-                if ($pos !== false) {
-                    $retour[$key] = $constant;
-                }
-            }
-            $this->const_target = $retour;
-        } else {
-            $retour = $this->const_target;
-        }
-
-        return $retour;
     }
 
     /**

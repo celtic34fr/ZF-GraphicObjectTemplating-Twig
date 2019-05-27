@@ -901,7 +901,7 @@ class ODTable extends ODContained
 
         $rslt = [];
         foreach ($lines as $noLine => $line) {
-            if ($line[$nCol] === $value) {
+            if ((string) $line[$nCol] === $value) {
                 $rslt[] = $noLine;
             }
         }

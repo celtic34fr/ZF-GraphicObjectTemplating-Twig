@@ -18,9 +18,6 @@ odtreeview.prototype = {
         value['selected'] = selected;
         value['tree']     = tree;
         return {id : this.id, value : value, object : this.objet, event : 'click'};
-        // return "id=" + this.id +
-        //     "&value='" + JSON.stringify(value) + "'" +
-        //     "&event='click'&object='" + this.objet + "'";
     },
     setData: function (data) {
         $.each(data, function (i, value) {
@@ -101,7 +98,7 @@ function initTreeview(idObject) {
     });
 }
 
-function addBtnActions(idObj) {
+function addBtnActionsTV(idObj) {
     var selector = '#' + idObj + ' li > div.btnActions';
     var nodes    = $(selector);
     $.each(nodes, function () {

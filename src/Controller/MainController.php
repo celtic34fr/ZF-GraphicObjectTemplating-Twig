@@ -274,11 +274,14 @@ class MainController extends AbstractActionController
      * @return bool|string
      */
     private function trimQuote($var, $char = "'") {
-        if ($var[0] === $char) { $var = substr($var, 1); }
-        if ($var[strlen($var) - 1] === $char) {
-            $var = substr($var, 0, - 1);
+        if (!empty($var)) {
+            if ($var[0] === $char) { $var = substr($var, 1); }
+            if ($var[strlen($var) - 1] === $char) {
+                $var = substr($var, 0, - 1);
+            }
+            return $var;
         }
-        return $var;
+        return '';
     }
 
     /**

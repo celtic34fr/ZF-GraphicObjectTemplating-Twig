@@ -14,12 +14,12 @@ odbutton.prototype = {
         switch (valeur) {
             case 'odtreeview':
                 var valeur = $('#'+this.id).closest("li").data("id");
-                this.id    = this.id.substr(valeur.length);
+                this.id    = this.id.substr(valeur.toString().length);
                 break;
             case 'odtable':
                 var valeur = 'L'+ $('#'+this.id).closest("tr").data("lno");
                 valeur     = valeur + 'C'+ $('#'+this.id).closest("td").data("cno");
-                this.id    = this.id.substr(valeur.length);
+                this.id    = this.id.substr(valeur.toString().length);
                 break;
             default:
         }
