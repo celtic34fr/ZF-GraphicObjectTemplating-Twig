@@ -31,4 +31,7 @@ return [
     'objLength'     => '',
     'objNavbar'     => '',
     'c'             => '',
+
+    'btnActions'    => [],
+    'btnsLine'      => [],
 ];

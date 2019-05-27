@@ -17,6 +17,9 @@ odbutton.prototype = {
                 this.id    = this.id.substr(valeur.length);
                 break;
             case 'odtable':
+                var valeur = 'L'+ $('#'+this.id).closest("tr").data("lno");
+                valeur     = valeur + 'C'+ $('#'+this.id).closest("td").data("cno");
+                this.id    = this.id.substr(valeur.length);
                 break;
             default:
         }

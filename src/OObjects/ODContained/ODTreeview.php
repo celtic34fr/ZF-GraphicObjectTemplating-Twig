@@ -921,6 +921,10 @@ class ODTreeview extends ODContained
             if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['méthod'], $optionsBtn['stopEvent'])) {
                 return false;
             }
+            $btnAction->setWidth('2.5em');
+            $item['position']           = $optionsBtn['position'] ?? 'right';
+            $btnAction->addClass('BA'.$item['position']);
+            $btnAction->setValue('odtreeview');
             $btnAction->saveProperties();
 
             $btnItem['id']              = $idBtn;

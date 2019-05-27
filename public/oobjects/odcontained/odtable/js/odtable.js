@@ -3,6 +3,22 @@ function odtable(obj) {
     this.pager  = obj.data('pager');
 }
 
+function addBtnActions(idObj) {
+    var selector = '#' + idObj + ' tr > td.cnoActions';
+    var nodes    = $(selector);
+    $.each(nodes, function () {
+        btnActions = $(this).data('btnactions');
+        btnActions = btnActions.split('|');
+        liNode     = $(this).parent('tr');
+
+        btnActions.forEach(function (btnName) {
+            var button = $('#'+idObj+'BtnsAction #'+btnName)[0].outerHTML;
+            button = button.replace(btnName, liNode.data('lno')+btnName);
+            liNode.find('> td.cnoActions').append(button);
+        })
+    });
+}
+
 odtable.prototype = {
     getData: function (evt) {
 

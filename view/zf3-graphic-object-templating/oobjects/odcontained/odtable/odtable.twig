@@ -1,6 +1,8 @@
 {# template de l'objet ODTable  #}
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set btnActions = false %}
+{% if objet.btnActions is not empty %} {% set btnActions = true %} {% endif %}
 
 <div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
 data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
@@ -68,6 +70,9 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
+                {% if btnActions %}
+                <td class="col cnoActions" data-cno="action" data-btnactions="{{ objet.btnsLine[noLine] }}"></td>
+                {% endif %}
             </tr>
                 {% endif %}
             {% endfor %}
@@ -77,6 +82,14 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
     {% if objet.pagination %}
     <div class="navigation col-lg-12 col-md-12 col-sm-12 col-xs-12">
         {{ gotRender(objet.navbarBtns) }}
+    </div>
+    {% endif %}
+
+    {% if btnActions %}
+    <div id="{{ objet.id }}BtnsAction" style="display: none;">
+        {% for btnAction, params in objet.btnActions %}
+            {{ gotRender(btnAction) }}
+        {% endfor %}
     </div>
     {% endif %}
 
