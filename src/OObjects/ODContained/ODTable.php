@@ -1727,7 +1727,7 @@ class ODTable extends ODContained
     /**
      * @param string $idBtn
      * @param array $optionsBtn
-     * @return ODTreeview|bool
+     * @return ODTable|bool
      * @throws \ReflectionException
      */
     public function addBtnAction(string $idBtn, array $optionsBtn)
@@ -1778,7 +1778,7 @@ class ODTable extends ODContained
     /**
      * @param string $idBtn
      * @param array $optionsBtn
-     * @return ODTreeview|bool
+     * @return ODTable|bool
      * @throws \ReflectionException
      */
     public function setBtnAction(string $idBtn, array $optionsBtn)
@@ -1928,6 +1928,17 @@ class ODTable extends ODContained
                 $code .= '</td>';
             }
         }
+        $properties     = $this->getProperties();
+        $btnActions     = $properties['btnActions'] ?? [];
+        if (!empty($btnActions)) {
+            $code .= '<td class="col';
+            if (!empty($properties["btnsLine"][$noLine])) {
+                $code .= 'cnoActions" data-cno="action"  data-btnactions="';
+                $code .= implode("|", $properties["btnsLine"][$noLine]);
+            }
+            $code .= '"></td>';
+        }
+    
         $code .= "</tr>";
         return self::formatRetour($idTable, $idTable . " tbody", 'append', $code);
     }

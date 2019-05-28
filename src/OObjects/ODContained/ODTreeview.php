@@ -795,9 +795,10 @@ class ODTreeview extends ODContained
     {
         $validBtns  = $this->validArrayOptionsBtn($optionsBtn);
         if ($validBtns && !empty($idBtn)) {
+            $item                       = [];
             $sessionObjects = self::validateSession();
-            $objetcs        = $sessionObjects->objects;
-            if (array_key_exists($idBtn, $objetcs)) { return false; }
+            $objects        = $sessionObjects->objects;
+            if (array_key_exists($idBtn, $objects)) { return false; }
             $properties     = $this->getProperties();
             $btnActions     = $properties['btnActions'];
             if (array_key_exists($idBtn, $btnActions)) { return false; }
@@ -823,8 +824,7 @@ class ODTreeview extends ODContained
             $btnAction->addClass('BA'.$item['position']);
             $btnAction->setValue('odtreeview');
             $btnAction->saveProperties();
-
-            $item                       = [];
+ 
             $item['id']                 = $idBtn;
             if (isset($optionsBtn['ord']) && !empty($optionsBtn['ord'])) { return false; }
             $item['ord']                = sizeof($btnActions) + 1;
@@ -851,7 +851,7 @@ class ODTreeview extends ODContained
 
             $sessionObjects = self::validateSession();
             /** @var ODButton $btnAction */
-            $btnAction      = self::buildObject($idBtn);
+            $btnAction      = self::buildObject($idBtn, $sessionObjects);
             $btnItem        = $btnActions[$idBtn];
 
 
@@ -866,7 +866,7 @@ class ODTreeview extends ODContained
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
             }
-            if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['méthod'], $optionsBtn['stopEvent'])) {
+            if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['method'], $optionsBtn['stopEvent'])) {
                 return false;
             }
             $btnAction->setWidth('2.5em');
