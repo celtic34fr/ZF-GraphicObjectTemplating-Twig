@@ -106,11 +106,13 @@ function addBtnActionsTV(idObj) {
         btnActions = btnActions.split('|');
         liNode     = $(this).parent('li');
 
-        btnActions.forEach(function (btnName) {
-            var button = $('#'+idObj+'BtnsAction #'+btnName)[0].outerHTML;
-            button = button.replace(btnName, liNode.data('id')+btnName);
-            liNode.find('> div.btnActions').append(button);
-        })
+        if ($(this).is(':empty')) {
+            btnActions.forEach(function (btnName) {
+                var button = $('#' + idObj + 'BtnsAction #' + btnName)[0].outerHTML;
+                button = button.replace(btnName, liNode.data('id') + btnName);
+                liNode.find('> div.btnActions').append(button);
+            })
+        }
     });
 }
 
