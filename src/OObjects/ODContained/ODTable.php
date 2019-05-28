@@ -589,17 +589,29 @@ class ODTable extends ODContained
     public function removeLine(int $nLine)
     {
         $properties = $this->getProperties();
-        $datas = $properties['datas'];
+        $datas      = $properties['datas'];
+        $btnsLine   = $properties['btnsLine'];
+
         $nbLines = sizeof($datas);
         if ($nbLines == 0) return false;
         if ($nLine == 0 || $nLine > $nbLines) return false;
 
         /* remise en séquence des lignes restantes */
         for ($i = $nLine; $i < $nbLines; $i++) {
-            $datas[$i] = $datas[$i + 1];
+            $datas[$i]      = $datas[$i + 1];
+            $btnsLine[$i]   = $btnsLine[$i + 1];
         }
         unset($datas[$nbLines]);
-        $properties['datas'] = $datas;
+        $properties['datas']    = $datas;
+
+        if (!empty($btnsLine)) {
+            for ($i = $nLine; $i < $nbLines; $i++) {
+                $btnsLine[$i]   = $btnsLine[$i + 1];
+            }
+            unset($btnsLine[$nbLines]);
+            $properties['btnsLine'] = $btnsLine;
+        }
+
         $this->setProperties($properties);
         return $this;
     }
@@ -1436,7 +1448,6 @@ class ODTable extends ODContained
      */
     public function findCellOnValue(string $value, int $noCol = 0, int $noLine = 0)
     {
-        $crc = false;
         $crl = false;
         $crr = [];
         switch (true) {
