@@ -1910,17 +1910,11 @@ class ODTable extends ODContained
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
-
-    /**
-     * méthode retournant les valeurs exploitée en retour de callback pour l'ajout d'une ligne en fin de tableau
-     * @param $idTable      : identifiant de l'objet ODTable
-     * @param $noLine       : numéro de ligne
-     * @return array        : valeur de retour de callback
-     */
-    public function returnAppendLine(string $idTable, int $noLine)
-    {
+    
+    protected function generateInnerLine(string $id, int $noLine) {
+        $properties     = $this->getProperties();
         $line = $this->getLine($noLine);
-        $code = '<tr class="line lno' . $noLine . '" data-lno="' . $noLine . '">';
+        $code = '';
         foreach ($line as $noCol => $valCol) {
             if ($this->stateCol($noCol)) {
                 $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
@@ -1928,17 +1922,28 @@ class ODTable extends ODContained
                 $code .= '</td>';
             }
         }
-        $properties     = $this->getProperties();
         $btnActions     = $properties['btnActions'] ?? [];
         if (!empty($btnActions)) {
             $code .= '<td class="col';
             if (!empty($properties["btnsLine"][$noLine])) {
-                $code .= 'cnoActions" data-cno="action"  data-btnactions="';
+                $code .= ' cnoActions" data-cno="action"  data-btnactions="';
                 $code .= implode("|", $properties["btnsLine"][$noLine]);
             }
             $code .= '"></td>';
         }
+        return $code;
+    }
+    /**
+     * méthode retournant les valeurs exploitée en retour de callback pour l'ajout d'une ligne en fin de tableau
+     * @param $idTable      : identifiant de l'objet ODTable
+     * @param $noLine       : numéro de ligne
+     * @return array        : valeur de retour de callback
+     */
     
+    public function returnAppendLine(string $idTable, int $noLine)
+    {
+        $code = '<tr class="line lno' . $noLine . '" data-lno="' . $noLine . '">';
+        $code .= $this->generateInnerLine($idTable, $noLine);
         $code .= "</tr>";
         return self::formatRetour($idTable, $idTable . " tbody", 'append', $code);
     }
@@ -1952,15 +1957,8 @@ class ODTable extends ODContained
     public function returnUpdateLine(string $idTable, int $noLine)
     {
         $line = $this->getLine($noLine);
-        $code = '';
         $idTarget = $idTable . ' .lno' . $noLine;
-        foreach ($line as $noCol => $valCol) {
-            if ($this->stateCol($noCol)) {
-                $code .= '<td class="col cno' . $noCol . '" data-cno="' . $noCol . '">';
-                $code .= $valCol;
-                $code .= '</td>';
-            }
-        }
+        $code = $this->generateInnerLine($idTable, $noLine);
         return self::formatRetour($idTable, $idTarget, 'innerUpdate', $code);
     }
 
