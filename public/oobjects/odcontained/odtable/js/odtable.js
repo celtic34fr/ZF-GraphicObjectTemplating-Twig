@@ -11,11 +11,13 @@ function addBtnActions(idObj) {
         btnActions = btnActions.split('|');
         liNode     = $(this).parent('tr');
 
-        btnActions.forEach(function (btnName) {
-            var button = $('#'+idObj+'BtnsAction #'+btnName)[0].outerHTML;
-            button = button.replace(btnName, liNode.data('lno')+btnName);
-            liNode.find('> td.cnoActions').append(button);
-        })
+        if ($(this).is(':empty')) {
+            btnActions.forEach(function (btnName) {
+                var button = $('#' + idObj + 'BtnsAction #' + btnName)[0].outerHTML;
+                button = button.replace(btnName, liNode.data('lno') + btnName);
+                liNode.find('> td.cnoActions').append(button);
+            })
+        }
     });
 }
 
