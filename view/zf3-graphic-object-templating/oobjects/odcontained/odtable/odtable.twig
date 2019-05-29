@@ -68,7 +68,9 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
         {% endif %}
         <tbody class="{{ objet.id }}">
             <tr class="line nodata {% if objet.datas|length > 0 %}hide{% endif %}">
-                <td colspan="{{ objet.cols|length }}" style="text-align: center">No data to show</td>
+                {% set colspan = objet.cols|length %}
+                {% if objet.btnActions is not empty %} {% set colspan = colspan + 1 %} {% endif %}
+                <td colspan="{{ colspan }}" style="text-align: center">No data to show</td>
             </tr>
         {% if objet.datas|length > 0 %}
             {% for lno, data in objet.datas %}

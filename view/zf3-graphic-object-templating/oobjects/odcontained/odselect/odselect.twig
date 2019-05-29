@@ -40,9 +40,9 @@
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} select", $("#{{ objet.id }} select").data("widthbt"));
 
-{#            {% if objet.event is not empty %}#}
-{#            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}#}
-{#            {% endif %}#}
+            {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
+            {% endif %}
         })
     </script>
 </div>

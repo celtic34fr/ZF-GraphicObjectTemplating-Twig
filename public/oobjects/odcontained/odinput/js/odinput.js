@@ -40,7 +40,11 @@ odinput.prototype = {
             case 'hidden':
                 break;
             case 'text':
-                if (this.data('mask') != undefined && this.data('mask').length > 0) { break; }
+                var mask = '';
+                for (key in this.data) {
+                    if (key == 'mask') { var mask = this.data('mask'); }
+                }
+                if (mask != undefined && mask.length > 0) { break; }
             case 'password':
                 var minlength = (input.attr('minlength') != undefined) ? input.attr('minlength'): -1;
                 var maxlength = (input.attr('maxlength') != undefined) ? input.attr('maxlength'): -1;
