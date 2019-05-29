@@ -97,6 +97,7 @@ use Zend\ServiceManager\ServiceManager;
  * setCustomButton($label, $value, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
  * getCustomButton()
  * setButton($type, $label, $classView, $closeOnClick = true)
+ * clearButton();
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -181,6 +182,7 @@ class ODMessage extends ODContained
      * méthode de positionnement de l'action à réaliser en focntion de celles autorisées
      * @param string $action
      * @return $this
+     * @throws \ReflectionException
      */
     public function setAction($action = self::ODMESSAGEACTION_INIT)
     {
@@ -327,6 +329,7 @@ class ODMessage extends ODContained
     /**
      * @param string $buttonAlign
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setButtonAlign($buttonAlign = self::ODMESSAGEBTNALIGN_CENTER)
     {
@@ -438,6 +441,7 @@ class ODMessage extends ODContained
     /**
      * @param string $iconSource
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setIconSource($iconSource = self::ODMESSAGEICON_BOOTSTRAP)
     {
@@ -463,6 +467,7 @@ class ODMessage extends ODContained
     /**
      * @param string $msgType
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setMsgType($msgType = self::ODMESSAGETYPE_CONFIRM)
     {
@@ -536,6 +541,7 @@ class ODMessage extends ODContained
     /**
      * @param string $nature
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setNature($nature = self::ODMESSAGEMSGNATURE_INFO)
     {
@@ -623,6 +629,7 @@ class ODMessage extends ODContained
     /**
      * @param string $type
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setType($type = self::ODMESSAGEPROMPT_TEXT)
     {
@@ -925,6 +932,7 @@ class ODMessage extends ODContained
     /**
      * @param string $method
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setLoadMethod($method = self::ODMESSAGEWINDOWLOAD_GET)
     {
@@ -987,6 +995,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setOkButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1015,6 +1024,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setCancelButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1044,6 +1054,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setYesButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1073,6 +1084,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setNoButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1097,19 +1109,28 @@ class ODMessage extends ODContained
     }
 
     /**
-     * @param $label
+     * @param string $label
      * @param $value
+     * @param string $type
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
+     * @throws \ReflectionException
      */
-    public function setCustomButton($label, $value, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
+    public function setCustomButton(string $label, $value, string $type = 'custom',
+                                    string $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, bool $closeOnClick = true)
     {
-        $label          = (string) $label;
-        $classView      = (string) $classView;
-        $closeOnClick   = ($closeOnClick && true);
-
-        return $this->setButton('custom', $label, $value = null, $classView, $closeOnClick);
+        $properties = $this->getProperties();
+        $buttons    = [];
+        if (array_key_exists('buttons', $properties)) {
+            $buttons = $properties['buttons'];
+            if (array_key_exists('yes', $buttons))      { unset($buttons['yes']); }
+            if (array_key_exists('no', $buttons))       { unset($buttons['no']); }
+            if (array_key_exists('ok', $buttons))       { unset($buttons['ok']); }
+            if (array_key_exists('cancel', $buttons))   { unset($buttons['cancel']); }
+        }
+        if ($type == 'custom') { $type =$type.sizeof($buttons); }
+        return $this->setButton($type, $label, $value = null, $classView, $closeOnClick);
     }
 
     /**
@@ -1120,7 +1141,12 @@ class ODMessage extends ODContained
         $properties = $this->getProperties();
         if (array_key_exists('buttons', $properties)) {
             $buttons = $properties['buttons'];
-            if (array_key_exists('custom', $buttons)) { return $buttons['cancel']; }
+            if (array_key_exists('yes', $buttons))      { unset($buttons['yes']); }
+            if (array_key_exists('no', $buttons))       { unset($buttons['no']); }
+            if (array_key_exists('ok', $buttons))       { unset($buttons['ok']); }
+            if (array_key_exists('cancel', $buttons))   { unset($buttons['cancel']); }
+
+            return $buttons;
         }
         return false;
     }
@@ -1132,6 +1158,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
+     * @throws \ReflectionException
      */
     public function setButton($type, $label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1154,7 +1181,17 @@ class ODMessage extends ODContained
         $properties['buttons'][$type] = $btn;
         $this->setProperties($properties);
         return $this;
+    }
 
+    /**
+     * @return ODMessage
+     */
+    public function clearButton()
+    {
+        $properties = $this->getProperties();
+        $properties['buttons'] = [];
+        $this->setProperties($properties);
+        return $this;
     }
 
     /** **************************************************************************************************
