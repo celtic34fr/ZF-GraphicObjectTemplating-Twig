@@ -9,10 +9,24 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * addOption($value, $libel, $type = self::RADIOTYPE_DEFAULT, $state = self::RADIOSTATE_ENABLE, $check = self::RADIOCHECK_UNCHECK)
+ * addOption(string $value, string $libel, string $type = self::RADIOTYPE_DEFAULT,
+ *                          bool $state = self::RADIOSTATE_ENABLE, string $check = self::RADIOCHECK_UNCHECK)
  *                          ajoute une option (= un bouton radio) en le rendant actif ou non (State)
+ * rmOption(string $value)
+ * getOption(string $value)
+ * setOption(string $value, string $libel, string $type = self::RADIOTYPE_DEFAULT,
+ *                          bool $state = self::RADIOSTATE_ENABLE, string $check = self::RADIOCHECK_UNCHECK)
+ * setOptions(array $options = null)
+ * getOptions()
  * checkOption($value)      sélectionne l'option déterminée par $value, valeur de l'option
- * uncheckOption($value)    déselectionne l'option déterminée par $value, valeur de l'option
+ * uncheckOption()          déselectionne l'option actuellement sélectionnée
+ * getCheckedOption()       restitue la valeur associé à l'option sé"lectionnée ou fals si rien n'est sélectionné
+ * enaOption(string $value)
+ * disOption(string $value)
+ * getStateOption(string $value)
+ * enaAllOptions()
+ * disAllOptions()
+ * getStateOptions()
  * setLabel($label)
  * getLabel()
  * setLabelWidthBT($labelWidthBT)
@@ -47,6 +61,11 @@ class ODRadio extends ODContained
     private $const_check;
     private $const_type;
 
+    /**
+     * ODRadio constructor.
+     * @param $id
+     * @throws \ReflectionException
+     */
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odradio/odradio.config.php");
 
@@ -63,19 +82,26 @@ class ODRadio extends ODContained
         return $this;
     }
 
-    public function addOption($value, $libel, $type = self::RADIOTYPE_DEFAULT, $state = self::RADIOSTATE_ENABLE, $check = self::RADIOCHECK_UNCHECK)
+    /**
+     * @param $value
+     * @param $libel
+     * @param string $type
+     * @param bool $state
+     * @param string $check
+     * @return ODRadio|bool
+     */
+    public function addOption(string $value, string $libel, string $type = self::RADIOTYPE_DEFAULT,
+                              bool $state = self::RADIOSTATE_ENABLE, string $check = self::RADIOCHECK_UNCHECK)
     {
-        $value = (string) $value;
         if (!empty($value)) {
-            $libel = (string) $libel;
             $properties = $this->getProperties();
             $states = $this->getStateConstants();
             $checks = $this->getCheckConstants();
-            $types      = $this->getTypeConstants();
+            $types  = $this->getTypeConstants();
 
-            if (!in_array($state, $states)) { $stat = self::RADIOSTATE_ENABLE; }
-            if (!in_array($check, $checks)) { $stat = self::RADIOCHECK_UNCHECK; }
-            if (!in_array($type, $types))   { $type = self::RADIOTYPE_DEFAULT; }
+            if (!in_array($state, $states)) { $state    = self::RADIOSTATE_ENABLE; }
+            if (!in_array($check, $checks)) { $check    = self::RADIOCHECK_UNCHECK; }
+            if (!in_array($type, $types))   { $type     = self::RADIOTYPE_DEFAULT; }
             if (!array_key_exists('options', $properties)) { $properties['options'] = []; }
             $options = $properties['options'];
             if (!array_key_exists($value, $options)) {
@@ -94,9 +120,109 @@ class ODRadio extends ODContained
         return false;
     }
 
-    public function checkOption($value)
+    /**
+     * @param string $value
+     * @return ODRadio|bool
+     */
+    public function rmOption(string $value)
     {
-        $value = (string) $value;
+        if (!empty($value)) {
+            $properties = $this->getProperties();
+            $options = $properties['options'];
+            if (array_key_exists($value, $options)) {
+                unset($options[$value]);
+                $properties['options']  = $options;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public function getOption(string $value)
+    {
+        if (!empty($value)) {
+            $properties = $this->getProperties();
+            $options = $properties['options'];
+            if (array_key_exists($value, $options)) {
+                return $options[$value];
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $value
+     * @param string $libel
+     * @param string $type
+     * @param bool $state
+     * @param string $check
+     * @return ODRadio|bool
+     */
+    public function setOption(string $value, string $libel, string $type = self::RADIOTYPE_DEFAULT,
+                              bool $state = self::RADIOSTATE_ENABLE, string $check = self::RADIOCHECK_UNCHECK)
+    {
+        if (!empty($value)) {
+            $properties = $this->getProperties();
+            $options = $properties['options'];
+            if (array_key_exists($value, $options)) {
+                $states = $this->getStateConstants();
+                $checks = $this->getCheckConstants();
+                $types  = $this->getTypeConstants();
+
+                if (!in_array($state, $states)) { $state    = self::RADIOSTATE_ENABLE; }
+                if (!in_array($check, $checks)) { $check    = self::RADIOCHECK_UNCHECK; }
+                if (!in_array($type, $types))   { $type     = self::RADIOTYPE_DEFAULT; }
+                if (!array_key_exists('options', $properties)) { $properties['options'] = []; }
+                $item = [];
+                $item['libel']  = $libel;
+                $item['check']  = $check;
+                $item['type']   = $type;
+                $item['state']  = $state;
+                $item['value']  = $value;
+                $options[$value]    = $item;
+                $properties['options']  = $options;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param array|null $options
+     * @return ODRadio|bool
+     */
+    public function setOptions(array $options = null)
+    {
+        if (!empty($options)) {
+            $properties = $this->getProperties();
+            $properties['options'] = $options;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|array
+     */
+    public function getOptions()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('options', $properties) ? $properties['options'] : false;
+    }
+
+    /**
+     * @param $value
+     * @return ODRadio|bool
+     */
+    public function checkOption(string $value)
+    {
         if (!empty($value)) {
             $properties = $this->getProperties();
             $options = $properties['options'];
@@ -110,6 +236,9 @@ class ODRadio extends ODContained
         return false;
     }
 
+    /**
+     * @return ODRadio
+     */
     public function uncheckOption()
     {
         $properties = $this->getProperties();
@@ -121,6 +250,123 @@ class ODRadio extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|int|string
+     */
+    public function getCheckedOption()
+    {
+        $properties = $this->getProperties();
+        $options = $properties['options'];
+        foreach ($options as $value => $option) {
+            if ($options[$value]['check'] == self::RADIOCHECK_CHECK) { return $value; }
+        }
+        return false;
+    }
+
+    /**
+     * @param $value
+     * @return $this|bool
+     */
+    public function enaOption(string $value)
+    {
+        if (!empty($value)) {
+            $properties = $this->getProperties();
+            $options = $properties['options'];
+            if (array_key_exists($value, $options)) {
+                $options[$value]['state'] = self::STATE_ENABLE;
+                $properties['options'] = $options;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $value
+     * @return $this|bool
+     */
+    public function disOption(string $value)
+    {
+        if (!empty($value)) {
+            $properties = $this->getProperties();
+            $options = $properties['options'];
+            if (array_key_exists($value, $options)) {
+                $options[$value]['state'] = self::STATE_DISABLE;
+                $properties['options'] = $options;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $value
+     * @return bool|string
+     */
+    public function getStateOption(string $value)
+    {
+        if (!empty($value)) {
+            $properties = $this->getProperties();
+            $options = $properties['options'];
+            if (array_key_exists($value, $options)) {
+                return $options[$value]['state'] ? 'enable' : 'disable';
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enaAllOptions()
+    {
+        $properties = $this->getProperties();
+        $options = $properties['options'];
+        foreach ($options as $value => $item) {
+            $item['state'] = self::STATE_ENABLE;
+            $options[$value] = $item;
+        }
+        $properties['options'] = $options;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function disAllOptions()
+    {
+        $properties = $this->getProperties();
+        $options = $properties['options'];
+        foreach ($options as $value => $item) {
+            $item['state'] = self::STATE_DISABLE;
+            $options[$value] = $item;
+        }
+        $properties['options'] = $options;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStateOptions()
+    {
+        $states     = [];
+        $properties = $this->getProperties();
+        $options = $properties['options'];
+        foreach ($options as $value => $item) {
+            $states[$value] = $options[$value]['state'] ? 'enable' : 'disable';
+        }
+        return $states;
+    }
+
+    /**
+     * @param $label
+     * @return ODRadio
+     */
     public function setLabel($label)
     {
         $label = (string) $label;
@@ -130,12 +376,19 @@ class ODRadio extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabel()
     {
         $properties = $this->getProperties();
         return array_key_exists('label', $properties) ? $properties['label'] : false;
     }
 
+    /**
+     * @param $labelWidthBT
+     * @return ODRadio|bool
+     */
     public function setLabelWidthBT($labelWidthBT)
     {
         if (!empty($labelWidthBT)) {
@@ -214,202 +467,15 @@ class ODRadio extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabelWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
-    /**
-    public function rmOption($value)
-    {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $options = $properties['options'];
-            if (array_key_exists($value, $options)) {
-                unset($options[$value]);
-                $properties['options'] = $options;
-                $this->setProperties($properties);
-                return $this;
-            }
-        }
-        return false;
-    }
-
-    public function setOption($value, $libel, $type = self::CHECKTYPE_DEFAULT, $state = self::STATE_ENABLE)
-    {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $libel = (string) $libel;
-            $properties = $this->getProperties();
-            $types = $this->getTypeConstants();
-            if (!in_array($type, $types)) { $type = self::CHECKTYPE_DEFAULT; }
-            $states = $this->getStateConstants();
-            if (!in_array($state, $states)) { $stat = self::STATE_ENABLE; }
-            if (!array_key_exists('options', $properties)) { $properties['options'] = []; }
-            $label = $properties['label'];
-            $options = $properties['options'];
-            if (empty($label) && empty($options)) {
-                $label = $libel;
-                $properties['label'] = $libel;
-            } else {
-                if (array_key_exists($value, $options)) {
-                    $item = [];
-                    $item['libel']  = $libel;
-                    $item['check']  = self::CHECKBOX_UNCHECK;
-                    $item['type']   = $type;
-                    $item['state']  = $state;
-                    $item['value']  = $value;
-                    $options[$value]    = $item;
-                    $properties['options']  = $options;
-                    $this->setProperties($properties);
-                    return $this;
-                }
-            }
-        }
-        return false;
-    }
-
-    public function getOption($value)
-    {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $options = $properties['options'];
-            if (array_key_exists($value, $options)) {
-                return $options[$value];
-            }
-        }
-        return false;
-    }
-
-    public function setOptions(array $options = null)
-    {
-        if (!empty($options)) {
-            $properties = $this->getProperties();
-            $properties['options'] = $options;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    public function getOptions()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('options', $properties) ? $properties['options'] : false;
-    }
-
-
-    public function checkAllOptions()
-    {
-        $properties = $this->getProperties();
-        $options = $properties['options'];
-        foreach ($options as $value => $item) {
-            $item[‘check’] = self::CHECKBOX_CHECK;
-            $options[$value] = $item;
-        }
-        $properties['options'] = $options;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function uncheckAllOptions()
-    {
-        $properties = $this->getProperties();
-        $options = $properties['options'];
-        foreach ($options as $value => $item) {
-            $item[‘check’] = self::CHECKBOX_UNCHECK;
-            $options[$value] = $item;
-        }
-        $properties['options'] = $options;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function enaOption($value)
-    {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $options = $properties['options'];
-            if (array_key_exists($value, $options)) {
-                $options[$value][‘state’] = self::STATE_ENABLE;
-                $properties['options'] = $options;
-                $this->setProperties($properties);
-                return $this;
-            }
-        }
-        return false;
-    }
-
-    public function disOption($value)
-    {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $options = $properties['options'];
-            if (array_key_exists($value, $options)) {
-                $options[$value][‘state’] = self::STATE_DISABLE;
-                $properties['options'] = $options;
-                $this->setProperties($properties);
-                return $this;
-            }
-        }
-        return false;
-    }
-
-    public function getStateOption($value)
-    {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $options = $properties['options'];
-            if (array_key_exists($value, $options)) {
-                return $options[$value]['state'] ? 'enable' : 'disable';
-            }
-        }
-        return false;
-    }
-
-    public function enaAllOptions()
-    {
-        $properties = $this->getProperties();
-        $options = $properties['options'];
-        foreach ($options as $value => $item) {
-            $item[‘state’] = self::STATE_ENABLE;
-            $options[$value] = $item;
-        }
-        $properties['options'] = $options;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function disAllOptions()
-    {
-        $properties = $this->getProperties();
-        $options = $properties['options'];
-        foreach ($options as $value => $item) {
-            $item[‘state’] = self::STATE_DISABLE;
-            $options[$value] = $item;
-        }
-        $properties['options'] = $options;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function getStateOptions()
-    {
-        $states     = [];
-        $properties = $this->getProperties();
-        $options = $properties['options'];
-        foreach ($options as $value => $item) {
-            $states[$value] = $options[$value]['state'] ? 'enable' : 'disable';
-        }
-        return $states;
-    }
-    **/
 
     /** méthodes privées */
 
