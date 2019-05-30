@@ -140,6 +140,7 @@ class ODMessage extends ODContained
     const ODMESSAGEBTNCLASSES_DANGER    = 'btn btn-danger';
     const ODMESSAGEBTNCLASSES_WARNING   = 'btn btn-warning';
     const ODMESSAGEBTNCLASSES_INFO      = 'btn btn-info';
+    const ODMESSAGEBTNCLASSES_PRIMARY   = 'btn btn-PRIMAY';
     const ODMESSAGEBTNCLASSES_DEFAULT   = 'btn btn-default';
 
     const ODMESSAGEMSGNATURE_INFO       = 'info';
