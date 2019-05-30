@@ -9,7 +9,7 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * addOption($value, $libel, $state = self::ODRADIOSTATE_ENABLE)
+ * addOption($value, $libel, $state = self::RADIOSTATE_ENABLE)
  *                          ajoute une option (= un bouton radio) en le rendant actif ou non (State)
  * checkOption($value)      sélectionne l'option déterminée par $value, valeur de l'option
  * uncheckOption($value)    déselectionne l'option déterminée par $value, valeur de l'option
@@ -24,11 +24,17 @@ use GraphicObjectTemplating\OObjects\ODContained;
  */
 class ODRadio extends ODContained
 {
-    const ODRADIOSTATE_ENABLE   = true;
-    const ODRADIOSTATE_DISABLE  = false;
+    const RADIOSTATE_ENABLE   = true;
+    const RADIOSTATE_DISABLE  = false;
 
-    const ODRADIOCHECK_CHECK    = "check";
-    const ODRADIOCHECK_UNCHECK  = "uncheck";
+    const RADIOPLACEMENT_LEFT  = "left";
+    const RADIOPLACEMENT_RIGHT = "right";
+
+    const RADIOCHECK_CHECK    = "check";
+    const RADIOCHECK_UNCHECK  = "uncheck";
+
+    const RADIOFORM_HORIZONTAL  = 'horizontal';
+    const RADIOFORM_VERTICAL    = 'vertical';
 
     protected $const_state;
     protected $const_check;
@@ -49,7 +55,7 @@ class ODRadio extends ODContained
         return $this;
     }
 
-    public function addOption($value, $libel, $state = self::ODRADIOSTATE_ENABLE, $check = self::ODRADIOCHECK_UNCHECK)
+    public function addOption($value, $libel, $state = self::RADIOSTATE_ENABLE, $check = self::RADIOCHECK_UNCHECK)
     {
         $value = (string) $value;
         if (!empty($value)) {
@@ -57,8 +63,8 @@ class ODRadio extends ODContained
             $properties = $this->getProperties();
             $states = $this->getStateConstants();
             $checks = $this->getCheckConstants();
-            if (!in_array($state, $states)) { $stat = self::ODRADIOSTATE_ENABLE; }
-            if (!in_array($check, $checks)) { $stat = self::ODRADIOCHECK_UNCHECK; }
+            if (!in_array($state, $states)) { $stat = self::RADIOSTATE_ENABLE; }
+            if (!in_array($check, $checks)) { $stat = self::RADIOCHECK_UNCHECK; }
             if (!array_key_exists('options', $properties)) { $properties['options'] = []; }
             $options = $properties['options'];
             if (!array_key_exists($value, $options)) {
@@ -83,7 +89,7 @@ class ODRadio extends ODContained
             $properties = $this->getProperties();
             $options = $properties['options'];
             if (array_key_exists($value, $options)) {
-                $options[$value]['check'] = self::ODRADIOCHECK_CHECK;
+                $options[$value]['check'] = self::RADIOCHECK_CHECK;
                 $properties['options'] = $options;
                 $this->setProperties($properties);
                 return $this;
@@ -99,7 +105,7 @@ class ODRadio extends ODContained
             $properties = $this->getProperties();
             $options = $properties['options'];
             if (array_key_exists($value, $options)) {
-                $options[$value]['check'] = self::CHECKBOX_UNCHECK;
+                $options[$value]['check'] = self::RADIOCHECK_UNCHECK;
                 $properties['options'] = $options;
                 $this->setProperties($properties);
                 return $this;
@@ -406,7 +412,7 @@ class ODRadio extends ODContained
         if (empty($this->const_state)) {
             $constants = $this->getConstants();
             foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODRADIOSTATE_');
+                $pos = strpos($key, 'RADIOSTATE_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }
@@ -425,7 +431,7 @@ class ODRadio extends ODContained
         if (empty($this->const_check)) {
             $constants = $this->getConstants();
             foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'ODRADIOCHECK_');
+                $pos = strpos($key, 'RADIOCHECK_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }

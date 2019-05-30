@@ -1,0 +1,13 @@
+.radioLabel {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.horizontal {
+    position: relative;
+    float: left;
+}
+
+.radioBtn {
+    padding: 0 0.5em;
+}

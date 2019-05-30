@@ -1,0 +1,39 @@
+{# template de l'objet ODRadio #}
+
+{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+    {% if objet.state == false %} radio disabled {% endif %}"
+    {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
+    {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
+    {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    {% if objet.state == false %} disabled {% endif %}
+    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+>
+    <div class="radioLabel {{ objet.forme }}"
+        {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}">
+        {{ objet.label }}
+    </div>
+    <div id="{{ objet.id }}radioBtns" class="{{ objet.forme }}"
+            {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}"
+    >
+        {% for radio in objet.options %}
+        <span style="">
+            <input type="radio" value="{{ radio.value }}" class="radioBtn">{{ radio.libel }}
+        </span>
+        {% endfor %}
+    </div>
+
+
+    <script>
+        $(document).ready(function (e) {
+            setBtClasses("#{{ objet.id }} div", $("#{{ objet.id }} div").data("widthbt"));
+
+{#            {% if objet.event is not empty %}#}
+{#            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}#}
+{#            {% endif %}#}
+        })
+    </script>
+
+</div>
+
