@@ -9,7 +9,7 @@ return [
 
     'label'             => '',
     'options'           => [],
-    'forme'             => 'horizontal',
+    'forme'             => ODRadio::RADIOFORM_HORIZONTAL,
     'hMargin'           => '0',
     'vMargin'           => '0',
     'place'             => 'left',

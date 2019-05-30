@@ -9,7 +9,7 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * addOption($value, $libel, $state = self::RADIOSTATE_ENABLE)
+ * addOption($value, $libel, $type = self::RADIOTYPE_DEFAULT, $state = self::RADIOSTATE_ENABLE, $check = self::RADIOCHECK_UNCHECK)
  *                          ajoute une option (= un bouton radio) en le rendant actif ou non (State)
  * checkOption($value)      sélectionne l'option déterminée par $value, valeur de l'option
  * uncheckOption($value)    déselectionne l'option déterminée par $value, valeur de l'option
@@ -33,11 +33,19 @@ class ODRadio extends ODContained
     const RADIOCHECK_CHECK    = "check";
     const RADIOCHECK_UNCHECK  = "uncheck";
 
-    const RADIOFORM_HORIZONTAL  = 'horizontal';
-    const RADIOFORM_VERTICAL    = 'vertical';
+    const RADIOTYPE_DEFAULT = "radio";
+    const RADIOTYPE_PRIMARY = "radio radio-primary";
+    const RADIOTYPE_SUCCESS = "radio radio-success";
+    const RADIOTYPE_INFO    = "radio radio-info";
+    const RADIOTYPE_WARNING = "radio radio-warning";
+    const RADIOTYPE_DANGER  = "radio radio-danger";
 
-    protected $const_state;
-    protected $const_check;
+    const RADIOFORM_HORIZONTAL  = 'radio-horizontal';
+    const RADIOFORM_VERTICAL    = 'radio-vertical';
+
+    private $const_state;
+    private $const_check;
+    private $const_type;
 
     public function __construct($id) {
         parent::__construct($id, "oobjects/odcontained/odradio/odradio.config.php");
@@ -55,7 +63,7 @@ class ODRadio extends ODContained
         return $this;
     }
 
-    public function addOption($value, $libel, $state = self::RADIOSTATE_ENABLE, $check = self::RADIOCHECK_UNCHECK)
+    public function addOption($value, $libel, $type = self::RADIOTYPE_DEFAULT, $state = self::RADIOSTATE_ENABLE, $check = self::RADIOCHECK_UNCHECK)
     {
         $value = (string) $value;
         if (!empty($value)) {
@@ -63,14 +71,18 @@ class ODRadio extends ODContained
             $properties = $this->getProperties();
             $states = $this->getStateConstants();
             $checks = $this->getCheckConstants();
+            $types      = $this->getTypeConstants();
+
             if (!in_array($state, $states)) { $stat = self::RADIOSTATE_ENABLE; }
             if (!in_array($check, $checks)) { $stat = self::RADIOCHECK_UNCHECK; }
+            if (!in_array($type, $types))   { $type = self::RADIOTYPE_DEFAULT; }
             if (!array_key_exists('options', $properties)) { $properties['options'] = []; }
             $options = $properties['options'];
             if (!array_key_exists($value, $options)) {
                 $item = [];
                 $item['libel']  = $libel;
                 $item['check']  = $check;
+                $item['type']   = $type;
                 $item['state']  = $state;
                 $item['value']  = $value;
                 $options[$value]    = $item;
@@ -98,20 +110,15 @@ class ODRadio extends ODContained
         return false;
     }
 
-    public function uncheckOption($value)
+    public function uncheckOption()
     {
-        $value = (string) $value;
-        if (!empty($value)) {
-            $properties = $this->getProperties();
-            $options = $properties['options'];
-            if (array_key_exists($value, $options)) {
-                $options[$value]['check'] = self::RADIOCHECK_UNCHECK;
-                $properties['options'] = $options;
-                $this->setProperties($properties);
-                return $this;
-            }
+        $properties = $this->getProperties();
+        $options = $properties['options'];
+        foreach ($options as $value => $option) {
+            $options[$value]['check'] = self::RADIOCHECK_UNCHECK;
         }
-        return false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     public function setLabel($label)
@@ -441,6 +448,24 @@ class ODRadio extends ODContained
             $retour = $this->const_check;
         }
 
+        return $retour;
+    }
+
+    private function getTypeConstants()
+    {
+        $retour = [];
+        if (empty($this->const_type)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'RADIOTYPE');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_type = $retour;
+        } else {
+            $retour = $this->const_type;
+        }
         return $retour;
     }
 }

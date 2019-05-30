@@ -14,24 +14,27 @@
         {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}">
         {{ objet.label }}
     </div>
-    <div id="{{ objet.id }}radioBtns" class="{{ objet.forme }}"
+    <div id="{{ objet.id }}radioBtns" class="radionBtns {{ objet.forme }}"
             {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}"
     >
         {% for radio in objet.options %}
-        <span style="">
-            <input type="radio" value="{{ radio.value }}" class="radioBtn">{{ radio.libel }}
-        </span>
+        <div class="{{ radio.type }} {{ objet.forme }}">
+        <input type="radio" name="{{ objet.id }}Radio" value="{{ radio.value }}" class="radioBtn"
+            id="{{ objet.id ~ radio.value }}" {% if radio.check == 'check' %} checked="checked"{% endif %}>
+        <label for="{{ objet.id ~ radio.value }}">{{ radio.libel }}</label>
+        </div>
         {% endfor %}
     </div>
 
 
     <script>
         $(document).ready(function (e) {
-            setBtClasses("#{{ objet.id }} div", $("#{{ objet.id }} div").data("widthbt"));
+            setBtClasses("#{{ objet.id }} .radioLabel", $("#{{ objet.id }} .radioLabel").data("widthbt"));
+            setBtClasses("#{{ objet.id }} .radionBtns", $("#{{ objet.id }} .radionBtns").data("widthbt"));
 
-{#            {% if objet.event is not empty %}#}
-{#            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}#}
-{#            {% endif %}#}
+            {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
+            {% endif %}
         })
     </script>
 
