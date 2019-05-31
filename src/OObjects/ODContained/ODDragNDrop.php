@@ -839,20 +839,12 @@ class ODDragNDrop extends ODContained
     {
         $properties                     = $this->getProperties();
         $loadedFiles                    = $properties['loadedFiles'];
-        $names                          = array_column($loadedFiles, 'name');
-        if (!in_array($name, $names)) {
-            $key                        = '1ld';
-            if (!empty($loadedFiles)) {
-                $loadedFiles                = ksort($loadedFiles);
-                /** @var array $loadedFiles */
-                $key                        = ((int) array_key_last($loadedFiles) + 1).'ld';
-            }
+        if (!in_array($name, $loadedFiles)) {
             $item                       = [];
             $item['name']               = $name;
             $item['pathFile']           = $pathFile;
             $item['mime']               = mime_content_type($pathFile);
-//            $loadedFiles[$name]         = $pathFile;
-            $loadedFiles[$key]          = $item;
+            $loadedFiles[$name]         = $item;
             $properties['loadedFiles']  = $loadedFiles;
             $this->setProperties($properties);
             return $this;

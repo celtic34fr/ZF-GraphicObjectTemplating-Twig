@@ -2,7 +2,7 @@ function getDPI() {
     return jQuery('#dpi').height();
 }
 
-function creaateThumbnailSrc(imgSrc, width, height, keepRatio) {
+function createThumbnailSrc(imgSrc, width, height, keepRatio) {
 	var iw	= imgSrc.width;
 	var ih	= imgSrc.height;
 	if (keepRatio.length === 0 || keepRatio === undefined) { keepRatio = true; }
@@ -128,7 +128,7 @@ function callAjax(chps, image) {
                         var thumbImg = new Image();
                         var name = code.name;
                         if (code.mime.indexOf('image') == 0) {
-                            thumbImg.src = creaateThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
+                            thumbImg.src = createThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
                         } else {
                             var files       = name.split('.');
                             var ext         = files[files.length - 1];
@@ -140,7 +140,7 @@ function callAjax(chps, image) {
                         thumbOccur.id = name+'-Vignette';
                         $(thumbOccur).append(makeBtnsCtrl(name, code.name, thumbCtrls));
                         $(thumbOccur).addClass('vignette');
-                        $(thumbOccur).data('fichier', code.name);
+                        $(thumbOccur).attr('data-fichier', code.name);
                         $(thumbOccur).appendTo('#'+id+' .previewDND');
                         if (thumbName) {
                             var printName = formatNameThumb(code.name, thumbWidth, '1.25vw');
@@ -257,19 +257,13 @@ oddragndrop.prototype = {
         }
     },
     getData: function (evt) {
-        var value = (this.value !== undefined)? this.value : '';
         var selection   = $('#'+this.id+' .previewDND .vignette');
         var loadedFiles = [];
 
         $.each(selection, function (i, div) {
             loadedFiles.push($(this).data('fichier'));
         });
-        return {id: this.id, value : value, event : evt, object : this.objet, files: loadedFiles };
-
-        var chps = "id=" + this.id + "&value='" + valeur + "'" + "&event='" + evt + "'";
-        chps = chps + "&object='" + this.objet + "'";
-        chps = chps + "&files='"+loadedFiles.join("$")+"'";
-        return chps;
+        return {id: this.id, value : loadedFiles, event : evt, object : this.objet  };
     },
     setData: function (data) {
         $('#'+this.id+' .messageDND').css('display', 'none');
@@ -299,7 +293,7 @@ oddragndrop.prototype = {
 
             if (mime.indexOf('image') == 0) {
                 image.src = this.url;
-                thumbImg.src = creaateThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
+                thumbImg.src = createThumbnailSrc(image, thumbWidth, thumbHeight, thumbRatio);
             } else {
                 var files       = name.split('.');
                 var ext         = files[files.length - 1];
