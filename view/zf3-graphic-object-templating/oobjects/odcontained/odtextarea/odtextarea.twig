@@ -56,6 +56,7 @@ data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
                     "{{ basePath('graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/cube-portfolio/cubeportfolio/css/cubeportfolio.min.css') }}"],
             {% if objet.imgListUrl is not empty %}
                 image_list: "{{ objet.imgListUrl }}",
+                image_advtab: true,
             {% endif %}
             {% if objet.lnkListUrl is not empty %}
                 link_list: "{{ objet.lnkListUrl }}",
