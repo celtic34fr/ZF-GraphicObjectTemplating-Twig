@@ -2,7 +2,7 @@
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
-<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}
     {% if objet.state == false %} radio disabled {% endif %}"
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
     {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
