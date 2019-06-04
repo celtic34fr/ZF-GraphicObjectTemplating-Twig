@@ -7,7 +7,7 @@
 {% set modalClasses = 'modal' %}
 {% if objet.animate == true %} {% set modalClasses = modalClasses ~ ' fade' %} {% endif %}
 
-<div class="{{ modalClasses }}" tabindex="-1" role="dialog" id="{{ objet.id }}"
+<div class="{{ modalClasses }}" tabindex="-1" role="dialog" id="{{ objet.id }}" data-objet="{{ objet.object }}"
      {% if objet.title is defined and objet.tile is not empty %}aria-labelledby="{{ objet.title }}"{% endif %}
 >
     <div class="{{ modalDialogClasses }}" role="document">

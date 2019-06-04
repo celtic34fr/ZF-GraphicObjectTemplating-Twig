@@ -2,7 +2,7 @@
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
-<div id="{{ objet.id }}" class="{{ objClasses }}" data-display="{{ objet.display }}"
+<div id="{{ objet.id }}" class="{{ objClasses }}" data-display="{{ objet.display }}" data-objet="{{ objet.object }}"
 {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}"{% endif %}
 >
     <style>
