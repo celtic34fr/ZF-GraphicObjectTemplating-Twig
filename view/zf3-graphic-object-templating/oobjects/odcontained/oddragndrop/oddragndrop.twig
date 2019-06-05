@@ -141,14 +141,14 @@
                 dragNDrop.upload(this.files, 'dropIn');
             });
 
-            $('body').on('click', '#{{ objet.id }} .vignette button', function(event) {
+            $(document).on('click','#{{ objet.id }} .vignette button',function(event){
                 event.preventDefault();
                 event.stopPropagation();
                 var dragNDrop = new oddragndrop($('#{{ objet.id }}'));
                 dragNDrop.remove($(this),'dropOut')
             });
 
-            $('body').on('click', '#{{ objet.id }} .vignette', function() {
+            $(document).on('click','#{{ objet.id }} .vignette',function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
