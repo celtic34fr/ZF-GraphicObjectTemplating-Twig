@@ -16,7 +16,7 @@
     </style>
 
     {% if objet.title is not empty %}
-    <h2 id="formTitle">{{ objet.title }}</h2>
+    <h2 id="formTitle">{{ objet.title|raw }}</h2>
     {% endif %}
 
     {% set btnsCtrls = 'none' %}
