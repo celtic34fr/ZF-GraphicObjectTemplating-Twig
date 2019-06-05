@@ -88,6 +88,19 @@
             {% endif %}
             {# activation des évènement jQuery/JS que l'object est enable : state = true (!= false) #}
             {% if objet.state != false %}
+
+            $(document).on('click','#{{ objet.id }} .vignette button',function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                var dragNDrop = new oddragndrop($('#{{ objet.id }}'));
+                dragNDrop.remove($(this),'dropOut')
+            });
+
+            $(document).on('click','#{{ objet.id }} .vignette',function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+
             $('#{{ objet.id }}DragNDrop').on('dragenter', function () {
                 $(this).css('border', '3px dashed red');
                 return false;
@@ -140,19 +153,7 @@
                 var dragNDrop = new oddragndrop(objetDOM);
                 dragNDrop.upload(this.files, 'dropIn');
             });
-
-            $(document).on('click','#{{ objet.id }} .vignette button',function(event){
-                event.preventDefault();
-                event.stopPropagation();
-                var dragNDrop = new oddragndrop($('#{{ objet.id }}'));
-                dragNDrop.remove($(this),'dropOut')
-            });
-
-            $(document).on('click','#{{ objet.id }} .vignette',function(event){
-                event.preventDefault();
-                event.stopPropagation();
-            });
-            {% endif %}
+           {% endif %}
         });
     </script>
 </div>
