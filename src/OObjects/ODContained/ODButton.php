@@ -30,6 +30,11 @@ use Zend\Session\Container;
  * enaDefault()
  * disDefault()
  * createSimpleControl(Container $sessionObj, $ord)
+ * setNatureCustom(string $custom)
+ * getNatureCustom()
+ * getNatureCustomBackground()
+ * getNatureCustomColor()
+ * getNatureCustomBorder()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -53,6 +58,7 @@ class ODButton extends ODContained
     const BUTTONNATURE_DANGER   = 'btn btn-danger';
     const BUTTONNATURE_LINK     = 'btn btn-link';
     const BUTTONNATURE_BLACK    = 'btn btn-black';
+    const BUTTONNATURE_CUSTOM   = 'btn btn-custom';
 
     const BUTTONLINK_TARGET_BLANK   = '_blank';
     const BUTTONLINK_TARGET_SELF    = '_self';
@@ -299,7 +305,76 @@ class ODButton extends ODContained
 			->saveProperties();
 		return $btn;
 	}
-    
+
+    /**
+     * @param string $custom
+     * @param string $customColor
+     * @return ODButton|bool
+     */
+    public function setNatureCustom(string $custom, string $customColor)
+    {
+        if (!preg_match('/([a-f0-9]{3}){1,2}\b/i', $custom)) {
+            return false;
+        }
+        if (!preg_match('/([a-f0-9]{3}){1,2}\b/i', $customColor)) {
+            return false;
+        }
+
+        $properties = $this->getProperties();
+        $properties['custom'] = $custom;
+
+        $customBorder   = dechex(hexdec($custom)*.9);
+        $properties['customBorder'] = $customBorder;
+
+        $properties['customColor']  = $customColor;
+
+        $properties['nature']       = self::BUTTONNATURE_CUSTOM;
+
+        $this->setProperties($properties);
+        return $this;
+	}
+
+    /**
+     * @return array|array
+     */
+    public function getNatureCustom()
+    {
+        $properties = $this->getProperties();
+        $retour     = [];
+        $retour['custom']   = array_key_exists('custom', $properties) ? $properties['custom'] : false;
+        $retour['customColor'] = array_key_exists('customColor', $properties) ? $properties['customColor'] : false;
+        $retour['customBorder'] =
+                                array_key_exists('customBorder', $properties) ? $properties['customColor'] : false;
+        return $retour;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getNatureCustomBackground()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('custom', $properties) ? $properties['custom'] : false;
+	}
+
+    /**
+     * @return bool|string
+     */
+    public function getNatureCustomColor()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('customColor', $properties) ? $properties['customColor'] : false;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getNatureCustomBorder()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('customBorder', $properties) ? $properties['customBorder'] : false;
+	}
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */

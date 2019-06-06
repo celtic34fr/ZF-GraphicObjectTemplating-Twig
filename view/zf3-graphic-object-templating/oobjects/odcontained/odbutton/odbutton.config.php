@@ -12,4 +12,7 @@ return [
     'icon'          => '',
     'nature'        => ODButton::BUTTONNATURE_DEFAULT,
     'default'       => false,
+    'custom'        => '',
+    'customBorder'  => '',
+    'customColor'   => '',
 ];
