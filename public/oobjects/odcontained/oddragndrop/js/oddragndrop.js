@@ -97,8 +97,6 @@ function callAjax(chps, image) {
                 let mode = "";
                 let code = "";
                 $.each(ret, function (j, part) {
-                    console.log('j='+j);
-                    console.log('part='+part);
                     switch (j) {
                         case 'id':
                             id = part;
@@ -111,7 +109,6 @@ function callAjax(chps, image) {
                             break;
                     }
                 });
-                console.log(id);
                 switch (mode) {
                     case 'addFile':
                         $('#'+id+' .messageDND').css('display', 'none');

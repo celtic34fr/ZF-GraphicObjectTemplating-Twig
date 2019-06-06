@@ -90,8 +90,6 @@
             {% if objet.state != false %}
 
             $(document).on('click','#{{ objet.id }} .vignette button',function(event){
-                console.log(event);
-
                 event.preventDefault();
                 event.stopPropagation();
                 var dragNDrop = new oddragndrop($('#{{ objet.id }}'));
@@ -99,22 +97,16 @@
             });
 
             $(document).on('click','#{{ objet.id }} .vignette',function(event){
-                console.log(event);
-
                 event.preventDefault();
                 event.stopPropagation();
             });
 
             $('#{{ objet.id }}DragNDrop').on('dragenter', function (event) {
-                console.log(event);
-
                 $(this).css('border', '3px dashed red');
                 return false;
             });
 
             $('#{{ objet.id }}DragNDrop').on('dragover', function (event) {
-                console.log(event);
-
                 event.preventDefault();
                 event.stopPropagation();
                 $(this).css('border', '3px dashed red');
@@ -122,8 +114,6 @@
             });
 
             $('#{{ objet.id }}DragNDrop').on('dragleave', function (event) {
-                console.log(event);
-
                 event.preventDefault();
                 event.stopPropagation();
                 $(this).css('border', '3px dashed #BBBBBB');
@@ -134,8 +124,6 @@
                 if (event.originalEvent.dataTransfer) {
                     if (event.originalEvent.dataTransfer.files.length) {
                         /* Stop the propagation of the event */
-                        console.log(event);
-
                         event.preventDefault();
                         event.stopPropagation();
                         $(this).css('border', '3px dashed green');
@@ -160,8 +148,6 @@
 
             $('body').on('change', '#{{ objet.id }}InputFile', function(event) {
                 /* Stop the propagation of the event */
-                console.log(event);
-
                 event.preventDefault();
                 event.stopPropagation();
                 $('#{{ objet.id }}DragNDrop').css('border', '3px dashed green');
