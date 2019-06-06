@@ -1227,8 +1227,8 @@ class ODDragNDrop extends ODContained
         if (array_key_exists($fileName, $loadedFiles)) {
             // suppression du fichier de la liste + suppression physique dans getTempFolder()
             $filePath = $loadedFiles[$fileName];
-            if (file_exists($filePath)) {
-                if( @unlink($filePath) !== true ) {
+            if (file_exists($filePath['pathFile'])) {
+                if( @unlink($filePath['pathFile']) !== true ) {
                     throw new Exception('impossible de supprimer le fichier: ' . $filePath .
                         ". Veuillez en avertir l'administrateur du site.");
                 } else {

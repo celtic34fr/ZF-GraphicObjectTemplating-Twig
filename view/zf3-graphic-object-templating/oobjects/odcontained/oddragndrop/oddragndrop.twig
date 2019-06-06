@@ -90,6 +90,8 @@
             {% if objet.state != false %}
 
             $(document).on('click','#{{ objet.id }} .vignette button',function(event){
+                console.log(event);
+
                 event.preventDefault();
                 event.stopPropagation();
                 var dragNDrop = new oddragndrop($('#{{ objet.id }}'));
@@ -97,41 +99,51 @@
             });
 
             $(document).on('click','#{{ objet.id }} .vignette',function(event){
+                console.log(event);
+
                 event.preventDefault();
                 event.stopPropagation();
             });
 
-            $('#{{ objet.id }}DragNDrop').on('dragenter', function () {
+            $('#{{ objet.id }}DragNDrop').on('dragenter', function (event) {
+                console.log(event);
+
                 $(this).css('border', '3px dashed red');
                 return false;
             });
 
-            $('#{{ objet.id }}DragNDrop').on('dragover', function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
+            $('#{{ objet.id }}DragNDrop').on('dragover', function (event) {
+                console.log(event);
+
+                event.preventDefault();
+                event.stopPropagation();
                 $(this).css('border', '3px dashed red');
                 return false;
             });
 
-            $('#{{ objet.id }}DragNDrop').on('dragleave', function (evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
+            $('#{{ objet.id }}DragNDrop').on('dragleave', function (event) {
+                console.log(event);
+
+                event.preventDefault();
+                event.stopPropagation();
                 $(this).css('border', '3px dashed #BBBBBB');
                 return false;
             });
 
-            $('#{{ objet.id }}DragNDrop').on('drop', function(evt) {
-                if (evt.originalEvent.dataTransfer) {
-                    if (evt.originalEvent.dataTransfer.files.length) {
+            $('#{{ objet.id }}DragNDrop').on('drop', function(event) {
+                if (event.originalEvent.dataTransfer) {
+                    if (event.originalEvent.dataTransfer.files.length) {
                         /* Stop the propagation of the event */
-                        evt.preventDefault();
-                        evt.stopPropagation();
+                        console.log(event);
+
+                        event.preventDefault();
+                        event.stopPropagation();
                         $(this).css('border', '3px dashed green');
                         var acceptedFiles = $(this).data('accepted-files');
                         /* Main function to upload */
                         var objetDOM = $(this).parent();
                         var dragNDrop = new oddragndrop(objetDOM);
-                        dragNDrop.upload(evt.originalEvent.dataTransfer.files, acceptedFiles);
+                        dragNDrop.upload(event.originalEvent.dataTransfer.files, acceptedFiles);
                     }
                 } else {
                     $(this).css('border', '3px dashed #BBBBBB');
@@ -139,14 +151,19 @@
                 return false;
             });
 
-            $('body').on('click', '#{{ objet.id }}DragNDrop', function(evt) {
-                $('#{{ objet.id }}InputFile').trigger('click');
+            $('body').on('click', '#{{ objet.id }}DragNDrop', function(event) {
+                /* filtre sur cible pour n'avoir que les click sur zone DragNDrop */
+                if (event.target.nodeName == 'DIV') {
+                    $('#{{ objet.id }}InputFile').trigger('click');
+                }
             });
 
-            $('body').on('change', '#{{ objet.id }}InputFile', function(evt) {
+            $('body').on('change', '#{{ objet.id }}InputFile', function(event) {
                 /* Stop the propagation of the event */
-                evt.preventDefault();
-                evt.stopPropagation();
+                console.log(event);
+
+                event.preventDefault();
+                event.stopPropagation();
                 $('#{{ objet.id }}DragNDrop').css('border', '3px dashed green');
                 /* Main function to upload */
                 var objetDOM = $(this).parent();

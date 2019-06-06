@@ -254,6 +254,7 @@ oddragndrop.prototype = {
             datas         = datas + "'&name='" + vignette.get(0).id + "'&file='" + fileName + "'";
 
             callAjax(datas, null);
+            vignette.remove();
         }
     },
     getData: function (evt) {
