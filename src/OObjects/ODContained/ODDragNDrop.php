@@ -884,9 +884,15 @@ class ODDragNDrop extends ODContained
         $properties                         = $this->getProperties();
         $loadedFiles                        = $properties['loadedFiles'];
         $names                              = array_column($loadedFiles, 'name');
-        if (file_exists($pathFile) && array_key_exists($name, $names)) {
+        if (file_exists($pathFile) && !array_key_exists($name, $names)) {
             $key = array_search($name, array_column($loadedFiles, 'name'));
             $loadedFiles[$key]['pathFile']  = $pathFile;
+            $loadedFiles[$key]['name']      = $name;
+            $loadedFiles[$key]['mime']      = mime_content_type($pathFile);
+
+            $url                            = substr($pathFile, strpos($pathFile, 'uploadedFiles'));
+            $loadedFiles[$key]['url']       = '../../../'.$url;
+
             $properties['loadedFiles']      = $loadedFiles;
             $this->setProperties($properties);
             return $this;
