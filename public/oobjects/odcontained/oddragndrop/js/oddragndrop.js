@@ -264,38 +264,20 @@ oddragndrop.prototype = {
         return {id: this.id, value : loadedFiles, event : evt, object : this.objet  };
     },
     setData: function (data) {
-        var thumbWidth = null;
-        var thumbHeight = null;
-        var thumbRatio = null;
-        var thumbView = null;
-        var thumbDload = null;
-        var thumbRmove = null;
-        var thumbName = null;
-        var thumbCtrls = null;
-        var thumbOccur = null;
-        var image = null;
-        var thumbImg = null;
-        var message = null;
-        var preview = null;
-        var globalObject = null;
-
-        globalObject = $('#'+objetId+' .dragNDrop');
-        message = $('#'+this.id+' .messageDND');
-        message.css('display', 'none');
-        preview = $('#'+this.id+' .previewDND');
-        preview.css('display', 'block');
-        thumbWidth = preview.data('thumb-width');
-        thumbHeight = preview.data('thumb-height');
-        thumbRatio = preview.data('thumb-ratio');
-        thumbView = preview.data('thumb-view');
-        thumbDload = preview.data('thumb-dload');
-        thumbRmove = preview.data('thumb-rmove');
-        thumbName = preview.data('thumb-name');
-        thumbCtrls = {'view': thumbView, 'dload': thumbDload, 'rmove': thumbRmove};
-        thumbOccur = document.createElement('div');
-        image = new Image();
-        thumbImg = new Image();
-        objetId = this.id;
+        $('#'+this.id+' .messageDND').css('display', 'none');
+        $('#'+this.id+' .previewDND').css('display', 'block');
+        var thumbWidth = $('#'+this.id+' .previewDND').data('thumb-width');
+        var thumbHeight = $('#'+this.id+' .previewDND').data('thumb-height');
+        var thumbRatio = $('#'+this.id+' .previewDND').data('thumb-ratio');
+        var thumbView = $('#'+this.id+' .previewDND').data('thumb-view');
+        var thumbDload = $('#'+this.id+' .previewDND').data('thumb-dload');
+        var thumbRmove = $('#'+this.id+' .previewDND').data('thumb-rmove');
+        var thumbName = $('#'+this.id+' .previewDND').data('thumb-name');
+        var thumbCtrls = {'view': thumbView, 'dload': thumbDload, 'rmove': thumbRmove};
+        var thumbOccur = document.createElement('div');
+        var image = new Image();
+        var thumbImg = new Image();
+        var objetId = this.id;
 
         $(thumbOccur).addClass('vignette');
 
@@ -325,7 +307,7 @@ oddragndrop.prototype = {
                 $(thumbOccur).append('<h6>'+printName+'</h6>');
                 var heightPreview   = parseInt($('#'+objetId+' .dragNDrop').css('height'));
                 heightPreview       = parseInt(heightPreview * 1.4);
-                globalObject.css('height', heightPreview+'px');
+                $('#'+objetId+' .dragNDrop').css('height', heightPreview+'px');
             }
             $(thumbOccur).appendTo('#'+objetId+' .previewDND');
         })
