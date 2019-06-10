@@ -126,9 +126,15 @@ function invokeAjax(datas, idSource, event, e) {
                 $.globalEval(script);
                 break;
             case "redirect": // redirection HTML
-                id = parseInt(id); // delay d'attente pour exécution de la resirection
+                id = parseInt(id); // delay d'attente pour exécution de la redirection
                 setTimeout(function () {
                     $(location).attr('href', code);
+                }, id );
+                break;
+            case "redirectBlank": // redirection HTML
+                id = parseInt(id); // delay d'attente pour exécution de la redirection
+                setTimeout(function () {
+                    window.open(code, '_blank');
                 }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
@@ -136,22 +142,6 @@ function invokeAjax(datas, idSource, event, e) {
                 let flg = code.substring(strpos(code, '|') + 1);
                 objectDOM.attr('data-'+evt+'-stopevt', flg);
                 break;
-            // case 'updCols': // mise à jour colonne ODTable
-            //     table = new odtable(objectDOM);
-            //     table.updateCol(code);
-            //     break;
-            // case 'rmLineUpd': // mise à jour colonne ODTable
-            //     table = new odtable(objectDOM);
-            //     table.rmLineUpdate(code);
-            //     break;
-            // case 'updtTreeLeaf': // ajout noeud et feuille Treeview sur ancienne feuille
-            //     treeview = new odtreeview(objectDOM);
-            //     treeview.updtTreeLeaf(code);
-            //     break;
-            // case 'appendTreeNode': // mise à jour feuille Treeview
-            //     treeview = new odtreeview(objectDOM);
-            //     treeview.appendTreeNode(code);
-            //     break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
                 let objetJS     = objectDOM.data('objet');
                 jQryObj = new window[objetJS](objectDOM);
