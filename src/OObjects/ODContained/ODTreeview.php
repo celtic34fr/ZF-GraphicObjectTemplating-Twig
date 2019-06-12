@@ -744,7 +744,7 @@ class ODTreeview extends ODContained
      * @param bool $level
      * @return array
      */
-    public function getChildLeaves(string $ref, int $level = 0)
+    public function getChildLeaves(string $ref, int $level = -1)
     {
         $leaf       = $this->getLeaf($ref);
         $children   = [];
