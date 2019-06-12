@@ -751,7 +751,7 @@ class ODTreeview extends ODContained
 
         if (array_key_exists('children', $leaf)) {
             foreach ($leaf['children'] as $child) {
-                if ($level && $level > 0) {
+                if (($level && $level > 0) || $level = -1) {
                     if (!$level) { $level--; }
                     $children[] = $child['ref'];
 
