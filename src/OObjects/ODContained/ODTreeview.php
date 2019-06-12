@@ -242,10 +242,12 @@ class ODTreeview extends ODContained
      */
     public function getLeaf(string $ref)
     {
-        $properties = $this->getProperties();
-        $dataPath   = $properties['dataPath'];
-
-        return $this->getLeafByPath($dataPath[$ref]);
+        if ($ref !== "0") {
+            $properties = $this->getProperties();
+            $dataPath   = $properties['dataPath'];
+            return $this->getLeafByPath($dataPath[$ref]);
+        }
+        return false;
     }
 
     /**
@@ -740,21 +742,31 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
-     * @param bool $level
+     * @param string $ref
+     * @param int $level
      * @return array
      */
     public function getChildLeaves(string $ref, int $level = -1)
     {
-        $leaf       = $this->getLeaf($ref);
-        $children   = [];
+        $children                       = [];
+        if ($ref !== "0") {
+            $leaf                       = $this->getLeaf($ref);
+        } else {
+            $leaf                       = [];
+            $leaf['children']           = [];
+            $properties = $this->getProperties();
+            foreach ($properties['dataTree'] as $dataLeaf) {
+                $item                   = [];
+                $item['ref']            = $dataLeaf['ref'];
+                $leaf['children'][]     = $item;
+            }
+        }
 
         if (array_key_exists('children', $leaf)) {
             foreach ($leaf['children'] as $child) {
-                if (($level && $level > 0) || $level = -1) {
-                    if (!$level) { $level--; }
+                if ($level > 0 || $level = -1) {
+                    if ($level > 0) { $level--; }
                     $children[] = $child['ref'];
-
                     $children = array_merge($children, $this->getChildLeaves($child['ref'], $level));
                 }
             }
