@@ -238,16 +238,16 @@ class ODTreeview extends ODContained
 
     /**
      * @param $ref
-     * @return bool|array
+     * @return array
      */
     public function getLeaf(string $ref)
     {
-        if ($ref !== "0") {
-            $properties = $this->getProperties();
-            $dataPath   = $properties['dataPath'];
-            return $this->getLeafByPath($dataPath[$ref]);
-        }
-        return false;
+        $properties = $this->getProperties();
+        $dataPath   = $properties['dataPath'];
+
+        if (empty($ref) || !array_key_exists($ref, $dataPath)) { $ref = "0"; }
+        $refPath    = ($ref != "0") ? $dataPath[$ref] : null;
+        return $this->getLeafByPath($refPath);
     }
 
     /**
