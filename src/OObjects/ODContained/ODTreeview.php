@@ -57,6 +57,7 @@ use Zend\ServiceManager\ServiceManager;
  * addBtnsNode(string $refNode, array $btnActions)
  * setBtnsNode(string $refNode, array $btnActions)
  * getBtnsNode(string $refNode)
+ * cloneNode(string $refNode, string $newRef)
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -69,6 +70,7 @@ use Zend\ServiceManager\ServiceManager;
  * validRefUnique(string $ref)
  * rmLeafTree(array $dataTree, array $refs)
  * validArrayOptionsBtn(array $optionsBtn)
+ * addCloneNodeChild(string $refNode, string $newRef, array $dataPath)
  */
 class ODTreeview extends ODContained
 {
@@ -133,9 +135,9 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
-     * @param $libel
-     * @param null $ord
+     * @param string $ref
+     * @param string $libel
+     * @param int $ord
      * @param string $parent
      * @return ODTreeview|bool
      */
@@ -983,6 +985,24 @@ class ODTreeview extends ODContained
         return false;
     }
 
+    /**
+     * @param string $refNode
+     * @param string $newRef
+     * @return bool|ODTreeview
+     */
+    public function addCloneNode(string $refNode, string $newRef)
+    {
+        $properties = $this->getProperties();
+        $dataPath   = $properties['dataPath'];
+        $result     = false;
+
+        /** $newRef ne doit pas éxister déjà, et $refNode doit exister */
+        if (!array_key_exists($newRef, $dataPath) && array_key_exists($refNode, $dataPath)) {
+            $result = $this->addCloneNodeChild($refNode, $newRef, $dataPath);
+        }
+        return $result;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
@@ -1188,5 +1208,25 @@ class ODTreeview extends ODContained
             if (!$valid) { break; }
         }
         return $valid;
+    }
+
+    /**
+     * @param string $refNode
+     * @param string $newRef
+     * @return ODTreeview|bool
+     */
+    private function addCloneNodeChild(string $refNode, string $newRef, array $dataPath)
+    {
+        $node       = $this->getLeaf($refNode);
+        $this->addLeaf($newRef, $node['libel'], null, $node['parent']);
+
+        if (array_key_exists('children', $node) && !empty($node['children'])) {
+            foreach ($node['children'] as $child) {
+                $newChildRef    = $newRef.'-'.$child['ord'];
+                if (array_key_exists($newChildRef, $dataPath)) { return false; }
+                $this->addCloneNodeChild($child['ref'], $newChildRef, $dataPath);
+            }
+        }
+        return $this;
     }
 }
