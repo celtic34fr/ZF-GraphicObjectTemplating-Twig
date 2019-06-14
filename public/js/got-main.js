@@ -82,21 +82,18 @@ function invokeAjax(datas, idSource, event, e) {
                 objectDOM.append(code);
                 if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
-                    updatePage();
                 }
                 break;
             case "appendAfter": // ajout à un objet DOM existant
                 objectDOM.after(code);
                 if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
-                    updatePage();
                 }
                 break;
             case "appendBefore": // ajout à un objet DOM existant
                 objectDOM.before(code);
                 if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
-                    updatePage();
                 }
                 break;
             case "update": // mise à jour, remplacement d’un objet DOM existant
@@ -105,11 +102,9 @@ function invokeAjax(datas, idSource, event, e) {
                 if (objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
                 }
-                updatePage();
                 break;
             case "innerUpdate": // remplacement du contenu d’un objet DOM
                 objectDOM.html(code);
-                updatePage();
                 break;
             case "raz": // vidage du contenu d’un objet DOM
                 objectDOM.html("");
@@ -160,6 +155,8 @@ function invokeAjax(datas, idSource, event, e) {
                 }
         }
     });
+    // mise à jour de la page pour faire voir ce qui est à voir + widthBT bien exprimé
+    updatePage();
 }
 
 function loadResources(type, url) {
