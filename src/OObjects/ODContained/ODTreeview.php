@@ -990,7 +990,7 @@ class ODTreeview extends ODContained
      * @param string $newRef
      * @return bool|ODTreeview
      */
-    public function addCloneNode(string $refNode, string $newRef)
+    public function addCloneNode(string $refNode, string $newRef, $ord = null)
     {
         $properties = $this->getProperties();
         $dataPath   = $properties['dataPath'];
@@ -998,7 +998,7 @@ class ODTreeview extends ODContained
 
         /** $newRef ne doit pas éxister déjà, et $refNode doit exister */
         if (!array_key_exists($newRef, $dataPath) && array_key_exists($refNode, $dataPath)) {
-            $result = $this->addCloneNodeChild($refNode, $newRef, $dataPath);
+            $result = $this->addCloneNodeChild($refNode, $newRef, $dataPath, $ord);
         }
         return $result;
     }
@@ -1213,20 +1213,28 @@ class ODTreeview extends ODContained
     /**
      * @param string $refNode
      * @param string $newRef
+     * @param array $dataPath
+     * @param null $ord
      * @return ODTreeview|bool
      */
-    private function addCloneNodeChild(string $refNode, string $newRef, array $dataPath)
+    private function addCloneNodeChild(string $refNode, string $newRef, array $dataPath, $ord = null)
     {
-        $node       = $this->getLeaf($refNode);
-        $this->addLeaf($newRef, $node['libel'], null, $node['parent']);
+        $node   = $this->getLeaf($refNode);
+        $parent = $this->getLeaf($node['parent']);
+        if (empty($ord) ||
+            (array_key_exists('children', $parent) && !array_key_exists($ord, $parent['children']))) {
 
-        if (array_key_exists('children', $node) && !empty($node['children'])) {
-            foreach ($node['children'] as $child) {
-                $newChildRef    = $newRef.'-'.$child['ord'];
-                if (array_key_exists($newChildRef, $dataPath)) { return false; }
-                $this->addCloneNodeChild($child['ref'], $newChildRef, $dataPath);
+            $this->addLeaf($newRef, $node['libel'], $ord, $node['parent']);
+
+            if (array_key_exists('children', $node) && !empty($node['children'])) {
+                foreach ($node['children'] as $child) {
+                    $newChildRef    = $newRef.'-'.$child['ord'];
+                    if (array_key_exists($newChildRef, $dataPath)) { return false; }
+                    $this->addCloneNodeChild($child['ref'], $newChildRef, $dataPath);
+                }
             }
+            return $this;
         }
-        return $this;
+        return false;
     }
 }
