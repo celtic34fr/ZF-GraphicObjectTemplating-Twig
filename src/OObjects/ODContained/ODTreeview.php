@@ -1220,7 +1220,12 @@ class ODTreeview extends ODContained
     private function addCloneNodeChild(string $refNode, string $newRef, array $dataPath, $ord = null)
     {
         $node   = $this->getLeaf($refNode);
-        $parent = $this->getLeaf($node['parent']);
+        if ($node['parent'] == "0") {
+            $parent = [];
+            $parent['children'] = $this->getLeaf($node["parent"]);
+        }
+        else { $parent = $this->getLeaf($node['parent']); }
+
         if (empty($ord) ||
             (array_key_exists('children', $parent) && !array_key_exists($ord, $parent['children']))) {
 
