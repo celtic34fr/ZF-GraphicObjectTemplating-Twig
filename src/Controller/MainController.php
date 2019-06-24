@@ -19,6 +19,7 @@ class MainController extends AbstractActionController
 {
     const ModeGenHTML   = ['append', 'appendAfter', 'appendBefore', 'update', 'innerUpdate'];
     const ModeExecJS    = ['exec', 'execID', 'redirect'];
+    const ModeNoOperate = ['nop'];
 
     /** @var ServiceManager $serviceManager */
     private $serviceManager;
@@ -105,9 +106,13 @@ class MainController extends AbstractActionController
                 $result     = [];
                 $rscs       = [];
                 $updDatas   = [];
+                $operate    = true;
                 foreach ($results as $rlst) {
                     $html       = "";
                     switch (true) {
+                        case (in_array($rlst['mode'], self::ModeNoOperate)):
+                            $operate    = false;
+                            break;
                         case (in_array($rlst['mode'], self::ModeGenHTML)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : $gs->render($rlst['idSource']);
                             $rscs       = $gs->rscs($rlst['idSource']);
@@ -123,25 +128,37 @@ class MainController extends AbstractActionController
                 }
                 $updDatas[] = ['id'=>'', 'mode'=>'execID', 'code'=>'layoutScripts'];
 
-                // traitement des ressources pour injection de fichiers sans doublons
-                $rscsObjs = [];
-                foreach ($rscs as $key => $files) {
-                    foreach ($files as $file) {
-                        if (!array_key_exists($file, $rscsObjs)) {
-                            $rscsObjs[$file] = $key.'|'.$file;
+                if ($operate) {
+                    // traitement des ressources pour injection de fichiers sans doublons
+                    $rscsObjs = [];
+                    foreach ($rscs as $key => $files) {
+                        foreach ($files as $file) {
+                            if (!array_key_exists($file, $rscsObjs)) {
+                                $rscsObjs[$file] = $key.'|'.$file;
+                            }
                         }
                     }
-                }
-                foreach ($rscsObjs as $item) {
-/*                    $id  = '';*/
-                    $key = substr($item, 0, strpos($item, '|'));
+                    foreach ($rscsObjs as $item) {
+                        /*                    $id  = '';*/
+                        $key = substr($item, 0, strpos($item, '|'));
 //                    $key = substr($key, 0, strpos($key, 'Scripts'));
-/*                    if ($key == 'cssScripts') { $id = 'css'; }
-                    if ($key == 'jsScripts')  { $id = 'js'; }*/
-                    $result[]   = ['id'=>$key, 'mode'=>'rscs', 'code'=>substr($item, strpos($item, '|') + 1)];
+                        /*                    if ($key == 'cssScripts') { $id = 'css'; }
+                                            if ($key == 'jsScripts')  { $id = 'js'; }*/
+                        $result[]   = ['id'=>$key, 'mode'=>'rscs', 'code'=>substr($item, strpos($item, '|') + 1)];
+                    }
+
+                    $result = array_merge($result, $updDatas);
+                } else {
+                    if ($callingObj->getObject() == 'oeddragndrop') {
+                        $updDatas   = $updDatas[0];
+
+                        $updDatas   = $updDatas['code'];
+                    }
+
+                    $result = $updDatas;
                 }
 
-                $viewModel = (new ViewModel([ 'content' => [array_merge($result, $updDatas)], ]))
+                $viewModel = (new ViewModel([ 'content' => [$result], ]))
                     ->setTemplate("zf3-graphic-object-templating/main/got-dispatch.twig")
                     ->setTerminal(TRUE);
                 return $viewModel;
