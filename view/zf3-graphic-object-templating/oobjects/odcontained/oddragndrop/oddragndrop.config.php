@@ -3,26 +3,25 @@
 use GraphicObjectTemplating\OObjects\ODContained\ODDragNDrop;
 
 return [
-    'object'            => 'oddragndrop',
-    'typeObj'           => 'odcontained',
-    'template'          => 'oddragndrop.twig',
-    'dispatchEvents'    => true,
+    'object'                => 'oddragndrop',
+    'typeObj'               => 'odcontained',
+    'template'              => 'oddragndrop.twig',
 
-    'maxFileCount'      => 0,   // 0 : pas de limite
-    'minFileSize'       => 0,   // 0 : pas de taille minimale
-    'maxFileSize'       => 0,   // 0 : pas de taille maximale
-    'acceptedFiles'     => [],  // tableau des extensions de fichiers téléchargeables
-    'message'           => '',  // texte à afficher dans la zone du Glisser/Deéposer
-    'lineHeightDND'     => '05em',
-    'heightDND'         => '06em',
-
-    'loadedFiles'       => [],  // tableau des fichiers déjà téléchargés (pouvant être supprimés)
-    'tempFolder'        => '',
-    'thumbWidth'        => 150,
-    'thumbHeight'       => 150,
-    'thumbRatio'        => ODDragNDrop::BOOLEAN_TRUE,
-    'thumbView'         => ODDragNDrop::BOOLEAN_TRUE,
-    'thumbDload'        => ODDragNDrop::BOOLEAN_FALSE,
-    'thumbRmove'        => ODDragNDrop::BOOLEAN_FALSE,
-    'thumbFileName'     => ODDragNDrop::BOOLEAN_TRUE,
+    'locale'                => 'fr',
+    'theme'                 => ODDragNDrop::OEDND_THEME_FAS,
+    'showClose'             => ODDragNDrop::STATE_ENABLE,
+    'showBrowse'            => ODDragNDrop::STATE_ENABLE,
+    'showCaption'           => ODDragNDrop::STATE_ENABLE,
+    'showPreview'           => ODDragNDrop::STATE_ENABLE,
+    'showRemove'            => ODDragNDrop::STATE_DISABLE,
+    'showUpload'            => ODDragNDrop::STATE_ENABLE,
+    'clickOnZone'           => ODDragNDrop::STATE_DISABLE,
+    'acceptedFiles'         => [],
+    'multiple'              => false,
+    'dispatchEvents'        => true,
+    'overwriteInitial'      => ODDragNDrop::STATE_DISABLE,
+    'loadedPaths'           => [],
+    'loadedPreview'         => [],
+    'loadedFiles'           => [],
+    'uploadedFilesPath'     => "../data/uploadedFiles",
 ];

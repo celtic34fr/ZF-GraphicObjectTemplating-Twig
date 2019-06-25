@@ -3,6 +3,7 @@
 namespace GraphicObjectTemplating;
 
 use GraphicObjectTemplating\Controller\Factory\MainControllerFactory;
+use GraphicObjectTemplating\Controller\FilesController;
 use GraphicObjectTemplating\Controller\MainController;
 use GraphicObjectTemplating\Service\Factory\ZF3GotServicesFactory;
 use GraphicObjectTemplating\Service\ZF3GotServices;
@@ -12,11 +13,11 @@ use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotRenderFactory;
 use GraphicObjectTemplating\ViewHelpers\Factory\ZF3GotVersionFactory;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotBootstrap;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotHeader;
-use GraphicObjectTemplating\ViewHelpers\ZF3GotHostname;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotHttpHost;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotRender;
 use GraphicObjectTemplating\ViewHelpers\ZF3GotVersion;
 use Zend\Router\Http\Literal;
+use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 //use Zend\Router\Http\Segment;
@@ -49,12 +50,23 @@ return [
                     ],
                 ],
             ],
+            'files' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/files/:filename',
+                    'defaults' => [
+                        'controller' => FilesController::class,
+                        'action' => 'files',
+                    ],
+                ]
+            ]
         ],
     ],
 
     'controllers' => [
         'factories' => [
             MainController::class => MainControllerFactory::class,
+            FilesController::class => InvokableFactory::class,
         ],
     ],
 

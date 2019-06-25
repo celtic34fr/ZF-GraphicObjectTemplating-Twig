@@ -10,7 +10,6 @@ use Zend\Http\Request;
 use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
-use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\Service\ZF3GotServices;
@@ -139,20 +138,17 @@ class MainController extends AbstractActionController
                         }
                     }
                     foreach ($rscsObjs as $item) {
-                        /*                    $id  = '';*/
                         $key = substr($item, 0, strpos($item, '|'));
-//                    $key = substr($key, 0, strpos($key, 'Scripts'));
-                        /*                    if ($key == 'cssScripts') { $id = 'css'; }
-                                            if ($key == 'jsScripts')  { $id = 'js'; }*/
                         $result[]   = ['id'=>$key, 'mode'=>'rscs', 'code'=>substr($item, strpos($item, '|') + 1)];
                     }
 
                     $result = array_merge($result, $updDatas);
                 } else {
-                    if ($callingObj->getObject() == 'oeddragndrop') {
-                        $updDatas   = $updDatas[0];
-
-                        $updDatas   = $updDatas['code'];
+                    switch ($callingObj->getObject()) {
+                        case 'oddragndrop':
+                            $updDatas   = $updDatas[0];
+                            $updDatas   = $updDatas['code'];
+                            break;
                     }
 
                     $result = $updDatas;

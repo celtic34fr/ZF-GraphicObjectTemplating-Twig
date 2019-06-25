@@ -4,106 +4,79 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
-use GraphicObjectTemplating\Service\ZF3GotServices;
-use function mime_content_type;
-use phpDocumentor\Reflection\Types\Self_;
-use ReflectionClass;
 use ReflectionException;
+use Zend\Mvc\Controller\Plugin\Url;
 use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class ODDragNDrop
- * @package Application\OEObjects\ODContained
+ * @package GraphicObjectTemplating\OObjects\ODContained
  *
- * setMaxFileCount(int $maxFileCount)       : fixe le nombre maximal de fichiers à télécharger
- * getMaxFileCount()                        : restitue le nombre maximum de fichiers à télécharger
- * disMaxFileCount()                        : supprime toute limite de nombre de fichiers à télécharger
- * setMinFileSize(int $minFileSize)         : fixe la taille minimale des fichiers à télécharger
- * getMinFileSize()                         : restitue la taille minimale des fichiers à télécharger
- * disMinFileSize()                         : supprime toute limite de taille minimale des fichiers à télécharger
- * setMaxFileSize(int $maxFileSize)         : fixe la taille maximale des fichiers à télécharger
- * getMaxFileSize()                         : restitue la taille maximale des fichiers à télécharger
- * disMaxFileSize()                         : supprime tout limite de taille maximale des fichiers à télécharger
- * setMessage(string $message)              : fixe le texte à afficher, dans la zone du Glisser/Déposer
- * getMessage()                             : restitue le texte à afficher, dans la zone du Glisser/Déposer
- * enaImageFiles()                          : autorise les fichiers image au téléchargement
- * enaWordFiles()                           : autorise les fichiers texte au téléchargement
- * enaExcelFiles()                          : autorise les feuilles de calcul au téléchargement
- * enaPresentationFiles()                   : autorise les fichiers diaporama au téléchargement
- * enaSoundFiles()                          : autorise les fichiers son au téléchargement
- * enaVideoFiles()                          : autorise les fichiers vidéo au téléchargement
- * enaDocumentFiles()                       : autorise les fichiier Document au téléchargement
- * enaArchiveFiles()                        : autorise les fichiers archive compressée au téléchargement
- * enaAllTypeFiles()                        : autorise tout type de fichiers (relativement aux extensions paramétrées)
- * setAcceptedFiles(string $acceptedFiles)  : fixe avec le tableau $acceptedFiles les fichiers téléchargeables
- * addAccepetdFile(string $acceptedFile)    : ajoute une extension $acceptedFile à la liste des fichiers téléchageables
- * rmAcceptedFile(string $acceptedFile)     : supprime une extension $acceptedFile de la liste des fichiers autorisés
- * disImageFiles()                          : interdit les fichiers image au téléchargement
- * disWordFiles()                           : interdit les fichiers texte au téléchargement
- * disExcelFiles()                          : interdit les feuilles de calcul au téléchargement
- * disPresentationFiles()                   : interdit les fichiers diaporama au téléchargement
- * disSoundFiles()                          : interdit les fichiers son au téléchargement
- * disVideoFiles()                          : interdit les fichiers vidéo au téléchargement
- * disDocumentFiles()                       : interidt les fichiers Document au téléchargement
- * disArchiveFiles()                        : interdit les fichiers archive compressée au téléchargement
- * clearAcceptedFiles()                     : supprime tout paramétrage de fichiers autorisés au téléchargement
- *                                              autorise de fait le téléchargement de n'importe quel fichier
- * setLineHeightDND(int $lineHeight, string $unit = 'px')
- *                                          : fixe la hauteur de ligne et indirectyement la hauteur de la zone
- *                                              glisser-déposer
- * getLineHeightDND()                       : restitue la hauteur de ligne dans la zone de glisser-déposer
- * setHeightDND(int $heightDND, string $unit = 'px')
- *                                          : fixe la hauteur de la zone de glisser-déposer et indirectement la hateur
- *                                              de ligne
- * getHeightDND()                           : restitue la hateur de la zone de glisser-déposer
- * setTempFolder(string $tempFolder)        : affecte après vérification le chemin $tempFolder comme répertoire de
- *                                              sauvegarde temporaire (de travail) des fichiers téléchargés
- * getTempFolder()                          : restitue le chemin du répertoire de sauvegarde temporaire des fichiers
- * addLoadedFile(string $name, string $pathFile)
- *                                          : ajoute un fichier stocké sur disque à la liste des fichiers chargés
- * rmLoadedFile(string $name)               : supprime un fichier stocké sur disque de la liste des fichiers chargés
+ * __construct($id)         : contructeur de l'objet
+ * enaClose()               : active l'affichage du bouton de fermeture de la zone de drag & drop
+ * disClose()               : désactive l'affichage du bouton de fermeture de la zone de drag & drop
+ * enaBrowse()              : active l'affichage du bouton de parcours des fichies locaux
+ * disBrowse()              : désactive l'affichage du bouton de parcours des fichies locaux
+ * enaCaption()             :
+ * disCaption()             :
+ * enaPreview()             : active l'affichage du bouton de visualisation en fenêtre modale du fichier
+ * disPreview()             : désactive l'affichage du bouton de visualisation en fenêtre modale du fichier
+ * enaRemove()              : active l'affichage du bouton de suppression
+ * disRemove()              : désactive l'affichage du bouton de suppression
+ * enaUpload()              : active l'affichage du bouton de chargement sur serveur du fichier
+ * disUpload()              : désactive l'affichage du bouton de chargement sur serveur du fichier
+ * enaClickOnZone()         : active le choix de fichier par click dans la zone drag & drop
+ * disClickOnZone()         : désactive le choix de fichier par click dans la zone drag & drop
+ * enaMultiple()            : active la sélection possible de plusieurs fichier
+ * enaSingle()              : active la sélection d'un seul fichier
+ * enaOverwriteInitial()    : ne conserve pas les preview si vous ajoutez d'autres images
+ * disOverwriteInitial()    : conserve les preview si vous ajoutez d'autres images
+ * enaImageFiles()          : paramétrage des images comme type de fichiers autorisés
+ * enaWordFiles()           : paramétrage des document type Word comme type de fichiers autorisés
+ * enaExcelFiles()          : paramétrage des feuilles de calcul comme type de fichiers autorisés
+ * enaPresentationFiles()   : paramétrage des présentations, diaporamas comme type de fichiers autorisés
+ * enaSoundFiles()          : paramétrage des fichiers son comme type de fichiers autorisés
+ * enaVideoFiles()          : paramétrage des fichiers vidéos comme type de fichiers autorisés
+ * enaDocumentFiles()       : paramétrage des documents (autre type que Word) comme type de fichiers autorisés
+ * enaArchiveFiles()        : paramétrage des fichiers archives compressés comme type de fichiers autorisés
+ * enaAllTypeFiles()        : paramétrage de tout les types connus du système comme type de fichiers autorisés
+ * setAcceptedFiles(array $acceptedFiles)
+ *                          : fixe avec le tableau $acceptedFiles les fichiers téléchargeables si connue par le système,
+ *                              sinon renvoi 'false'
+ * addAccepetdFile(string $acceptedFile)
+ *                          : ajoute une extension $acceptedFile à la liste des fichiers téléchageables si connue par le
+ *                              système, sinon renvoi 'false'
+ * rmAcceptedFile(string $acceptedFile)
+ *                          : supprime une extension $acceptedFile de la liste des fichiers autorisés si connue par le
+ *                              système et présente dans la liste paramétrée, sinon renvoi 'false'
+ * disImageFiles()          : supprime du paramétrage les images des types de fichiers autorisés
+ * disWordFiles()           : supprime du paramétrage les document type Word des types de fichiers autorisés
+ * disExcelFiles()          : supprime du paramétrage les feuilles de calcul des types de fichiers autorisés
+ * disPresentationFiles()   : supprime du paramétrage les présentations, diaporamas des types de fichiers autorisés
+ * disSoundFiles()          : supprime du paramétrage les fichiers son des types de fichiers autorisés
+ * disVideoFiles()          : supprime du paramétrage les fichiers vidéos des types de fichiers autorisés
+ * disDocumentFiles()       : supprime du paramétrage les documents (autre que Word) des types de fichiers autorisés
+ * disArchiveFiles()        : supprime du paramétrage des fichiers archives compressés des types de fichiers autorisés
+ * clearAcceptedFiles()     : vide totalement la liste des types de fichiers autorisés
+ * getAcceptedFiles()       : restitue sous forme de chaîne de caractères, l'ensemble des extension de fichiers acceptés
+ *                              pour le téléchargement
+ * addLoadedFile(string $name, string $pathFile, bool $initial = false, string $caption = '')
+ *                          : ajoute un fichier stocké sur disque à la liste des fichiers chargés
+ * rmLoadedFile(string $name)
+ *                          : supprime un fichier stocké sur disque de la liste des fichiers chargés
  * setLoadedFile(string $name, string $pathFile)
- *                                          : réaffecte au fichier de nom $name dans la liste des fichiers chargés le
- *                                              le chemin $pathFile
- * getLoadedFile(string $name)              : restitue le chemin physique d'accès au fichier de nom $name dans la liste
- *                                              des fichiers chargés
- * setLoadedFiles(array loadedFiles)        : affecte le contenu du tableau $loadedFiles à la liste des fichiers chargés
- * getLoadedFiles()                         : restitue le tableau des fichiers chargés
- * setThumbWidth(int $thumbWidth)           : fixe la largeur de la miniature à créer pour le fichier téléchargé, si 0 :
- *                                              pas pris en compte dans la création de la miniature
- * getThumbWidth()                          : restitue la largeur de la miniature à créer pour le fichier téléchargé
- * setThumbHeight(int $thumbHeight)         : fixe la hauteur de la miniature à créer pour le fichier téléchargé, si 0 :
- *                                              pas pris en comptes dans la création de la miniature
- * getThumbHeight()                         : restitue la hauteur de la miniature à créer pour le fichier téléchargé
- * enaThumbView()                           : active la présentation d'une icône pour délencher la vue du fichier dans
- *                                              un autre onglet
- * disThumbView()                           : désactive la présentation d'une icône pour délencher la vue du fichier
- *                                              dans un autre onglet
- * enaThumbDload()                          : active la présentation d'une icône pour délencher le téléchargement du
- *                                              fichier
- * disThumbDload()                          : désactive la présentation d'une icône pour délencher le téléchargement du
- *                                              fichier
- * enaThumbRmove()                          : active la présentation d'une icône pour délencher la suppression du
- *                                              fichier des fichiers téléchargés
- * disThumbRmove()                          : désactive la présentation d'une icône pour délencher la suppression du
- *                                              fichier des fichiers téléchargés
- * enaThumbFileName()                       : déclenche l'affichage du nom de fichier sous sa miniature
- * disThumbFileName()                       : interdit l'affichage du nom de fichier sous sa miniature
- * validFiles($files)                       : valide l'existance des fichiers contenus dans $files dans loadedFiles,
- *                                              retourne la différence
- *
- * méthodes de gestion de retour de callback
- * -----------------------------------------
- * dispatchEvents(ServiceManager $sm, $params)
- *                                          : méthode permettant la distribution des évènement gérés par l'objet
- * evtAddFile(ServiceManager $sm, array $params)
- *                                          : méthode traitant l'évènement de l'ajout d'un fichier à la lise des
- *                                              fichiers chargés (avec les différents impacts sur l'objet)
- * evtRmFile(ServiceManager $sm, array $params)
- *                                          : méthode traitant de la suppression d'un fichier à la liste des fichiers
- *                                              chargés (avec les différents impacts sur l'objet)
- * returnSetData()                          : alimentation pour retour de callbacjk visant à réaffecter le contenu de
- *                                              l'objet
+ *                          : réaffecte au fichier de nom $name dans la liste des fichiers chargés avec le chemin
+ *                              $pathFile
+ * getLoadedFile(string $name)
+ *                          : restitue le chemin physique d'accès au fichier de nom $name dans la liste des fichiers
+ *                              chargés
+ * setInitialLoadedFiles(array $loadedFiles)
+ *                          : affecte le contenu du tableau $loadedFiles à la liste des fichiers chargés
+ * getLoadedFiles()         : restitue le tableau des fichiers chargés
+ * setuploadedFilesPath(string $tempFolder)
+ *                          : affecte après vérification le chemin $tempFolder comme répertoire de sauvegarde temporaire
+ *                              (de travail) des fichiers téléchargés
+ * getuploadedFilesPath()   : restitue le chemin du répertoire de sauvegarde temporaire des fichiers
  *
  * méthodes privées de la classe
  * ------------------------------
@@ -133,59 +106,58 @@ use Zend\ServiceManager\ServiceManager;
  */
 class ODDragNDrop extends ODContained
 {
+    const OEDND_THEME_EXPLORER      = 'explorer';
+    const OEDND_THEME_EXPLORER_FA   = 'explorer-fa';
+    const OEDND_THEME_EXPLORER_FAS  = 'explorer-fas';
+    const OEDND_THEME_FA            = 'fa';
+    const OEDND_THEME_FAS           = 'fas';
+    const OEDND_THEME_GLY           = 'gly';
 
-    const   EXT_IMAG_JPG    = 'jpg';
-    const   EXT_IMAG_JPEG   = 'jpeg';
-    const   EXT_IMAG_PNG    = 'png';
-    const   EXT_IMAG_BMP    = 'bmp';
-    const   EXT_IMAG_GIF    = 'gif';
-    const   EXT_IMAG_SVG    = 'svg';
+    const EXT_IMAG_JPG    = 'jpg';
+    const EXT_IMAG_JPEG   = 'jpeg';
+    const EXT_IMAG_PNG    = 'png';
+    const EXT_IMAG_BMP    = 'bmp';
+    const EXT_IMAG_GIF    = 'gif';
+    const EXT_IMAG_SVG    = 'svg';
 
-    const   EXT_WORD_DOC    = 'doc';
-    const   EXT_WORD_DOCX   = 'docx';
-    const   EXT_WORD_ODT    = 'odt';
-    const   EXT_WORD_RTF    = 'rtf';
-    const   EXT_WORD_TXT    = 'txt';
+    const EXT_WORD_DOC    = 'doc';
+    const EXT_WORD_DOCX   = 'docx';
+    const EXT_WORD_ODT    = 'odt';
+    const EXT_WORD_RTF    = 'rtf';
+    const EXT_WORD_TXT    = 'txt';
 
-    const   EXT_EXCL_XLS    = 'xls';
-    const   EXT_EXCL_XLSX   = 'xlsx';
-    const   EXT_EXCL_ODS    = 'ods';
-    const   EXT_EXCL_CSV    = 'csv';
+    const EXT_EXCL_XLS    = 'xls';
+    const EXT_EXCL_XLSX   = 'xlsx';
+    const EXT_EXCL_ODS    = 'ods';
+    const EXT_EXCL_CSV    = 'csv';
 
-    const   EXT_PPTS_PPT    = 'ppt';
-    const   EXT_PPTS_PPTX   = 'pptx';
-    const   EXT_PPTS_ODP    = 'odp';
+    const EXT_PPTS_PPT    = 'ppt';
+    const EXT_PPTS_PPTX   = 'pptx';
+    const EXT_PPTS_ODP    = 'odp';
 
-    const   EXT_SNDS_MP3    = 'mp3';
-    const   EXT_SNDS_WAV    = 'wav';
-    const   EXT_SNDS_OGG    = 'ogg';
+    const EXT_SNDS_MP3    = 'mp3';
+    const EXT_SNDS_WAV    = 'wav';
+    const EXT_SNDS_OGG    = 'ogg';
 
-    const   EXT_VDEO_MP4    = 'mp4';
-    const   EXT_VDEO_MKV    = 'mkv';
-    const   EXT_VDEO_OGV    = 'ogv';
+    const EXT_VDEO_MP4    = 'mp4';
+    const EXT_VDEO_MKV    = 'mkv';
+    const EXT_VDEO_OGV    = 'ogv';
 
-    const   EXT_DOCS_PDF    = 'pdf';
-    const   EXT_DOCS_EPUB   = 'epub';
+    const EXT_DOCS_PDF    = 'pdf';
+    const EXT_DOCS_EPUB   = 'epub';
 
-    const   EXT_ARCH_GZ     = 'gz';
-    const   EXT_ARCH_ZIP    = 'zip';
-    const   EXT_ARCH_TAR    = 'tar';
+    const EXT_ARCH_GZ     = 'gz';
+    const EXT_ARCH_ZIP    = 'zip';
+    const EXT_ARCH_TAR    = 'tar';
 
     private static $const_allExt;
-    private $const_imagExt;
-    private $const_wordExt;
-    private $const_exclExt;
-    private $const_pptsExt;
-    private $const_sndsExt;
-    private $const_archExt;
 
     /**
      * ODDragNDrop constructor.
-     * @param $id                       : identifiant de l'objet pour GOT
+     * @param $id
      * @throws ReflectionException
-     * @throws Exception
      */
-    public function __construct($id, $core = true)
+    public function __construct($id)
     {
         parent::__construct($id, "oobjects/odcontained/oddragndrop/oddragndrop.config.php");
 
@@ -196,151 +168,236 @@ class ODDragNDrop extends ODContained
             }
             $this->setDisplay(self::DISPLAY_BLOCK);
             $this->enable();
-            $this->setClassName(self::class);
         }
 
-        if ($core){ $this->saveProperties(); }
+        $this->saveProperties();
         return $this;
     }
 
     /**
-     * fixe le nombre maximal de fichiers à télécharger
-     * @param int $maxFileCount         : nombre de fichier à télécharger (>0)
-     * @return ODDragNDrop|bool        : (false si $maxFileCount est valorisé à 0)
-     */
-    public function setMaxFileCount(int $maxFileCount)
-    {
-        if ($maxFileCount > 0) {
-            $properties = $this->getProperties();
-            $properties['maxFileCount'] = $maxFileCount;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * restitue le nombre maximum de fichiers à télécharger
-     * @return bool|int                 : ((int) $properties['maxFileCount'] ou false si la propriété n'existe pas)
-     */
-    public function getMaxFileCount()
-    {
-        $properties = $this->getProperties();
-        return (int) $properties['maxFileCount'] ?? false;
-    }
-
-    /**
-     * supprime toute limite de nombre de fichiers à télécharger
+     * active l'affichage du bouton de fermeture de la zone de drag & drop
+     *
      * @return ODDragNDrop
      */
-    public function disMaxFileCount()
+    public function enaClose()
     {
-        $properties = $this->getProperties();
-        $properties['maxFileCount'] = 0;
+        $properties                 = $this->getProperties();
+        $properties['showClose']  = true;
         $this->setProperties($properties);
         return $this;
     }
 
     /**
-     * fixe la taille minimale des fichiers  à télécharger
-     * @param int $minFileSize          : taille minimale des fichiers
-     * @return ODDragNDrop|bool        : (false si $minFileSize est valorisé à 0)
-     */
-    public function setMinFileSize(int $minFileSize)
-    {
-        if ($minFileSize > 0) {
-            $properties = $this->getProperties();
-            $properties['minFileSize'] = $minFileSize;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * restitue la taille minimale des fichiers à télécharger
-     * @return bool|int                 : ((int) $properties['minFileSize'] ou false si la propriété n'existe pas)
-     */
-    public function getMinFileSize()
-    {
-        $properties = $this->getProperties();
-        return (int) $properties['minFileSize'] ?? false;
-    }
-
-    /**
-     * supprime toute limite de taille minimale des fichiers
+     * désactive l'affichage du bouton de fermeture de la zone de drag & drop
+     *
      * @return ODDragNDrop
      */
-    public function disMinFileSize()
+    public function disClose()
     {
-        $properties = $this->getProperties();
-        $properties['minFileSize'] = 0;
+        $properties                 = $this->getProperties();
+        $properties['showClose']  = false;
         $this->setProperties($properties);
         return $this;
     }
 
     /**
-     * fixe la taille maximale des fichiers à télécharger
-     * @param int $maxFileSize          : taille maximal des fichiers
-     * @return ODDragNDrop|bool        : (false si $minFileSize est valorisé à 0)
-     */
-    public function setMaxFileSize(int $maxFileSize)
-    {
-        if ($maxFileSize > 0) {
-            $properties = $this->getProperties();
-            $properties['maxFileSize'] = $maxFileSize;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * restitue la taille maximale des fichiers à télécharger
-     * @return bool|int                 : ((int) $properties['maxFileSize'] ou false si la propriété n'existe pas)
-     */
-    public function getMaxFileSize()
-    {
-        $properties = $this->getProperties();
-        return (int) $properties['maxFileSize'] ?? false;
-    }
-
-    /**
-     * supprime tout limite de taille maximale des fichiers à télécharger
+     * active l'affichage du bouton de fermeture de la zone de drag & drop
+     *
      * @return ODDragNDrop
      */
-    public function disMaxFileSize()
+    public function enaBrowse()
     {
-        $properties = $this->getProperties();
-        $properties['maxFileSize'] = 0;
+        $properties                 = $this->getProperties();
+        $properties['showBrowse']  = true;
         $this->setProperties($properties);
         return $this;
     }
 
     /**
-     * fixe le texte à afficher, dans la zone du Glisser/Déposer
-     * @param string $message
-     * @return ODDragNDrop|bool        : (false si $message est vide)
+     * désactive l'affichage du bouton de fermeture de la zone de drag & drop
+     *
+     * @return ODDragNDrop
      */
-    public function setMessage(string $message)
+    public function disBrowse()
     {
-        if (strlen($message) > 0) {
-            $properties = $this->getProperties();
-            $properties['message'] = $message;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
+        $properties                 = $this->getProperties();
+        $properties['showBrowse']  = false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /**
-     * restitue le texte à afficher, dans la zone du Glisser/Déposer
-     * @return bool|int                 : ((int) $properties['maessage'] ou false si la propriété n'existe pas)
+     * @return ODDragNDrop
      */
-    public function getMessage()
+    public function enaCaption()
     {
-        $properties = $this->getProperties();
-        return (int) $properties['message'] ?? false;
+        $properties                 = $this->getProperties();
+        $properties['showCaption']  = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODDragNDrop
+     */
+    public function disCaption()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showCaption']  = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODDragNDrop
+     */
+    public function enaPreview()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showPreview']  = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODDragNDrop
+     */
+    public function disPreview()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showPreview']  = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * active l'affichage du bouton de suppression
+     *
+     * @return ODDragNDrop
+     */
+    public function enaRemove()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showRemove']   = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * désactive l'affichage du bouton de suppression
+     *
+     * @return ODDragNDrop
+     */
+    public function disRemove()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showRemove']   = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * active l'affichage du bouton de chargement sur serveur du fichier
+     *
+     * @return ODDragNDrop
+     */
+    public function enaUpload()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showUpload']   = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * désactive l'affichage du bouton de chargement sur serveur du fichier
+     *
+     * @return ODDragNDrop
+     */
+    public function disUpload()
+    {
+        $properties                 = $this->getProperties();
+        $properties['showUpload']   = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * active le choix de fichier par click dans la zone drag & drop
+     *
+     * @return ODDragNDrop
+     */
+    public function enaClickOnZone()
+    {
+        $properties                 = $this->getProperties();
+        $properties['clickOnZone']   = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * désactive le choix de fichier par click dans la zone drag & drop
+     *
+     * @return ODDragNDrop
+     */
+    public function disClickOnZone()
+    {
+        $properties                 = $this->getProperties();
+        $properties['clickOnZone']   = false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * active la sélection possible de plusieurs fichier
+     *
+     * @return ODDragNDrop
+     */
+    public function enaMultiple()
+    {
+        $properties     		= $this->getProperties();
+        $properties['multiple'] = true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * active la sélection d'un seul fichier
+     *
+     * @return ODDragNDrop
+     */
+    public function enaSingle()
+    {
+        $properties             = $this->getProperties();
+        $properties['multiple']	= false;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * ne conserve pas les preview si vous ajoutez d'autres images
+     *
+     * @return ODDragNDrop
+     */
+    public function enaOverwriteInitial()
+    {
+        $properties             = $this->getProperties();
+        $properties['overwriteInitial']	= true;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * conserve les preview si vous ajoutez d'autres images
+     *
+     * @return ODDragNDrop
+     */
+    public function disOverwriteInitial()
+    {
+        $properties             = $this->getProperties();
+        $properties['overwriteInitial']	= false;
+        $this->setProperties($properties);
+        return $this;
     }
 
     /**
@@ -351,10 +408,10 @@ class ODDragNDrop extends ODContained
     public function enaImageFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $imagExts   = $this->getImageExtensionConstant();
         foreach ($imagExts as $imagExt) {
-            if (in_array($imagExt, $extString) === false) {
+            if (!in_array($imagExt, $extString)) {
                 $extString[] = $imagExt;
             }
         }
@@ -375,13 +432,13 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $wordExts   = $this->getWordExtensionConstant();
         foreach ($wordExts as $wordExt) {
-            if (strpos($extString, $wordExt) === false) {
-                $extString .= ','.$wordExt;
+            if (!in_array($wordExt, $extString)) {
+                $extString[] = $wordExt;
             }
         }
         $extString                      = substr($extString, 1);
-        $properties                     = $this->getProperties();
-        $properties['acceptedFiles']    = $extString;
+        $properties                 	= $this->getProperties();
+        $properties['acceptedFiles']	= $extString;
         $this->setProperties($properties);
         return $this;
     }
@@ -397,8 +454,8 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $exclExts   = $this->getExcelExtensionConstant();
         foreach ($exclExts as $exclExt) {
-            if (strpos($extString, $exclExt) === false) {
-                $extString .= ','.$exclExt;
+            if (!in_array($exclExt, $extString)) {
+                $extString[] = $exclExt;
             }
         }
         $extString                      = substr($extString, 1);
@@ -419,8 +476,8 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $pptsExts   = $this->getPresentationExtensionConstant();
         foreach ($pptsExts as $pptsExt) {
-            if (strpos($extString, $pptsExt) === false) {
-                $extString .= ','.$pptsExt;
+            if (!in_array($pptsExt, $extString)) {
+                $extString[] = $pptsExt;
             }
         }
         $extString                      = substr($extString, 1);
@@ -441,8 +498,8 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $sndsExts   = $this->getSoundExtensionConstant();
         foreach ($sndsExts as $sndsExt) {
-            if (strpos($extString, $sndsExt) === false) {
-                $extString .= ','.$sndsExt;
+            if (!in_array($sndsExt, $extString)) {
+                $extString[] = $sndsExt;
             }
         }
         $extString                      = substr($extString, 1);
@@ -463,8 +520,8 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $vdeoExts   = $this->getVideoExtensionConstant();
         foreach ($vdeoExts as $vdeoExt) {
-            if (strpos($extString, $vdeoExt) === false) {
-                $extString .= ','.$vdeoExt;
+            if (!in_array($vdeoExt, $extString)) {
+                $extString[] = $vdeoExt;
             }
         }
         $extString                      = substr($extString, 1);
@@ -485,8 +542,8 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $docsExts   = $this->getDocumentExtensionConstant();
         foreach ($docsExts as $docsExt) {
-            if (strpos($extString, $docsExt) === false) {
-                $extString .= ','.$docsExt;
+            if (!in_array($docsExt, $extString)) {
+                $extString[] = $docsExt;
             }
         }
         $extString                      = substr($extString, 1);
@@ -507,11 +564,10 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $archExts   = $this->getArchiveExtensionConstant();
         foreach ($archExts as $archExt) {
-            if (strpos($extString, $archExt) === false) {
-                $extString .= ','.$archExt;
+            if (!in_array($archExt, $extString)) {
+                $extString[] = $archExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -529,8 +585,8 @@ class ODDragNDrop extends ODContained
         $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
         $allExts    = $this->getAllExtensionConstant();
         foreach ($allExts as $allExt) {
-            if (strpos($extString, $allExt) === false) {
-                $extString .= ','.$allExt;
+            if (!in_array($allExt, $extString)) {
+                $extString[] = $allExt;
             }
         }
         $extString                      = substr($extString, 1);
@@ -542,7 +598,7 @@ class ODDragNDrop extends ODContained
 
     /**
      * fixe avec le tableau $acceptedFiles les fichiers téléchargeables
-     * @param string $acceptedFiles
+     * @param array $acceptedFiles
      * @return ODDragNDrop|bool        : (false si une extension de $acceptedFiles n'est pas valide)
      * @throws ReflectionException
      */
@@ -564,13 +620,17 @@ class ODDragNDrop extends ODContained
      * @return ODDragNDrop|bool        : (false si l'extension de $acceptedFile n'est pas valide)
      * @throws ReflectionException
      */
-    public function addAccepetdFile(string $acceptedFile)
+    public function addAcceptedFile(string $acceptedFile)
     {
         if (strpos($acceptedFile, '') !== false)   { return false; }
         $allExt                                            = $this->getAllExtensionConstant();
         if (!in_array($acceptedFile, $allExt))            { return false; }
         $properties                     = $this->getProperties();
-        $properties['acceptedFiles']    .= ((empty($properties['acceptedFiles'])) ? '' : ',') .$acceptedFile;
+        $extString                      = $properties['acceptedFiles'];
+        if (!in_array($acceptedFile, $extString)) {
+            $extString[] = $acceptedFile;
+        }
+        $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
         return $this;
     }
@@ -584,19 +644,15 @@ class ODDragNDrop extends ODContained
     public function rmAcceptedFile(string $acceptedFile)
     {
         if (strpos($acceptedFile, '') !== false)   { return false; }
-        $allExt                                            = $this->getAllExtensionConstant();
+        $allExt                             = $this->getAllExtensionConstant();
         if (!in_array($acceptedFile, $allExt))            { return false; }
-        $properties                     = $this->getProperties();
-        $acceptedFiles                  = $properties['acceptedFiles'];
-        $posExt                         = strpos($acceptedFiles, $acceptedFile);
-        if ($posExt !== false) {
-            $nextExt    = strpos($acceptedFiles, ',', $posExt + 1);
-            if ($nextExt) {
-                $acceptedFiles = substr($acceptedFiles, 0, $posExt).substr($acceptedFiles, $nextExt + 1);
-            } else {
-                $acceptedFiles = substr($acceptedFiles, 0, $posExt);
-            }
-            $properties['acceptedFiles']    = $acceptedFiles;
+        $properties                         = $this->getProperties();
+        $extString                          = $properties['acceptedFiles'];
+        $key                                = array_search($acceptedFile, $extString);
+
+        if ($key !== false) {
+            unset($extString[$key]);
+            $properties['acceptedFiles']    = $extString;
             $this->setProperties($properties);
             return $this;
         }
@@ -745,107 +801,69 @@ class ODDragNDrop extends ODContained
     }
 
     /**
-     * fixe la hauteur de ligne et indirectement la hauteur de la zone glisser-déposer
-     * @param int $lineHeight       : hauteur de ligne (valeur unmérique)
-     * @param string $unit          : unité de la largeur, point (px) par défaut
-     * @return ODDragNDrop|bool
-     */
-    public function setLineHeightDND(int $lineHeight, string $unit = 'px')
-    {
-        if ($lineHeight > 0) {
-            $properties = $this->getProperties();
-            $properties['lineHeightDND'] = $lineHeight.$unit;
-            $height     = round(1.2 * $lineHeight, 1);
-            $properties['heightDND'] = $height.$unit;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * restitue la hauteur de ligne dans la zone de glisser-déposer
-     * @return bool|int
-     */
-    public function getLineHeightDND()
-    {
-        $properties = $this->getProperties();
-        return (int) $properties['lineHeightDND'] ?? false;
-    }
-
-    /**
-     * fixe la hauteur de la zone de glisser-déposer et indirectement la hateur de ligne
-     * @param int $heightDND        : hauteur de la zone de glisser-déposer
-     * @param string $unit          : unité de la hauteur, point (px) par défault
-     * @return ODDragNDrop|bool
-     */
-    public function setHeightDND(int $heightDND, string $unit = 'px')
-    {
-        if ($heightDND > 0) {
-            $properties = $this->getProperties();
-            $properties['heightDND'] = $heightDND.$unit;
-            $lineHeight = round($heightDND * 0.8, 1);
-            $properties['lineHeightDND'] = $lineHeight.$unit;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * restitue la hateur de la zone de glisser-déposer
-     * @return bool|int
-     */
-    public function getHeightDND()
-    {
-        $properties = $this->getProperties();
-        return (int) $properties['heightDND'] ?? false;
-    }
-
-    /**
-     * affecte après vérification le chemin $tempFolder comme répertoire de sauvegarde temporaire (de travail) des
-     * fichiers téléchargés
-     * @param string $tempFolder        : chemin du répertoire de sauvegarde temporaire
-     * @return ODDragNDrop|bool        : false si le chemin n'exoiste pas
-     */
-    public function setTempFolder(string $tempFolder)
-    {
-        if (file_exists($tempFolder)) {
-            $properties = $this->getProperties();
-            $properties['tempFolder'] = $tempFolder;
-            $this->setProperties($properties);
-            return $this;
-        }
-        return false;
-    }
-
-    /**
-     * restitue le chemin du répertoire de sauvegarde temporaire des fichiers
+     * restitue sous forme de chaîne de caractères, l'ensemble des extension de fichiers acceptés pour le téléchargement
+     *
      * @return bool|string
      */
-    public function getTempFolder()
+    public function getAcceptedFiles()
     {
         $properties = $this->getProperties();
-        return (string) $properties['tempFolder'] ?? false;
+        return $properties['acceptedFiles'] ?? false;
     }
 
     /**
      * ajoute un fichier stocké sur disque à la liste des fichiers chargés
      * @param string $name
      * @param string $pathFile
+     * @param bool $initial
+     * @param string $caption
      * @return ODDragNDrop|bool
      */
-    public function addLoadedFile(string $name, string $pathFile)
+    public function addLoadedFile(string $name, string $pathFile, bool $initial = false, string $caption = '')
     {
-        $properties                     = $this->getProperties();
-        $loadedFiles                    = $properties['loadedFiles'];
-        if (!in_array($name, $loadedFiles)) {
-            $item                       = [];
-            $item['name']               = $name;
-            $item['pathFile']           = $pathFile;
-            $item['mime']               = mime_content_type($pathFile);
-            $loadedFiles[$name]         = $item;
-            $properties['loadedFiles']  = $loadedFiles;
+        $properties     = $this->getProperties();
+        $loadedFiles    = $properties['loadedFiles'] ?? [];
+        $loadedPaths    = $properties['loadedPaths'] ?? [];
+        $loadedPreview  = $properties['loadedPreview'] ?? [];
+
+        if (file_exists($pathFile) && !in_array($name, $loadedFiles)) {
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'].'/'.$properties['uploadedFilesPath'] ?? '';
+            $pathInfo   = pathinfo($pathFile);
+            $fileName   = $name;
+
+            $destPath   = $uploadPath.'/'.$fileName;
+            if ($pathFile != $destPath) {
+                if(!move_uploaded_file($pathFile,$destPath)) {
+                    return false;
+                }
+            }
+
+            $mime = mime_content_type($destPath);
+            $type = strstr($mime, "/", true);
+            $size = filesize($destPath);
+            $item = [
+                'key'       => $name,
+                'pathFile'  => $destPath,
+                'filetype'  => mime_content_type($destPath),
+                'size'      => $size,
+                'caption'   => $caption ?: $name,
+                'loaded'    => $initial,
+                'fileName'  => $fileName,
+            ];
+            $loadedFiles[$name]  = $item;
+            $loadedPaths[]      = '/files/'.$fileName.'?id='.$this->getId();
+            $item           = [
+                'caption'   => $fileName,
+                'size'      => $size,
+                'width'     => '2em',
+                'key'       => $name,
+                'type'      => $type,
+            ];
+            $loadedPreview[]    = $item;
+
+            $properties['loadedFiles']      = $loadedFiles;
+            $properties['loadedPaths']      = $loadedPaths;
+            $properties['loadedPreview']    = $loadedPreview;
             $this->setProperties($properties);
             return $this;
         }
@@ -855,47 +873,57 @@ class ODDragNDrop extends ODContained
     /**
      * supprime un fichier stocké sur disque de la liste des fichiers chargés
      * @param string $name
-     * @param string $pathFile
      * @return ODDragNDrop|bool
      */
-    public function rmLoadedFile(string $name, string $pathFile)
+    public function rmLoadedFile(string $name)
     {
-        $properties                     = $this->getProperties();
-        $loadedFiles                    = $properties['loadedFiles'];
-        $names                          = array_column($loadedFiles, 'name');
-        if (file_exists($pathFile) && array_key_exists($name, $names)) {
-            $key = array_search($name, array_column($loadedFiles, 'name'));
-            unset($loadedFiles[$key]);
-            $properties['loadedFiles']  = $loadedFiles;
-            $this->setProperties($properties);
-            return $this;
+        $properties     = $this->getProperties();
+        $loadedFiles    = $properties['loadedFiles'] ?? [];
+        $loadedPaths    = $properties['loadedPaths'] ?? [];
+        $loadedPreview  = $properties['loadedPreview'] ?? [];
+        $uploadedPath   = $properties['uploadedFilesPath'];;
+
+        if ($loadedFiles && array_key_exists($name, $loadedFiles)) {
+            $infoFile   = $loadedFiles[$name];
+            unset($loadedFiles[$name]);
+            $key        = array_search('/files/'.$infoFile['fileName'].'?id='.$this->getId(), $loadedPaths);
+            if ($key !== false) {
+                unset($loadedPaths[$key]);
+                unset($loadedPreview[$key]);
+            }
+            $filePath   = $_SERVER['DOCUMENT_ROOT'].'/'.$uploadedPath.'/'.$name;
+
+            if(file_exists($filePath)) {
+                // On efface le fichier
+                unlink($filePath);
+
+                $properties['loadedFiles']      = $loadedFiles;
+                $properties['loadedPaths']      = $loadedPaths;
+                $properties['loadedPreview']    = $loadedPreview;
+                $this->setProperties($properties);
+                return $this;
+            }
         }
         return false;
     }
 
     /**
-     * réaffecte au fichier de nom $name dans la liste des fichiers chargés le le chemin $pathFile
+     * réaffecte au fichier de nom $name dans la liste des fichiers chargés avec le chemin $pathFile
      * @param string $name
      * @param string $pathFile
      * @return ODDragNDrop|bool
      */
     public function setLoadedFile(string $name, string $pathFile)
     {
-        $properties                         = $this->getProperties();
-        $loadedFiles                        = $properties['loadedFiles'];
-        $names                              = array_column($loadedFiles, 'name');
-        if (file_exists($pathFile) && !array_key_exists($name, $names)) {
+        $properties  = $this->getProperties();
+        $loadedFiles = &$properties['loadedFiles'];
+        if (file_exists($pathFile)) {
             $key = array_search($name, array_column($loadedFiles, 'name'));
-            $loadedFiles[$key]['pathFile']  = $pathFile;
-            $loadedFiles[$key]['name']      = $name;
-            $loadedFiles[$key]['mime']      = mime_content_type($pathFile);
-
-            $url                            = substr($pathFile, strpos($pathFile, 'uploadedFiles'));
-            $loadedFiles[$key]['url']       = '../../../'.$url;
-
-            $properties['loadedFiles']      = $loadedFiles;
-            $this->setProperties($properties);
-            return $this;
+            if ($key !== false) {
+                $loadedFiles[$key]['pathFile'] = $pathFile;
+                $this->setProperties($properties);
+                return $this;
+            }
         }
         return false;
     }
@@ -907,11 +935,10 @@ class ODDragNDrop extends ODContained
      */
     public function getLoadedFile(string $name)
     {
-        $properties                     = $this->getProperties();
-        $loadedFiles                    = $properties['loadedFiles'];
-        $names                          = array_column($loadedFiles, 'name');
-        if (in_array($name, $names)) {
-            $key = array_search($name, array_column($loadedFiles, 'name'));
+        $properties  = $this->getProperties();
+        $loadedFiles = $properties['loadedFiles'];
+        $key = array_search($name, array_column($loadedFiles, 'name'));
+        if ($key !== false) {
             return $loadedFiles[$key];
         }
         return false;
@@ -922,24 +949,26 @@ class ODDragNDrop extends ODContained
      * @param array $loadedFiles
      * @return ODDragNDrop|bool
      */
-    public function setLoadedFiles(array $loadedFiles)
+    public function setInitialLoadedFiles(array $loadedFiles)
     {
+        $properties = $propertiesOld = $this->getProperties();
+        $properties['loadedFiles'] = [];
         $formatedLoadedFiles = [];
-        $idLoadedFiles      = 0;
-        // validation du tableau
+        $this->setProperties($properties);
+        $valid = true;
         foreach ($loadedFiles as $loadedFile) {
             if (!array_key_exists('name', $loadedFile) || !array_key_exists('pathFile', $loadedFile)) {
-                return false;
+                $valid = false;
             }
-            $idLoadedFiles++;
-            $item                                       = [];
-            $item['name']                               = $loadedFile['name'];
-            $item['pathFile']                           = $loadedFile['pathFile'];
-            $formatedLoadedFiles[$idLoadedFiles.'ld']   = $item;
+            if (!$valid) break;
+            $valid &= (bool) $this->addLoadedFile($loadedFile['name'], $loadedFile['name'], true, $loadedFile['caption'] ?? '');
+        }
+        if (!$valid) {
+            $this->setProperties($propertiesOld);
+            return false;
         }
 
-        $properties                     = $this->getProperties();
-        $properties['loadedFiles']      = $formatedLoadedFiles;
+        $properties['loadedFiles'] = $formatedLoadedFiles;
         $this->setProperties($properties);
         return $this;
     }
@@ -955,161 +984,30 @@ class ODDragNDrop extends ODContained
     }
 
     /**
-     * fixe la largeur de la miniature à créer pour le fichier téléchargé
-     * si 0 : pas pris en comptes dans la création de la miniature
-     * @param int $thumbWidth
-     * @return ODDragNDrop
+     * affecte après vérification le chemin $tempFolder comme répertoire de sauvegarde temporaire (de travail) des
+     * fichiers téléchargés
+     * @param string $tempFolder        : chemin du répertoire de sauvegarde temporaire
+     * @return ODDragNDrop|bool        : false si le chemin n'exoiste pas
      */
-    public function setThumbWidth(int $thumbWidth)
+    public function setUploadedFilesPath(string $tempFolder)
     {
-        if ($thumbWidth == 0) { $thumbWidth = 150; }
-        $properties                 = $this->getProperties();
-        $properties['thumbWidth']   = $thumbWidth;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * restitue la largeur de la miniature à créer pour le fichier téléchargé
-     * @return bool:int
-     */
-    public function getThumbWidth()
-    {
-        $properties = $this->getProperties();
-        return $properties['thumbWidth'] ?? false;
-    }
-
-    /**
-     * fixe la hauteur de la miniature à créer pour le fichier téléchargé
-     * si 0 : pas pris en comptes dans la création de la miniature
-     * @param int $thumbHeight
-     * @return ODDragNDrop
-     */
-    public function setThumbHeight(int $thumbHeight)
-    {
-        if ($thumbHeight == 0) { $thumbHeight = 150; }
-        $properties                 = $this->getProperties();
-        $properties['thumbHeight']  = $thumbHeight;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * restitue la hauteur de la miniature à créer pour le fichier téléchargé
-     * @return bool
-     */
-    public function getThumbHeight()
-    {
-        $properties = $this->getProperties();
-        return $properties['thumbHeight'] ?? false;
-    }
-
-    /**
-     * active la présentation d'une icône pour délencher la vue du fichier dans un autre onglet
-     * @return ODDragNDrop
-     */
-    public function enaThumbView()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbView'] = self::BOOLEAN_TRUE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * désactive la présentation d'une icône pour délencher la vue du fichier dans un autre onglet
-     * @return ODDragNDrop
-     */
-    public function disThumbView()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbView'] = self::BOOLEAN_FALSE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * active la présentation d'une icône pour délencher le téléchargement du fichier
-     * @return ODDragNDrop
-     */
-    public function enaThumbDload()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbDload'] = self::BOOLEAN_TRUE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * désactive la présentation d'une icône pour délencher le téléchargement du fichier
-     * @return ODDragNDrop
-     */
-    public function disThumbDload()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbDload'] = self::BOOLEAN_FALSE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * active la présentation d'une icône pour délencher la suppression du fichier des fichiers téléchargés
-     * @return ODDragNDrop
-     */
-    public function enaThumbRmove()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbRmove'] = self::BOOLEAN_TRUE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * désactive la présentation d'une icône pour délencher la suppression du fichier des fichiers téléchargés
-     * @return ODDragNDrop
-     */
-    public function disThumbRmove()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbRmove'] = self::BOOLEAN_FALSE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * déclenche l'affichage du nom de fichier sous sa miniature
-     * @return ODDragNDrop
-     */
-    public function enaThumbFileName()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbFileName'] = self::BOOLEAN_TRUE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * interdit l'affichage du nom de fichier sous sa miniature
-     * @return $this
-     */
-    public function disThumbFileName()
-    {
-        $properties = $this->getProperties();
-        $properties['thumbFileName'] = self::BOOLEAN_FALSE;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function validFiles(array $files)
-    {
-        $loadedFiles    = $this->getLoadedFiles();
-        $names          = array_column($loadedFiles, 'name');
-        foreach ($files as $ind => $file) {
-            if (in_array($file, $names)) {
-                unset($files[$ind]);
-            }
+        if (file_exists($tempFolder)) {
+            $properties = $this->getProperties();
+            $properties['uploadedFilesPath'] = $tempFolder;
+            $this->setProperties($properties);
+            return $this;
         }
-        return $files;
+        return false;
+    }
+
+    /**
+     * restitue le chemin du répertoire de sauvegarde temporaire des fichiers
+     * @return bool|string
+     */
+    public function getUploadedFilesPath()
+    {
+        $properties = $this->getProperties();
+        return (string) $properties['uploadedFilesPath'] ?? false;
     }
 
     /** **************************************************************************************************
@@ -1124,14 +1022,13 @@ class ODDragNDrop extends ODContained
      * @return array
      * @throws Exception
      */
-
     public function dispatchEvents(ServiceManager $sm, $params)
     {
         switch ($params['event']) {
-            case 'dropIn':
+            case 'upload':
                 return $this->evtAddFile($sm, $params);
                 break;
-            case 'dropOut':
+            case 'delete':
                 return $this->evtRmFile($sm, $params);
                 break;
             default:
@@ -1149,59 +1046,43 @@ class ODDragNDrop extends ODContained
      */
     public function evtAddFile(ServiceManager $sm, array $params)
     {
-        /** @var ZF3GotServices $gs */
-        $gs         = $sm->get('graphic.object.templating.services');
-        $ret        = [];
-        /** @var ODDragNDrop $objet */
-        $sessionObj = self::validateSession();
-        /** @var ODDragNDrop $objet */
-        $objet      = self::buildObject($params['id'], $sessionObj);
+        $properties     = $this->getProperties();
+        $uploadInput    = $_FILES['uploadInput'];
+        $uploadFiles    = [];
+        $ret            = [];
+        $uploadPath     = $properties['uploadedFilesPath'];
 
-        $maxCountFile   = $objet->getMaxFileCount();
-        $loadedFiles    = $objet->getLoadedFiles();
+        foreach ($uploadInput as $key => $inputs) {
+            foreach ($inputs as $ind => $input) {
+                if (!array_key_exists($ind, $uploadFiles)) { $uploadFiles[$ind] = []; }
+                $uploadFiles[$ind][$key] = $input;
+            }
+        }
 
-        if ($maxCountFile === 0 || sizeof($loadedFiles) < $maxCountFile) {
-            $tempFolder = $objet->getTempFolder();
-            $pathPublic = $_SERVER['DOCUMENT_ROOT'];
-            /** si tempFolder vide, voir de créer un répertoire uploadFile dans public */
-            if (empty($tempFolder)) {
-                if (!file_exists($pathPublic.'/uploadedFiles')) {
-                    $returnCall  = shell_exec('cd '.$pathPublic.' 2>&1');
+        if (!empty($uploadFiles)) {
+            if ($this->controlsUploadFiles($uploadFiles)) {
+                $loadedPath     = [];
+                $loadedPreview  = [];
 
-                    $returnCall .= shell_exec('mkdir public/uploadedFiles 2>&1');
-                    $returnCall .= shell_exec('chmod 777 public/uploadedFiles/ 2>&1');
-                    if (!empty($returnCall)) { throw new Exception($returnCall); }
+                /** @var Url $url */
+                $url = $sm->get('ControllerPluginManager')->get(Url::class);
+                $redirect = $url->fromRoute('gotDispatch');
+
+                foreach ($uploadFiles as $uploadFile) {
+                    $this->addLoadedFile($uploadFile['name'], $uploadFile['tmp_name'], false, $uploadFile['name']);
+                    $this->saveProperties();
+
+                    $properties         = $this->getProperties();
+                    $loadedPath[]       = $properties['loadedPaths'][sizeof($properties['loadedPaths']) - 1];
+                    $loadedPreview[]    = $properties['loadedPreview'][sizeof($properties['loadedPaths']) - 1];
+                    foreach ($loadedPreview as $key => $item) {
+                        $loadedPreview[$key]['url'] = $redirect;
+                    }
                 }
-                $tempFolder  = $pathPublic.'/uploadedFiles';
+
+                $ret[]  = $this->returnAddUploadedFile($params['id'], $loadedPath, $loadedPreview);
+                $ret[]  = self::formatRetour($params['id'], $params['id'], 'nop');
             }
-
-            /**
-             * traitement d'ajout d'un fichier
-             */
-            $fileName   = $params['name'];
-            $fileExt    = pathinfo($fileName, PATHINFO_EXTENSION);
-            $mimeType   = $this->getMimeString($fileExt);
-            $imgSrc     = $params['file'];
-            $imgFile    = base64_decode($imgSrc);
-            $dest       = $tempFolder.'/'.$fileName;
-            if ( $objet->addLoadedFile($params['name'], $dest) !== false ) {
-                $file       = fopen($dest, 'wb');
-                fwrite($file, $imgFile);
-                fclose($file);
-
-                $objet->setTempFolder($tempFolder);
-                $objet->saveProperties();
-
-                $mode   = 'addFile';
-                $html   = ['name'=> $params['name'], 'mime'=> $mimeType];
-                $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), $mode, $html);
-            } else {
-                $alertMsg = 'alert("Nom de fichier '.$$params['name'].' existe dèjà, veuillez changer");';
-                $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), 'exec', $alertMsg);
-            }
-        } else if ($maxCountFile != 0) {
-            $alertMsg = 'alert("Maximum de '.$maxCountFile.' fichier(s) atteint");';
-            $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), 'exec', $alertMsg);
         }
 
         return $ret;
@@ -1217,94 +1098,29 @@ class ODDragNDrop extends ODContained
      */
     public function evtRmFile(ServiceManager $sm, array $params)
     {
-        /** @var ZF3GotServices $gs */
-        $gs = $sm->get('graphic.object.templating.services');
-        $ret    = [];
-        /** @var ODDragNDrop $objet */
-        $sessionObj = self::validateSession();
-        $objet  = self::buildObject($params['id'], $sessionObj);
+        $sessionObjects = self::validateSession();
+        $ret            = [];
 
-        /**
-         * traitement de suppression d'un fichier
-         */
-        $properties     = $objet->getProperties();
-        $loadedFiles    = $properties['loadedFiles'];
-        $fileName       = $params['file'];
-        if (array_key_exists($fileName, $loadedFiles)) {
-            // suppression du fichier de la liste + suppression physique dans getTempFolder()
-            $filePath = $loadedFiles[$fileName];
-            if (file_exists($filePath['pathFile'])) {
-                if( @unlink($filePath['pathFile']) !== true ) {
-                    throw new Exception('impossible de supprimer le fichier: ' . $filePath .
-                        ". Veuillez en avertir l'administrateur du site.");
-                } else {
-                    unset($loadedFiles[$fileName]);
-                    $properties['loadedFiles']  = $loadedFiles;
-                    $objet->setProperties($properties);
-                    $objet->saveProperties();
-
-                    $mode   = 'rmFile';
-                    $name   = $params['name'];
-                    $html   = ['name'=> $name, 'count'=> sizeof($loadedFiles)];
-                    $ret[]  = $objet::formatRetour($objet->getId(), $objet->getId(), $mode, $html);
-                }
-            }
+        /** @var ODDragNDrop $dragNDrop */
+        $dragNDrop      = self::buildObject($params['id'], $sessionObjects);
+        $fileToDelete   = $params['key'];
+        if ($dragNDrop->rmLoadedFile($fileToDelete)) {
+            $ret[]  = self::formatRetour($params['id'], $params['id'], 'json', [[]]);
+            $ret[]  = self::formatRetour($params['id'], $params['id'], 'nop');
+        } else {
+            $ret[]  = self::formatRetour($params['id'], $params['id'], 'exec', "alert('Erreur'");
         }
-
-
         return $ret;
     }
 
-    /**
-     * alimentation pour retour de callback visant à réaffecter le contenu de l'objet
-     * @return array
-     * @throws Exception
-     */
-    public function returnSetData()
-     {
-         $thisID        = $this->getId();
-         $code          = [];
-         $loadedFiles   = $this->getLoadedFiles();
-         if (!empty($loadedFiles)) {
-             /* récupération et préparation du répertoire des miniatures */
-            $tempFolder = $this->getTempFolder();
-            $pathPublic = $_SERVER['DOCUMENT_ROOT'];
-            if (empty($tempFolder)) {
-                if (!file_exists($pathPublic.'/uploadedFiles')) {
-                    $returnCall  = shell_exec('cd '.$pathPublic.' 2>&1');
-
-                    $returnCall .= shell_exec('mkdir public/uploadedFiles 2>&1');
-                    $returnCall .= shell_exec('chmod 777 public/uploadedFiles/ 2>&1');
-                    if (!empty($returnCall)) { throw new Exception($returnCall); }
-                }
-                $tempFolderPath  = $pathPublic.'/uploadedFiles';
-            }
-            $tempFolderPath     .= 'thumbnails';
-            if (!file_exists($tempFolderPath.'/thumbnails')) {
-                $returnCall  = shell_exec('cd '.$tempFolder.' 2>&1');
-
-                $returnCall .= shell_exec('mkdir '.$tempFolderPath.'/thumbnails 2>&1');
-                $returnCall .= shell_exec('chmod 777 '.$tempFolderPath.'/thumbnails 2>&1');
-                if (!empty($returnCall)) { throw new Exception($returnCall); }
-            }
-            $tempFolderPath     .= '/thumbnails';
-
-            foreach($loadedFiles as $fileName => $filePath) {
-                $item   = [];
-                $item['name']       = $fileName;
-                $item['mime']       = mime_content_type($filePath);
-                $item['url']        = $filePath;
-//                if (strpos(\mime_content_type($filePath), 'image') === 0) {
-//                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$fileName;
-//                } else {
-//                    $ext = pathinfo($filePath, PATHINFO_EXTENSION);
-//                    $item['thumdURL']   = 'http://'.$_SERVER['SERVER_NAME'].'/graphicobjecttemplating/'.$tempFolder.'/'.$ext.'.svg';
-//                }
-                $code[] = $item;
-            }
-         }
-         return  self::formatRetour($thisID, $thisID, 'setData', $code);
-     }
+    public function returnAddUploadedFile(string $objId, array $previewPath, array $previewConfig)
+    {
+        $item                           = [];
+        $item['initialPreview']         = $previewPath;
+        $item['initialPreviewConfig']   = $previewConfig;
+        $item['append']                 = true;
+        return ['idSource'=>$objId, 'idCible'=>$objId, 'mode'=>'json', 'code'=> $item];
+    }
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
@@ -1535,18 +1351,16 @@ class ODDragNDrop extends ODContained
     private function rmAcceptedFiles(array $acceptedFiles, array $exts)
     {
         foreach ($exts as $ext) {
-            $existsExt              = in_array($ext, $acceptedFiles);
+            $existsExt              = array_search($ext, $acceptedFiles);
             if ($existsExt !== false) {
-                $key    = array_keys($acceptedFiles, $ext);
-                $key    = $key[0];
-                unset($acceptedFiles[$key]);
+                unset($acceptedFiles[$existsExt]);
             }
         }
         return $acceptedFiles;
     }
 
     /**
-     * restitue la chaîne de caractère nature de fichier MIME en fonction de l'extension $ext fournie
+     * restitue la chaîne de caractères nature de fichier MIME en fonction de l'extension $ext fournie
      * @param $ext                      : extension de fichier fournie
      * @return bool|string              : restitue la chaine de typde fichier MIME ou false si l'extension n'est pas
      *                                      valide et gérée par le système
@@ -1653,9 +1467,116 @@ class ODDragNDrop extends ODContained
         return false;
     }
 
-    private function getDir()
+    /**
+     * restitue à partir de la chaîne de caractères nature de fichier MIME l'extension $ext du fichier
+     * @param string $mime
+     * @return string
+     * @throws Exception
+     */
+    public static function getExtString(string $mime)
     {
-        $rc = new ReflectionClass(get_class($this));
-        return dirname($rc->getFileName());
+        switch ($mime) {
+            case "image/svg+xml":
+                $ext    = self::EXT_IMAG_SVG;
+                break;
+            case "text/plain":
+                $ext    = self::EXT_WORD_TXT;
+                break;
+            case "application/msword":
+                $ext    = self::EXT_WORD_DOC;
+                break;
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                $ext    = self::EXT_WORD_DOCX;
+                break;
+            case "application/rtf":
+                $ext    = self::EXT_WORD_RTF;
+                break;
+            case "application/vnd.oasis.opendocument.text":
+                $ext    = self::EXT_WORD_ODT;
+                break;
+            case "application/vnd.ms-excel":
+                $ext    = self::EXT_EXCL_XLS;
+                break;
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                $ext    = self::EXT_EXCL_XLSX;
+                break;
+            case "application/vnd.oasis.opendocument.spreadsheet":
+                $ext    = self::EXT_EXCL_ODS;
+                break;
+            case "text/csv":
+                $ext    = self::EXT_EXCL_CSV;
+                break;
+            case "application/vnd.ms-powerpoint":
+                $ext    = self::EXT_PPTS_PPT;
+                break;
+            case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+                $ext    = self::EXT_PPTS_PPTX;
+                break;
+            case "application/vnd.oasis.opendocument.presentation":
+                $ext    = self::EXT_PPTS_ODP;
+                break;
+            case "audio/mpeg":
+                $ext    = self::EXT_SNDS_MP3;
+                break;
+            case "audio/ogg":
+                $ext    = self::EXT_SNDS_OGG;
+                break;
+            case "audio/x-wav":
+                $ext    = self::EXT_SNDS_WAV;
+                break;
+            case "video/mp4":
+                $ext    = self::EXT_VDEO_MP4;
+                break;
+            case "video/x-matroska":
+                $ext    = self::EXT_VDEO_MKV;
+                break;
+            case "video/ogg":
+                $ext    = self::EXT_VDEO_OGV;
+                break;
+            case "application/pdf":
+                $ext    = self::EXT_DOCS_PDF;
+                break;
+            case "application/epub+zip":
+                $ext    = self::EXT_DOCS_EPUB;
+                break;
+            case "application/zip":
+                $ext    = self::EXT_ARCH_ZIP;
+                break;
+            case "application/x-tar":
+                $ext    = self::EXT_ARCH_TAR;
+                break;
+            case "application/octet-stream":
+                $ext    = self::EXT_ARCH_GZ;
+                break;
+            default:
+                if (strpos($mime, 'image/') === 0) {
+                    $ext    = substr($mime, 6);
+                } else {
+                    throw new \Exception("chaîne MIME inconnue: $mime, veuillez en avertir l'administrateur");
+                }
+        }
+
+        return $ext;
+    }
+
+    /**
+     * @param array $uploadedFiles
+     * @return bool
+     * @throws Exception
+     */
+    private function controlsUploadFiles(array $uploadedFiles)
+    {
+        $check = true;
+        $authorizedExt  = $this->getAcceptedFiles();
+
+        foreach ($uploadedFiles as $uploadedFile) {
+            $extFile    = self::getExtString($uploadedFile['type']);
+            if (!in_array($extFile, $authorizedExt)) {
+                $check  = false;
+                break;
+            }
+        }
+
+        return $check;
     }
 }

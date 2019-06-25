@@ -75,6 +75,27 @@ Ceci n'est qu'une base pour vos développements que vous pouvez modifier et adap
 
 En dernier, avant de débuter le développement de votre application, vous devrez faire quelques changement dans le fichier *module/Application/config/module.config.php*. Dans le bloc *template_map* vous devez changer toutes les extensions des noms de fichiers de *.phtml* en *.twig*. Après cela, n'oubliez par de refaire un dump des autoload **Zend Framework** (*composer.phar dump-autoload*) avant de contrôler quer tout fonctionne correctement.
 
+## Paramètrage d'Objet - besoin technique ##
+
+Pour que le moteur **GraphicObjectTemplating** fonctionne, il faut faire quelques action supplémenrtaires au regard des objets que vous serez amménés à utiliser.
+
+### L'objet ODDragNDrop ###
+
+Cet objet va occasionner plusieurs modifications.
+
+Dans le cadre d'un projet Zend Framework, il vous faut en premier lieu créer le répertoier '*uploadedFiles*' dans le répertoire '*data*' de votre application, projet. Lui affecter les droits d'écriture par n'impote quel utilisateur (chmod 777). Dans le cas ou vous ne pouver donner le droit d'écriture qu'au propriétaire du répertoire et aux utilisateurs de son groupe, ajouter au dit groupe l'utilisateur '*www-data*' utiliser par le serveur HTTP.
+
+On doit également modifier la définition de votre hôte virtuel définissant l'accès à votre site, votre application. Ceci va passer par la déclaration, sous *nginx*, d'un alias pointant sur le répertoire que vous venez de créer:
+
+    ...
+	location /fichiers/ {
+		alias /path_to_your_project/data/uploadedFiles/;
+		internal;
+	}
+    ...
+
+Cette déclaration sera positionnée en fin de définition de votre hôte virtuel.
+
 ## Mode Développement
 
 En premier, installez, seulement en mode développement, les extensions nécessaires :
