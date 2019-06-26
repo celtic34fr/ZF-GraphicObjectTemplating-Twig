@@ -7,6 +7,7 @@ use GraphicObjectTemplating\OObjects\ODContained\ODDragNDrop;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
 use Zend\Http\Headers;
 use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
@@ -37,13 +38,15 @@ class MainController extends AbstractActionController
 
     /* méthode appelé pour l'exécution des demandes Ajax */
     /**
-     * @return bool|ViewModel
+     * @return bool|Response
      * @throws \Exception
      */
     public function gotDispatchAction()
     {
         /** @var Request $request */
         $request = $this->getRequest();
+        /** @var Response $response */
+        $response = $this->getResponse();
         /** @var ZF3GotServices $gs */
         $gs      = $this->serviceManager->get('graphic.object.templating.services');
 
@@ -98,7 +101,6 @@ class MainController extends AbstractActionController
                             // appel de la méthode de l'objet passée en paramètre
                             $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
                         }
-
                     }
                 }
 
@@ -150,14 +152,14 @@ class MainController extends AbstractActionController
                             $updDatas   = $updDatas['code'];
                             break;
                     }
-
                     $result = $updDatas;
                 }
 
-                $viewModel = (new ViewModel([ 'content' => [$result], ]))
-                    ->setTemplate("zf3-graphic-object-templating/main/got-dispatch.twig")
-                    ->setTerminal(TRUE);
-                return $viewModel;
+                $response->getHeaders()->addHeaders([
+                    'Content-Type' => 'application/json'
+                ]);
+                $response->setContent(json_encode($result));
+                return $response;
             }
         }
         return false;
@@ -203,10 +205,10 @@ class MainController extends AbstractActionController
     /**
      * méthode de création d'objet
      *
-     * @param $objClass         nom de classe de l'objet à créer si $params vide
-     * @param $sessionObjects   Objet Session contenant la déclarations des objets en cours de validité
-     * @param null $params      tableau des paramétres pour créatiion de l'objet à travailler
-     * @return mixed            un objet de type ZF3GraphicObjectTemplating ou à partir de $objClass
+     * @param string $objClass          nom de classe de l'objet à créer si $params vide
+     * @param Container $sessionObjects Objet Session contenant la déclarations des objets en cours de validité
+     * @param array? $params            tableau des paramétres pour créatiion de l'objet à travailler
+     * @return mixed                    un objet de type ZF3GraphicObjectTemplating ou à partir de $objClass
      * @throws \Exception
      */
     private function buildObject($objClass, $sessionObjects, $params = null) {
@@ -225,9 +227,9 @@ class MainController extends AbstractActionController
     /**
      * méthode de création et formatage du tableau des valeurs des champs d'un formulaire
      *
-     * @param $form     chaîne de caractères transmise lors de l'appel Ajax des champs/valeurs du fortmulaire
-     * @param $objects  tableau des déclaration des objets valides en sessions
-     * @return array    tableau formé par :
+     * @param string $form     chaîne de caractères transmise lors de l'appel Ajax des champs/valeurs du fortmulaire
+     * @param  array $objects  tableau des déclaration des objets valides en sessions
+     * @return array tableau formé par :
      *                      le tableau des champs (clé d'accès) et valeurs du formulaire retravaillés
      *                      le tableau des déclarations des objets valides en session mis à jours avec les traitements
      */

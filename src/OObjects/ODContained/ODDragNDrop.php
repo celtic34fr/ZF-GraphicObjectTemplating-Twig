@@ -3,6 +3,7 @@
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use Exception;
+use GraphicObjectTemplating\Exception\GotException;
 use GraphicObjectTemplating\OObjects\ODContained;
 use ReflectionException;
 use Zend\Mvc\Controller\Plugin\Url;
@@ -183,7 +184,7 @@ class ODDragNDrop extends ODContained
     public function enaClose()
     {
         $properties                 = $this->getProperties();
-        $properties['showClose']  = true;
+        $properties['showClose']    = true;
         $this->setProperties($properties);
         return $this;
     }
@@ -196,7 +197,7 @@ class ODDragNDrop extends ODContained
     public function disClose()
     {
         $properties                 = $this->getProperties();
-        $properties['showClose']  = false;
+        $properties['showClose']    = false;
         $this->setProperties($properties);
         return $this;
     }
@@ -209,7 +210,7 @@ class ODDragNDrop extends ODContained
     public function enaBrowse()
     {
         $properties                 = $this->getProperties();
-        $properties['showBrowse']  = true;
+        $properties['showBrowse']   = true;
         $this->setProperties($properties);
         return $this;
     }
@@ -222,7 +223,7 @@ class ODDragNDrop extends ODContained
     public function disBrowse()
     {
         $properties                 = $this->getProperties();
-        $properties['showBrowse']  = false;
+        $properties['showBrowse']   = false;
         $this->setProperties($properties);
         return $this;
     }
@@ -437,7 +438,6 @@ class ODDragNDrop extends ODContained
                 $extString[] = $wordExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                 	= $this->getProperties();
         $properties['acceptedFiles']	= $extString;
         $this->setProperties($properties);
@@ -459,7 +459,6 @@ class ODDragNDrop extends ODContained
                 $extString[] = $exclExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -481,7 +480,6 @@ class ODDragNDrop extends ODContained
                 $extString[] = $pptsExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -503,7 +501,6 @@ class ODDragNDrop extends ODContained
                 $extString[] = $sndsExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -525,7 +522,6 @@ class ODDragNDrop extends ODContained
                 $extString[] = $vdeoExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -547,7 +543,6 @@ class ODDragNDrop extends ODContained
                 $extString[] = $docsExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -795,7 +790,7 @@ class ODDragNDrop extends ODContained
     public function clearAcceptedFiles()
     {
         $properties     = $this->getProperties();
-        $properties['acceptedFiles']    = '';
+        $properties['acceptedFiles']    = [];
         $this->setProperties($properties);
         return $this;
     }
@@ -818,6 +813,7 @@ class ODDragNDrop extends ODContained
      * @param bool $initial
      * @param string $caption
      * @return ODDragNDrop|bool
+     * @throws GotException
      */
     public function addLoadedFile(string $name, string $pathFile, bool $initial = false, string $caption = '')
     {
@@ -827,13 +823,9 @@ class ODDragNDrop extends ODContained
         $loadedPreview  = $properties['loadedPreview'] ?? [];
 
         if (file_exists($pathFile) && !in_array($name, $loadedFiles)) {
-            $uploadPath = $_SERVER['DOCUMENT_ROOT'].'/'.$properties['uploadedFilesPath'] ?? '';
-            $pathInfo   = pathinfo($pathFile);
-            $fileName   = $name;
-
-            $destPath   = $uploadPath.'/'.$fileName;
+            list($destPath, $url, $internal_url) = $this->getCompleteUploadedFilesPath($name);
             if ($pathFile != $destPath) {
-                if(!move_uploaded_file($pathFile,$destPath)) {
+                if(!move_uploaded_file($pathFile, $destPath)) {
                     return false;
                 }
             }
@@ -841,19 +833,21 @@ class ODDragNDrop extends ODContained
             $mime = mime_content_type($destPath);
             $type = strstr($mime, "/", true);
             $size = filesize($destPath);
+
             $item = [
-                'key'       => $name,
-                'pathFile'  => $destPath,
-                'filetype'  => mime_content_type($destPath),
-                'size'      => $size,
-                'caption'   => $caption ?: $name,
-                'loaded'    => $initial,
-                'fileName'  => $fileName,
+                'key'           => $name,
+                'pathFile'      => $destPath,
+                'filetype'      => $mime,
+                'size'          => $size,
+                'caption'       => $caption ?: $name,
+                'loaded'        => $initial,
+                'fileName'      => $name,
+                'internalUrl'   => $internal_url,
             ];
-            $loadedFiles[$name]  = $item;
-            $loadedPaths[]      = '/files/'.$fileName.'?id='.$this->getId();
+            $loadedFiles[$name] = $item;
+            $loadedPaths[]      = $url;
             $item           = [
-                'caption'   => $fileName,
+                'caption'   => $caption ?: $name,
                 'size'      => $size,
                 'width'     => '2em',
                 'key'       => $name,
@@ -948,6 +942,7 @@ class ODDragNDrop extends ODContained
      * affecte le contenu du tableau $loadedFiles à la liste des fichiers chargés
      * @param array $loadedFiles
      * @return ODDragNDrop|bool
+     * @throws GotException
      */
     public function setInitialLoadedFiles(array $loadedFiles)
     {
@@ -1010,6 +1005,29 @@ class ODDragNDrop extends ODContained
         return (string) $properties['uploadedFilesPath'] ?? false;
     }
 
+    /**
+     * @param string $filename
+     * @return array
+     * @throws GotException
+     */
+    public function getCompleteUploadedFilesPath($filename = '') {
+        $properties = $this->getProperties();
+        $id = $this->getId();
+        $folderSuffix = '/' . session_id() . '/' . $id . '/';
+        $folder = $_SERVER['DOCUMENT_ROOT'].'/'.($properties['uploadedFilesPath'] ?? '') . $folderSuffix;
+        error_clear_last();
+        if (file_exists($folder) && !is_dir($folder)) {
+            throw new GotException('Impossible de créer le dossier des fichiers uploadés',0,
+                (error_get_last() ?? 'Un fichier existe deja a son emplacement'));
+        } elseif (@!mkdir($folder, 0777,true)) {
+            throw new GotException('Impossible de créer le dossier des fichiers uploadés', 0, error_get_last());
+        }
+        $completePath = $folder . $filename;
+        $url = '/files/' . $filename. '?id='.$id;
+        $internal_url = '/odnd_files/' . $folderSuffix . $filename;
+        return [$completePath, $url, $internal_url];
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * ***************************************************************************************************
@@ -1046,11 +1064,9 @@ class ODDragNDrop extends ODContained
      */
     public function evtAddFile(ServiceManager $sm, array $params)
     {
-        $properties     = $this->getProperties();
         $uploadInput    = $_FILES[$params['id'].'Input'];
         $uploadFiles    = [];
         $ret            = [];
-        $uploadPath     = $properties['uploadedFilesPath'];
 
         foreach ($uploadInput as $key => $inputs) {
             foreach ($inputs as $ind => $input) {
@@ -1058,7 +1074,6 @@ class ODDragNDrop extends ODContained
                 $uploadFiles[$ind][$key] = $input;
             }
         }
-
         if (!empty($uploadFiles)) {
             if ($this->controlsUploadFiles($uploadFiles)) {
                 $loadedPath     = [];
@@ -1069,16 +1084,19 @@ class ODDragNDrop extends ODContained
                 $redirect = $url->fromRoute('gotDispatch');
 
                 foreach ($uploadFiles as $uploadFile) {
-                    $this->addLoadedFile($uploadFile['name'], $uploadFile['tmp_name'], false, $uploadFile['name']);
-                    $this->saveProperties();
+                    $name = basename($uploadFile['name']);
+                    $hash = sha1(serialize($uploadFile));
+                    $fname = uniqid($hash, true).$name;
+                    $this->addLoadedFile($fname, $uploadFile['tmp_name'], false, $name);
 
                     $properties         = $this->getProperties();
-                    $loadedPath[]       = $properties['loadedPaths'][sizeof($properties['loadedPaths']) - 1];
-                    $loadedPreview[]    = $properties['loadedPreview'][sizeof($properties['loadedPaths']) - 1];
+                    $loadedPath[]       = end($properties['loadedPaths']);
+                    $loadedPreview[]    = end($properties['loadedPreview']);
                     foreach ($loadedPreview as $key => $item) {
                         $loadedPreview[$key]['url'] = $redirect;
                     }
                 }
+                $this->saveProperties();
 
                 $ret[]  = $this->returnAddUploadedFile($params['id'], $loadedPath, $loadedPreview);
                 $ret[]  = self::formatRetour($params['id'], $params['id'], 'nop');

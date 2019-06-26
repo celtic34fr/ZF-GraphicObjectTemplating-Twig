@@ -1,6 +1,6 @@
 <?php
 
-namespace GraphicObjectTemplating\Factory;
+namespace GraphicObjectTemplating\Interfaces;
 
 use Zend\ServiceManager\ServiceManager;
 

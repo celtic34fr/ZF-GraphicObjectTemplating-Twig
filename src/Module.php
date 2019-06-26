@@ -2,7 +2,7 @@
 
 namespace GraphicObjectTemplating;
 
-use GraphicObjectTemplating\Factory\PersistObjectInterface;
+use GraphicObjectTemplating\Interfaces\PersistObjectInterface;
 use GraphicObjectTemplating\OObjects\OObject;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;

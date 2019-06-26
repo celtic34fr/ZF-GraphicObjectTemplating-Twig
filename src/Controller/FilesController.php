@@ -24,21 +24,20 @@ class FilesController extends AbstractActionController
         $response = $this->getResponse();
         /** @var Request $request */
         $request = $this->getRequest();
-        $id = $request->getQuery('id');
-        if ($id) {
-            $fileName = $this->params()->fromRoute('filename');
-            if ($fileName) {
+        $fileName = $this->params()->fromRoute('filename');
+        if ($fileName) {
+            $id = $request->getQuery('id');
+            if ($id) {
                 $dragNDrop = ODDragNDrop::buildObject($id, ODDragNDrop::validateSession());
                 if ($dragNDrop instanceof ODDragNDrop) {
-                    if (true) {
-                        $filesUploaded  = $dragNDrop->getLoadedFiles();
-                        if (array_key_exists($fileName, $filesUploaded)) {
-                            $fileInfo   = $filesUploaded[$fileName];
-                            $mime       = $fileInfo['filetype'];
-
-                            $response->getHeaders()->addHeaderLine('Content-Type', $mime)
-                                                  ->addHeaderLine('X-Accel-Redirect', "/odnd_files/". $fileName);
-                        }
+                    $filesUploaded = $dragNDrop->getLoadedFiles();
+                    if (array_key_exists($fileName, $filesUploaded)) {
+                        $fileInfo = $filesUploaded[$fileName];
+                        $mime = $fileInfo['filetype'];
+                        $url = $fileInfo['internalUrl'];
+                        $response->getHeaders()
+                            ->addHeaderLine('Content-Type', $mime)
+                            ->addHeaderLine('X-Accel-Redirect',  $url);
                     } else {
                         $httpCode = 403;
                     }
