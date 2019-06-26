@@ -168,6 +168,7 @@ class ODDragNDrop extends ODContained
             }
             $this->setDisplay(self::DISPLAY_BLOCK);
             $this->enable();
+            $this->setClassName(self::class);
         }
 
         $this->saveProperties();
@@ -429,7 +430,7 @@ class ODDragNDrop extends ODContained
     public function enaWordFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $wordExts   = $this->getWordExtensionConstant();
         foreach ($wordExts as $wordExt) {
             if (!in_array($wordExt, $extString)) {
@@ -451,7 +452,7 @@ class ODDragNDrop extends ODContained
     public function enaExcelFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $exclExts   = $this->getExcelExtensionConstant();
         foreach ($exclExts as $exclExt) {
             if (!in_array($exclExt, $extString)) {
@@ -473,7 +474,7 @@ class ODDragNDrop extends ODContained
     public function enaPresentationFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $pptsExts   = $this->getPresentationExtensionConstant();
         foreach ($pptsExts as $pptsExt) {
             if (!in_array($pptsExt, $extString)) {
@@ -495,7 +496,7 @@ class ODDragNDrop extends ODContained
     public function enaSoundFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $sndsExts   = $this->getSoundExtensionConstant();
         foreach ($sndsExts as $sndsExt) {
             if (!in_array($sndsExt, $extString)) {
@@ -517,7 +518,7 @@ class ODDragNDrop extends ODContained
     public function enaVideoFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $vdeoExts   = $this->getVideoExtensionConstant();
         foreach ($vdeoExts as $vdeoExt) {
             if (!in_array($vdeoExt, $extString)) {
@@ -539,7 +540,7 @@ class ODDragNDrop extends ODContained
     public function enaDocumentFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $docsExts   = $this->getDocumentExtensionConstant();
         foreach ($docsExts as $docsExt) {
             if (!in_array($docsExt, $extString)) {
@@ -561,7 +562,7 @@ class ODDragNDrop extends ODContained
     public function enaArchiveFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $archExts   = $this->getArchiveExtensionConstant();
         foreach ($archExts as $archExt) {
             if (!in_array($archExt, $extString)) {
@@ -582,14 +583,13 @@ class ODDragNDrop extends ODContained
     public function enaAllTypeFiles()
     {
         $properties = $this->getProperties();
-        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : '';
+        $extString  = (!empty($properties['acceptedFiles'])) ? $properties['acceptedFiles'] : [];
         $allExts    = $this->getAllExtensionConstant();
         foreach ($allExts as $allExt) {
             if (!in_array($allExt, $extString)) {
                 $extString[] = $allExt;
             }
         }
-        $extString                      = substr($extString, 1);
         $properties                     = $this->getProperties();
         $properties['acceptedFiles']    = $extString;
         $this->setProperties($properties);
@@ -1047,7 +1047,7 @@ class ODDragNDrop extends ODContained
     public function evtAddFile(ServiceManager $sm, array $params)
     {
         $properties     = $this->getProperties();
-        $uploadInput    = $_FILES['uploadInput'];
+        $uploadInput    = $_FILES[$params['id'].'Input'];
         $uploadFiles    = [];
         $ret            = [];
         $uploadPath     = $properties['uploadedFilesPath'];
