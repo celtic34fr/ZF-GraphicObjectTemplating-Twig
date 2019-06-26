@@ -25,7 +25,7 @@
             theme: '{{ objet.theme }}',
 			previewFileIcon : '<img src="../graphicobjecttemplating/icons/unknown.svg" style="width: 1.5em;"/>',
             initialPreviewAsData: true,
-        {% if objet.initialPreview is not empty %}
+        {% if objet.loadedFiles is not empty %}
 			initialPreview: {{objet.loadedPaths|json_encode()|raw}},
             initialPreviewConfig: {{ objet.loadedPreview|json_encode()|raw}},
         {% endif %}

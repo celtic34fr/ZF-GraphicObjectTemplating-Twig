@@ -825,8 +825,14 @@ class ODDragNDrop extends ODContained
         if (file_exists($pathFile) && !in_array($name, $loadedFiles)) {
             list($destPath, $url, $internal_url) = $this->getCompleteUploadedFilesPath($name);
             if ($pathFile != $destPath) {
-                if(!move_uploaded_file($pathFile, $destPath)) {
-                    return false;
+                if ($initial) {
+                    if(!copy($pathFile,$destPath)) {
+                        return false;
+                    }
+                } else {
+                    if(!move_uploaded_file($pathFile,$destPath)) {
+                        return false;
+                    }
                 }
             }
 
