@@ -33,7 +33,7 @@ class GotException extends \Exception
         if ($previous != null) {
             $ret['previous'] = (string) $previous;
         }
-        return $ret;
+        return json_encode($ret);
     }
 
     public function setEvnMode(string $mode) {

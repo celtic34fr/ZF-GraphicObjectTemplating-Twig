@@ -1021,9 +1021,11 @@ class ODDragNDrop extends ODContained
         $folderSuffix = '/' . session_id() . '/' . $id . '/';
         $folder = $_SERVER['DOCUMENT_ROOT'].'/'.($properties['uploadedFilesPath'] ?? '') . $folderSuffix;
         error_clear_last();
-        if (file_exists($folder) && !is_dir($folder)) {
-            throw new GotException('Impossible de créer le dossier des fichiers uploadés',0,
-                (error_get_last() ?? 'Un fichier existe deja a son emplacement'));
+        if (file_exists($folder)) {
+            if (!is_dir($folder)) {
+                throw new GotException('Impossible de créer le dossier des fichiers uploadés', 0,
+                    (error_get_last() ?? 'Un fichier existe deja a son emplacement'));
+            }
         } elseif (@!mkdir($folder, 0777,true)) {
             throw new GotException('Impossible de créer le dossier des fichiers uploadés', 0, error_get_last());
         }

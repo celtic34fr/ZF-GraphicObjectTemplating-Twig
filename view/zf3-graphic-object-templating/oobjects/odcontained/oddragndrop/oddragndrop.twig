@@ -9,7 +9,7 @@
     <input type="file" id="{{ objet.id }}Input" name="{{ objet.id }}Input[]" {% if objet.multiple %} multiple {% endif %}>
 </div>
 
-{#<pre>{{ dump(objet.acceptedFiles) }}</pre>#}
+<pre>{{ dump(objet.loadedFiles) }}</pre>
 
 <script>
     $(document).ready(function (evt) {
@@ -38,6 +38,33 @@
             allowedFileExtensions: {{ objet.acceptedFiles|json_encode()|raw }},
             browseOnZoneClick: {% if objet.clickOnZone %}true{% else %}false{% endif %},
             overwriteInitial: {% if objet.overwriteInitial %}true{% else %}false{% endif %},
+            preferIconicPreview: true,
+            previewFileIconSettings: {
+                csv: '<img src="/graphicobjecttemplating/icons/csv.svg" style="width: 2em;"/>',
+                doc: '<img src="/graphicobjecttemplating/icons/doc.svg" style="width: 2em;"/>',
+                docx: '<img src="/graphicobjecttemplating/icons/docx.svg" style="width: 2em;"/>',
+                epub: '<img src="/graphicobjecttemplating/icons/epub.svg" style="width: 2em;"/>',
+                gz: '<img src="/graphicobjecttemplating/icons/gz.svg" style="width: 2em;"/>',
+                mkv: '<img src="/graphicobjecttemplating/icons/mkv.svg" style="width: 2em;"/>',
+                mp3: '<img src="/graphicobjecttemplating/icons/mp3.svg" style="width: 2em;"/>',
+                mp4: '<img src="/graphicobjecttemplating/icons/mp4.svg" style="width: 2em;"/>',
+                odp: '<img src="/graphicobjecttemplating/icons/odp.svg" style="width: 2em;"/>',
+                ods: '<img src="/graphicobjecttemplating/icons/ods.svg" style="width: 2em;"/>',
+                odt: '<img src="/graphicobjecttemplating/icons/odt.svg" style="width: 2em;"/>',
+                ogg: '<img src="/graphicobjecttemplating/icons/ogg.svg" style="width: 2em;"/>',
+                ogv: '<img src="/graphicobjecttemplating/icons/ogv.svg" style="width: 2em;"/>',
+                pdf: '<img src="/graphicobjecttemplating/icons/pdf.svg" style="width: 2em;"/>',
+                ppt: '<img src="/graphicobjecttemplating/icons/ppt.svg" style="width: 2em;"/>',
+                pptx: '<img src="/graphicobjecttemplating/icons/pptx.svg" style="width: 2em;"/>',
+                rtf: '<img src="/graphicobjecttemplating/icons/rtf.svg" style="width: 2em;"/>',
+                tar: '<img src="/graphicobjecttemplating/icons/tar.svg" style="width: 2em;"/>',
+                txt: '<img src="/graphicobjecttemplating/icons/txt.svg" style="width: 2em;"/>',
+                wav: '<img src="/graphicobjecttemplating/icons/wav.svg" style="width: 2em;"/>',
+                xls: '<img src="/graphicobjecttemplating/icons/xls.svg" style="width: 2em;"/>',
+                xlsx: '<img src="/graphicobjecttemplating/icons/xlsx.svg" style="width: 2em;"/>',
+                zip: '<img src="/graphicobjecttemplating/icons/zip.svg" style="width: 2em;"/>'
+
+            },
         });
     });
 </script>
