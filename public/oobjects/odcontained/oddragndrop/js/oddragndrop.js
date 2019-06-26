@@ -17,10 +17,10 @@ oddragndrop.prototype = {
 				val 	= null;
 				break;
 			default:
-				let eltSelected = $("#"+this.id+" .file-preview .file-preview-thumbnails .file-preview-frame"+
-					" file-thumbnail-footer .file-footer-caption .file-caption-info");
+				let eltSelected = $("#"+this.id+" .file-preview .file-preview-thumbnails .file-preview-frame.kv-preview-thumb"+
+					" .file-thumbnail-footer .file-footer-caption .file-caption-info");
 				$.each(eltSelected, function (i, selected) {
-					val[i]	= selected.text();
+					val[i]	= $(selected).text();
 				});
 		}
 		return {id: this.id, value : val, event : evt, object : this.objet};
