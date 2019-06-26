@@ -88,7 +88,7 @@ Dans le cadre d'un projet Zend Framework, il vous faut en premier lieu créer le
 On doit également modifier la définition de votre hôte virtuel définissant l'accès à votre site, votre application. Ceci va passer par la déclaration, sous *nginx*, d'un alias pointant sur le répertoire que vous venez de créer:
 
     ...
-	location /fichiers/ {
+	location ^~ /odnd_files/ {
 		alias /path_to_your_project/data/uploadedFiles/;
 		internal;
 	}

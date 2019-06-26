@@ -37,7 +37,7 @@ class FilesController extends AbstractActionController
                             $mime       = $fileInfo['filetype'];
 
                             $response->getHeaders()->addHeaderLine('Content-Type', $mime)
-                                                  ->addHeaderLine('X-Accel-Redirect', "/fichiers/". $fileName);
+                                                  ->addHeaderLine('X-Accel-Redirect', "/odnd_files/". $fileName);
                         }
                     } else {
                         $httpCode = 403;
