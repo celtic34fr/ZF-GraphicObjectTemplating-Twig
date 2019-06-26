@@ -825,19 +825,18 @@ class ODDragNDrop extends ODContained
         if (file_exists($pathFile) && !in_array($name, $loadedFiles)) {
             list($destPath, $url, $internal_url) = $this->getCompleteUploadedFilesPath($name);
             if ($pathFile != $destPath) {
+                error_clear_last();
                 if ($initial) {
-                    if(!copy($pathFile,$destPath)) {
-                        return false;
-                    }
+                    @copy($pathFile,$destPath);
                 } else {
-                    if(!move_uploaded_file($pathFile,$destPath)) {
-                        return false;
-                    }
+                    @move_uploaded_file($pathFile,$destPath);
+                }
+                if ($error = error_get_last()) {
+                    throw new GotException('Impossible de deplacer le fichier dans le dossier des uploads', 0, $error);
                 }
             }
 
             $mime = mime_content_type($destPath);
-            $type = strstr($mime, "/", true);
             $size = filesize($destPath);
 
             $item = [
@@ -857,7 +856,7 @@ class ODDragNDrop extends ODContained
                 'size'      => $size,
                 'width'     => '2em',
                 'key'       => $name,
-                'type'      => $type,
+                'filetype'  => $mime,
             ];
             $loadedPreview[]    = $item;
 
