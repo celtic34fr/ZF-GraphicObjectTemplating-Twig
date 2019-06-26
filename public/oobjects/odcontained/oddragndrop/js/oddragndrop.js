@@ -11,17 +11,17 @@ function oddragndrop(obj) {
 
 oddragndrop.prototype = {
 	getData: function (evt) {
-		var val	= '';
-		switch (evt) {
-			case 'upload':
-			case 'delete':
+		let val	= {};
+		switch (true) {
+			case (evt === 'upload' || evt === 'delete'):
 				val 	= null;
+				break;
 			default:
-				var eltSelected = $("#"+this.id+" .file-preview .file-preview-thumbnails .file-preview-frame"+
-				" file-thumbnail-footer .file-footer-caption .file-caption-info");
+				let eltSelected = $("#"+this.id+" .file-preview .file-preview-thumbnails .file-preview-frame"+
+					" file-thumbnail-footer .file-footer-caption .file-caption-info");
 				$.each(eltSelected, function (i, selected) {
 					val[i]	= selected.text();
-				})
+				});
 		}
 		return {id: this.id, value : val, event : evt, object : this.objet};
 	},
