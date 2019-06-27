@@ -25,6 +25,9 @@ data/DoctrineORMModule/cache/
 
 view/zf3-graphic-object-templating/oobjects/odcontained/odmenu/odmenu_v1.twig
 
+Documentation/OldObject
+'Documentation/suivi des dysfocntionnements.ods'
+
 phpdox.xml
 docs/
 build/
