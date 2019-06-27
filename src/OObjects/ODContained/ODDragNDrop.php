@@ -852,12 +852,14 @@ class ODDragNDrop extends ODContained
             ];
             $loadedFiles[$name] = $item;
             $loadedPaths[]      = $url;
+            $type               = $this->getTypeFromMime($mime);
             $item           = [
                 'caption'   => $caption ?: $name,
                 'size'      => $size,
                 'width'     => '2em',
                 'key'       => $name,
                 'filetype'  => $mime,
+                'type'      => $type,
             ];
             $loadedPreview[]    = $item;
 
@@ -1605,5 +1607,46 @@ class ODDragNDrop extends ODContained
         }
 
         return $check;
+    }
+
+    private function getTypeFromMime(string $mime)
+    {
+        $type   = '';
+        $videos = $this->getVideoExtensionConstant();
+        $texts  = [self::EXT_WORD_TXT, self::EXT_WORD_RTF];
+        $office = array_merge($this->getWordExtensionConstant(), $this->getExcelExtensionConstant(),
+            $this->getPresentationExtensionConstant());
+        $archiv = $this->getArchiveExtensionConstant();
+        $sounds = $this->getSoundExtensionConstant();
+        switch (true) {
+            case (strpos($mime, 'image') === 0):
+                $type   = 'image';
+                break;
+            case (strtolower(self::getExtString($mime)) === self::EXT_DOCS_PDF):
+                $type   = 'pdf';
+                break;
+            case (strtolower(self::getExtString($mime)) === self::EXT_DOCS_EPUB):
+                $type   = 'epub';
+                break;
+            case (strtolower(self::getExtString($mime)) === self::EXT_DOCS_HTML):
+                $type   = 'html';
+                break;
+            case (in_array(self::getExtString($mime), $texts)):
+                $type = 'text';
+                break;
+            case (in_array(self::getExtString($mime), $office)):
+                $type = 'office';
+                break;
+            case (in_array(self::getExtString($mime), $videos)):
+                $type = 'video';
+                break;
+            case (in_array(self::getExtString($mime), $archiv)):
+                $type = 'zip';
+                break;
+            case (in_array(self::getExtString($mime), $sounds)):
+                $type = 'sound';
+                break;
+        }
+        return $type;
     }
 }
