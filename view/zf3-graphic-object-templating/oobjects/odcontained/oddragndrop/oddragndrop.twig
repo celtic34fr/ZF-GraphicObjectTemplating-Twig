@@ -23,7 +23,7 @@
             uploadUrl: urlGotCallback,
             uploadExtraData: object.getData('upload'),
             theme: '{{ objet.theme }}',
-			previewFileIcon : '<img src="../graphicobjecttemplating/icons/unknown.svg" style="width: 1.5em;"/>',
+			previewFileIcon : '<img src="/graphicobjecttemplating/icons/unknow.svg" style="width: 2em;"/>',
             initialPreviewAsData: true,
         {% if objet.loadedFiles is not empty %}
 			initialPreview: {{objet.loadedPaths|json_encode()|raw}},
@@ -38,7 +38,8 @@
             allowedFileExtensions: {{ objet.acceptedFiles|json_encode()|raw }},
             browseOnZoneClick: {% if objet.clickOnZone %}true{% else %}false{% endif %},
             overwriteInitial: {% if objet.overwriteInitial %}true{% else %}false{% endif %},
-            preferIconicPreview: true,
+            allowedPreviewTypes: ['image', 'html', 'text'],
+            preferIconicPreview: false,
             previewFileIconSettings: {
                 csv: '<img src="/graphicobjecttemplating/icons/csv.svg" style="width: 2em;"/>',
                 doc: '<img src="/graphicobjecttemplating/icons/doc.svg" style="width: 2em;"/>',

@@ -146,6 +146,7 @@ class ODDragNDrop extends ODContained
 
     const EXT_DOCS_PDF    = 'pdf';
     const EXT_DOCS_EPUB   = 'epub';
+    const EXT_DOCS_HTML   = 'html';
 
     const EXT_ARCH_GZ     = 'gz';
     const EXT_ARCH_ZIP    = 'zip';
@@ -1050,6 +1051,7 @@ class ODDragNDrop extends ODContained
     public function dispatchEvents(ServiceManager $sm, $params)
     {
         switch ($params['event']) {
+
             case 'upload':
                 return $this->evtAddFile($sm, $params);
                 break;
