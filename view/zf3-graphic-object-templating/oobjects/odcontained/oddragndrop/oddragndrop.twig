@@ -66,6 +66,8 @@
                 zip: '<img src="/graphicobjecttemplating/icons/zip.svg" style="width: 2em;"/>'
 
             },
+        }).on("filebatchselected", function(event, files) {
+            $("#{{ objet.id  }}Input").fileinput("upload");
         });
     });
 </script>
