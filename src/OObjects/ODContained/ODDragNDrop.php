@@ -876,6 +876,7 @@ class ODDragNDrop extends ODContained
      * supprime un fichier stocké sur disque de la liste des fichiers chargés
      * @param string $name
      * @return ODDragNDrop|bool
+     * @throws GotException
      */
     public function rmLoadedFile(string $name)
     {
@@ -883,7 +884,6 @@ class ODDragNDrop extends ODContained
         $loadedFiles    = $properties['loadedFiles'] ?? [];
         $loadedPaths    = $properties['loadedPaths'] ?? [];
         $loadedPreview  = $properties['loadedPreview'] ?? [];
-        $uploadedPath   = $properties['uploadedFilesPath'];;
 
         if ($loadedFiles && array_key_exists($name, $loadedFiles)) {
             $infoFile   = $loadedFiles[$name];
@@ -893,7 +893,7 @@ class ODDragNDrop extends ODContained
                 unset($loadedPaths[$key]);
                 unset($loadedPreview[$key]);
             }
-            $filePath   = $_SERVER['DOCUMENT_ROOT'].'/'.$uploadedPath.'/'.$name;
+            $filePath   = $infoFile['pathFile'];
 
             if(file_exists($filePath)) {
                 // On efface le fichier
@@ -902,6 +902,13 @@ class ODDragNDrop extends ODContained
                 $properties['loadedFiles']      = $loadedFiles;
                 $properties['loadedPaths']      = $loadedPaths;
                 $properties['loadedPreview']    = $loadedPreview;
+
+                if (empty($loadedFiles)) {
+                    $folder = substr($filePath, 0, strrpos($filePath, '/'));
+                    if (!rmdir($folder)) {
+                        throw new GotException('impossible de supprimer le répertoire '.$folder);
+                    }
+                }
                 $this->setProperties($properties);
                 return $this;
             }
@@ -1021,7 +1028,7 @@ class ODDragNDrop extends ODContained
     public function getCompleteUploadedFilesPath($filename = '') {
         $properties = $this->getProperties();
         $id = $this->getId();
-        $folderSuffix = '/' . session_id() . '/' . $id . '/';
+        $folderSuffix = '/' . session_id() . '-' . $id . '/';
         $folder = $_SERVER['DOCUMENT_ROOT'].'/'.($properties['uploadedFilesPath'] ?? '') . $folderSuffix;
         error_clear_last();
         if (file_exists($folder)) {
