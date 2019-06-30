@@ -22,6 +22,7 @@
 			deleteExtraData: object.getData('delete'),
             uploadUrl: urlGotCallback,
             uploadExtraData: object.getData('upload'),
+            uploadAsync: false,
             theme: '{{ objet.theme }}',
 			previewFileIcon : '<img src="/graphicobjecttemplating/icons/unknow.svg" style="width: 2em;"/>',
             initialPreviewAsData: true,
@@ -68,6 +69,12 @@
             },
         }).on("filebatchselected", function(event, files) {
             $("#{{ objet.id  }}Input").fileinput("upload");
+        }).on('filebeforedelete', function(event, key, data) {
+            return !window.confirm('Êtes-vous bien sûr de supprimer ce fichier?');
+        }).on('filebatchuploadsuccess', function(event, data) {
+            let localData   = object.getData('uploadFile');
+            localData.files = data.files;
+            invokeAjax(localData, object.id, 'uploadFile', event );
         });
     });
 </script>

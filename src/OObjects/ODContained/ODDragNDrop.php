@@ -78,6 +78,13 @@ use Zend\ServiceManager\ServiceManager;
  *                          : affecte après vérification le chemin $tempFolder comme répertoire de sauvegarde temporaire
  *                              (de travail) des fichiers téléchargés
  * getuploadedFilesPath()   : restitue le chemin du répertoire de sauvegarde temporaire des fichiers
+ * getCompleteUploadedFilesPath($filename = '')
+ * evtUploadFile(string $class, string $method, bool $stopEvent = false)
+ * getUploadFile()
+ * disUploadFile()
+ * evtDeleteFile(string $class, string $method, bool $stopEvent = false)
+ * getDeleteFile()
+ * disDeleteFile()
  *
  * méthodes privées de la classe
  * ------------------------------
@@ -1045,6 +1052,69 @@ class ODDragNDrop extends ODContained
         return [$completePath, $url, $internal_url];
     }
 
+    /**
+     * @param string $class
+     * @param string $method
+     * @param bool $stopEvent
+     * @return bool|ODDragNDrop
+     */
+    public function evtUploadFile(string $class, string $method, bool $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('uploadFile', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|array
+     */
+    public function getUploadFile()
+    {
+        return $this->getEvent('uploadFile');
+    }
+
+    /**
+     * @return bool|ODDragNDrop
+     */
+    public function disUploadFile()
+    {
+        return $this->disEvent('uploadFile');
+
+    }
+
+    /**
+     * @param string $class
+     * @param string $method
+     * @param bool $stopEvent
+     * @return bool|ODDragNDrop
+     */
+    public function evtDeleteFile(string $class, string $method, bool $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('deleteFile', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDeleteFile()
+    {
+        return $this->getEvent('deleteFile');
+    }
+
+    /**
+     * @return bool|ODDragNDrop
+     */
+    public function disDeleteFile()
+    {
+        return $this->disEvent('deleteFile');
+
+    }
+
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * ***************************************************************************************************
@@ -1059,17 +1129,37 @@ class ODDragNDrop extends ODContained
      */
     public function dispatchEvents(ServiceManager $sm, $params)
     {
+        $ret    = [];
+        $event  = false;
         switch ($params['event']) {
 
             case 'upload':
-                return $this->evtAddFile($sm, $params);
+                $ret    = array_merge($ret, $this->evtAddFile($sm, $params));
                 break;
             case 'delete':
-                return $this->evtRmFile($sm, $params);
+                $ret    = array_merge($ret, $this->evtRmFile($sm, $params));
+                break;
+            case 'uploadFile':
+                $event  = $this->getUploadFile();
+                break;
+            case 'deleteFile':
+                $event  = $this->getDeleteFile();
                 break;
             default:
                 throw new Exception("Une erreur est survenue, l'évènement ".$params['event'].' ne peut être traité');
         }
+        if ($event !== false) {
+            $class      = (array_key_exists('class', $event)) ? $event['class'] : "";
+            $method     = (array_key_exists('method', $event)) ? $event['method'] : "";
+            if (!empty($class) && !empty($method)) {
+                $callObj = new $class();
+                $retCallObj = call_user_func_array([$callObj, $method], [$sm, $params]);
+                foreach ($retCallObj as $item) {
+                    array_push($ret, $item);
+                }
+            }
+        }
+        return $ret;
     }
 
     /**
