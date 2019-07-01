@@ -71,10 +71,8 @@
             $("#{{ objet.id  }}Input").fileinput("upload");
         }).on('filebeforedelete', function(event, key, data) {
             return !window.confirm('Êtes-vous bien sûr de supprimer ce fichier?');
-        }).on('filebatchuploadcomplete', function(event, preview, config, tags, extraData) {
-            let localData       = object.getData('uploadFile');
-            localData.config    = config;
-            invokeAjax(localData, object.id, 'uploadFile', undefined );
+        }).on('filebatchuploadcomplete', function(event, files, extra) {
+            invokeAjax(object.getData('uploadFile'), object.id, 'uploadFile', undefined );
         }).on('filedeleted', function (event, key, jqXHR, data) {
             let localData   = object.getData('deleteFile');
             localData.key   = key;

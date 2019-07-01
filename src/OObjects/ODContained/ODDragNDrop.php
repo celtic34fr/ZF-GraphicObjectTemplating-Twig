@@ -1121,6 +1121,43 @@ class ODDragNDrop extends ODContained
 
     }
 
+    /**
+     * @return array
+     */
+    public function getUploadedFiles()
+    {
+        $properties     = $this->getProperties();
+        $loadedFiles    = $properties['loadedFiles'];
+        $names          = [];
+
+        foreach ($loadedFiles as $name => $infos) {
+            if (!$infos['loaded']) { $names[]   = $name; }
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param array $names
+     * @return ODDragNDrop|bool
+     */
+    public function updateLoadedFiles(array $names)
+    {
+        /** validation de l'existance de tous les noms */
+        $properties     = $this->getProperties();
+        $loadedFiles    = $properties['loadedFiles'];
+
+        foreach ($names as $name) {
+            if (!array_key_exists($name, $loadedFiles)) { return false; }
+        }
+
+        foreach ($names as $name) {
+            $loadedFiles[$name]['loaded'] = true;
+        }
+        $properties['loadedFiles']  = $loadedFiles;
+        $this->setProperties($properties);
+        return $this;
+    }
 
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
@@ -1147,7 +1184,8 @@ class ODDragNDrop extends ODContained
                 $ret    = array_merge($ret, $this->evtRmFile($sm, $params));
                 break;
             case 'uploadFile':
-                $event  = $this->getUploadFile();
+                $loaded = $this->getUploadedFiles();
+                if ($loaded) { $event   = $this->getUploadFile(); }
                 break;
             case 'deleteFile':
                 $event  = $this->getDeleteFile();
