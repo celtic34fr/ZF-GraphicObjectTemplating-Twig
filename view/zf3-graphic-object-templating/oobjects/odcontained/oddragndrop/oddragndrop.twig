@@ -74,9 +74,7 @@
         }).on('filebatchuploadcomplete', function(event, files, extra) {
             invokeAjax(object.getData('uploadFile'), object.id, 'uploadFile', undefined );
         }).on('filedeleted', function (event, key, jqXHR, data) {
-            let localData   = object.getData('deleteFile');
-            localData.key   = key;
-            invokeAjax(localData, object.id, 'deleteFile', undefined);
+            invokeAjax(object.getData('deleteFile'), object.id, 'deleteFile', undefined);
         });
     });
 </script>

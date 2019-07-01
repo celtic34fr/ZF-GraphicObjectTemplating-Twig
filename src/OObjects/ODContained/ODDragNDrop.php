@@ -85,6 +85,10 @@ use Zend\ServiceManager\ServiceManager;
  * evtDeleteFile(string $class, string $method, bool $stopEvent = false)
  * getDeleteFile()
  * disDeleteFile()
+ * getUploadedFiles()
+ * updateLoadedFiles(array $names)
+ * getDeletedFiles()
+ * rmDeletedFiles()
  *
  * méthodes de gestion de retour de callback
  * -----------------------------------------
@@ -916,6 +920,8 @@ class ODDragNDrop extends ODContained
                 $properties['loadedFiles']      = $loadedFiles;
                 $properties['loadedPaths']      = $loadedPaths;
                 $properties['loadedPreview']    = $loadedPreview;
+                if (!array_key_exists('deleteFiles', $properties)) { $properties['deletedFiles'] = []; }
+                $properties['deletedFiles'][$name]  = $infoFile;
 
                 if (empty($loadedFiles)) {
                     $folder = substr($filePath, 0, strrpos($filePath, '/'));
@@ -1159,6 +1165,29 @@ class ODDragNDrop extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|array
+     */
+    public function getDeletedFiles()
+    {
+        $properties     = $this->getProperties();
+        return (string) $properties['deletedFiles'] ?? false;
+    }
+
+    /**
+     * @return ODDragNDrop|bool
+     */
+    public function rmDeletedFiles()
+    {
+        $properties     = $this->getProperties();
+        if (array_key_exists('deleteFiles', $properties)) {
+            unset($properties['deletedFiles']);
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
     /** **************************************************************************************************
      * méthodes de gestion de retour de callback                                                         *
      * ***************************************************************************************************
@@ -1185,15 +1214,28 @@ class ODDragNDrop extends ODContained
                 break;
             case 'uploadFile':
                 $loaded = $this->getUploadedFiles();
-                if ($loaded) { $event   = $this->getUploadFile(); }
+                if ($loaded) {
+                    /** mise à jour automatique du ou des fichiers téléchargés */
+                    $this->updateLoadedFiles($loaded);
+                    /** récupération de la callback associé */
+                    $event   = $this->getUploadFile();
+                }
                 break;
             case 'deleteFile':
-                $event  = $this->getDeleteFile();
+                $deleted    = $this->getDeletedFiles();
+                if ($deleted) {
+                    $event  = $this->getDeleteFile();
+                    $params['deleted']  = $deleted;
+                    $this->rmDeletedFiles();
+                }
                 break;
             default:
                 throw new Exception("Une erreur est survenue, l'évènement ".$params['event'].' ne peut être traité');
         }
-        if ($event !== false) {
+        /** sauvegarde de l'objet en cas de modification */
+        $this->saveProperties();
+
+        if ($event !== false) { // s'il y a une callback à exécuter
             $class      = (array_key_exists('class', $event)) ? $event['class'] : "";
             $method     = (array_key_exists('method', $event)) ? $event['method'] : "";
             if (!empty($class) && !empty($method)) {
