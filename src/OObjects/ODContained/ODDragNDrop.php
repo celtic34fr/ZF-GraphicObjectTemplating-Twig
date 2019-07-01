@@ -86,6 +86,13 @@ use Zend\ServiceManager\ServiceManager;
  * getDeleteFile()
  * disDeleteFile()
  *
+ * méthodes de gestion de retour de callback
+ * -----------------------------------------
+ * dispatchEvents(ServiceManager $sm, $params)
+ * evtAddFile(ServiceManager $sm, array $params)
+ * evtRmFile(ServiceManager $sm, array $params)
+ * returnAddUploadedFile(string $objId, array $previewPath, array $previewConfig)
+ *
  * méthodes privées de la classe
  * ------------------------------
  * getAllExtensionConstant()                : récupération de l'ensemble des constantes de définition des extensions de
@@ -1239,6 +1246,12 @@ class ODDragNDrop extends ODContained
         return $ret;
     }
 
+    /**
+     * @param string $objId
+     * @param array $previewPath
+     * @param array $previewConfig
+     * @return array
+     */
     public function returnAddUploadedFile(string $objId, array $previewPath, array $previewConfig)
     {
         $item                           = [];

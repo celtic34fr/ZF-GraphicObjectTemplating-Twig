@@ -10,7 +10,7 @@
 
 function invokeAjax(datas, idSource, event, e) {
     // vérification propagation événement
-    if (event !== undefined) {
+    if (event !== undefined && e !== undefined) {
         let dataKey   = event+'-stopevt';
         let stopEvent = $('#'+idSource).data(dataKey);
         if (stopEvent === 'OUI' || stopEvent === undefined) {
