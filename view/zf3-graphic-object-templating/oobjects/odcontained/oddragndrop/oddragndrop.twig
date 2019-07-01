@@ -71,11 +71,11 @@
             $("#{{ objet.id  }}Input").fileinput("upload");
         }).on('filebeforedelete', function(event, key, data) {
             return !window.confirm('Êtes-vous bien sûr de supprimer ce fichier?');
-        }).on('filebatchuploadsuccess', function(event, data) {
-            let localData   = object.getData('uploadFile');
-            localData.files = data.files;
+        }).on('filebatchuploadcomplete', function(event, preview, config, tags, extraData) {
+            let localData       = object.getData('uploadFile');
+            localData.config    = config;
             invokeAjax(localData, object.id, 'uploadFile', undefined );
-        }).on('filefiledeleted', function (event, key, jqXHR, data) {
+        }).on('filedeleted', function (event, key, jqXHR, data) {
             let localData   = object.getData('deleteFile');
             localData.key   = key;
             invokeAjax(localData, object.id, 'deleteFile', undefined);
