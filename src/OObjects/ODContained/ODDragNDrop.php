@@ -966,9 +966,9 @@ class ODDragNDrop extends ODContained
     {
         $properties  = $this->getProperties();
         $loadedFiles = $properties['loadedFiles'];
-        $key = array_search($name, array_column($loadedFiles, 'name'));
+        $key = array_search($name, array_column($loadedFiles, 'key'));
         if ($key !== false) {
-            return $loadedFiles[$key];
+            return $loadedFiles[$name];
         }
         return false;
     }
@@ -1213,7 +1213,7 @@ class ODDragNDrop extends ODContained
                 $ret    = array_merge($ret, $this->evtRmFile($sm, $params));
                 break;
             case 'uploadFile':
-                $loaded = $this->getUploadedFiles();
+                $loaded = $params['value'];
                 if ($loaded) {
                     /** mise à jour automatique du ou des fichiers téléchargés */
                     $this->updateLoadedFiles($loaded);
