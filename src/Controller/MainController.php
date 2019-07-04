@@ -51,13 +51,8 @@ class MainController extends AbstractActionController
         $gs      = $this->serviceManager->get('graphic.object.templating.services');
 
         if ($request->isPost()) { // récupération des paramètres d'appel
-            $paramsPost = $request->getPost()->toArray();
-            $params     = [];
-            foreach ($paramsPost as $cle => $value) {
-                // alimentation du tableau $params avec les paramètres d'appel
-                $value = $this->trimQuote($value);
-                $params[$cle] = $value;
-            }
+            $params = $request->getPost()->toArray();
+
 
             if (!empty($params['id']) && (null !== $params['id'])) {
                 $sessionObj = OObject::validateSession();
@@ -278,25 +273,6 @@ class MainController extends AbstractActionController
             $objects = $this->updateFieldObject($formDatas, $objects);
         }
         return [$formDatas, $objects];
-    }
-
-    /**
-     * méthode visant à supprimer les simple apostrophes (quote) dans une chaîne de caractères
-     * placés au débuit et à la fin
-     *
-     * @param $var
-     * @param string $char
-     * @return bool|string
-     */
-    private function trimQuote($var, $char = "'") {
-        if (!empty($var)) {
-            if ($var[0] === $char) { $var = substr($var, 1); }
-            if ($var[strlen($var) - 1] === $char) {
-                $var = substr($var, 0, - 1);
-            }
-            return $var;
-        }
-        return '';
     }
 
     /**

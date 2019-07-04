@@ -1000,13 +1000,15 @@ class OSForm extends OSDiv
         $valid      = true;
         $rc         = [];
 
-        foreach ($fields as $key => $field) {
+        foreach ($fields as $key => $required) {
             if (array_key_exists($key, $formDatas)) {
-                $formDatas[$key] = strval($formDatas[$key]);
-                if ($field) { $valid = $valid && (strlen($formDatas[$key]) > 0); }
+                if ($required) {
+                    $len = is_array($formDatas[$key])?count($formDatas[$key]):strlen($formDatas[$key]);
+                    $valid = $valid && ($len > 0);
+                }
                 unset($formDatas[$key]);
             } else {
-                if ($field) {
+                if ($required) {
                     $rc['valid']    = 'NF';
                     $rc['msg']      = 'Champs non trouvé '.$key. 'dans le tableau';
                     break;
