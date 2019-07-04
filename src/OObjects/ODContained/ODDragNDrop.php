@@ -1171,7 +1171,7 @@ class ODDragNDrop extends ODContained
     public function getDeletedFiles()
     {
         $properties     = $this->getProperties();
-        return (string) $properties['deletedFiles'] ?? false;
+        return $properties['deletedFiles'] ?? false;
     }
 
     /**
@@ -1250,7 +1250,7 @@ class ODDragNDrop extends ODContained
     }
 
     /**
-     * méthode traitant l'évènement de l'ajout d'un fichier à la lise des fichiers chargés (vaec les différents impacts
+     * méthode traitant l'évènement de l'ajout d'un fichier à la liste des fichiers chargés (avec les différents impacts
      * sur l'objet)
      * @param ServiceManager $sm
      * @param array $params
