@@ -22,22 +22,22 @@ Les attributs de bases
     width         => largeur en directive CSS de l'objet
     height        => hauteur de l'objet en directive CSS de l'objet
 
-    autoCenter    => drapeu d'activation (true) ou désactivation (false) de l'auto-centrage de l'objet à l'écran
+    autoCenter    => drapeau d'activation (true) ou désactivation (false) de l'auto-centrage du conteneur courant
     acPx          => largeur de l'objet auto-centré en directive CSS
     acPy          => hauteur de l'objet auto-centré en directive CSS
 
     infoBulle     => paramétrage d'info-bulle sur l'objet
-        setIB         => drapeau indiquant si l'info-bulle n'est qu'un titre (false) ou un titre -contenu (true)
+        setIB         => drapeau indiquant si l'info-bulle n'est qu'un titre (false) ou un titre + contenu (true)
         type          => par défaut 'tooltip', mais possible en 'popover'
-        animation     => active (true) oiu désactive (false) l'animation de l'info-bulle
-        delay         => défionition des temps d'affichage / disparution
+        animation     => active (true) ou désactive (false) l'animation de l'affichage de l'info-bulle
+        delay         => tableau d'attributs permettant la définition des temps d'affichage et disparition de l'info-bulle
             show          => temps d'affichage fixé par défaut à 500 millisecondes
-            hide          => temps de disparution de l'objet fixé par défaut à 100 millisecondes
-        html          => drapeau pour affichage HTML (true) ou non (false) de l'info-bulle
+            hide          => temps de disparition de l'objet fixé par défaut à 100 millisecondes
+        html          => drapeau pour définir l’affichage en mode HTML (true) ou non (false) de l'info-bulle
         placement     => placement de l'info-bulle par rapport à l'objet, par défaut fixé au dessus
         title         => titre de l'info-bulle
         content       => texte ou contenu de l'info-bulle
-        trigger       => mode d'affichage de l'info-bulle, fixé par défaut au surval
+        trigger       => mode d'affichage de l'info-bulle, fixé par défaut au survol
     ],
 
 Les constantes de base
