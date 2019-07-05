@@ -35,7 +35,7 @@
     >
     <span class="help-block hidden"></span>
 
-    <script>
+    <script id="{{ objet.id }}Scripts">
         $(document).ready(function (evt) {
             {% if objet.labelWidthBT is not empty %}
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));

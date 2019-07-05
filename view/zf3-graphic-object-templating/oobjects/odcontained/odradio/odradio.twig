@@ -26,8 +26,7 @@
         {% endfor %}
     </div>
 
-
-    <script>
+    <script id="{{ objet.id }}Scripts">
         $(document).ready(function (e) {
             setBtClasses("#{{ objet.id }} .radioLabel", $("#{{ objet.id }} .radioLabel").data("widthbt"));
             setBtClasses("#{{ objet.id }} .radionBtns", $("#{{ objet.id }} .radionBtns").data("widthbt"));
@@ -38,5 +37,6 @@
         })
     </script>
 
+    {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'infoBulle':objet.infoBulle, 'id':objet.id} %}
 </div>
 

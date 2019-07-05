@@ -14,9 +14,9 @@
                 show: {{ infoBulle.delay.show }},
                 hide: {{ infoBulle.delay.hide }},
             },
-            title: '{{ infoBulle.title }}{% if infoBulle.type == 'tooltip' and infoBulle.content is not empty %} {{ infoBulle.content }}{% endif %}',
+            title: '{{ infoBulle.title|raw }}{% if infoBulle.type == 'tooltip' and infoBulle.content is not empty %} {{ infoBulle.content|raw }}{% endif %}',
             {% if infoBulle.type == 'popover' %}
-            content: '{{ infoBulle.content }}',
+            content: '{{ infoBulle.content|raw }}',
             {% endif %}
             trigger: '{{ infoBulle.trigger }}',
         });
