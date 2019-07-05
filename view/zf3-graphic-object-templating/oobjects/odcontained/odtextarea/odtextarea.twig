@@ -36,7 +36,7 @@ data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
     >{{ objet.text | raw }}</textarea>
 
 
-    <script>
+    <script id="{{ objet.id }}Scripts">
         $(document).ready(function (e) {
             setBtClasses("#{{ objet.id }} label", $("#{{ objet.id }} label").data("widthbt"));
             setBtClasses("#{{ objet.id }} textarea", $("#{{ objet.id }} textarea").data("widthbt"));
@@ -71,6 +71,8 @@ data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
             {% endif %}
         })
     </script>
+
+    {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'infoBulle':objet.infoBulle, 'id':objet.id} %}
 </div>
 {#
 // menubar: "insert",
