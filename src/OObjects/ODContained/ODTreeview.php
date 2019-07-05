@@ -154,15 +154,17 @@ class ODTreeview extends ODContained
             if ($parent == '0') {
                 if ($ord == 0) { $ord = max(array_keys($dataTree)) + 1; }
                 if (!isset($dataTree[$ord])) {
-                    $item = [];
-                    $item['libel']      = $libel;
-                    $item['ord']        = $ord;
-                    $item['ref']        = $ref;
-                    $item['icon']       = 'none';
-                    $item['parent']     = '0';
-                    $item['check']      = false;
-                    $item['selectable'] = true;
-                    $item['sortable']	= true;
+                    $item = [
+                        'libel'     => $libel,
+                        'ord'       => $ord,
+                        'ref'       => $ref,
+                        'icon'      => 'none',
+                        'parent'    => '0',
+                        'check'     => false,
+                        'selectable'=> true,
+                        'sortable'  => true,
+                        'children'  => [],
+                    ];
 
                     $dataTree[(string) $ord]    = $item;
                     $dataPath[$ref]             = (string) $ord;
@@ -172,17 +174,21 @@ class ODTreeview extends ODContained
             } else {
                 $leaf   = $this->getLeaf($parent);
                 if ($ord == 0 || !isset($leaf['children'][$ord])) {
-                    if ($ord == 0) { $ord = max(array_keys($leaf['children'])) + 1; }
-
-                    $item = [];
-                    $item['libel']      = $libel;
-                    $item['ord']        = $ord;
-                    $item['ref']        = $ref;
-                    $item['icon']       = 'none';
-                    $item['parent']     = $parent;
-                    $item['check']      = false;
-                    $item['selectable'] = true;
-                    $item['sortable']	= true;
+                    if ($ord == 0) {
+                        $keys = array_keys($leaf['children']);
+                        $ord  = empty($keys)? 1: (max($keys) + 1);
+                    }
+                    $item = [
+                        'libel'     => $libel,
+                        'ord'       => $ord,
+                        'ref'       => $ref,
+                        'icon'      => 'none',
+                        'parent'    => $parent,
+                        'check'     => false,
+                        'selectable'=> true,
+                        'sortable'  => true,
+                        'children'  => [],
+                    ];
 
                     $path               = explode('-', $dataPath[$parent]);
                     if ((int) $path[0] == 0) { unset($path[0]); }

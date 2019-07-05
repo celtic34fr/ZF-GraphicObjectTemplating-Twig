@@ -61,6 +61,8 @@ data-wysiwyg="{% if objet.wysiwyg %}true{% else %}false{% endif %}"
             {% if objet.lnkListUrl is not empty %}
                 link_list: "{{ objet.lnkListUrl }}",
             {% endif %}
+                relative_urls : false,
+                remove_script_host : true,
             });
             {% endif %}
 
