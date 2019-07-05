@@ -116,12 +116,14 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
     </div>
     {% endif %}
 
-    <script>
+    <script id="{{ objet.id }}Scripts">
     {% if objet.event is not empty %}
         $(document).ready(function (e) {
             {% include "zf3-graphic-object-templating/oobjects/events.twig" with { events:objet.event } %}
-        })
+        });
     {% endif %}
         addBtnActions('{{ objet.id }}');
     </script>
+
+    {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'infoBulle':objet.infoBulle, 'id':objet.id} %}
 </div>
