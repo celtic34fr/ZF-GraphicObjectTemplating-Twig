@@ -81,8 +81,8 @@ Les constantes de base
     const BOOLEAN_TRUE    = 'true';
     const BOOLEAN_FALSE   = 'false';
 
-    Les constantes pour affectation de couleur pour écriture ou fond
-    ----------------------------------------------------------------
+    Les constantes pour affectation de couleur pour écriture ou fond (CSS)
+    ----------------------------------------------------------------------
     const COLOR_BLACK         = 'black';
     const COLOR_WHITE         = 'white';
     const COLOR_LIME          = 'lime';
@@ -240,3 +240,8 @@ Les méthodes de gestion des infobulles mis sur les objets
     * getConstants()
     * getDisplayConstants()
     * getStateConstants()
+    * getIBTypesConstants()
+    * getIBPlacementConstants()
+    * getIBTriggersContants()
+    * getColorConstants()
+    * arrayMerge(array $array1, array $array2)
