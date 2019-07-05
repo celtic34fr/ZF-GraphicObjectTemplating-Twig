@@ -1830,7 +1830,7 @@ class OObject
         $properties = $this->getProperties();
         if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
         $infoBulle  = $properties['infoBulle'];
-        if (!empty($IBbody)) {
+        if (!empty($IBtitle)) {
             $infoBulle['title'] = $IBtitle;
             $infoBulle['setIB'] = true;
         } else {
