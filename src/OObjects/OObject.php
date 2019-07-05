@@ -87,8 +87,8 @@ namespace GraphicObjectTemplating\OObjects;
  *
  * méthodes de gestion des infobulles mis sur les objets
  * -----------------------------------------------------
- * setIBType($IBtype = self::IBTYPE_TOOLTIP)
  * getIBType()
+ * setIBType($IBtype = self::IBTYPE_TOOLTIP)
  * enaIBAnimation()
  * disIBAnimation()
  * getIBAnimation()
@@ -669,6 +669,7 @@ class OObject
     {
         if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
             $this->properties   = $properties;
+            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
             return $this;
         }
         return false;
@@ -745,6 +746,15 @@ class OObject
     }
 
     /**
+     * @return bool|string
+     */
+    public function getDisplay()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('display', $properties) ? $properties['display'] : false;
+    }
+
+    /**
      * @param string $display
      * @return $this
      * @throws \ReflectionException
@@ -762,10 +772,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getDisplay()
+    public function getWidthBT()
     {
         $properties = $this->getProperties();
-        return array_key_exists('display', $properties) ? $properties['display'] : false;
+        return array_key_exists('widthBT', $properties) ? $properties['widthBT'] : false;
     }
 
     /**
@@ -788,10 +798,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getWidthBT()
+    public function getClassName()
     {
         $properties = $this->getProperties();
-        return array_key_exists('widthBT', $properties) ? $properties['widthBT'] : false;
+        return array_key_exists('className', $properties) ? $properties['className'] : false;
     }
 
     /**
@@ -814,10 +824,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getClassName()
+    public function getTemplate()
     {
         $properties = $this->getProperties();
-        return array_key_exists('className', $properties) ? $properties['className'] : false;
+        return array_key_exists('template', $properties) ? $properties['template'] : false;
     }
 
     /**
@@ -840,10 +850,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getTemplate()
+    public function getObject()
     {
         $properties = $this->getProperties();
-        return array_key_exists('template', $properties) ? $properties['template'] : false;
+        return array_key_exists('object', $properties) ? $properties['object'] : false;
     }
 
     /**
@@ -864,10 +874,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getObject()
+    public function getTypeObj()
     {
         $properties = $this->getProperties();
-        return array_key_exists('object', $properties) ? $properties['object'] : false;
+        return array_key_exists('typeObj', $properties) ? $properties['typeObj'] : false;
     }
 
     /**
@@ -886,20 +896,20 @@ class OObject
     }
 
     /**
-     * @return bool
-     */
-    public function getTypeObj()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('typeObj', $properties) ? $properties['typeObj'] : false;
-    }
-
-    /**
      * @return mixed
      */
     public function getLastAccess()
     {
         return $this->lastAccess;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getClasses()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('classes', $properties) ? $properties['classes'] : false;
     }
 
     /**
@@ -961,15 +971,6 @@ class OObject
             }
         }
         return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getClasses()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('classes', $properties) ? $properties['classes'] : false;
     }
 
     /**
@@ -1351,6 +1352,15 @@ class OObject
     }
 
     /**
+     * @return bool
+     */
+    public function getACWidth()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('acPx', $properties) ? $properties['acPx'] : false;
+    }
+
+    /**
      * @param $width
      * @return $this
      */
@@ -1366,10 +1376,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getACWidth()
+    public function getACHeight()
     {
         $properties = $this->getProperties();
-        return array_key_exists('acPx', $properties) ? $properties['acPx'] : false;
+        return array_key_exists('acPy', $properties) ? $properties['acPy'] : false;
     }
 
     /**
@@ -1386,12 +1396,14 @@ class OObject
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function getACHeight()
+    public function getACWidthHeight()
     {
         $properties = $this->getProperties();
-        return array_key_exists('acPy', $properties) ? $properties['acPy'] : false;
+        $acPx       = (array_key_exists('acPx', $properties) ? $properties['acPx'] : false);
+        $acPy       = (array_key_exists('acPy', $properties) ? $properties['acPy'] : false);
+        return ['width' => $acPx, 'height' => $acPy];
     }
 
     /**
@@ -1411,14 +1423,27 @@ class OObject
     }
 
     /**
-     * @return array
+     * @param null $event
+     * @return bool
      */
-    public function getACWidthHeight()
+    public function getEvent($event = null)
+    {
+        if (!empty($event)) {
+            $properties = $this->getProperties();
+            if (array_key_exists('event', $properties) && !empty($properties['event'])) {
+                return array_key_exists($event, $properties['event']) ? $properties['event'][$event] : false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|array
+     */
+    public function getEvents()
     {
         $properties = $this->getProperties();
-        $acPx       = (array_key_exists('acPx', $properties) ? $properties['acPx'] : false);
-        $acPy       = (array_key_exists('acPy', $properties) ? $properties['acPy'] : false);
-        return ['width' => $acPx, 'height' => $acPy];
+        return array_key_exists('event', $properties) ? $properties['event'] : false;
     }
 
     /**
@@ -1478,30 +1503,6 @@ class OObject
     }
 
     /**
-     * @param null $event
-     * @return bool
-     */
-    public function getEvent($event = null)
-    {
-        if (!empty($event)) {
-            $properties = $this->getProperties();
-            if (array_key_exists('event', $properties) && !empty($properties['event'])) {
-                return array_key_exists($event, $properties['event']) ? $properties['event'][$event] : false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @return bool|array
-     */
-    public function getEvents()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('event', $properties) ? $properties['event'] : false;
-    }
-
-    /**
      * @param $event
      * @return $this|bool
      */
@@ -1540,6 +1541,15 @@ class OObject
     }
 
     /**
+     * @return bool
+     */
+    public function getWidth()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('width', $properties) ? $properties['width'] : false;
+    }
+
+    /**
      * @param $width
      * @return $this
      */
@@ -1555,10 +1565,10 @@ class OObject
     /**
      * @return bool
      */
-    public function getWidth()
+    public function getHeight()
     {
         $properties = $this->getProperties();
-        return array_key_exists('width', $properties) ? $properties['width'] : false;
+        return array_key_exists('height', $properties) ? $properties['height'] : false;
     }
 
     /**
@@ -1572,15 +1582,6 @@ class OObject
         $properties['height'] = $height;
         $this->setProperties($properties);
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getHeight()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('height', $properties) ? $properties['height'] : false;
     }
 
     /**
@@ -1612,6 +1613,21 @@ class OObject
      * *************************************************************************************************** */
 
     /**
+     * @return bool
+     */
+    public function getIBType()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('type', $infoBulle)) {
+                return $infoBulle['type'];
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string $IBtype
      * @return $this
      * @throws \ReflectionException
@@ -1629,21 +1645,6 @@ class OObject
         $properties['infoBulle'] = $infoBulle;
         $this->setProperties($properties);
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIBType()
-    {
-        $properties = $this->getProperties();
-        if (array_key_exists('infoBulle', $properties)) {
-            $infoBulle  = $properties['infoBulle'];
-            if (array_key_exists('type', $infoBulle)) {
-                return $infoBulle['type'];
-            }
-        }
-        return false;
     }
 
     /**
@@ -1690,6 +1691,21 @@ class OObject
     }
 
     /**
+     * @return bool
+     */
+    public function getIBDelay()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('delay', $infoBulle)) {
+                return $infoBulle['delay'];
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param array|null $delay
      * @return $this|bool
      */
@@ -1709,21 +1725,6 @@ class OObject
         $properties['infoBulle'] = $infoBulle;
         $this->setProperties($properties);
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIBDelay()
-    {
-        $properties = $this->getProperties();
-        if (array_key_exists('infoBulle', $properties)) {
-            $infoBulle  = $properties['infoBulle'];
-            if (array_key_exists('delay', $infoBulle)) {
-                return $infoBulle['delay'];
-            }
-        }
-        return false;
     }
 
     /**
@@ -1770,6 +1771,21 @@ class OObject
     }
 
     /**
+     * @return bool
+     */
+    public function getIBPlacement()
+    {
+        $properties = $this->getProperties();
+        if (array_key_exists('infoBulle', $properties)) {
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('placement', $infoBulle)) {
+                return $infoBulle['placement'];
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string $IBplacement
      * @return $this
      * @throws \ReflectionException
@@ -1792,13 +1808,13 @@ class OObject
     /**
      * @return bool
      */
-    public function getIBPlacement()
+    public function getIBTitle()
     {
         $properties = $this->getProperties();
         if (array_key_exists('infoBulle', $properties)) {
-            $infoBulle  = $properties['infoBulle'];
-            if (array_key_exists('placement', $infoBulle)) {
-                return $infoBulle['placement'];
+            $infoBulle = $properties['infoBulle'];
+            if (array_key_exists('title', $infoBulle)) {
+                return $infoBulle['title'];
             }
         }
         return false;
@@ -1830,13 +1846,13 @@ class OObject
     /**
      * @return bool
      */
-    public function getIBTitle()
+    public function getIBContent()
     {
         $properties = $this->getProperties();
         if (array_key_exists('infoBulle', $properties)) {
             $infoBulle = $properties['infoBulle'];
-            if (array_key_exists('title', $infoBulle)) {
-                return $infoBulle['title'];
+            if (array_key_exists('content', $infoBulle)) {
+                return $infoBulle['content'];
             }
         }
         return false;
@@ -1868,13 +1884,13 @@ class OObject
     /**
      * @return bool
      */
-    public function getIBContent()
+    public function getIBTrigger()
     {
         $properties = $this->getProperties();
         if (array_key_exists('infoBulle', $properties)) {
-            $infoBulle = $properties['infoBulle'];
-            if (array_key_exists('content', $infoBulle)) {
-                return $infoBulle['content'];
+            $infoBulle  = $properties['infoBulle'];
+            if (array_key_exists('trigger', $infoBulle)) {
+                return $infoBulle['trigger'];
             }
         }
         return false;
@@ -1901,21 +1917,6 @@ class OObject
         $properties['infoBulle'] = $infoBulle;
         $this->setProperties($properties);
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIBTrigger()
-    {
-        $properties = $this->getProperties();
-        if (array_key_exists('infoBulle', $properties)) {
-            $infoBulle  = $properties['infoBulle'];
-            if (array_key_exists('trigger', $infoBulle)) {
-                return $infoBulle['trigger'];
-            }
-        }
-        return false;
     }
 
     /** **************************************************************************************************
