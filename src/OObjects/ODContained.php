@@ -20,6 +20,7 @@ namespace GraphicObjectTemplating\OObjects;
  * getForm()
  * setDefult($default ) null)
  * getDefault()
+ * resetValue()
  */
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
@@ -161,5 +162,16 @@ class ODContained extends OObject
         }
         $this->setProperties($properties);
         return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function resetValue()
+    {
+    	$value	= $this->getDefault();
+    	if (!$value) { $value = ''; }
+    	$this->setValue($value);
+    	return $this;
     }
 }
