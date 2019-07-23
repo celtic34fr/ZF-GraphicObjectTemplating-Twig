@@ -845,6 +845,10 @@ class ODTreeview extends ODContained
                 return false;
             }
             $btnAction->setWidth('2.5em');
+            $btnAction->setHeight('2.5em');
+            $properties['btnActionWidth'] = '2.5em';
+            $properties['btnActionHeight'] = '2.5em';
+
             $item['position']           = $optionsBtn['position'] ?? 'right';
             $btnAction->addClass('BA'.$item['position']);
             $btnAction->setValue('odtreeview');

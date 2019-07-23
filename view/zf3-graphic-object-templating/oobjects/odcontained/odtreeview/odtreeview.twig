@@ -88,6 +88,16 @@
             position: relative;
             margin-left: 0.5em;
         }
+
+        {% for btnAction, params in objet.btnActions %}
+        .{{ btnAction }} .width {
+            width: {{ objet.btnActionWidth }} !important;
+        }
+        .{{ btnAction }} .height {
+            height: {{ objet.btnActionHeight }} !important;
+        }
+        {% endfor %}
+
     </style>
 
     <div id="{{ objet.id }}Li-0-0">

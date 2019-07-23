@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use function Couchbase\basicEncoderV1;
 use GraphicObjectTemplating\OObjects\ODContained;
+use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
 use Zend\Session\Container;
 
@@ -151,6 +152,7 @@ class ODTable extends ODContained
     const ARRAY_OPTIONS             = [
         'label'     => 'mixte',
         'icon'      => 'mixte',
+        'pathFile'  => 'mixte',
         'nature'    => 'noRequire',
         'class'     => 'require',
         'method'    => 'require',
@@ -1758,6 +1760,8 @@ class ODTable extends ODContained
             { $btnAction->setLabel($optionsBtn['label']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
             { $btnAction->setIcon($optionsBtn['icon']);}
+            if (isset($optionsBtn['pathFile']) && !empty($optionsBtn['pathFile']))
+            { $btnAction->setImage($optionsBtn['pathFile']);}
             if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
                 $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
             }
@@ -1769,6 +1773,10 @@ class ODTable extends ODContained
                 return false;
             }
             $btnAction->setWidth('2.5em');
+            $btnAction->setHeight('2.5em');
+            $properties['btnActionWidth'] = '2.5em';
+            $properties['btnActionHeight'] = '2.5em';
+
             $item['position']           = $optionsBtn['position'] ?? 'right';
             $btnAction->addClass('BA'.$item['position']);
             $btnAction->setValue('odtable');
@@ -1808,7 +1816,9 @@ class ODTable extends ODContained
             if (isset($optionsBtn['label']) && !empty($optionsBtn['label']))
             { $btnAction->setLabel($optionsBtn['label']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
-            { $btnAction->setIcon($optionsBtn['label']);}
+            { $btnAction->setIcon($optionsBtn['icon']);}
+            if (isset($optionsBtn['icon']) && !empty($optionsBtn['pathFile']))
+            { $btnAction->setImage($optionsBtn['pathFile']);}
             if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
                 $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
             }
@@ -2097,7 +2107,8 @@ class ODTable extends ODContained
                     break;
                 case 'mixte':
                     $valid = $valid &&
-                        (array_key_exists('label', $optionsBtn) || array_key_exists('icon', $optionsBtn));
+                        (array_key_exists('label', $optionsBtn) || array_key_exists('icon', $optionsBtn) ||
+                        array_key_exists('pathFile', $optionsBtn));
                     break;
                 default:
                     $valid = false;

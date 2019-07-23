@@ -41,12 +41,36 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
             position: relative;
             margin-left: 0.5em;
         }
+
+        .ico-custom:before {
+            top: 0em !important;
+            left: 0em !important;
+        }
+
+        {% for btnAction, params in objet.btnActions %}
+        .{{ btnAction }} .width {
+            width: {{ objet.btnActionWidth }} !important;
+        }
+        .{{ btnAction }} .height {
+            height: {{ objet.btnActionHeight }} !important;
+        }
+        {% endfor %}
+
     </style>
     {% if objet.pagination %}
     <div class="length col-lg-12 col-md-12 col-sm-12 col-xs-12">
         {{ gotRender(objet.objLength) }}
     </div>
     {% endif %}
+
+
+    {# test test test#}
+
+        {{ dump(objet.btnActions) }}
+
+    {# test test test#}
+
+
 
     <table id="{{ objet.id }}_table"  style="width: 100% !important;" class="lno0 cno0 {{ objClass }} {{ objet.tableClasses }}" data-lno="0" data-cno="0">
         {% if objet.title is not empty %}
