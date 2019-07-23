@@ -130,15 +130,14 @@ class ODButton extends ODContained
     }
 
     /**
-     * @param string $pathFile
-     * @param string $urlFile
+     * @param string $pathFile chemin relatif à partir de $_SERVER["DOCUMENT_ROOT"]
      * @return ODButton|bool
      */
-    public function setImage(string $pathFile, string $urlFile)
+    public function setImage(string $pathFile)
     {
-        if (file_exists($pathFile)) {
+        if (file_exists($_SERVER["DOCUMENT_ROOT"]."/".$pathFile)) {
             $properties = $this->getProperties();
-            $properties['pathfile'] = $urlFile;
+            $properties['pathfile'] = $_SERVER['HTTP_HOST']."/".$pathFile;
             $this->setProperties($properties);
             return $this;
         }

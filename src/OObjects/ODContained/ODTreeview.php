@@ -831,9 +831,8 @@ class ODTreeview extends ODContained
                                                                     { $btnAction->setLabel($optionsBtn['label']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
                                                                     { $btnAction->setIcon($optionsBtn['icon']);}
-            if (isset($optionsBtn['pathFile']) && !empty($optionsBtn['pathFile'])
-                                                     && isset($optionsBtn['urlFile']) && !empty($optionsBtn['urlFile']))
-                                            { $btnAction->setImage($optionsBtn['pathFile'],$optionsBtn['urlFile']);}
+            if (isset($optionsBtn['pathFile']) && !empty($optionsBtn['pathFile']))
+                                                                    { $btnAction->setImage($optionsBtn['pathFile']);}
             if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
                 $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
             }
