@@ -76,7 +76,7 @@
         {% if objet.value is defined and objet.value is not empty %} data-value="{{ objet.value }}" {% endif %}
         {% if objet.state == false %} disabled {% endif %}
     >
-        {% if icoClass is not empty %}<i class="{{ ico-class }}"></i>{% endif %}{{ objet.label }}
+        {% if icoClass is not empty %}<i class="{{ icoClass }}"></i>{% endif %}{{ objet.label }}
     </button>
 
 {#    {% if objet.type != 'link' and objet.event is not empty %}#}
