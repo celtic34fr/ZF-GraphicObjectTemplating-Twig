@@ -22,6 +22,8 @@ namespace GraphicObjectTemplating\OObjects;
  * getDefault()
  * resetValue()
  */
+
+use Exception;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
 
@@ -29,11 +31,11 @@ class ODContained extends OObject
 {
     /**
      * ODContained constructor.
-     * @param $id
-     * @param $pathObjArray
-     * @throws \Exception
+     * @param string $id
+     * @param string $pathObjArray
+     * @throws Exception
      */
-    public function __construct($id, $pathObjArray)
+    public function __construct(string $id, string $pathObjArray)
     {
         parent::__construct($id, $pathObjArray);
 
@@ -51,7 +53,7 @@ class ODContained extends OObject
     /**
      * @param null $value
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function setValue($value = null)
     {
@@ -82,10 +84,10 @@ class ODContained extends OObject
     }
 
     /**
-     * @param null $form
+     * @param string $form
      * @return $this|bool
      */
-    public function setForm($form = null)
+    public function setForm(string $form = null)
     {
         if (!empty($form)) {
             $properties = $this->getProperties();
@@ -134,7 +136,7 @@ class ODContained extends OObject
      * @return $this|bool|\GraphicObjectTemplating\OObjects\OObject
      * @throws \ReflectionException
      */
-    public function setDisplay($display = self::DISPLAY_BLOCK)
+    public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
         $displayPrev    = $this->getDisplay();
         parent::setDisplay($display);
@@ -166,11 +168,12 @@ class ODContained extends OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function resetValue()
     {
     	$value	= $this->getDefault();
-    	if (!$value) { $value = ''; }
+    	if (!$value) { $value = null; }
     	$this->setValue($value);
     	return $this;
     }

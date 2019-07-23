@@ -2,8 +2,10 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
+use ReflectionException;
 use Zend\Session\Container;
 
 /**
@@ -11,19 +13,22 @@ use Zend\Session\Container;
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
  * __construct($id)         constructeur de l'objet, obligation de fournir $id identifiant de l'objet
- * setLabel($label)         affectation du texte affiché dans le bouton
+ * setLabel(string $label)  affectation du texte affiché dans le bouton
  * getLabel()
- * setIcon($icon)           affectation de la classe CSS pour affichage d'une icône à gauche du label (glyphicon, ...)
- * getIcon()
- * setForm($form = null)    rattachement du bouton à un 'formulaire' (cadre de l'objet OSForm) avec traitements induits
- * setType($type = self::BUTTONTYPE_CUSTOM)
+ * setIcon(string $icon)    affectation de la classe CSS pour affichage d'une icône à gauche du label (glyphicon, ...)
+ * setImage(string $pathFile)
+ *                          affectation d'une image comme icône du bouton à gauche du label (.ico-custom)
+ * getIcon()                récupère suivant le cas la classe associé (setIcon()) ou le chemin de l'image (SetImage())
+ * setForm(string $form = null)
+ *                          rattachement du bouton à un 'formulaire' (cadre de l'objet OSForm) avec traitements induits
+ * setType(string $type = self::BUTTONTYPE_CUSTOM)
  *                          affectation du type du bouton (= mode de fonctionnement) par défaut type 'CUSTOM'
  * getType()
- * evtClick($class, $method, $stopEvent = false)
+ * evtClick(string $class, string $method, bool $stopEvent = false)
  *                          déclaration et paramétrage de l'évènement onclick sur le bouton avec traitements induits
  * getClick()               récupération des paramètres de l'évènement onclick sur le bouton
  * disClick()               suppression / déactivation de l'évènement onclick sur le bouton
- * setNature($nature = self::BUTTONNATURE_DEFAULT)
+ * setNature(string $nature = self::BUTTONNATURE_DEFAULT)
  *                          affecation de la nature du bouton (= couleur graphique) par deefaut 'DEFAULT' blanc
  *                          remarque : la nature (LINK' présente le bouton comme un lien hypertexte
  * getNature()
@@ -71,10 +76,10 @@ class ODButton extends ODContained
 
     /**
      * ODButton constructor.
-     * @param $id
-     * @throws \ReflectionException
+     * @param string $id
+     * @throws ReflectionException
      */
-    public function __construct($id)
+    public function __construct(string $id)
     {
         parent::__construct($id, "oobjects/odcontained/odbutton/odbutton.config.php");
 
@@ -92,12 +97,11 @@ class ODButton extends ODContained
     }
 
     /**
-     * @param $label
+     * @param string $label
      * @return $this
      */
-    public function setLabel($label)
+    public function setLabel(string $label)
     {
-        $label = (string) $label;
         $properties = $this->getProperties();
         $properties['label'] = $label;
         $this->setProperties($properties);
@@ -117,13 +121,27 @@ class ODButton extends ODContained
      * @param $icon
      * @return $this
      */
-    public function setIcon($icon)
+    public function setIcon(string $icon)
     {
-        $icon = (string) $icon;
         $properties = $this->getProperties();
         $properties['icon'] = $icon;
         $this->setProperties($properties);
         return $this;
+    }
+
+    /**
+     * @param string $pathFile
+     * @return ODButton|bool
+     */
+    public function setImage(string $pathFile)
+    {
+        if (file_exists($pathFile)) {
+            $properties = $this->getProperties();
+            $properties['pathfile'] = $pathFile;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -132,14 +150,27 @@ class ODButton extends ODContained
     public function getIcon()
     {
         $properties = $this->getProperties();
-        return array_key_exists('icon', $properties) ? $properties['icon'] : false;
+        switch (true) {
+            case (array_key_exists('icon', $properties) && !empty($properties['icon'])):
+                return $properties['icon'];
+                break;
+            case (array_key_exists('pathFile', $properties) && !empty($properties['pathFile'])):
+                return $properties['pathFile'];
+                break;
+            case (!array_key_exists('icon', $properties) || !array_key_exists('filePath', $properties)):
+                return false;
+                break;
+            default:
+                return '';
+                break;
+        }
     }
 
     /**
-     * @param null $form
-     * @return $this|bool|ODContained
+     * @param string $form
+     * @return ODButton|bool
      */
-    public function setForm($form = null)
+    public function setForm(string $form = null)
     {
         parent::setForm($form);
         $properties = $this->getProperties();
@@ -163,9 +194,9 @@ class ODButton extends ODContained
     /**
      * @param string $type
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function setType($type = self::BUTTONTYPE_CUSTOM)
+    public function setType(string $type = self::BUTTONTYPE_CUSTOM)
     {
         $properties = $this->getProperties();
         $types      = $this->getTypeConstants();
@@ -211,12 +242,12 @@ class ODButton extends ODContained
     }
 
     /**
-     * @param $class
-     * @param $method
+     * @param string $class
+     * @param string $method
      * @param bool $stopEvent
      * @return bool|ODButton
      */
-    public function evtClick($class, $method, $stopEvent = false)
+    public function evtClick(string $class, string $method, bool $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
             // TODO; manque gestion bouton RESET cas méthode spécifique
@@ -243,10 +274,10 @@ class ODButton extends ODContained
 
     /**
      * @param string $nature
-     * @return $this
-     * @throws \ReflectionException
+     * @return ODButton
+     * @throws ReflectionException
      */
-    public function setNature($nature = self::BUTTONNATURE_DEFAULT)
+    public function setNature(string $nature = self::BUTTONNATURE_DEFAULT)
     {
         $nature  = (string) $nature;
         $natures = $this->getNatureConstants();
@@ -268,7 +299,7 @@ class ODButton extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODButton
      */
     public function enaDefault()
     {
@@ -279,7 +310,7 @@ class ODButton extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODButton
      */
     public function disDefault()
     {
@@ -293,7 +324,7 @@ class ODButton extends ODContained
      * @param Container $sessionObj
      * @param $ord
      * @return ODButton
-     * @throws \Exception
+     * @throws Exception
      */
     public function createSimpleControl(Container &$sessionObj, $ord)
     {
@@ -381,7 +412,7 @@ class ODButton extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getTypeConstants()
     {
@@ -403,7 +434,7 @@ class ODButton extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getNatureConstants()
     {
@@ -425,7 +456,7 @@ class ODButton extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getLinkTargetConstants()
     {

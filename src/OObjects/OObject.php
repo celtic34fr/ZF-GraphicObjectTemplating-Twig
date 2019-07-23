@@ -114,6 +114,7 @@ namespace GraphicObjectTemplating\OObjects;
  *
  */
 
+use Exception;
 use GraphicObjectTemplating\Service\ZF3GotServices;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
@@ -214,11 +215,11 @@ class OObject
     /**
      * OObject constructor.
      *
-     * @param $id           int     identifiant de l'objet
+     * @param string $id            identifiant de l'objet
      * @param $pathObjArray string  chemin partiel du fichier config de l'objet étendu
-     * @throws \Exception
+     * @throws Exception
      */
-    public function __construct($id, $pathObjArray)
+    public function __construct(string $id, string $pathObjArray)
     {
         if (empty($id)) {
             $id     = 'dummy';
@@ -300,7 +301,7 @@ class OObject
 
     /**
      * @return Container
-     * @throws \Exception
+     * @throws Exception
      */
     public static function validateSession()
     {
@@ -340,7 +341,7 @@ class OObject
      * @param Container $sessionObj
      * @param null $valeur
      * @return mixed bool / OObject
-     * @throws \Exception
+     * @throws Exception
      */
     public static function buildObject($id, Container $sessionObj, $valeur = null)
     {
@@ -370,7 +371,7 @@ class OObject
      * @param OObject $object
      * @param Container $sessionObj
      * @return OObject
-     * @throws \Exception
+     * @throws Exception
      */
     public static function cloneObject(OObject $object, Container $sessionObj)
     {
@@ -389,7 +390,7 @@ class OObject
      * @param $id
      * @param bool $session
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function destroyObject($id, $session = false)
     {
@@ -481,7 +482,7 @@ class OObject
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function clearObjects()
     {
@@ -629,7 +630,7 @@ class OObject
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getPersistantObjs() {
         $gotObjList = self::validateSession();
@@ -686,7 +687,7 @@ class OObject
     /**
      * @param $id
      * @return $this|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function setId($id)
     {
@@ -722,7 +723,7 @@ class OObject
     /**
      * @param string $name
      * @return $this|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function setName(string $name)
     {
@@ -759,7 +760,7 @@ class OObject
      * @return $this
      * @throws \ReflectionException
      */
-    public function setDisplay($display = self::DISPLAY_BLOCK)
+    public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
         $displays = $this->getDisplayConstants();
         if (!in_array($display, $displays, true)) { $display = self::DISPLAY_BLOCK; }
@@ -1453,7 +1454,7 @@ class OObject
      * @param bool $stopEvent
      * @return $this|bool
      */
-    public function setEvent($event, $class, $method, $stopEvent = false)
+    public function setEvent(string $event, string $class, string $method, bool $stopEvent = false)
     {
         if (!empty($event) && !empty($class) && !empty($method)) {
             $properties = $this->getProperties();
@@ -1525,7 +1526,7 @@ class OObject
 
     /**
      * @return Container
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveProperties()
     {
@@ -1586,7 +1587,7 @@ class OObject
 
     /**
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function isPersistantObjs()
     {
@@ -1597,7 +1598,7 @@ class OObject
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function addPersistantObjs()
     {

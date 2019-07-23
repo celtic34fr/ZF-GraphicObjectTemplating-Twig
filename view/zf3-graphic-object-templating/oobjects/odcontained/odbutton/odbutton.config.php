@@ -10,6 +10,7 @@ return [
     'type'          => ODButton::BUTTONTYPE_CUSTOM,
     'label'         => '',
     'icon'          => '',
+    'pathFile'      => '',
     'nature'        => ODButton::BUTTONNATURE_DEFAULT,
     'default'       => false,
     'custom'        => '',

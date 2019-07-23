@@ -31,6 +31,14 @@
         border-color: #{{ objet.customBorder }};
     }
     {% endif %}
+
+    {% if objet.pathFiles is not empty %}
+    .ico-custom {
+        background: url("{{ objet.pathFile }}");
+        width: 100%;
+        height: 100%;
+    }
+    {% endif %}
 </style>
 
 {% if objet.type == 'link' %}
@@ -43,6 +51,14 @@
             {% set routeUrl = ( url(route|lower, params) ) %}
         {% endif %}
     {% endif %}
+{% endif %}
+
+{% if objet.icon is not empty %}
+    {% set icoClass = objet.icon %}
+{% elseif objet.pathFile is not empty %}
+    {% set icoClass = "ico-custom" %}
+{% else %}
+    {% set icoClass = "" %}
 {% endif %}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
@@ -60,7 +76,7 @@
         {% if objet.value is defined and objet.value is not empty %} data-value="{{ objet.value }}" {% endif %}
         {% if objet.state == false %} disabled {% endif %}
     >
-        {% if objet.icon is not empty %}<i class="{{ objet.icon }}"></i>{% endif %}{{ objet.label }}
+        {% if icoClass is not empty %}<i class="{{ ico-class }}"></i>{% endif %}{{ objet.label }}
     </button>
 
 {#    {% if objet.type != 'link' and objet.event is not empty %}#}
