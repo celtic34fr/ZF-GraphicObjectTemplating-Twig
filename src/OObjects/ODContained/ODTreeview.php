@@ -103,6 +103,7 @@ class ODTreeview extends ODContained
     const ARRAY_OPTIONS             = [
         'label'     => 'mixte',
         'icon'      => 'mixte',
+        'pathFile'  => 'mixte',
         'nature'    => 'noRequire',
         'class'     => 'require',
         'method'    => 'require',
