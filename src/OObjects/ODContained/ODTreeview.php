@@ -1212,7 +1212,8 @@ class ODTreeview extends ODContained
                     break;
                 case 'mixte':
                     $valid = $valid &&
-                        (array_key_exists('label', $optionsBtn) || array_key_exists('icon', $optionsBtn));
+                        (array_key_exists('label', $optionsBtn) || array_key_exists('icon', $optionsBtn)
+                        || array_key_exists('pathFile', $optionsBtn));
                     break;
                 default:
                     $valid = false;
