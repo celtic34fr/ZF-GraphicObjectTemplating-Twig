@@ -131,6 +131,7 @@ class ODButton extends ODContained
 
     /**
      * @param string $pathFile
+     * @param string $urlFile
      * @return ODButton|bool
      */
     public function setImage(string $pathFile, string $urlFile)
