@@ -2,7 +2,9 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
+use ReflectionException;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -114,11 +116,11 @@ class ODTreeview extends ODContained
 
     /**
      * ODTreeview constructor.
-     * @param $id
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @param string $id
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function __construct($id)
+    public function __construct(string $id)
     {
         parent::__construct($id, "oobjects/odcontained/odtreeview/odtreeview.config.php");
 
@@ -210,8 +212,8 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $libel
-     * @param $path
+     * @param string $libel
+     * @param string $path
      * @return ODTreeview|bool
      */
     public function setLeaf(string $libel, string $path)
@@ -245,8 +247,8 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
-     * @return array
+     * @param string $ref
+     * @return array|bool
      */
     public function getLeaf(string $ref)
     {
@@ -328,7 +330,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $leafIco
+     * @param string $leafIco
      * @return ODTreeview
      */
     public function setLeafIco(string $leafIco)
@@ -349,7 +351,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $nodeOpenedIco
+     * @param string $nodeOpenedIco
      * @return ODTreeview
      */
     public function setNodeOpenedIco(string $nodeOpenedIco)
@@ -370,7 +372,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $nodeClosedIco
+     * @param string $nodeClosedIco
      * @return ODTreeview
      */
     public function setNodeClosedIco(string $nodeClosedIco)
@@ -412,12 +414,12 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $class
-     * @param $method
+     * @param string $class
+     * @param string $method
      * @param bool $stopEvent
      * @return bool|ODTreeview
      */
-    public function evtClick($class, $method, $stopEvent = false)
+    public function evtClick(string $class, string $method, bool $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
             return $this->setEvent('click', $class, $method, $stopEvent);
@@ -464,7 +466,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @param bool $root
      * @return ODTreeview|bool
      */
@@ -501,7 +503,7 @@ class ODTreeview extends ODContained
      * @param string $title
      * @return ODTreeview
      */
-    public function setTitle($title = "")
+    public function setTitle(string $title = "")
     {
         $title = (string) $title;
         $properties = $this->getProperties();
@@ -511,7 +513,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @return bool
+     * @return bool|string
      */
     public function getTitle()
     {
@@ -564,7 +566,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @return ODTreeview|bool
      */
     public function selectNode(string $ref)
@@ -586,7 +588,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @return ODTreeview|bool
      */
     public function unselectNode(string $ref)
@@ -608,7 +610,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @return ODTreeview|bool
      */
     public function enaSelectNode(string $ref) {
@@ -629,7 +631,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @return ODTreeview|bool
      */
     public function disSelectNode(string $ref) {
@@ -650,7 +652,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @param bool $andChildren
      * @return ODTreeview|bool
      */
@@ -679,7 +681,7 @@ class ODTreeview extends ODContained
 	}
 
     /**
-     * @param $ref
+     * @param string $ref
      * @param bool $andChildren
      * @return ODTreeview|bool
      */
@@ -709,8 +711,8 @@ class ODTreeview extends ODContained
 	}
 
     /**
-     * @param $class
-     * @param $method
+     * @param string $class
+     * @param string $method
      * @param bool $stopEvent
      * @return bool|ODTreeview
      */
@@ -740,7 +742,7 @@ class ODTreeview extends ODContained
 
     /**
      * @param $ref
-     * @return bool|mixed
+     * @return bool|array
      */
     public function getParent($ref)
     {
@@ -809,7 +811,7 @@ class ODTreeview extends ODContained
      * @param string $idBtn
      * @param array $optionsBtn
      * @return ODTreeview|bool
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function addBtnAction(string $idBtn, array $optionsBtn)
     {
@@ -826,9 +828,11 @@ class ODTreeview extends ODContained
             /** @var ODButton $btnAction */
             $btnAction = new ODButton($idBtn);
             if (isset($optionsBtn['label']) && !empty($optionsBtn['label']))
-                                                                        { $btnAction->setLabel($optionsBtn['label']);}
+                                                                    { $btnAction->setLabel($optionsBtn['label']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
-                                                                        { $btnAction->setIcon($optionsBtn['icon']);}
+                                                                    { $btnAction->setIcon($optionsBtn['icon']);}
+            if (isset($optionsBtn['pathFile']) && !empty($optionsBtn['pathFile']))
+                                                                    { $btnAction->setImage($optionsBtn['pathFile']);}
             if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
                 $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
             }
@@ -860,7 +864,7 @@ class ODTreeview extends ODContained
      * @param string $idBtn
      * @param array $optionsBtn
      * @return ODTreeview|bool
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setBtnAction(string $idBtn, array $optionsBtn)
     {
@@ -994,6 +998,7 @@ class ODTreeview extends ODContained
     /**
      * @param string $refNode
      * @param string $newRef
+     * @param null $ord
      * @return bool|ODTreeview
      */
     public function addCloneNode(string $refNode, string $newRef, $ord = null)
@@ -1017,7 +1022,7 @@ class ODTreeview extends ODContained
      * @param ServiceManager $sm
      * @param array $params
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function dispatchEvents(ServiceManager $sm, array $params)
     {
@@ -1115,10 +1120,10 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $leafPath
+     * @param string $leafPath
      * @return array
      */
-    public function returnDelLeaf($leafPath)
+    public function returnDelLeaf(string $leafPath)
     {
         $leafPath = (string) $leafPath;
         $leaf     = $this->getLeaf($leafPath);
@@ -1134,13 +1139,13 @@ class ODTreeview extends ODContained
      * *************************************************************************************************** */
 
     /**
-     * @param $tree
-     * @param $path
-     * @param $item
+     * @param array $tree
+     * @param string $path
+     * @param array $item
      * @param bool $addNode
      * @return mixed
      */
-    private function updateTree(array $tree, $path, array $item, bool $addNode = false)
+    private function updateTree(array $tree, string $path, array $item, bool $addNode = false)
     {
             if (!is_array($path)) { $path = explode('-', $path); }
             $id = array_shift($path);
@@ -1160,7 +1165,7 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $ref
+     * @param string $ref
      * @return bool
      */
     private function validRefUnique(string $ref)
@@ -1171,8 +1176,8 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param $dataTree
-     * @param $refs
+     * @param array $dataTree
+     * @param array $refs
      * @return mixed
      */
     private function rmLeafTree(array $dataTree, array $refs)
