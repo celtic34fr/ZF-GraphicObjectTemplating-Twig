@@ -133,11 +133,11 @@ class ODButton extends ODContained
      * @param string $pathFile
      * @return ODButton|bool
      */
-    public function setImage(string $pathFile)
+    public function setImage(string $pathFile, string $urlFile)
     {
         if (file_exists($pathFile)) {
             $properties = $this->getProperties();
-            $properties['pathfile'] = $pathFile;
+            $properties['pathfile'] = $urlFile;
             $this->setProperties($properties);
             return $this;
         }
