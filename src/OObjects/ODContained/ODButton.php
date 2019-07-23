@@ -137,7 +137,7 @@ class ODButton extends ODContained
     {
         if (file_exists($_SERVER["DOCUMENT_ROOT"]."/".$pathFile)) {
             $properties = $this->getProperties();
-            $properties['pathfile'] = $_SERVER['HTTP_HOST']."/".$pathFile;
+            $properties['pathFile'] = 'http://'.$_SERVER['HTTP_HOST']."/".$pathFile;
             $this->setProperties($properties);
             return $this;
         }
@@ -405,6 +405,20 @@ class ODButton extends ODContained
         $properties = $this->getProperties();
         return array_key_exists('customBorder', $properties) ? $properties['customBorder'] : false;
 	}
+
+    /**
+     * @param $width
+     * @return $this
+     */
+    public function setWidth($width)
+    {
+        $width = (string) $width ;
+        $properties = $this->getProperties();
+        $properties['width'] = $width;
+        $properties['widthS2'] = ((int) $width / 2) . substr($width, strlen(strval((int) $width) ));
+        $this->setProperties($properties);
+        return $this;
+    }
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *

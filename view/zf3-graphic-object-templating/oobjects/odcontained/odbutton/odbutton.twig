@@ -32,11 +32,22 @@
     }
     {% endif %}
 
-    {% if objet.pathFiles is not empty %}
+    {% if objet.pathFile is not empty %}
     .ico-custom {
+        display:block;
+        background:black;
+        color:white;
+        text-decoration:none;
+    }
+    .ico-custom:before{
+        content: '';
         background: url("{{ objet.pathFile }}");
-        width: 100%;
-        height: 100%;
+        background-size: contain;
+        position:absolute;
+        width:{{ objet.width }};
+        height:{{ objet.width }};
+        left: {{ objet.widthS2 }};
+        top: 0em;
     }
     {% endif %}
 </style>
