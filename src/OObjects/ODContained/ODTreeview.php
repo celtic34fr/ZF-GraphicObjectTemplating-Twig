@@ -1145,12 +1145,12 @@ class ODTreeview extends ODContained
 
     /**
      * @param array $tree
-     * @param string $path
+     * @param string|array $path
      * @param array $item
      * @param bool $addNode
      * @return mixed
      */
-    private function updateTree(array $tree, string $path, array $item, bool $addNode = false)
+    private function updateTree(array $tree, $path, array $item, bool $addNode = false)
     {
             if (!is_array($path)) { $path = explode('-', $path); }
             $id = array_shift($path);
