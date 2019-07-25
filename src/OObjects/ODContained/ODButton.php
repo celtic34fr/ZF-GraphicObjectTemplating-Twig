@@ -40,6 +40,12 @@ use Zend\Session\Container;
  * getNatureCustomBackground()
  * getNatureCustomColor()
  * getNatureCustomBorder()
+ * setWidth(string $width)  surchange de l'affectation de la largeur du bouton et de l'image servant d'icône en
+ *                          directives CSS
+ * setLeft(string $left)    affectation du déport à gauche de l'image servant d'icône
+ * getLeft()                récupération du déport à gauche de l'image servant d'icône
+ * setTop(string $top)      affectation du déport en haut de l'image servant d'icône
+ * getTop()                 récupération du déport en haut de l'image servant d'icône
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -410,14 +416,53 @@ class ODButton extends ODContained
      * @param $width
      * @return $this
      */
-    public function setWidth($width)
+    public function setWidth(string $width)
     {
-        $width = (string) $width ;
         $properties = $this->getProperties();
         $properties['width'] = $width;
-        $properties['widthS2'] = ((int) $width / 2) . substr($width, strlen(strval((int) $width) ));
+        if (empty($properties['left'])) {
+            $properties['left'] = ((int) $width / 2) . substr($width, strlen(strval((int) $width) ));
+        }
         $this->setProperties($properties);
         return $this;
+    }
+
+    /**
+     * @param string $left
+     * @return ODButton
+     */
+    public function setLeft(string $left)
+    {
+        $properties = $this->getProperties();
+        $properties['left'] = $left;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getLeft()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('left', $properties) ? $properties['left'] : false;
+    }
+
+    /**
+     * @param string $top
+     * @return ODButton
+     */
+    public function setTop(string $top)
+    {
+        $properties = $this->getProperties();
+        $properties['top'] = $top;
+        $this->setProperties($properties);
+        return $this;
+    }
+    public function getTop()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('top', $properties) ? $properties['top'] : false;
     }
 
     /** **************************************************************************************************

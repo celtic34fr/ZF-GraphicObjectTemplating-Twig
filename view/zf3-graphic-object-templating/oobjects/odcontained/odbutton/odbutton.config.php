@@ -16,4 +16,7 @@ return [
     'custom'        => '',
     'customBorder'  => '',
     'customColor'   => '',
+
+    'left'          => '',
+    'top'           => ''
 ];
