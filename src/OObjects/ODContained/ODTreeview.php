@@ -829,8 +829,8 @@ class ODTreeview extends ODContained
             /** @var ODButton $btnAction */
             $btnAction = new ODButton($idBtn);
 
-            $width      = "";
-            $height     = "";
+            $width      = "2.5em";
+            $height     = "2.5em";
             $left       = "";
             $top        = "";
             if (isset($optionsBtn['width']) && !empty($optionsBtn['width'])) {
@@ -867,12 +867,12 @@ class ODTreeview extends ODContained
             if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['method'], $optionsBtn['stopEvent'])) {
                 return false;
             }
-            $properties['btnActionWidth'] = $width;
-            $properties['btnActionHeight'] = $height;
-            $btnAction->setWidth($width);
-            $btnAction->setHeight($height);
-            $btnAction->setLeft($left);
-            $btnAction->setTop($top);
+            $properties['btnActionWidth']   = $width;
+            $properties['btnActionHeight']  = $height;
+            if (!empty($width))     { $btnAction->setWidth($width); }
+            if (!empty($height))    { $btnAction->setHeight($height); }
+            if (!empty($left))      { $btnAction->setLeft($left); }
+            if (!empty($top))       { $btnAction->setTop($top); }
 
             $item['position']           = $optionsBtn['position'] ?? 'right';
             $btnAction->addClass('BA'.$item['position']);
