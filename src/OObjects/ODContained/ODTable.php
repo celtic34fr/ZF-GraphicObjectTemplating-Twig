@@ -1757,37 +1757,34 @@ class ODTable extends ODContained
             /** @var ODButton $btnAction */
             $btnAction = new ODButton($idBtn);
 
+            $width      = "";
+            $height     = "";
+            $left       = "";
+            $top        = "";
             if (isset($optionsBtn['width']) && !empty($optionsBtn['width'])) {
                 $width = $optionsBtn['width'];
-            } else {
-                $width = '2.5em';
             }
             if (isset($optionsBtn['height']) && !empty($optionsBtn['height'])) {
                 $height = $optionsBtn['height'];
-            } else {
-                $height = '2.5em';
             }
             if (isset($optionsBtn['left']) && !empty($optionsBtn['left'])) {
                 $left = $optionsBtn['left'];
-            } else {
-                $left = '1.25em';
             }
             if (isset($optionsBtn['top']) && !empty($optionsBtn['top'])) {
                 $top = $optionsBtn['top'];
-            } else {
-                $top = '0em';
             }
-            $btnAction->setWidth($width);
-            $btnAction->setHeight($height);
-            $btnAction->setLeft($left);
-            $btnAction->setTop($top);
 
             if (isset($optionsBtn['label']) && !empty($optionsBtn['label']))
             { $btnAction->setLabel($optionsBtn['label']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
             { $btnAction->setIcon($optionsBtn['icon']);}
-            if (isset($optionsBtn['pathFile']) && !empty($optionsBtn['pathFile']))
-            { $btnAction->setImage($optionsBtn['pathFile']);}
+            if (isset($optionsBtn['pathFile']) && !empty($optionsBtn['pathFile'])) {
+                $btnAction->setImage($optionsBtn['pathFile']);
+                if (empty($width))  { $width = '2.5em'; }
+                if (empty($height)) { $height = '2.5em'; }
+                if (empty($left))   { $left = '1.25em'; }
+                if (empty($top))    { $top = '0em'; }
+            }
             if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
                 $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
             }
@@ -1800,6 +1797,10 @@ class ODTable extends ODContained
             }
             $properties['btnActionWidth'] = $width;
             $properties['btnActionHeight'] = $height;
+            $btnAction->setWidth($width);
+            $btnAction->setHeight($height);
+            $btnAction->setLeft($left);
+            $btnAction->setTop($top);
 
             $item['position']           = $optionsBtn['position'] ?? 'right';
             $btnAction->addClass('BA'.$item['position']);
