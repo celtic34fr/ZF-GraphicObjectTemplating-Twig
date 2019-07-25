@@ -1798,10 +1798,8 @@ class ODTable extends ODContained
             if (!$btnAction->evtClick($optionsBtn['class'], $optionsBtn['method'], $optionsBtn['stopEvent'])) {
                 return false;
             }
-            $btnAction->setWidth('2.5em');
-            $btnAction->setHeight('2.5em');
-            $properties['btnActionWidth'] = '2.5em';
-            $properties['btnActionHeight'] = '2.5em';
+            $properties['btnActionWidth'] = $width;
+            $properties['btnActionHeight'] = $height;
 
             $item['position']           = $optionsBtn['position'] ?? 'right';
             $btnAction->addClass('BA'.$item['position']);
