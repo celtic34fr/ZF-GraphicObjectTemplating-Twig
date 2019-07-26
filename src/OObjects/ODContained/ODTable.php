@@ -2,10 +2,10 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
-use function Couchbase\basicEncoderV1;
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
-use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
+use ReflectionException;
 use Zend\Session\Container;
 
 /**
@@ -167,8 +167,8 @@ class ODTable extends ODContained
     /**
      * ODTable constructor.
      * @param $id
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function __construct(string $id)
     {
@@ -185,7 +185,7 @@ class ODTable extends ODContained
      * @param $title            : titre associé au tableau
      * @param string $position  : position du titre opar rapport au tableau
      * @return ODTable
-     * @throws \Exception
+     * @throws Exception
      */
     public function setTitle(string $title, $position = self::ODTABLETITLEPOS_BOTTOM_CENTER)
     {
@@ -213,7 +213,7 @@ class ODTable extends ODContained
     /**
      * @param string $position : valeur de la position à affecter au titre
      * @return ODTable
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setTitlePosition($position = self::ODTABLETITLEPOS_BOTTOM_CENTER)
     {
@@ -654,15 +654,12 @@ class ODTable extends ODContained
     public function setCell(int $nCol, int $nLine, string $val)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
-        $nbLines = sizeof($properties['datas']);
-        if ($nbLines == 0) return false;
-        if ($nLine > $nbLines) return false;
-
-        $properties['datas'][$nLine][$nCol] = $val;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            $properties['datas'][$nLine][$nCol] = $val;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -673,13 +670,10 @@ class ODTable extends ODContained
     public function getCell(int $nCol, int $nLine)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
-        $nbLines = sizeof($properties['datas']);
-        if ($nbLines == 0) return false;
-        if ($nLine > $nbLines) return false;
-
-        return (isset($properties['datas'][$nLine][$nCol])) ? $properties['datas'][$nLine][$nCol] : false;
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            return (isset($properties['datas'][$nLine][$nCol])) ? $properties['datas'][$nLine][$nCol] : false;
+        }
+        return false;
     }
 
     /**
@@ -691,17 +685,15 @@ class ODTable extends ODContained
     public function addCellStyle(int $nCol, int $nLine, string $style)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        $nbLines = sizeof($properties['datas']);
-        if ($nCol == 0 || $nbCols < $nCol) return false;
-        if ($nLine == 0 || $nbLines < $nLine) return false;
-
-        if (!isset($properties['styles'])) $properties['styles'] = [];
-        if (!isset($properties['styles'][$nLine])) $properties['styles'][$nLine] = [];
-        if (!isset($properties['styles'][$nLine][$nCol])) $properties['styles'][$nLine][$nCol] = "";
-        $properties['styles'][$nLine][$nCol] .= " " . $style;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, $nLine, $properties)){
+            if (!isset($properties['styles'])) $properties['styles'] = [];
+            if (!isset($properties['styles'][$nLine])) $properties['styles'][$nLine] = [];
+            if (!isset($properties['styles'][$nLine][$nCol])) $properties['styles'][$nLine][$nCol] = "";
+            $properties['styles'][$nLine][$nCol] .= " " . $style;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -713,16 +705,14 @@ class ODTable extends ODContained
     public function setCellStyle(int $nCol, int $nLine, string $style)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        $nbLines = sizeof($properties['datas']);
-        if ($nCol == 0 || $nbCols < $nCol) return false;
-        if ($nLine == 0 || $nbLines < $nLine) return false;
-
-        if (!isset($properties['styles'])) $properties['styles'] = [];
-        if (!isset($properties['styles'][$nLine])) $properties['styles'][$nLine] = [];
-        $properties['styles'][$nLine][$nCol] = $style;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            if (!isset($properties['styles'])) $properties['styles'] = [];
+            if (!isset($properties['styles'][$nLine])) $properties['styles'][$nLine] = [];
+            $properties['styles'][$nLine][$nCol] = $style;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -734,12 +724,10 @@ class ODTable extends ODContained
     public function getCellStyle(int $nCol, int $nLine)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        $nbLines = sizeof($properties['datas']);
-        if ($nCol == 0 || $nbCols < $nCol) return false;
-        if ($nLine == 0 || $nbLines < $nLine) return false;
-
-        return ((isset($properties['styles'][$nLine][$nCol])) ? $properties['styles'][$nLine][$nCol] : false);
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            return ((isset($properties['styles'][$nLine][$nCol])) ? $properties['styles'][$nLine][$nCol] : false);
+        }
+        return false;
     }
 
     /**
@@ -750,14 +738,12 @@ class ODTable extends ODContained
     public function clearCellStyle(int $nCol, int $nLine)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        $nbLines = sizeof($properties['datas']);
-        if ($nCol == 0 || $nbCols < $nCol) return false;
-        if ($nLine == 0 || $nbLines < $nLine) return false;
-
-        if (isset($properties['styles'][$nLine][$nCol])) $properties['styles'][$nLine][$nCol] = "";
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            if (isset($properties['styles'][$nLine][$nCol])) $properties['styles'][$nLine][$nCol] = "";
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -769,21 +755,20 @@ class ODTable extends ODContained
     public function toggleCellStyle(int $nCol, int $nLine, string $style = null)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        $nbLines = sizeof($properties['datas']);
-        if ($nCol == 0 || $nbCols < $nCol) return false;
-        if ($nLine == 0 || $nbLines < $nLine) return false;
-        if (!isset($properties['style'][$nLine][$nCol])) return false;
-
-        $id = $properties['id'];
-        $cStyle = $properties['style'][$nLine][$nCol];
-        $oStyle = "";
-        $session = new Container("styleTable_" . $id);
-        if ($session->offsetExists('styleC' . $nCol . 'L' . $nLine)) $oStyle = $session->offsetGet('styleC' . $nCol . 'L' . $nLine);
-        $session->offsetSet('styleC' . $nCol . 'L' . $nLine, $cStyle);
-        $properties['style'][$nLine][$nCol] = (!empty($style)) ? $style : $oStyle;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            if (isset($properties['style'][$nLine][$nCol])) {
+                $id = $properties['id'];
+                $cStyle = $properties['style'][$nLine][$nCol];
+                $oStyle = "";
+                $session = new Container("styleTable_" . $id);
+                if ($session->offsetExists('styleC' . $nCol . 'L' . $nLine)) $oStyle = $session->offsetGet('styleC' . $nCol . 'L' . $nLine);
+                $session->offsetSet('styleC' . $nCol . 'L' . $nLine, $cStyle);
+                $properties['style'][$nLine][$nCol] = (!empty($style)) ? $style : $oStyle;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
     }
 
     /**
@@ -798,56 +783,52 @@ class ODTable extends ODContained
     public function evtCellClick(int $nCol, int $nLine, string $class, string $method, bool $stopEvent = true)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
-        $nbLines = sizeof($properties['datas']);
-        if ($nLine > $nbLines || $nLine < 1) return false;
-
-        $events = $properties['event'];
-        if (!array_key_exists('click', $events)) { $events['clieck'] = []; }
-        $evtDef = $events['click'];
-
-        if (!empty($class) && !empty($method)) {
-            switch (true) {
-                case (class_exists($class)) :
-                    if ($class != $properties['className']) {
-                        $obj = new $class();
-                    } else {
-                        $obj = $this;
-                    }
-                    if (method_exists($obj, $method)) {
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            $events = $properties['event'];
+            if (!array_key_exists('click', $events)) { $events['clieck'] = []; }
+            $evtDef = $events['click'];
+            if (!empty($class) && !empty($method)) {
+                switch (true) {
+                    case (class_exists($class)) :
+                        if ($class != $properties['className']) {
+                            $obj = new $class();
+                        } else {
+                            $obj = $this;
+                        }
+                        if (method_exists($obj, $method)) {
+                            $evtDef['class']        = $class;
+                            $evtDef['method']       = $method;
+                            $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                        }
+                        break;
+                    case ($class == "javascript:") :
                         $evtDef['class']        = $class;
                         $evtDef['method']       = $method;
                         $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
-                    }
-                    break;
-                case ($class == "javascript:") :
-                    $evtDef['class']        = $class;
-                    $evtDef['method']       = $method;
-                    $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
-                    break;
-                case ($properties['object'] == 'odbutton' && $properties['type'] == ODButton::BUTTONTYPE_LINK):
-                    $params = [];
-                    if ($method != 'none') {
-                        $method = explode('|', $method);
-                        foreach ($method as $item) {
-                            $item = explode(':', $item);
-                            $params[$item[0]] = $item[1];
+                        break;
+                    case ($properties['object'] == 'odbutton' && $properties['type'] == ODButton::BUTTONTYPE_LINK):
+                        $params = [];
+                        if ($method != 'none') {
+                            $method = explode('|', $method);
+                            foreach ($method as $item) {
+                                $item = explode(':', $item);
+                                $params[$item[0]] = $item[1];
+                            }
                         }
-                    }
-                    $evtDef['class']        = $class;
-                    $evtDef['method']       = $params;
-                    $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
-                    break;
+                        $evtDef['class']        = $class;
+                        $evtDef['method']       = $params;
+                        $evtDef['stopEvent']    = ($stopEvent) ? 'OUI' : 'NON';
+                        break;
+                }
+
+                $properties['events'][$nLine][$nCol]                = [];
+                $properties['events'][$nLine][$nCol]['class']       = $evtDef['class'];
+                $properties['events'][$nLine][$nCol]['method']      = $evtDef['method'];
+                $properties['events'][$nLine][$nCol]['stopEvent']   = $evtDef['stopEvent'];
+
+                $this->setProperties($properties);
+                return $this;
             }
-
-            $properties['events'][$nLine][$nCol]                = [];
-            $properties['events'][$nLine][$nCol]['class']       = $evtDef['class'];
-            $properties['events'][$nLine][$nCol]['method']      = $evtDef['method'];
-            $properties['events'][$nLine][$nCol]['stopEvent']   = $evtDef['stopEvent'];
-
-            $this->setProperties($properties);
-            return $this;
         }
         return false;
     }
@@ -860,14 +841,12 @@ class ODTable extends ODContained
     public function disCellClick(int $nCol, int $nLine)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
-        $nbLines = sizeof($properties['datas']);
-        if ($nLine > $nbLines || $nLine < 1) return false;
-
-        if (isset($properties['events'][$nLine][$nCol])) unset($properties['events'][$nLine][$nCol]);
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, $nLine, $properties)) {
+            if (isset($properties['events'][$nLine][$nCol])) unset($properties['events'][$nLine][$nCol]);
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -877,12 +856,12 @@ class ODTable extends ODContained
     public function showCol(int $nCol)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol < 1 || $nCol > $nbCols) return false;
-
-        $properties['cols'][$nCol]['view'] = true;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, 1, $properties)) {
+            $properties['cols'][$nCol]['view'] = true;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -892,12 +871,12 @@ class ODTable extends ODContained
     public function hideCol(int $nCol)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol < 1 || $nCol > $nbCols) return false;
-
-        $properties['cols'][$nCol]['view'] = false;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, 1, $properties)) {
+            $properties['cols'][$nCol]['view'] = false;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -907,9 +886,10 @@ class ODTable extends ODContained
     public function stateCol(int $nCol)
     {
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol < 1 || $nCol > $nbCols) return false;
-        return $properties['cols'][$nCol]['view'];
+        if ($this->validColsLines($nCol, 1, $properties)) {
+            return $properties['cols'][$nCol]['view'];
+        }
+        return false;
     }
 
     /**
@@ -921,16 +901,16 @@ class ODTable extends ODContained
     {
         $lines = $this->getLines();
         $properties = $this->getProperties();
-        $nbCols = sizeof($properties['cols']);
-        if ($nCol < 1 || $nCol > $nbCols) return false;
-
-        $rslt = [];
-        foreach ($lines as $noLine => $line) {
-            if ((string) $line[$nCol] === $value) {
-                $rslt[] = $noLine;
+        if ($this->validColsLines($nCol, 1, $properties)) {
+            $rslt = [];
+            foreach ($lines as $noLine => $line) {
+                if ((string) $line[$nCol] === $value) {
+                    $rslt[] = $noLine;
+                }
             }
+            return $rslt;
         }
-        return $rslt;
+        return false;
     }
 
     /**
@@ -966,8 +946,8 @@ class ODTable extends ODContained
     /**
      * méthode d'activation de la pagination,
      * @return ODTable
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function enaPagination()
     {
@@ -1040,7 +1020,7 @@ class ODTable extends ODContained
     /**
      * méthode désactivation de la pagination,
      * @return ODTable
-     * @throws \Exception
+     * @throws Exception
      */
     public function disPagination()
     {
@@ -1128,7 +1108,7 @@ class ODTable extends ODContained
     /**
      * @param int $length : nombre de lignes dans le tableau paginé
      * @return ODTable|bool : false si la pagination n'est pas activée
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setLength(int $length = self::ODTABLELENGTH_10)
     {
@@ -1189,8 +1169,8 @@ class ODTable extends ODContained
     /**
      * méthode de construction de la barre de navigation d'un tableau paginé
      * @return ODTable|bool : false si la pagination n'est pas activée
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function buildNavbar()
     {
@@ -1523,7 +1503,7 @@ class ODTable extends ODContained
         $nbCols = count($properties['cols']);
         if ($isOneDim && count($styles) == $nbCols) {
             foreach ($styles as $noCol => $style) {
-                $this->setcolStyle($noCol, $style);
+                $this->setColStyle($noCol, $style);
             }
         }
         return $this;
@@ -1611,14 +1591,15 @@ class ODTable extends ODContained
     public function addColClass(int $nCol, string $class)
     {
         $properties             = $this->getProperties();
-        $nbCols                 = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
-        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
-        if (!isset($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] = ""; }
-        if (!empty($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] .= " "; }
-        $properties['classesTab']['col'.$nCol] .= $class;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines($nCol, 1, $properties)) {
+            if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+            if (!isset($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] = ""; }
+            if (!empty($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] .= " "; }
+            $properties['classesTab']['col'.$nCol] .= $class;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -1647,9 +1628,10 @@ class ODTable extends ODContained
     public function getColClasses(int $nCol)
     {
         $properties             = $this->getProperties();
-        $nbCols                 = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
+        if ($this->validColsLines($nCol, 1, $properties)) {
         return (isset($properties['classesTab']['col'.$nCol])) ? $properties['classesTab']['col'.$nCol] : false;
+        }
+        return false;
     }
 
     /**
@@ -1659,13 +1641,14 @@ class ODTable extends ODContained
     public function clearColClasses(int $nCol)
     {
         $properties             = $this->getProperties();
-        $nbCols                 = sizeof($properties['cols']);
-        if ($nCol > $nbCols || $nCol < 1) return false;
-        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
-        if (isset($properties['classesTab']['col'.$nCol])) { unset($properties['classesTab']['col'.$nCol]); }
+        if ($this->validColsLines($nCol, 1, $properties)) {
+            if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+            if (isset($properties['classesTab']['col'.$nCol])) { unset($properties['classesTab']['col'.$nCol]); }
 
-        $this->setProperties($properties);
-        return $this;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -1676,14 +1659,15 @@ class ODTable extends ODContained
     public function addLineClass(int $nLine, string $class)
     {
         $properties             = $this->getProperties();
-        $nbLines = sizeof($properties['datas']);
-        if ($nLine > $nbLines|| $nLine< 1) return false;
-        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
-        if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = ""; }
-        if (!empty($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] .= " "; }
-        $properties['classesTab']['line'.$nLine] .= $class;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines(1, $nLine, $properties)) {
+            if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+            if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = ""; }
+            if (!empty($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] .= " "; }
+            $properties['classesTab']['line'.$nLine] .= $class;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -1696,13 +1680,14 @@ class ODTable extends ODContained
         if (is_array($classes)) { $classes = implode(" ", $classes); }
         if (!is_string($classes)) { return false; }
         $properties             = $this->getProperties();
-        $nbLines = sizeof($properties['datas']);
-        if ($nLine > $nbLines|| $nLine< 1) return false;
-        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
-        if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = []; }
-        $properties['classesTab']['line'.$nLine] = $classes;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->validColsLines(1, $nLine, $properties)) {
+            if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+            if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = []; }
+            $properties['classesTab']['line'.$nLine] = $classes;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -1712,9 +1697,10 @@ class ODTable extends ODContained
     public function getLineClasses(int $nLine)
     {
         $properties             = $this->getProperties();
-        $nbLines = sizeof($properties['datas']);
-        if ($nLine > $nbLines|| $nLine< 1) return false;
-        return (isset($properties['classesTab']['line'.$nLine])) ? $properties['classesTab']['line'.$nLine] : false;
+        if ($this->validColsLines(1, $nLine, $properties)) {
+            return (isset($properties['classesTab']['line'.$nLine])) ? $properties['classesTab']['line'.$nLine] : false;
+        }
+        return false;
     }
 
     /**
@@ -1724,24 +1710,25 @@ class ODTable extends ODContained
     public function clearLineClasses(int $nLine)
     {
         $properties             = $this->getProperties();
-        $nbLines = sizeof($properties['datas']);
-        if ($nLine > $nbLines|| $nLine< 1) return false;
-        if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
-        if (isset($properties['classesTab']['line'.$nLine])) {
-            $classes = $properties['classesTab'];
-            unset($classes['line'.$nLine]);
-            $properties['classesTab'] = $classes;
-        }
+        if ($this->validColsLines(1, $nLine, $properties)) {
+            if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
+            if (isset($properties['classesTab']['line'.$nLine])) {
+                $classes = $properties['classesTab'];
+                unset($classes['line'.$nLine]);
+                $properties['classesTab'] = $classes;
+            }
 
-        $this->setProperties($properties);
-        return $this;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
      * @param string $idBtn
      * @param array $optionsBtn
      * @return ODTable|bool
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function addBtnAction(string $idBtn, array $optionsBtn)
     {
@@ -1785,10 +1772,32 @@ class ODTable extends ODContained
                 if (empty($left))   { $left = '1.25em'; }
                 if (empty($top))    { $top = '0em'; }
             }
-            if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
-                $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+
+            /** traitement de la nature du bouton : couleurs de présentation */
+            switch (true) {
+                case (array_key_exists('nature', $optionsBtn) && !empty($optionsBtn['nature'])):
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
+                case (array_key_exists('natureCustomBG', $optionsBtn) ||
+                        array_key_exists('natureCustomFG', $optionsBtn)) :
+                    if (!array_key_exists('natureCustomBG', $optionsBtn) || empty($optionsBtn['natureCustomBG'])){
+                        $optionsBtn['natureCustomBG'] = 'FFFFFF';
+                    }
+                    if (!array_key_exists('natureCustomFG', $optionsBtn) || empty($optionsBtn['natureCustomFG'])){
+                        $optionsBtn['natureCustomFG'] = '000000';
+                    }
+                    $optionsBtn['nature'] = '';
+                default:
+                    $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
             }
-            $btnAction->setNature($optionsBtn['nature']);
+
+            if (!empty($optionsBtn['nature'])) { $btnAction->setNature($optionsBtn['nature']); }
+            else {$btnAction->setNatureCustom($optionsBtn['natureCustomFG'], $optionsBtn['natureCustomBG']); }
+
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
             }
@@ -1823,7 +1832,7 @@ class ODTable extends ODContained
      * @param string $idBtn
      * @param array $optionsBtn
      * @return ODTable|bool
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setBtnAction(string $idBtn, array $optionsBtn)
     {
@@ -1844,10 +1853,32 @@ class ODTable extends ODContained
             { $btnAction->setIcon($optionsBtn['icon']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['pathFile']))
             { $btnAction->setImage($optionsBtn['pathFile']);}
-            if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
-                $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+
+            /** traitement de la nature du bouton : couleurs de présentation */
+            switch (true) {
+                case (array_key_exists('nature', $optionsBtn) && !empty($optionsBtn['nature'])):
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
+                case (array_key_exists('natureCustomBG', $optionsBtn) ||
+                    array_key_exists('natureCustomFG', $optionsBtn)) :
+                    if (!array_key_exists('natureCustomBG', $optionsBtn) || empty($optionsBtn['natureCustomBG'])){
+                        $optionsBtn['natureCustomBG'] = 'FFFFFF';
+                    }
+                    if (!array_key_exists('natureCustomFG', $optionsBtn) || empty($optionsBtn['natureCustomFG'])){
+                        $optionsBtn['natureCustomFG'] = '000000';
+                    }
+                    $optionsBtn['nature'] = '';
+                default:
+                    $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
             }
-            $btnAction->setNature($optionsBtn['nature']);
+
+            if (!empty($optionsBtn['nature'])) { $btnAction->setNature($optionsBtn['nature']); }
+            else {$btnAction->setNatureCustom($optionsBtn['natureCustomFG'], $optionsBtn['natureCustomBG']); }
+
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
             }
@@ -2065,7 +2096,7 @@ class ODTable extends ODContained
 
     /**
      * @return array    : tableau des valeurs de constantes commençant par ODTABLETITLEPOS_
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getTitlePosConstants()
     {
@@ -2085,7 +2116,7 @@ class ODTable extends ODContained
 
     /**
      * @return array    : tableau des valeurs de constantes commençant par ODTABLELENGTH_
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getLengthConstants()
     {
@@ -2141,5 +2172,14 @@ class ODTable extends ODContained
             if (!$valid) { break; }
         }
         return $valid;
+    }
+
+    private function validColsLines($nCol, $nLine, $properties)
+    {
+        $nbCols = sizeof($properties['cols']);
+        if ($nCol > $nbCols || $nCol < 1) return false;
+        $nbLines = sizeof($properties['datas']);
+        if ($nLine > $nbLines || $nLine < 1) return false;
+        if ($nbLines == 0) return false;
     }
 }
