@@ -875,6 +875,7 @@ class ODTreeview extends ODContained
                         $optionsBtn['natureCustomFG'] = '000000';
                     }
                     $optionsBtn['nature'] = '';
+                    break;
                 default:
                     $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
                     $optionsBtn['natureCustomBG'] = '';
@@ -953,6 +954,7 @@ class ODTreeview extends ODContained
                         $optionsBtn['natureCustomFG'] = '000000';
                     }
                     $optionsBtn['nature'] = '';
+                    break;
                 default:
                     $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
                     $optionsBtn['natureCustomBG'] = '';
