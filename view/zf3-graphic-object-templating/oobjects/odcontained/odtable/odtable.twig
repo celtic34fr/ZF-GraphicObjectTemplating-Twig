@@ -63,15 +63,6 @@ data-widthbt="{{ objet.widthBT }}" data-pager={{ objet.pagination }} >
     </div>
     {% endif %}
 
-
-    {# test test test#}
-
-        {{ dump(objet.btnActions) }}
-
-    {# test test test#}
-
-
-
     <table id="{{ objet.id }}_table"  style="width: 100% !important;" class="lno0 cno0 {{ objClass }} {{ objet.tableClasses }}" data-lno="0" data-cno="0">
         {% if objet.title is not empty %}
             <caption>{{ objet.title }}</caption>

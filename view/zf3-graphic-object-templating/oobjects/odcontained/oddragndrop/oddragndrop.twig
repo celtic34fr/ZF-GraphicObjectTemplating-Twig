@@ -9,8 +9,6 @@
     <input type="file" id="{{ objet.id }}Input" name="{{ objet.id }}Input[]" {% if objet.multiple %} multiple {% endif %}>
 </div>
 
-{#<pre>{{ dump(objet.loadedFiles) }}</pre>#}
-
 <script>
     $(document).ready(function (evt) {
         var urlGotCallback  = $("#gotcallback").text();
