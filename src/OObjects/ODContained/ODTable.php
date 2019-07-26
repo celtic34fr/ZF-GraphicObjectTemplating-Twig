@@ -150,15 +150,17 @@ class ODTable extends ODContained
     const ODTABLELENGTH_100 = 100;
 
     const ARRAY_OPTIONS             = [
-        'label'     => 'mixte',
-        'icon'      => 'mixte',
-        'pathFile'  => 'mixte',
-        'nature'    => 'noRequire',
-        'class'     => 'require',
-        'method'    => 'require',
-        'stopEvent' => 'noRequire',
-        'position'  => 'require',
-        'ord'       => 'noRequire'
+        'label'             => 'mixte',
+        'icon'              => 'mixte',
+        'pathFile'          => 'mixte',
+        'nature'            => 'noRequire',
+        'natureCustomBG'    => 'noRequire',
+        'natureCustomFG'    => 'noRequire',
+        'class'             => 'require',
+        'method'            => 'require',
+        'stopEvent'         => 'noRequire',
+        'position'          => 'require',
+        'ord'               => 'noRequire'
     ];
 
     private $const_titlePos;

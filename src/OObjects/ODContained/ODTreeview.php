@@ -101,15 +101,17 @@ class ODTreeview extends ODContained
     const COLORCLASS_MAROON         = 'maroon';
 
     const ARRAY_OPTIONS             = [
-        'label'     => 'mixte',
-        'icon'      => 'mixte',
-        'pathFile'  => 'mixte',
-        'nature'    => 'noRequire',
-        'class'     => 'require',
-        'method'    => 'require',
-        'stopEvent' => 'noRequire',
-        'position'  => 'require',
-        'ord'       => 'noRequire'
+        'label'             => 'mixte',
+        'icon'              => 'mixte',
+        'pathFile'          => 'mixte',
+        'nature'            => 'noRequire',
+        'natureCustomBG'    => 'noRequire',
+        'natureCustomFG'    => 'noRequire',
+        'class'             => 'require',
+        'method'            => 'require',
+        'stopEvent'         => 'noRequire',
+        'position'          => 'require',
+        'ord'               => 'noRequire'
     ];
 
     private $const_target;
@@ -857,10 +859,32 @@ class ODTreeview extends ODContained
                 if (empty($left))   { $left = '1.25em'; }
                 if (empty($top))    { $top = '0em'; }
             }
-            if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
-                $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+
+            /** traitement de la nature du bouton : couleurs de présentation */
+            switch (true) {
+                case (array_key_exists('nature', $optionsBtn) && !empty($optionsBtn['nature'])):
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
+                case (array_key_exists('natureCustomBG', $optionsBtn) ||
+                    array_key_exists('natureCustomFG', $optionsBtn)) :
+                    if (!array_key_exists('natureCustomBG', $optionsBtn) || empty($optionsBtn['natureCustomBG'])){
+                        $optionsBtn['natureCustomBG'] = 'FFFFFF';
+                    }
+                    if (!array_key_exists('natureCustomFG', $optionsBtn) || empty($optionsBtn['natureCustomFG'])){
+                        $optionsBtn['natureCustomFG'] = '000000';
+                    }
+                    $optionsBtn['nature'] = '';
+                default:
+                    $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
             }
-            $btnAction->setNature($optionsBtn['nature']);
+
+            if (!empty($optionsBtn['nature'])) { $btnAction->setNature($optionsBtn['nature']); }
+            else {$btnAction->setNatureCustom($optionsBtn['natureCustomFG'], $optionsBtn['natureCustomBG']); }
+
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
             }
@@ -913,10 +937,32 @@ class ODTreeview extends ODContained
             { $btnAction->setLabel($optionsBtn['label']);}
             if (isset($optionsBtn['icon']) && !empty($optionsBtn['icon']))
             { $btnAction->setIcon($optionsBtn['label']);}
-            if (!isset($optionsBtn['nature']) || empty($optionsBtn['nature'])) {
-                $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+
+            /** traitement de la nature du bouton : couleurs de présentation */
+            switch (true) {
+                case (array_key_exists('nature', $optionsBtn) && !empty($optionsBtn['nature'])):
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
+                case (array_key_exists('natureCustomBG', $optionsBtn) ||
+                    array_key_exists('natureCustomFG', $optionsBtn)) :
+                    if (!array_key_exists('natureCustomBG', $optionsBtn) || empty($optionsBtn['natureCustomBG'])){
+                        $optionsBtn['natureCustomBG'] = 'FFFFFF';
+                    }
+                    if (!array_key_exists('natureCustomFG', $optionsBtn) || empty($optionsBtn['natureCustomFG'])){
+                        $optionsBtn['natureCustomFG'] = '000000';
+                    }
+                    $optionsBtn['nature'] = '';
+                default:
+                    $optionsBtn['nature'] = ODButton::BUTTONNATURE_INFO;
+                    $optionsBtn['natureCustomBG'] = '';
+                    $optionsBtn['natureCustomFG'] = '';
+                    break;
             }
-            $btnAction->setNature($optionsBtn['nature']);
+
+            if (!empty($optionsBtn['nature'])) { $btnAction->setNature($optionsBtn['nature']); }
+            else {$btnAction->setNatureCustom($optionsBtn['natureCustomFG'], $optionsBtn['natureCustomBG']); }
+
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
             }
