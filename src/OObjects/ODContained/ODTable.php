@@ -1799,7 +1799,7 @@ class ODTable extends ODContained
             }
 
             if (!empty($optionsBtn['nature'])) { $btnAction->setNature($optionsBtn['nature']); }
-            else {$btnAction->setNatureCustom($optionsBtn['natureCustomFG'], $optionsBtn['natureCustomBG']); }
+            else {$btnAction->setNatureCustom($optionsBtn['natureCustomBG'], $optionsBtn['natureCustomFG']); }
 
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
@@ -1881,7 +1881,7 @@ class ODTable extends ODContained
             }
 
             if (!empty($optionsBtn['nature'])) { $btnAction->setNature($optionsBtn['nature']); }
-            else {$btnAction->setNatureCustom($optionsBtn['natureCustomFG'], $optionsBtn['natureCustomBG']); }
+            else {$btnAction->setNatureCustom($optionsBtn['natureCustomBG'], $optionsBtn['natureCustomFG']); }
 
             if (!isset($optionsBtn['stopEvent']) || empty($optionsBtn['stopEvent'])) {
                 $optionsBtn['stopEvent'] = false;
