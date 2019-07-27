@@ -25,7 +25,7 @@
     {% if btnClasses is empty %}#{{ objet.id }} button { width: 100% } {% endif %}
 
     {% if objet.custom is not empty %}
-    .btn-custom {
+    #{{ objet.id }} .btn-custom {
         color: #{{ objet.customColor }};
         background-color: #{{ objet.custom }};
         border-color: #{{ objet.customBorder }};
