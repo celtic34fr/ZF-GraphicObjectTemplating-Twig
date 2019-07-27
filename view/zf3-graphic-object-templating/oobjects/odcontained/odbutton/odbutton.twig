@@ -33,13 +33,13 @@
     {% endif %}
 
     {% if objet.pathFile is not empty %}
-    #{{ objet.id }} .btn-custom .ico-custom {
+    .ico-custom.{{ objet.id }} {
         display:block;
         background:black;
         color:white;
         text-decoration:none;
     }
-    #{{ objet.id }} .btn-custom .ico-custom:before{
+    .ico-custom.{{ objet.id }}:before{
         content: '';
         background: url("{{ objet.pathFile }}");
         background-size: cover;
@@ -67,7 +67,7 @@
 {% if objet.icon is not empty %}
     {% set icoClass = objet.icon %}
 {% elseif objet.pathFile is not empty %}
-    {% set icoClass = "ico-custom" %}
+    {% set icoClass = "ico-custom {{ objet.id }}" %}
 {% else %}
     {% set icoClass = "" %}
 {% endif %}
