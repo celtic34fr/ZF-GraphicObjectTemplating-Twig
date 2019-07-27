@@ -67,7 +67,7 @@
 {% if objet.icon is not empty %}
     {% set icoClass = objet.icon %}
 {% elseif objet.pathFile is not empty %}
-    {% set icoClass = "ico-custom {{ objet.id }}" %}
+    {% set icoClass = "ico-custom " ~ objet.id %}
 {% else %}
     {% set icoClass = "" %}
 {% endif %}
