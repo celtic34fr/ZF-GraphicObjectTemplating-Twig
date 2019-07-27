@@ -25,7 +25,7 @@
     {% if btnClasses is empty %}#{{ objet.id }} button { width: 100% } {% endif %}
 
     {% if objet.custom is not empty %}
-    #{{ objet.id }} .btn-custom {
+    .{{ objet.id }} .btn-custom {
         color: #{{ objet.customColor }};
         background-color: #{{ objet.custom }};
         border-color: #{{ objet.customBorder }};
@@ -33,13 +33,13 @@
     {% endif %}
 
     {% if objet.pathFile is not empty %}
-    .ico-custom.{{ objet.id }} {
+    .{{ objet.id }} .ico-custom {
         display:block;
         background:black;
         color:white;
         text-decoration:none;
     }
-    .ico-custom.{{ objet.id }}:before{
+    .{{ objet.id }} .ico-custom:before{
         content: '';
         background: url("{{ objet.pathFile }}");
         background-size: cover;
@@ -67,7 +67,7 @@
 {% if objet.icon is not empty %}
     {% set icoClass = objet.icon %}
 {% elseif objet.pathFile is not empty %}
-    {% set icoClass = "ico-custom " ~ objet.id %}
+    {% set icoClass = "ico-custom" %}
 {% else %}
     {% set icoClass = "" %}
 {% endif %}
