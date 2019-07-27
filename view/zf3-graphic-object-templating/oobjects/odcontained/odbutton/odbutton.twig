@@ -33,13 +33,13 @@
     {% endif %}
 
     {% if objet.pathFile is not empty %}
-    .ico-custom {
+    #{{ objet.id }} button .ico-custom {
         display:block;
         background:black;
         color:white;
         text-decoration:none;
     }
-    .ico-custom:before{
+    #{{ objet.id }} button .ico-custom:before{
         content: '';
         background: url("{{ objet.pathFile }}");
         background-size: cover;
