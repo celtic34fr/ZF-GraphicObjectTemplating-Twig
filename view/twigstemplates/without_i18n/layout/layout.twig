@@ -20,6 +20,9 @@
         .prependStylesheet(basePath('css/style.css'))
         .prependStylesheet(basePath('graphicobjecttemplating/css/font-awesome.css'))
         .prependStylesheet(basePath('graphicobjecttemplating/css/got-main.css'))
+        .prependStylesheet(basePath('graphicobjecttemplating/css/jquery-ui.min.css'))
+        .prependStylesheet(basePath('graphicobjecttemplating/css/jquery-ui.Structure.min.css'))
+        .prependStylesheet(basePath('graphicobjecttemplating/css/jquery-ui.theme.min.css'))
         | raw }}
         {% endblock Hstyle %}
         <!-- Le styles -->
@@ -40,6 +43,7 @@
         {% block Hscript %}
             <!-- Scripts -->
             {{ headScript()
+        .prependFile(basePath('graphicobjecttemplating/js/jquery-ui.min.js'))
         .prependFile(basePath('graphicobjecttemplating/js/got-main.js'))
         .prependFile(basePath('js/bootstrap.min.js'))
         .prependFile(basePath('js/jquery-3.1.0.min.js'))
