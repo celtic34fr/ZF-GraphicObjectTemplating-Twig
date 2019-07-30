@@ -831,7 +831,7 @@ class ODTreeview extends ODContained
      */
     public function addBtnAction(string $idBtn, array $optionsBtn)
     {
-        $validBtns  = $this->validArrayOptionsBtn($optionsBtn, self::ARRAY_OPTIONS);
+        $validBtns  = $this->validArrayOptions($optionsBtn, self::ARRAY_OPTIONS);
         if ($validBtns && !empty($idBtn)) {
             $item                       = [];
             $sessionObjects = self::validateSession();
@@ -936,7 +936,7 @@ class ODTreeview extends ODContained
      */
     public function setBtnAction(string $idBtn, array $optionsBtn)
     {
-        if ($this->validArrayOptionsBtn($optionsBtn, self::ARRAY_OPTIONS) && !empty($idBtn)) {
+        if ($this->validArrayOptions($optionsBtn, self::ARRAY_OPTIONS) && !empty($idBtn)) {
             $properties     = $this->getProperties();
             $btnActions     = $properties['btnActions'];
             if (!array_key_exists($idBtn, $btnActions)) { return false; }
