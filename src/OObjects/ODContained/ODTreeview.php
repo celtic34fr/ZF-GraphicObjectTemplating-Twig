@@ -164,8 +164,8 @@ class ODTreeview extends ODContained
             if ($this->validArrayOptions($options, self::LEAF_OPTIONS)) {
                 $libel      = $options['libel'];
                 $ord        = (int) ($options['ord']??null);
-                $widthbt    = $options['widthbt'] ?? "12";
-                $widthbt    = self::formatBootstrap($widthbt);
+                $widthbt    = $options['widthbt'] ?? "";
+                if (!empty($widthbt)) { $widthbt    = self::formatBootstrap($widthbt); }
                 $parent     = $options['parent'] ?? "0";
                 if ($parent == '0') {
                     if ($ord == 0) { $ord = max(array_keys($dataTree)) + 1; }

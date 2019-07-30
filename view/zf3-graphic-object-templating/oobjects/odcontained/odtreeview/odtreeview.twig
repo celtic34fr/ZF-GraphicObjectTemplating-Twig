@@ -21,7 +21,8 @@
             {% if item.selectable == false %} unselect{% endif %} leaf"
             {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"{% endif %}
         >
-            <div class="btnActions" data-btnactions="{{ btnActions }}" style="float: right"></div>
+            <div class="btnActions" data-btnactions="{{ btnActions }}"
+                {% if item.widthbt is defined and item.widthbt is not empty %}style="float: right"{% endif %}></div>
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -40,11 +41,12 @@
             {% if item.selectable == false %} unselect {% endif %} node"
             {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"{% endif %}
         >
-            <div class="btnActions" data-btnactions="{{ btnActions }}" style="float: right"></div>
+            <div class="btnActions" data-btnactions="{{ btnActions }}"
+                 {% if item.widthbt is defined and item.widthbt is not empty %}style="float: right"{% endif %}></div>
             {% if icon %}
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
-            <label style="float: left">
+            <label {% if item.widthbt is defined and item.widthbt is not empty %}style="float: left"{% endif %}>
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
             <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}
