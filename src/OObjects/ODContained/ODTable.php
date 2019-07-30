@@ -2178,6 +2178,12 @@ class ODTable extends ODContained
         return $valid;
     }
 
+    /**
+     * @param $nCol
+     * @param $nLine
+     * @param $properties
+     * @return bool
+     */
     private function validColsLines($nCol, $nLine, $properties)
     {
         $nbCols = sizeof($properties['cols']);
@@ -2185,5 +2191,6 @@ class ODTable extends ODContained
         $nbLines = sizeof($properties['datas']);
         if ($nLine > $nbLines || $nLine < 1) return false;
         if ($nbLines == 0) return false;
+        return true;
     }
 }
