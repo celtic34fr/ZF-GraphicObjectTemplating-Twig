@@ -204,6 +204,7 @@ class ODTreeview extends ODContained
                             'check'     => false,
                             'selectable'=> true,
                             'sortable'  => true,
+                            'widthbt'   => $widthbt,
                             'children'  => [],
                         ];
 

@@ -501,10 +501,13 @@ class OObject
     public static function formatBootstrap($widthBT)
     {
         if (!empty($widthBT)) {
-            $retour = '';
+            $retour = [];
             switch (true) {
                 case (is_numeric($widthBT)):
-                    $retour .= 'WL' . $widthBT . ':WM' . $widthBT . ':WS' . $widthBT . ':WX' . $widthBT;
+                    $retour['WL'] = 'WL'.$widthBT;
+                    $retour['WM'] = 'WM'.$widthBT;
+                    $retour['WS'] = 'WS'.$widthBT;
+                    $retour['WX'] = 'WX'.$widthBT;
                     break;
                 case (strpos($widthBT, ':') !== false):
                     $widthBTs = explode(':', $widthBT);
@@ -516,22 +519,31 @@ class OObject
                                     if (!empty($retour)) {
                                         $retour .= ':';
                                     }
-                                    $retour .= 'WL' . $val . ':WM' . $val . ':WS' . $val . ':WX' . $val;
+                                    $retour['WL'] = 'WL'.$val;
+                                    $retour['WM'] = 'WM'.$val;
+                                    $retour['WS'] = 'WS'.$val;
+                                    $retour['WX'] = 'WX'.$val;
                                 }
                                 if (substr($item, 0, 1) == 'O') {
                                     if (!empty($retour)) {
                                         $retour .= ':';
                                     }
-                                    $retour .= 'OL' . $val . ':OM' . $val . ':OS' . $val . ':OX' . $val;
+                                    $retour['OL'] = 'OL'.$widthBT;
+                                    $retour['OM'] = 'OM'.$widthBT;
+                                    $retour['OS'] = 'OS'.$widthBT;
+                                    $retour['OX'] = 'OX'.$widthBT;
                                 }
                                 break;
-                            case ((int)substr($widthBT, 1) == 0):
-                                $retour .= $item;
+                            default:
+                                $cle    = substr($item, 0, 2);
+                                $retour[$cle] = $item;
                                 break;
                         }
                     }
                     break;
             }
+            if (sizeof($retour) > 0) { return implode(':', $retour); }
+            else { $retour = ''; }
             return $retour;
         }
         return false;

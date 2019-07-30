@@ -3,8 +3,7 @@
 {% import _self as macros %}
 
 {% macro drawLeaf(item, objet, level) %}
-    {#{ dump(objet.colorClasses[level].normal['bg-color']) }#}
-    {% import _self as macros %}
+    {% import _self as macros%}
 
     {% set path = objet.dataPath %}
     {% set icon = objet.icon %}
@@ -16,64 +15,61 @@
     {% if btnActions|length > 0 %} {% set btnActions = substr(btnActions, 1) %} {% endif %}
 
     {% if item.children|length == 0 %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
-            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1
-            {% if item.selectable == false %} unselect{% endif %} leaf"
-            {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"{% endif %}
-        >
-            <div class="btnActions" data-btnactions="{{ btnActions }}"
-                {% if item.widthbt is defined and item.widthbt is not empty %}style="float: right"{% endif %}></div>
-            {% if icon %}
-                {% switch(item.icon) %}
-                {% case 'none' %}
-                    <i class="{{ objet.leafIco }} icon leaf"></i>
-                {% default %}
-                    <i class="{{ item.icon }} icon leaf"></i>
-                {% endswitch %}
-            {% endif %}
-            <label {% if item.widthbt is defined and item.widthbt is not empty %}style="float: left"{% endif %}>
-                {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
-            </label>
-        </li>
+        {% set type = 'leaf' %}
+        {% if icon %}
+            {% switch(item.icon) %}
+            {% case 'none' %}
+                {% set iconClasses = objet.leafIco ~" icon leaf" %}
+            {% default %}
+                {% set iconClasses = item.leafIco ~" icon leaf" %}
+            {% endswitch %}
+        {% endif %}
     {% else %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
-            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1
-            {% if item.selectable == false %} unselect {% endif %} node"
-            {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"{% endif %}
-        >
-            <div class="btnActions" data-btnactions="{{ btnActions }}"
-                 {% if item.widthbt is defined and item.widthbt is not empty %}style="float: right"{% endif %}></div>
-            {% if icon %}
-                <i class="{{ objet.nodeClosedIco }}"></i>
-            {% endif %}
-            <label {% if item.widthbt is defined and item.widthbt is not empty %}style="float: left"{% endif %}>
-                {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
-            </label>
-            <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}
-            {% if objet.sortable != false and item.sortable != false %} sortable {% endif %}"
-            {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="WL12:WM12:WS12:WX12"{% endif %}
-            >
-                {% for id,leaf in item.children %}
-                    {{ macros.drawLeaf(leaf, objet, level + 1) }}
-                {% endfor %}
-            </ul>
-        </li>
+        {% set type = 'node' %}
+        {% set iconClasses = objet.nodeClosedIco %}
     {% endif %}
+    {% if item.widthbt is defined and item.widthbt is not empty %} {% set type = type ~ " border" %} {% endif %}
+
+    <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
+        class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1
+                {% if item.selectable == false %} unselect{% endif %} {{ type }}"
+        {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"
+            {% else %}style="width:100%; float:left;"{% endif %}
+    >
+
+        <div class="btnActions" data-btnactions="{{ btnActions }}"
+             {% if item.widthbt is defined and item.widthbt is not empty %}style="float: right"{% endif %}></div>
+        {% if icon %}
+            <i class="{{ iconClasses }}"></i>
+        {% endif %}
+        <label {% if item.widthbt is defined and item.widthbt is not empty %}style="float: left"{% endif %}>
+            {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
+        </label>
+        {% if item.children|length != 0 %}
+        <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}
+        {% if objet.sortable != false and item.sortable != false %} sortable {% endif %}">
+            {% for id,leaf in item.children %}
+                {{ macros.drawLeaf(leaf, objet, level + 1) }}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
 {% endmacro %}
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 {% if objet.selection != false %} {% set objClasses = objClasses ~ ' selectable' %} {% endif %}
 
 <div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-role="{{ objet.type }}"
- data-default="{{ objet.default ? 'true' : 'false' }}" data-multiselect="{{ (objet.multiSelect) ? 'true' : 'false' }}"
-{% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
-{% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
-{% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+     data-default="{{ objet.default ? 'true' : 'false' }}" data-multiselect="{{ (objet.multiSelect) ? 'true' : 'false' }}"
+     {% if objet.widthBT is not empty %}data-widthbt="{{ objet.widthBT }}" {% endif %}
+        {% if objet.display is not empty %}data-display="{{ objet.display}}" {% endif %}
+        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
 
-{% if objet.event is not empty %}
-    {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
-{% endif %}
+        {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
+        {% endif %}
 >
+
     <style>
         li .check {
             background: url("http://{{ gotHttpHost() }}/img/checkGreen.svg") no-repeat left top;
@@ -82,6 +78,10 @@
             height:16px;
             display: block;
             float: right;
+        }
+
+        li.border {
+            border: 1px solid gray;
         }
 
         li .BAright {
@@ -141,5 +141,4 @@
         });
     </script>
 
-    {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'infoBulle':objet.infoBulle, 'id':objet.id} %}
 </div>
