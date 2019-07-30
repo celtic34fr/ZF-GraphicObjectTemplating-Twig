@@ -16,11 +16,12 @@
     {% if btnActions|length > 0 %} {% set btnActions = substr(btnActions, 1) %} {% endif %}
 
     {% if item.children|length == 0 %}
-        <li id="{{ objet.id }}Li-{{ path[item.ref] }}"
-            data-id = "{{ path[item.ref] }}"
-            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect{% endif %} leaf"
+        <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
+            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1
+            {% if item.selectable == false %} unselect{% endif %} leaf"
+            {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"{% endif %}
         >
-            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
+            <div class="btnActions" data-btnactions="{{ btnActions }}" style="float: right"></div>
             {% if icon %}
                 {% switch(item.icon) %}
                 {% case 'none' %}
@@ -29,23 +30,27 @@
                     <i class="{{ item.icon }} icon leaf"></i>
                 {% endswitch %}
             {% endif %}
-            <label>
+            <label style="float: left">
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
         </li>
     {% else %}
         <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
-            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1 {% if item.selectable == false %} unselect {% endif %} node"
+            class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1
+            {% if item.selectable == false %} unselect {% endif %} node"
+            {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"{% endif %}
         >
-            <div class="btnActions" data-btnactions="{{ btnActions }}"></div>
+            <div class="btnActions" data-btnactions="{{ btnActions }}" style="float: right"></div>
             {% if icon %}
                 <i class="{{ objet.nodeClosedIco }}"></i>
             {% endif %}
-            <label>
+            <label style="float: left">
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
             <ul class="t-sortable-inner {% if item.sortable == false %} disabled {% endif %}
-            {% if objet.sortable != false and item.sortable != false %} sortable {% endif %}">
+            {% if objet.sortable != false and item.sortable != false %} sortable {% endif %}"
+                data-widthbt="WL12:WM12:WS12:WX12"
+            >
                 {% for id,leaf in item.children %}
                     {{ macros.drawLeaf(leaf, objet, level + 1) }}
                 {% endfor %}
@@ -105,7 +110,9 @@
             {% if objet.title is defined and objet.title is not empty %}{{ objet.title}}{% endif %}
         </label>
         <ul class="t-sortable ml4 {% if objet.sortable == false %} disabled {% endif %}
-        {% if objet.dataTree is not empty %}node{% endif %} {% if objet.sortable != false %} sortable {% endif %}">
+        {% if objet.dataTree is not empty %}node{% endif %} {% if objet.sortable != false %} sortable {% endif %}"
+            data-widthbt="WL12:WM12:WS12:WX12"
+        >
         {% for leaf in objet.dataTree %}
             {{ macros.drawLeaf(leaf, objet, 1) }}
         {% endfor %}
@@ -122,6 +129,16 @@
         initTreeview('{{ objet.id }}');
 
         addBtnActionsTV('{{ objet.id }}');
+
+        $("#{{ objet.id }} ul").each(function () {
+            let btClass = buildBootstrapClasses($(this).data("widthbt"));
+            $(this).addClass(btClass);
+        });
+
+        $("#{{ objet.id }} li").each(function () {
+            let btClass = buildBootstrapClasses($(this).data("widthbt"));
+            $(this).addClass(btClass);
+        });
     </script>
 
     {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'infoBulle':objet.infoBulle, 'id':objet.id} %}

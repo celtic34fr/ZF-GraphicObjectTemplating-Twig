@@ -71,7 +71,7 @@ use Zend\ServiceManager\ServiceManager;
  * updateTree(array $tree, $path, array $item, bool $addNode = false)
  * validRefUnique(string $ref)
  * rmLeafTree(array $dataTree, array $refs)
- * validArrayOptionsBtn(array $optionsBtn)
+ * validArrayOptions(array $optionsBtn, array $arrayOptions)
  * addCloneNodeChild(string $refNode, string $newRef, array $dataPath)
  */
 class ODTreeview extends ODContained
@@ -114,6 +114,13 @@ class ODTreeview extends ODContained
         'ord'               => 'noRequire'
     ];
 
+    const LEAF_OPTIONS              = [
+        'libel'             => 'require',
+        'ord'               => 'noRequire',
+        'parent'            => 'noRequire',
+        'widthbt'           => 'noRequire'
+    ];
+
     private $const_target;
 
 
@@ -140,13 +147,11 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param string $ref
-     * @param string $libel
-     * @param int $ord
-     * @param string $parent
+     * @param string $ref       référence de la feuille ou du noeud
+     * @param array $options    options de création de la feuille ou du noeud
      * @return ODTreeview|bool
      */
-    public function addLeaf(string $ref, string $libel, int $ord = null, string $parent = "0")
+    public function addLeaf(string $ref, array $options)
     {
         $properties = $this->getProperties();
         if (empty($parent)) { $parent = '0'; }
@@ -156,51 +161,59 @@ class ODTreeview extends ODContained
         $validAct   = false;
 
         if ($this->validRefUnique($ref)) {
-            if ($parent == '0') {
-                if ($ord == 0) { $ord = max(array_keys($dataTree)) + 1; }
-                if (!isset($dataTree[$ord])) {
-                    $item = [
-                        'libel'     => $libel,
-                        'ord'       => $ord,
-                        'ref'       => $ref,
-                        'icon'      => 'none',
-                        'parent'    => '0',
-                        'check'     => false,
-                        'selectable'=> true,
-                        'sortable'  => true,
-                        'children'  => [],
-                    ];
+            if ($this->validArrayOptions($options, self::LEAF_OPTIONS)) {
+                $libel      = $options['libel'];
+                $ord        = (int) ($options['ord']??null);
+                $widthbt    = $options['widthbt'] ?? "12";
+                $widthbt    = self::formatBootstrap($widthbt);
+                $parent     = $options['parent'] ?? "0";
+                if ($parent == '0') {
+                    if ($ord == 0) { $ord = max(array_keys($dataTree)) + 1; }
+                    if (!isset($dataTree[$ord])) {
+                        $item = [
+                            'libel'     => $libel,
+                            'ord'       => $ord,
+                            'ref'       => $ref,
+                            'icon'      => 'none',
+                            'parent'    => '0',
+                            'check'     => false,
+                            'selectable'=> true,
+                            'sortable'  => true,
+                            'widthbt'   => $widthbt,
+                            'children'  => [],
+                        ];
 
-                    $dataTree[(string) $ord]    = $item;
-                    $dataPath[$ref]             = (string) $ord;
-                    $validAct                   = true;
-                    ksort($dataTree);
-                }
-            } else {
-                $leaf   = $this->getLeaf($parent);
-                if ($ord == 0 || !isset($leaf['children'][$ord])) {
-                    if ($ord == 0) {
-                        $keys = array_keys($leaf['children']);
-                        $ord  = empty($keys)? 1: (max($keys) + 1);
+                        $dataTree[(string) $ord]    = $item;
+                        $dataPath[$ref]             = (string) $ord;
+                        $validAct                   = true;
+                        ksort($dataTree);
                     }
-                    $item = [
-                        'libel'     => $libel,
-                        'ord'       => $ord,
-                        'ref'       => $ref,
-                        'icon'      => 'none',
-                        'parent'    => $parent,
-                        'check'     => false,
-                        'selectable'=> true,
-                        'sortable'  => true,
-                        'children'  => [],
-                    ];
+                } else {
+                    $leaf   = $this->getLeaf($parent);
+                    if ($ord == 0 || !isset($leaf['children'][$ord])) {
+                        if ($ord == 0) {
+                            $keys = array_keys($leaf['children']);
+                            $ord  = empty($keys)? 1: (max($keys) + 1);
+                        }
+                        $item = [
+                            'libel'     => $libel,
+                            'ord'       => $ord,
+                            'ref'       => $ref,
+                            'icon'      => 'none',
+                            'parent'    => $parent,
+                            'check'     => false,
+                            'selectable'=> true,
+                            'sortable'  => true,
+                            'children'  => [],
+                        ];
 
-                    $path               = explode('-', $dataPath[$parent]);
-                    if ((int) $path[0] == 0) { unset($path[0]); }
+                        $path               = explode('-', $dataPath[$parent]);
+                        if ((int) $path[0] == 0) { unset($path[0]); }
 
-                    $dataTree           = $this->updateTree($dataTree, $path, $item, true);
-                    $dataPath[$ref]     = $dataPath[$parent].'-'.$ord;
-                    $validAct           = true;
+                        $dataTree           = $this->updateTree($dataTree, $path, $item, true);
+                        $dataPath[$ref]     = $dataPath[$parent].'-'.$ord;
+                        $validAct           = true;
+                    }
                 }
             }
 
@@ -818,7 +831,7 @@ class ODTreeview extends ODContained
      */
     public function addBtnAction(string $idBtn, array $optionsBtn)
     {
-        $validBtns  = $this->validArrayOptionsBtn($optionsBtn);
+        $validBtns  = $this->validArrayOptionsBtn($optionsBtn, self::ARRAY_OPTIONS);
         if ($validBtns && !empty($idBtn)) {
             $item                       = [];
             $sessionObjects = self::validateSession();
@@ -923,7 +936,7 @@ class ODTreeview extends ODContained
      */
     public function setBtnAction(string $idBtn, array $optionsBtn)
     {
-        if ($this->validArrayOptionsBtn($optionsBtn) && !empty($idBtn)) {
+        if ($this->validArrayOptionsBtn($optionsBtn, self::ARRAY_OPTIONS) && !empty($idBtn)) {
             $properties     = $this->getProperties();
             $btnActions     = $properties['btnActions'];
             if (!array_key_exists($idBtn, $btnActions)) { return false; }
@@ -1274,13 +1287,14 @@ class ODTreeview extends ODContained
     }
 
     /**
-     * @param array $optionsBtn
+     * @param array $optionsBtn     tableau des options de contruction
+     * @param array $arrayOptions   tableau des options de référence
      * @return bool
      */
-    private function validArrayOptionsBtn(array $optionsBtn)
+    private function validArrayOptions(array $optionsBtn, array $arrayOptions)
     {
         $valid = true;
-        foreach (self::ARRAY_OPTIONS as $cle => $isRequire) {
+        foreach ($arrayOptions as $cle => $isRequire) {
             switch ($isRequire) {
                 case 'require' :
                     $valid = $valid && array_key_exists($cle, $optionsBtn);

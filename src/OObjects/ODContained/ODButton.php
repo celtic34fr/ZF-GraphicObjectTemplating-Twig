@@ -18,7 +18,7 @@ use Zend\Session\Container;
  * setIcon(string $icon)    affectation de la classe CSS pour affichage d'une icône à gauche du label (glyphicon, ...)
  * setImage(string $pathFile)
  *                          affectation d'une image comme icône du bouton à gauche du label (.ico-custom)
- * getIcon()                récupère suivant le cas la classe associé (setIcon()) ou le chemin de l'image (SetImage())
+ * getIcon()                récupère suivant le cas la classe associée (setIcon()) ou le chemin de l'image (setImage())
  * setForm(string $form = null)
  *                          rattachement du bouton à un 'formulaire' (cadre de l'objet OSForm) avec traitements induits
  * setType(string $type = self::BUTTONTYPE_CUSTOM)
@@ -40,7 +40,7 @@ use Zend\Session\Container;
  * getNatureCustomBackground()
  * getNatureCustomColor()
  * getNatureCustomBorder()
- * setWidth(string $width)  surchange de l'affectation de la largeur du bouton et de l'image servant d'icône en
+ * setWidth(string $width)  surcharge de l'affectation de la largeur du bouton et de l'image servant d'icône en
  *                          directives CSS
  * setLeft(string $left)    affectation du déport à gauche de l'image servant d'icône
  * getLeft()                récupération du déport à gauche de l'image servant d'icône
@@ -381,7 +381,7 @@ class ODButton extends ODContained
         $retour['custom']   = array_key_exists('custom', $properties) ? $properties['custom'] : false;
         $retour['customColor'] = array_key_exists('customColor', $properties) ? $properties['customColor'] : false;
         $retour['customBorder'] =
-                                array_key_exists('customBorder', $properties) ? $properties['customColor'] : false;
+                                array_key_exists('customBorder', $properties) ? $properties['customBorder'] : false;
         return $retour;
     }
 
