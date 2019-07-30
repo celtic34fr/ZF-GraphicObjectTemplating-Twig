@@ -31,7 +31,7 @@
                     <i class="{{ item.icon }} icon leaf"></i>
                 {% endswitch %}
             {% endif %}
-            <label style="float: left">
+            <label {% if item.widthbt is defined and item.widthbt is not empty %}style="float: left"{% endif %}>
                 {{ item.libel|raw }}<span class="odtcheck {% if item.check %} check{% endif %}" ></span>
             </label>
         </li>
