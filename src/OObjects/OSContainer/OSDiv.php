@@ -7,9 +7,10 @@ use GraphicObjectTemplating\OObjects\OSContainer;
 
 class OSDiv extends OSContainer
 {
-    public function __construct($id)
+    public function __construct(string $id, array $pathObjArray = [])
     {
-        parent::__construct($id, "oobjects/oscontainer/osdiv/osdiv.config.php");
+        $pathObjArray[] = "oobjects/oscontainer/osdiv/osdiv";
+        parent::__construct($id, $pathObjArray);
         if (!$this->getWidthBT() || empty($this->getWidthBT())) {
             $this->setWidthBT(12); // largeur Bootstrap Twitter à 12 par défaut
         }

@@ -174,7 +174,8 @@ class ODTable extends ODContained
      */
     public function __construct(string $id)
     {
-        parent::__construct($id, "oobjects/odcontained/odtable/odtable.config.php");
+        $pathObjArray[] = "oobjects/odcontained/odtable/odtable";
+		parent::__construct($id, $pathObjArray);
         $this->setDisplay();
         $width = $this->getWidthBT();
         if (!is_array($width) || empty($width)) $this->setWidthBT(12);
@@ -1992,7 +1993,8 @@ class ODTable extends ODContained
      * méthodes de gestion de retour de callback                                                         *
      * *************************************************************************************************** */
     
-    protected function generateInnerLine(string $id, int $noLine) {
+    protected function generateInnerLine(string $id, int $noLine)
+    {
         $properties     = $this->getProperties();
         $line = $this->getLine($noLine);
         $code = '';

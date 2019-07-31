@@ -118,7 +118,6 @@ use Exception;
 use GraphicObjectTemplating\Service\ZF3GotServices;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
-use GraphicObjectTemplating\OObjects\OSContainer;
 
 class OObject
 {
@@ -216,29 +215,58 @@ class OObject
      * OObject constructor.
      *
      * @param string $id            identifiant de l'objet
-     * @param $pathObjArray string  chemin partiel du fichier config de l'objet étendu
+     * @param $pathObjArray array chemin partiel du fichier config de l'objet étendu
      * @throws Exception
      */
-    public function __construct(string $id, string $pathObjArray)
+    public function __construct(string $id, array $pathObjArray)
     {
+
         if (empty($id)) {
-            $id     = 'dummy';
+            $id = 'dummy';
             self::destroyObject($id, false);
         }
         $sessionObj = self::validateSession();
         $object = $sessionObj->objects;
         if (!$object || !array_key_exists($id, $object)) {
-            if (!empty($pathObjArray)) {
-                $path  = __DIR__ ;
-                $path .= '/../../view/zf3-graphic-object-templating/' . trim($pathObjArray);
-                $objProperties = include $path;
+            $path = __DIR__;
+            $path .= '/../../view/zf3-graphic-object-templating/';
+            if (is_array($pathObjArray)) {
+                $objProperties = [];
+                while ($name = array_pop($pathObjArray)) {
+                    $path_properties = $path . $name . '.config.php';
+                    $path_rscs = $path . $name . '.rscs.php';
+                    $objProperties = array_merge(include $path_properties, $objProperties);
+                    if (is_file($path_rscs)) {
+                        $rscsObj = include $path_rscs;
+                        if ($rscsObj) {
+                            $rscsSession = $sessionObj->resources ?? [];
+                            $prefix = 'graphicobjecttemplating/oobjects/';
+                            if (array_key_exists('prefix', $rscsObj)) {
+                                $prefix = 'gotextension/' . $rscsObj['prefix'] . 'oeobjects/';
+                                unset($rscsObj['prefix']);
+                            }
+                            foreach ($rscsObj as $type => $filesInfo) {
+                                if (!array_key_exists($type, $rscsSession)) {
+                                    $rscsSession[$type] = [];
+                                }
+                                foreach ($filesInfo as $name => $path) {
+                                    $rscsSession[$type][$name] = $prefix . $objProperties['typeObj'] . '/' . $objProperties['object'] . '/' . $path;
+                                }
+                            }
+                            $sessionObj->resources = $rscsSession;
+                        }
+                    }
+                }
+            } elseif (is_string($pathObjArray)) {
+                if (!empty($pathObjArray = trim($pathObjArray))) {
+                    $objProperties = include $path.$pathObjArray;
+                }
             }
-            $objProperties['id']    = $id;
-            $objProperties['name']  = $id;
-            $this->id               = $id;
-            $this->name             = $id;
 
-
+            $objProperties['id'] = $id;
+            $objProperties['name'] = $id;
+            $this->id = $id;
+            $this->name = $id;
             if (array_key_exists('typeObj', $objProperties)) {
                 $templateName = 'zf3-graphic-object-templating/oobjects/' . $objProperties['typeObj'];
                 $templateName .= '/' . $objProperties['object'] . '/' . $objProperties['template'];
@@ -252,39 +280,7 @@ class OObject
                 $objName = str_replace('/', chr(92), $objName);
                 $objProperties['className'] = $objName;
             }
-
-            /** ajout des attributs de base à l'objet */
-            $properties = include __DIR__ . '/../../view/zf3-graphic-object-templating/oobjects/oobject.config.php';
-            foreach ($objProperties as $key => $objProperty) {
-                $properties[$key] = $objProperty;
-            }
-            $this->setProperties($properties);
-
-            if (!empty($pathObjArray)) {
-                $pathRscs = __DIR__;
-                $pathRscs .= '/../../view/zf3-graphic-object-templating/oobjects/' . $properties['typeObj'];
-                $pathRscs .= '/' . $properties['object'] . '/' . $properties['object'] . '.rscs.php';
-                if (is_file($pathRscs)) {
-                    $rscsObj = include $pathRscs;
-                    if ($rscsObj) {
-                        $rscsSession = $sessionObj->resources ?? [];
-                        $prefix = 'graphicobjecttemplating/oobjects/';
-                        if (array_key_exists('prefix', $rscsObj)) {
-                            $prefix = 'gotextension/' . $rscsObj['prefix'] . 'oeobjects/';
-                            unset($rscsObj['prefix']);
-                        }
-                        foreach ($rscsObj as $type => $filesInfo) {
-                            if (!array_key_exists($type, $rscsSession)) {
-                                $rscsSession[$type] = [];
-                            }
-                            foreach ($filesInfo as $name => $path) {
-                                $rscsSession[$type][$name] = $prefix . $properties['typeObj'] . '/' . $properties['object'] . '/' . $path;
-                            }
-                        }
-                        $sessionObj->resources = $rscsSession;
-                    }
-                }
-            }
+            $this->setProperties($objProperties);
         } else {
             $this->id = $id;
             $properties = unserialize($object[$id]);
@@ -501,50 +497,33 @@ class OObject
     public static function formatBootstrap($widthBT)
     {
         if (!empty($widthBT)) {
-            $retour = [];
+            $ret = [];
             switch (true) {
                 case (is_numeric($widthBT)):
-                    $retour['WL'] = 'WL'.$widthBT;
-                    $retour['WM'] = 'WM'.$widthBT;
-                    $retour['WS'] = 'WS'.$widthBT;
-                    $retour['WX'] = 'WX'.$widthBT;
+                    $ret['WL'] = 'WL'.$widthBT;
+                    $ret['WM'] = 'WM'.$widthBT;
+                    $ret['WS'] = 'WS'.$widthBT;
+                    $ret['WX'] = 'WX'.$widthBT;
                     break;
                 case (strpos($widthBT, ':') !== false):
                     $widthBTs = explode(':', $widthBT);
                     foreach ($widthBTs as $item) {
-                        switch (true) {
-                            case ((int)substr($item, 1) > 0):
-                                $val = substr($item, 1);
-                                if (substr($item, 0, 1) == 'W') {
-                                    if (!empty($retour)) {
-                                        $retour .= ':';
-                                    }
-                                    $retour['WL'] = 'WL'.$val;
-                                    $retour['WM'] = 'WM'.$val;
-                                    $retour['WS'] = 'WS'.$val;
-                                    $retour['WX'] = 'WX'.$val;
-                                }
-                                if (substr($item, 0, 1) == 'O') {
-                                    if (!empty($retour)) {
-                                        $retour .= ':';
-                                    }
-                                    $retour['OL'] = 'OL'.$widthBT;
-                                    $retour['OM'] = 'OM'.$widthBT;
-                                    $retour['OS'] = 'OS'.$widthBT;
-                                    $retour['OX'] = 'OX'.$widthBT;
-                                }
-                                break;
-                            default:
-                                $cle    = substr($item, 0, 2);
-                                $retour[$cle] = $item;
-                                break;
+                        if ((int) ($val = substr($item, 1)) > 0) {
+                            $k = substr($item, 0, 1);
+                            $ret[$k . 'L'] = 'WL'.$val;
+                            $ret[$k . 'M'] = 'WM'.$val;
+                            $ret[$k . 'S'] = 'WS'.$val;
+                            $ret[$k . 'X'] = 'WX'.$val;
+                        } else {
+                            $key = substr($item, 0, 2);
+                            $ret[$key] = $item;
                         }
                     }
                     break;
             }
-            if (sizeof($retour) > 0) { return implode(':', $retour); }
-            else { $retour = ''; }
-            return $retour;
+            if (sizeof($ret) > 0) { return implode(':', $ret); }
+            else { $ret = ''; }
+            return $ret;
         }
         return false;
     }
@@ -635,7 +614,8 @@ class OObject
      * @param null $code
      * @return array
      */
-    public static function formatRetour($idSource, $idCible, $mode, $code = null) {
+    public static function formatRetour($idSource, $idCible, $mode, $code = null)
+    {
         if (empty($idCible)) { $idCible = $idSource; }
         return ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
     }
@@ -644,7 +624,8 @@ class OObject
      * @return array
      * @throws Exception
      */
-    public static function getPersistantObjs() {
+    public static function getPersistantObjs()
+    {
         $gotObjList = self::validateSession();
         $persistantObjs = $gotObjList->persistObjs;
         return $persistantObjs;

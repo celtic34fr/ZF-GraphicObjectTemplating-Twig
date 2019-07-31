@@ -48,7 +48,7 @@ class OSContainer extends OObject
      * @param $pathObjArray
      * @throws \Exception
      */
-    public function __construct($id, $pathObjArray)
+    public function __construct(string $id, array $pathObjArray)
     {
         parent::__construct($id, $pathObjArray);
 
@@ -68,7 +68,8 @@ class OSContainer extends OObject
      * @return bool|mixed
      * @throws \Exception
      */
-    public function __get($nameChild) {
+    public function __get($nameChild)
+    {
         $sessionObj = OObject::validateSession();
         $objects    = $sessionObj->objects;
         $properties = $this->getProperties();
@@ -91,7 +92,8 @@ class OSContainer extends OObject
      * @return bool
      * @throws \Exception
      */
-    public function __isset($nameChild) {
+    public function __isset($nameChild)
+    {
         $sessionObj = OObject::validateSession();
         $objects    = $sessionObj->objects;
         $properties = $this->getProperties();

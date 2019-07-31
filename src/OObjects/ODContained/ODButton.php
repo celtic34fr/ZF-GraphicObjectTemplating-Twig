@@ -85,12 +85,12 @@ class ODButton extends ODContained
      * @param string $id
      * @throws ReflectionException
      */
-    public function __construct(string $id)
+    public function __construct(string $id, $pathObjArray = [])
     {
-        parent::__construct($id, "oobjects/odcontained/odbutton/odbutton.config.php");
+        $pathObjArray[] = "oobjects/odcontained/odbutton/odbutton";
+		parent::__construct($id, $pathObjArray);
 
-        $properties = $this->getProperties();
-        if ($properties['id'] != 'dummy') {
+        if ($this->getId() != 'dummy') {
             if (!$this->getWidthBT() || empty($this->getWidthBT())) {
                 $this->setWidthBT(12);
             }
@@ -416,7 +416,7 @@ class ODButton extends ODContained
      * @param $width
      * @return $this
      */
-    public function setWidth(string $width)
+    public function setWidth($width)
     {
         $properties = $this->getProperties();
         $properties['width'] = $width;

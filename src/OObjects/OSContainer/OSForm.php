@@ -76,8 +76,8 @@ use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
 class OSForm extends OSDiv
 {
 
-    const OSFORMBTN_RESET           = 'reset';
-    const OSFORMBTN_SUBMIT          = 'submit';
+    const TYPE_BTN_RESET           = 'reset';
+    const TYPE_BTN_SUBMIT          = 'submit';
 
     const OSFORMDISPBTN_HORIZONTAL  = 'H';
     const OSFORMDISPBTN_VERTICAL    = 'V';
@@ -89,60 +89,14 @@ class OSForm extends OSDiv
      * @param $id
      * @throws Exception
      */
-    public function __construct($id)
+    public function __construct(string $id, array $pathObjArray = [])
     {
         /** création de l'objet de base OSDiv */
-        parent::__construct($id);
-        /** ajout des propriétés spécifiques au formulaire */
-        $localAttributes = include __DIR__ . '/../../../view/zf3-graphic-object-templating/oobjects/oscontainer/osform/osform.config.php';
-        $properties = $this->getProperties();
-
-        $properties['object']    = 'osform';
-        $properties['typeObj']   = 'oscontainer';
-        $properties['template']  = 'osform.twig';
-        $properties['resources'] = (array_key_exists('resources', $localAttributes)) ? $localAttributes['resources'] : [];
-        foreach ($localAttributes as $key => $localAttribute) {
-            if (!array_key_exists($key, $properties)) {
-                $properties[$key] = $localAttribute;
-            }
-        }
-        $templateName = 'zf3-graphic-object-templating/oobjects/' . $properties['typeObj'];
-        $templateName .= '/' . $properties['object'] . '/' . $properties['template'];
-        $properties['template'] = $templateName;
-
-        $objName = 'GraphicObjectTemplating/OObjects/';
-        $objName .= strtoupper(substr($properties['typeObj'], 0, 3));
-        $objName .= strtolower(substr($properties['typeObj'], 3)) . '/';
-        $objName .= strtoupper(substr($properties['object'], 0, 3));
-        $objName .= strtolower(substr($properties['object'], 3));
-        $objName = str_replace('/', chr(92), $objName);
-        $properties['className'] = $objName;
-
-        $this->setProperties($properties);
-        $this->saveProperties();
-
-        $sessionObj = OObject::validateSession();
-        $pathRscs   = __DIR__ ;
-        $pathRscs  .= '/../../../view/zf3-graphic-object-templating/oobjects/'.$properties['typeObj'].'/'.$properties['object'];
-        $pathRscs  .= '/'.$properties['object'].'.rscs.php';
-        $rscsObj        = include $pathRscs;
-        $rscsSession    = $sessionObj->resources ?? [];
-        $prefix         = 'graphicobjecttemplating/oobjects/';
-        if (array_key_exists('prefix', $rscsObj)) {
-            $prefix         = 'gotextension/'.$rscsObj['prefix'].'oeobjects/';
-            unset($rscsObj['prefix']);
-        }
-        foreach ($rscsObj as $type => $filesInfo) {
-            if (!array_key_exists($type, $rscsSession)) { $rscsSession[$type] = []; }
-            foreach ($filesInfo as $name => $path) {
-                $rscsSession[$type][$name] = $prefix.$properties['typeObj'].'/'.$properties['object'].'/'.$path;
-            }
-        }
-        $sessionObj->resources = $rscsSession;
+        $pathObjArray[] = "oobjects/oscontainer/osform/osform";
+        parent::__construct($id, $pathObjArray);
 
         $divCtrls   = new OSDiv($this->getId().'Ctrls');
         $divCtrls->saveProperties();
-
         return $this;
     }
 
@@ -372,6 +326,7 @@ class OSForm extends OSDiv
                                 $options[$value]['check'] = $check;
                             }
                         }
+                        break;
                     default:
                         $properties['value'] = $data;
                         break;
@@ -405,7 +360,7 @@ class OSForm extends OSDiv
         $name           = (string) $name;
         $type           = (string) $type;
         $types          = $this->getBtnConstants();
-        if (!in_array($type, $types)) { $type = self::OSFORMBTN_SUBMIT; }
+        if (!in_array($type, $types)) { $type = self::TYPE_BTN_SUBMIT; }
         $properties     = $this->getProperties();
         $btnControls    = $properties['btnControls'] ?? [];
 //        if ($type == ODButton::BUTTONTYPE_RESET){ $ord = 4; }
@@ -879,7 +834,7 @@ class OSForm extends OSDiv
         if (empty($this->const_btn)) {
             $constants = $this->getConstants();
             foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'OSFORMBTN_');
+                $pos = strpos($key, 'TYPE_BTN_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }

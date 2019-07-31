@@ -32,21 +32,13 @@ class ODContained extends OObject
     /**
      * ODContained constructor.
      * @param string $id
-     * @param string $pathObjArray
+     * @param array $pathObjArray
      * @throws Exception
      */
-    public function __construct(string $id, string $pathObjArray)
+    public function __construct(string $id, array $pathObjArray = [])
     {
+        $pathObjArray[] = '/oobjects/odcontained/odcontained';
         parent::__construct($id, $pathObjArray);
-
-        /** ajout des attributs spécifiques à l'objet */
-        $properties = include __DIR__ . '/../../view/zf3-graphic-object-templating/oobjects/odcontained/odcontained.config.php';
-        foreach ($this->getProperties() as $key => $objProperty) {
-            if (!array_key_exists($key, $properties)) { $properties[$key] = $objProperty; }
-        }
-
-        $this->setProperties($properties);
-        $this->saveProperties();
         return $this;
     }
 
@@ -155,6 +147,7 @@ class ODContained extends OObject
             $sessionObjects = self::validateSession();
             /** @var OSForm $form */
             $form           = self::buildObject($properties['form'], $sessionObjects);
+            $value = $this->getValue();
             if (!$form->addHiddenValue($this->getId(), $value)) {
                 if (!$form->setHiddenValue($this->getId(), $value)) {
                     return false;

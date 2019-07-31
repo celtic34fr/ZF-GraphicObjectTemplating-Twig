@@ -127,12 +127,14 @@ class ODTreeview extends ODContained
     /**
      * ODTreeview constructor.
      * @param string $id
+     * @param array $pathObjArray
      * @throws ReflectionException
      * @throws Exception
      */
-    public function __construct(string $id)
+    public function __construct(string $id, $pathObjArray = [])
     {
-        parent::__construct($id, "oobjects/odcontained/odtreeview/odtreeview.config.php");
+        $pathObjArray[] = "oobjects/odcontained/odtreeview/odtreeview";
+        parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id']) {
@@ -630,7 +632,8 @@ class ODTreeview extends ODContained
      * @param string $ref
      * @return ODTreeview|bool
      */
-    public function enaSelectNode(string $ref) {
+    public function enaSelectNode(string $ref)
+    {
         $leaf   = $this->getLeaf($ref);
         if ($leaf) {
             $properties     = $this->getProperties();
@@ -651,7 +654,8 @@ class ODTreeview extends ODContained
      * @param string $ref
      * @return ODTreeview|bool
      */
-    public function disSelectNode(string $ref) {
+    public function disSelectNode(string $ref)
+    {
         $leaf   = $this->getLeaf($ref);
         if ($leaf) {
             $properties     = $this->getProperties();
@@ -673,7 +677,8 @@ class ODTreeview extends ODContained
      * @param bool $andChildren
      * @return ODTreeview|bool
      */
-    public function enaSortableNode(string $ref, bool $andChildren = false) {
+    public function enaSortableNode(string $ref, bool $andChildren = false)
+    {
 		$leaf	= $this->getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
@@ -702,7 +707,8 @@ class ODTreeview extends ODContained
      * @param bool $andChildren
      * @return ODTreeview|bool
      */
-    public function disSortableNode(string $ref, bool $andChildren = false) {
+    public function disSortableNode(string $ref, bool $andChildren = false)
+    {
 		$leaf	= $this->getLeaf($ref);
 		if (!empty($leaf)) {
 			$properties				= $this->getProperties();
@@ -1334,7 +1340,7 @@ class ODTreeview extends ODContained
         if (empty($ord) ||
             (array_key_exists('children', $parent) && !array_key_exists($ord, $parent['children']))) {
 
-            $this->addLeaf($newRef, $node['libel'], $ord, $node['parent']);
+            $this->addLeaf($newRef, $node['libel'], $ord, $node['parent']); // TODO: Fix this call.
 
             if (array_key_exists('children', $node) && !empty($node['children'])) {
                 foreach ($node['children'] as $child) {
