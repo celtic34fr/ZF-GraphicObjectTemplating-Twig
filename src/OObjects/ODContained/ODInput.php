@@ -76,9 +76,10 @@ class ODInput extends ODContained
 
     private $const_type;
 
-    public function __construct($id, $core = true)
+    public function __construct(string $id, $pathObjArray = [])
     {
-        parent::__construct($id, "oobjects/odcontained/odinput/odinput.config.php");
+        $pathObjArray[] = "oobjects/odcontained/odinput/odinput";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {
@@ -89,7 +90,7 @@ class ODInput extends ODContained
             $this->enable();
         }
 
-        if ($core){ $this->saveProperties(); }
+        $this->saveProperties();
         return $this;
     }
 

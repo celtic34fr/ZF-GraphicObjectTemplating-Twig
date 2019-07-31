@@ -99,8 +99,7 @@ class ODTinyMCE extends ODTextarea
      * @param $id
      * @throws \ReflectionException
      */
-    public function __construct($id)
-    {
+    public function __construct(string $id, array $pathObjArray = []) {
         parent::__construct($id);
 
         $properties = $this->getProperties();

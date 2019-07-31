@@ -59,9 +59,9 @@ class ODTextarea extends ODContained
      * @param $id
      * @throws \ReflectionException
      */
-    public function __construct($id)
-    {
-        parent::__construct($id, "oobjects/odcontained/odtextarea/odtextarea.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odtextarea/odtextarea";
+		parent::__construct($id, $pathObjArray);
         $this->setDisplay();
         $width = $this->getWidthBT();
         if (!is_array($width) || empty($width)) $this->setWidthBT(12);
