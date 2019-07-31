@@ -107,11 +107,13 @@ function addBtnActionsTV(idObj) {
         liNode     = $(this).parent('li');
 
         if ($(this).is(':empty')) {
-            btnActions.forEach(function (btnName) {
-                var button = $('#' + idObj + 'BtnsAction #' + btnName)[0].outerHTML;
-                button = button.replace(btnName, liNode.data('id') + btnName);
-                liNode.find('> div.btnActions').append(button);
-            })
+            if (btnActions.length > 0 && btnActions[0].length > 0) {
+                btnActions.forEach(function (btnName) {
+                    var button = $('#' + idObj + 'BtnsAction #' + btnName)[0].outerHTML;
+                    button = button.replace(btnName, liNode.data('id') + btnName);
+                    liNode.find('> div.btnActions').append(button);
+                });
+            }
         }
     });
 }
