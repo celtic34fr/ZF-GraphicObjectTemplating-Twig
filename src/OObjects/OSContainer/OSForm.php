@@ -76,11 +76,11 @@ use GraphicObjectTemplating\OObjects\OSContainer\OSDiv;
 class OSForm extends OSDiv
 {
 
-    const TYPE_BTN_RESET           = 'reset';
-    const TYPE_BTN_SUBMIT          = 'submit';
+    const TYPE_BTN_RESET        = 'reset';
+    const TYPE_BTN_SUBMIT       = 'submit';
 
-    const OSFORMDISPBTN_HORIZONTAL  = 'H';
-    const OSFORMDISPBTN_VERTICAL    = 'V';
+    const DISP_BTN_HORIZONTAL   = 'H';
+    const DISP_BTN_VERTICAL     = 'V';
     protected $const_btn;
 
     /**
@@ -298,6 +298,7 @@ class OSForm extends OSDiv
 
     /**
      * @param array $datas
+     * @return bool|OSForm
      * @throws Exception
      */
     public function setFormDatas(array $datas)
@@ -326,6 +327,7 @@ class OSForm extends OSDiv
                                 $options[$value]['check'] = $check;
                             }
                         }
+                        $properties['options'] = $options;
                         break;
                     default:
                         $properties['value'] = $data;
@@ -334,7 +336,9 @@ class OSForm extends OSDiv
                 $objects[$cle] = serialize($properties);
             }
             $sessionObj->objets = $objects;
+            return $this;
         }
+        return false;
     }
 
     /**
@@ -404,7 +408,7 @@ class OSForm extends OSDiv
             $btnControls[$name]['object']   = $bouton->getId();
             $btnControls[$name]['ord']      = $ord;
 
-            if ($this->getBtnsCtrlP() == self::OSFORMDISPBTN_HORIZONTAL) {
+            if ($this->getBtnsCtrlP() == self::DISP_BTN_HORIZONTAL) {
                 if (empty($label) && !empty($icon)) { $bouton->addClass('btnIco'); }
                 // reprise des taille de boutons suit à ajout d'un
                 switch (sizeof($btnControls['ord'])) {
@@ -705,7 +709,7 @@ class OSForm extends OSDiv
     public function enaBtnsCtrlH()
     {
         $properties = $this->getProperties();
-        $properties['btnsDisplay'] = self::OSFORMDISPBTN_HORIZONTAL;
+        $properties['btnsDisplay'] = self::DISP_BTN_HORIZONTAL;
         $this->setProperties($properties);
         return $this;
     }
@@ -719,7 +723,7 @@ class OSForm extends OSDiv
         if ($widthBT == 0) { $widthBT = 2; }
 
         $properties = $this->getProperties();
-        $properties['btnsDisplay']  = self::OSFORMDISPBTN_VERTICAL;
+        $properties['btnsDisplay']  = self::DISP_BTN_VERTICAL;
         $properties['btnsWidthBT']  = $widthBT;
         $properties['widthBTctrls'] = self::formatBootstrap($widthBT);
         $properties['widthBTbody']  = self::formatBootstrap(12 - $widthBT);

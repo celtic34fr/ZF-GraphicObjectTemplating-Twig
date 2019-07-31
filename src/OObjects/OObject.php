@@ -227,39 +227,33 @@ class OObject
         }
         $sessionObj = self::validateSession();
         $object = $sessionObj->objects;
-        if (!$object || !array_key_exists($id, $object)) {
+        if (!($object && array_key_exists($id, $object))) {
             $path = __DIR__;
             $path .= '/../../view/zf3-graphic-object-templating/';
-            if (is_array($pathObjArray)) {
-                $objProperties = [];
-                while ($name = array_pop($pathObjArray)) {
-                    $path_properties = $path . $name . '.config.php';
-                    $path_rscs = $path . $name . '.rscs.php';
-                    $objProperties = array_merge(include $path_properties, $objProperties);
-                    if (is_file($path_rscs)) {
-                        $rscsObj = include $path_rscs;
-                        if ($rscsObj) {
-                            $rscsSession = $sessionObj->resources ?? [];
-                            $prefix = 'graphicobjecttemplating/oobjects/';
-                            if (array_key_exists('prefix', $rscsObj)) {
-                                $prefix = 'gotextension/' . $rscsObj['prefix'] . 'oeobjects/';
-                                unset($rscsObj['prefix']);
-                            }
-                            foreach ($rscsObj as $type => $filesInfo) {
-                                if (!array_key_exists($type, $rscsSession)) {
-                                    $rscsSession[$type] = [];
-                                }
-                                foreach ($filesInfo as $name => $path) {
-                                    $rscsSession[$type][$name] = $prefix . $objProperties['typeObj'] . '/' . $objProperties['object'] . '/' . $path;
-                                }
-                            }
-                            $sessionObj->resources = $rscsSession;
+            $objProperties = [];
+            while ($name = array_pop($pathObjArray)) {
+                $path_properties = $path . $name . '.config.php';
+                $path_rscs = $path . $name . '.rscs.php';
+                $objProperties = array_merge(include $path_properties, $objProperties);
+                if (is_file($path_rscs)) {
+                    $rscsObj = include $path_rscs;
+                    if ($rscsObj) {
+                        $rscsSession = $sessionObj->resources ?? [];
+                        $prefix = 'graphicobjecttemplating/oobjects/';
+                        if (array_key_exists('prefix', $rscsObj)) {
+                            $prefix = 'gotextension/' . $rscsObj['prefix'] . 'oeobjects/';
+                            unset($rscsObj['prefix']);
                         }
+                        foreach ($rscsObj as $type => $filesInfo) {
+                            if (!array_key_exists($type, $rscsSession)) {
+                                $rscsSession[$type] = [];
+                            }
+                            foreach ($filesInfo as $name => $path) {
+                                $rscsSession[$type][$name] = $prefix . $objProperties['typeObj'] . '/' . $objProperties['object'] . '/' . $path;
+                            }
+                        }
+                        $sessionObj->resources = $rscsSession;
                     }
-                }
-            } elseif (is_string($pathObjArray)) {
-                if (!empty($pathObjArray = trim($pathObjArray))) {
-                    $objProperties = include $path.$pathObjArray;
                 }
             }
 
@@ -510,10 +504,10 @@ class OObject
                     foreach ($widthBTs as $item) {
                         if ((int) ($val = substr($item, 1)) > 0) {
                             $k = substr($item, 0, 1);
-                            $ret[$k . 'L'] = 'WL'.$val;
-                            $ret[$k . 'M'] = 'WM'.$val;
-                            $ret[$k . 'S'] = 'WS'.$val;
-                            $ret[$k . 'X'] = 'WX'.$val;
+                            $ret[$k.'L'] = $k.'L'.$val;
+                            $ret[$k.'M'] = $k.'M'.$val;
+                            $ret[$k.'S'] = $k.'S'.$val;
+                            $ret[$k.'X'] = $k.'X'.$val;
                         } else {
                             $key = substr($item, 0, 2);
                             $ret[$key] = $item;
@@ -1544,12 +1538,11 @@ class OObject
     }
 
     /**
-     * @param $width
+     * @param string $width
      * @return $this
      */
-    public function setWidth($width)
+    public function setWidth(string $width)
     {
-        $width = (string) $width ;
         $properties = $this->getProperties();
         $properties['width'] = $width;
         $this->setProperties($properties);

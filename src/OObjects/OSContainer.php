@@ -2,6 +2,8 @@
 
 namespace GraphicObjectTemplating\OObjects;
 
+use Exception;
+
 /**
  * classe extenstion d'objet G.O.T. type contenu
  *
@@ -44,22 +46,14 @@ class OSContainer extends OObject
 
     /**
      * OSContainer constructor.
-     * @param $id
-     * @param $pathObjArray
-     * @throws \Exception
+     * @param string $id
+     * @param array $pathObjArray
+     * @throws Exception
      */
-    public function __construct(string $id, array $pathObjArray)
+    public function __construct(string $id, array $pathObjArray = [])
     {
+        $pathObjArray[] = '/oobjects/oscontainer/oscontainer';
         parent::__construct($id, $pathObjArray);
-
-        /** ajout des attributs spécifiques à l'objet */
-        $properties = include __DIR__ . '/../../view/zf3-graphic-object-templating/oobjects/oscontainer/oscontainer.config.php';
-        foreach ($this->getProperties() as $key => $objProperty) {
-            $properties[$key] = $objProperty;
-        }
-
-        $this->setProperties($properties);
-        $this->saveProperties();
         return $this;
     }
 

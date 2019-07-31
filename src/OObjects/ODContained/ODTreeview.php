@@ -1340,7 +1340,8 @@ class ODTreeview extends ODContained
         if (empty($ord) ||
             (array_key_exists('children', $parent) && !array_key_exists($ord, $parent['children']))) {
 
-            $this->addLeaf($newRef, $node['libel'], $ord, $node['parent']); // TODO: Fix this call.
+            $node['ord'] = $ord;
+            $this->addLeaf($newRef, $node); // TODO: Fix this call.
 
             if (array_key_exists('children', $node) && !empty($node['children'])) {
                 foreach ($node['children'] as $child) {

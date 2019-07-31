@@ -413,10 +413,10 @@ class ODButton extends ODContained
 	}
 
     /**
-     * @param $width
+     * @param string $width
      * @return $this
      */
-    public function setWidth($width)
+    public function setWidth(string $width)
     {
         $properties = $this->getProperties();
         $properties['width'] = $width;
