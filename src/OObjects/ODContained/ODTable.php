@@ -858,7 +858,7 @@ class ODTable extends ODContained
     public function showCol(int $nCol)
     {
         $properties = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
             $properties['cols'][$nCol]['view'] = true;
             $this->setProperties($properties);
             return $this;
@@ -873,7 +873,7 @@ class ODTable extends ODContained
     public function hideCol(int $nCol)
     {
         $properties = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
             $properties['cols'][$nCol]['view'] = false;
             $this->setProperties($properties);
             return $this;
@@ -888,7 +888,7 @@ class ODTable extends ODContained
     public function stateCol(int $nCol)
     {
         $properties = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
             return $properties['cols'][$nCol]['view'];
         }
         return false;
@@ -903,7 +903,7 @@ class ODTable extends ODContained
     {
         $lines = $this->getLines();
         $properties = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
             $rslt = [];
             foreach ($lines as $noLine => $line) {
                 if ((string) $line[$nCol] === $value) {
@@ -1593,7 +1593,7 @@ class ODTable extends ODContained
     public function addColClass(int $nCol, string $class)
     {
         $properties             = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
             if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
             if (!isset($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] = ""; }
             if (!empty($properties['classesTab']['col'.$nCol])) { $properties['classesTab']['col'.$nCol] .= " "; }
@@ -1630,7 +1630,7 @@ class ODTable extends ODContained
     public function getColClasses(int $nCol)
     {
         $properties             = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
         return (isset($properties['classesTab']['col'.$nCol])) ? $properties['classesTab']['col'.$nCol] : false;
         }
         return false;
@@ -1643,7 +1643,7 @@ class ODTable extends ODContained
     public function clearColClasses(int $nCol)
     {
         $properties             = $this->getProperties();
-        if ($this->validColsLines($nCol, 1, $properties)) {
+        if ($this->validCols($nCol, $properties)) {
             if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
             if (isset($properties['classesTab']['col'.$nCol])) { unset($properties['classesTab']['col'.$nCol]); }
 
@@ -1661,7 +1661,7 @@ class ODTable extends ODContained
     public function addLineClass(int $nLine, string $class)
     {
         $properties             = $this->getProperties();
-        if ($this->validColsLines(1, $nLine, $properties)) {
+        if ($this->validLines($nLine, $properties)) {
             if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
             if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = ""; }
             if (!empty($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] .= " "; }
@@ -1682,7 +1682,7 @@ class ODTable extends ODContained
         if (is_array($classes)) { $classes = implode(" ", $classes); }
         if (!is_string($classes)) { return false; }
         $properties             = $this->getProperties();
-        if ($this->validColsLines(1, $nLine, $properties)) {
+        if ($this->validLines($nLine, $properties)) {
             if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
             if (!isset($properties['classesTab']['line'.$nLine])) { $properties['classesTab']['line'.$nLine] = []; }
             $properties['classesTab']['line'.$nLine] = $classes;
@@ -1699,7 +1699,7 @@ class ODTable extends ODContained
     public function getLineClasses(int $nLine)
     {
         $properties             = $this->getProperties();
-        if ($this->validColsLines(1, $nLine, $properties)) {
+        if ($this->validLines($nLine, $properties)) {
             return (isset($properties['classesTab']['line'.$nLine])) ? $properties['classesTab']['line'.$nLine] : false;
         }
         return false;
@@ -1712,7 +1712,7 @@ class ODTable extends ODContained
     public function clearLineClasses(int $nLine)
     {
         $properties             = $this->getProperties();
-        if ($this->validColsLines(1, $nLine, $properties)) {
+        if ($this->validLines($nLine, $properties)) {
             if (!isset($properties['classesTab'])) { $properties['classesTab'] = []; }
             if (isset($properties['classesTab']['line'.$nLine])) {
                 $classes = $properties['classesTab'];
@@ -2186,8 +2186,18 @@ class ODTable extends ODContained
      */
     private function validColsLines($nCol, $nLine, $properties)
     {
+        return $this->validCols($nCol, $properties) && $this->validLines($nLine, $properties);
+    }
+
+    private function validCols($nCol, $properties)
+    {
         $nbCols = sizeof($properties['cols']);
         if ($nCol > $nbCols || $nCol < 1) return false;
+        return true;
+    }
+
+    private function validLines($nLine, $properties)
+    {
         $nbLines = sizeof($properties['datas']);
         if ($nLine > $nbLines || $nLine < 1) return false;
         if ($nbLines == 0) return false;
