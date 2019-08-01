@@ -234,7 +234,7 @@ class OObject
             while ($name = array_pop($pathObjArray)) {
                 $path_properties = $path . $name . '.config.php';
                 $path_rscs = $path . $name . '.rscs.php';
-                $objProperties = array_merge(include $path_properties, $objProperties);
+                $objProperties = $this->arrayMerge($objProperties, include $path_properties);
                 if (is_file($path_rscs)) {
                     $rscsObj = include $path_rscs;
                     if ($rscsObj) {
@@ -2059,16 +2059,20 @@ class OObject
     }
 
 
-    /** méthode(s) privée(s) de l'objet */
+    /** méthode(s) privée(s) de l'objet **/
 
+    /**
+     * @param array $array1
+     * @param array $array2
+     * @return array
+     */
     private function arrayMerge(array $array1, array $array2)
     {
         $resltArray     = [];
 
         foreach ($array2 as $cle => $item) {
-            if (array_key_exists($cle, $array1)) {
-                $tmparray           = array_merge($array1[$cle], $array2[$cle]);
-                $resltArray[$cle]   = $tmparray;
+            if (array_key_exists($cle, $array1)) { // prise valeur array2 comme finale
+                $resltArray[$cle]   = $item;
                 unset($array1[$cle]);
             } else {
                 $resltArray[$cle]   = $item;

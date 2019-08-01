@@ -52,7 +52,7 @@ class OSContainer extends OObject
      */
     public function __construct(string $id, array $pathObjArray = [])
     {
-        $pathObjArray[] = '/oobjects/oscontainer/oscontainer';
+        $pathObjArray[] = 'oobjects/oscontainer/oscontainer';
         parent::__construct($id, $pathObjArray);
         return $this;
     }

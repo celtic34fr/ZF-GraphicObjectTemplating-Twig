@@ -17,7 +17,7 @@ return [
     ],
     'hidden'            => [],
     'title'             => '',
-    'btnsDisplay'       => OSForm::OSFORMDISPBTN_HORIZONTAL,
+    'btnsDisplay'       => OSForm::DISP_BTN_HORIZONTAL,
     'btnsWidthBT'       => 2,
     'widthBTbody'       => '',
     'widthBTctrls'      => '',
