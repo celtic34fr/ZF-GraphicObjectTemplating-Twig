@@ -162,12 +162,14 @@ class ODMessage extends ODContained
 
     /**
      * ODMessage constructor.
-     * @param $id
+     * @param string $id
+     * @param array|null $pathObjArray
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function __construct($id) {
-        parent::__construct($id, 'oobjects/odcontained/odmessage/odmessage.config.php');
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = 'oobjects/odcontained/odmessage/odmessage';
+        parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id']) {

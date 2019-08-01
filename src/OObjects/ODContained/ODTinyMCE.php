@@ -100,7 +100,7 @@ class ODTinyMCE extends ODTextarea
      * @throws \ReflectionException
      */
     public function __construct(string $id, array $pathObjArray = []) {
-        parent::__construct($id);
+        parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         $properties['wysiwyg'] = true;

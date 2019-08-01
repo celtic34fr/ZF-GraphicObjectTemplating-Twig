@@ -66,8 +66,9 @@ class ODRadio extends ODContained
      * @param $id
      * @throws \ReflectionException
      */
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/odcontained/odradio/odradio.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odradio/odradio";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {

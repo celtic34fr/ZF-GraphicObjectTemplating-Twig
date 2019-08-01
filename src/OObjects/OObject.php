@@ -234,7 +234,7 @@ class OObject
             while ($name = array_pop($pathObjArray)) {
                 $path_properties = $path . $name . '.config.php';
                 $path_rscs = $path . $name . '.rscs.php';
-                $objProperties = $this->arrayMerge($objProperties, include $path_properties);
+                $objProperties = array_merge($objProperties, include $path_properties);
                 if (is_file($path_rscs)) {
                     $rscsObj = include $path_rscs;
                     if ($rscsObj) {

@@ -74,8 +74,9 @@ class ODNotification extends ODContained
     protected $const_NotificationType;
     protected $const_NotificationSize;
 
-    public function __construct($id) {
-        parent::__construct($id, 'oobjects/odcontained/odnotification/odnotification.config.php');
+    public function __construct(string $id, array $pathObjArray)
+    {
+        parent::__construct($id, ['oobjects/odcontained/odnotification/odnotification']);
 
         $properties = $this->getProperties();
         if ($properties['id']) {

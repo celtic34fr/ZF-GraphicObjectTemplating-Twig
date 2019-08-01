@@ -57,9 +57,9 @@ class ODMenu extends ODContained
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function __construct($id)
-    {
-        parent::__construct($id, "oobjects/odcontained/odmenu/odmenu.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odmenu/odmenu";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id']) {

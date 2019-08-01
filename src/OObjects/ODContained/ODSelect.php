@@ -115,8 +115,9 @@ class ODSelect extends ODContained
     protected $const_format;
     protected $const_color;
 
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/odcontained/odselect/odselect.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odselect/odselect";
+		parent::__construct($id, $pathObjArray);
         $this->setDisplay();
         $width = $this->getWidthBT();
         if (!is_array($width) || empty($width)) $this->setWidthBT(12);

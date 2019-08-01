@@ -177,9 +177,9 @@ class ODDragNDrop extends ODContained
      * @param $id
      * @throws ReflectionException
      */
-    public function __construct($id)
-    {
-        parent::__construct($id, "oobjects/odcontained/oddragndrop/oddragndrop.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/oddragndrop/oddragndrop";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {

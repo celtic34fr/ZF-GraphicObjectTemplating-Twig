@@ -61,8 +61,9 @@ class ODTreeviewOld extends ODContained
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/odcontained/odtreeview/odtreeview.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odtreeview/odtreeview";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id']) {

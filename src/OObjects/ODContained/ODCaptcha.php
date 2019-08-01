@@ -18,9 +18,9 @@ class ODCaptcha extends ODContained
      * @param $id
      * @throws \ReflectionException
      */
-    public function __construct($id)
-    {
-        parent::__construct($id, "oobjects/odcontained/odcaptcha/odcaptcha.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odcaptcha/odcaptcha";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {

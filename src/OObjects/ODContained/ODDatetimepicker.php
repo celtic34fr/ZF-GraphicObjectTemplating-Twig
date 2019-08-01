@@ -75,8 +75,9 @@ class ODDatetimepicker extends ODContained
 
     private $const_mode;
 
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/odcontained/oddatetimepicker/oddatetimepicker.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/oddatetimepicker/oddatetimepicker";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id']) {

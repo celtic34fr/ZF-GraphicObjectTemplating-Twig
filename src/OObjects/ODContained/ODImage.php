@@ -21,8 +21,9 @@ use GraphicObjectTemplating\OObjects\ODContained;
  */
 class ODImage extends ODContained
 {
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/odcontained/odimage/odimage.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odimage/odimage";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {

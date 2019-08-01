@@ -59,8 +59,9 @@ class ODBadge extends ODContained
      * @param $id
      * @throws \ReflectionException
      */
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/odcontained/odbadge/odbadge.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/odcontained/odbadge/odbadge";
+		parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {

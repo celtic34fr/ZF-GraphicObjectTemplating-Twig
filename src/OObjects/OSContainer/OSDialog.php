@@ -33,7 +33,7 @@ use GraphicObjectTemplating\OObjects\OSContainer;
  * enaAnimation()           : active l'animation de visualisation du dialogue modal
  * disAnimation()           : supprime l'animation de visualisation du dialogue modal
  */
-class OSDialog extends OSContainer
+class OSDialog extends OSForm
 {
     const COLOR_BLACK         = 'black';
     const COLOR_WHITE         = 'white';
@@ -92,18 +92,21 @@ class OSDialog extends OSContainer
     const SIZE_NORMAL         = 'normal';
     const SIZE_LARGE          = 'large';
 
+    const TYPE_BTN_CLOSE = 'close';
+
     protected $const_color;
     protected $const_size;
 
     /**
      * OSDialog constructor.
      * @param $id
+     * @param array $pathObjArray
      * @throws \ReflectionException
      * @throws \Exception
-     * @return OSDialog
      */
-    public function __construct($id) {
-        parent::__construct($id, "oobjects/oscontainer/osdialog/osdialog.config.php");
+    public function __construct(string $id, array $pathObjArray = []) {
+        $pathObjArray[] = "oobjects/oscontainer/osdialog/osdialog";
+        parent::__construct($id, $pathObjArray);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {
@@ -116,27 +119,15 @@ class OSDialog extends OSContainer
         $this->saveProperties();
         return $this;
     }
-
-    /**
-     * @return OSDialog
-     */
-    public function showBtnClose()
+    public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
-        $properties = $this->getProperties();
-        $properties['btnClose'] = true;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    /**
-     * @return OSDialog
-     */
-    public function hideBtnClose()
-    {
-        $properties = $this->getProperties();
-        $properties['btnClose'] = false;
-        $this->setProperties($properties);
-        return $this;
+        switch ($type) {
+            case self::TYPE_BTN_CLOSE:
+                $class  = 'javascript:';
+                $method = "$(#'.$this->getId().').modal('hide')";
+                break;
+        }
+        parent::addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class, $method, $stopEvent);
     }
 
     /**

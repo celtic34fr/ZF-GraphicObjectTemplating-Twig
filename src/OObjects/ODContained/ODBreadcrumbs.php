@@ -2,12 +2,12 @@
 
 namespace GoTemplating\Objects\ODContained;
 
-use GoTemplating\Objects\ODContained;
+use GraphicObjectTemplating\OObjects\ODContained;
 use Zend\Session\Container;
 
 /**
  * Class ODBreadcrumbs
- * @package GoTemplating\Objects\ODContained
+ * @package GraphicObjectTemplating\Objects\ODContained
  *
  * setTree      : initialise le fil d'ariane avec le contenu du tableau $tree [['label', 'url'], ...]
  * addItem      : ajoute à la suite un nouvel élément du fil d'ariane
@@ -17,14 +17,14 @@ use Zend\Session\Container;
 
 class ODBreadcrumbs extends ODContained
 {
-    public function __construct($id)
-    {
+    public function __construct(string $id, array $pathObjArray = []) {
         $session = new Container($id);
         if ($session->offsetExists('properties')) {
             $properties = unserialize($session->offsetGet('properties'), ['allowed_classes' => true]);
             $this->setProperties($properties);
         } else {
-            parent::__construct($id, "oobject/odcontained/odbreadcrumbs/odbreadcrumbs.config.phtml");
+            $pathObjArray[] = "oobject/odcontained/odbreadcrumbs/odbreadcrumbs.config.phtml";
+		parent::__construct($id, $pathObjArray);
         }
         $this->setDisplay();
     }

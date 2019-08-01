@@ -62,9 +62,9 @@ class ODMenuOld extends ODContained
     private $const_mode;
     private $const_target;
 
-    public function __construct($id)
+    public function __construct ($id)
     {
-        parent::__construct($id, "oobjects/odcontained/odmenu/odmenu.config.php");
+        parent::__construct($id, ["oobjects/odcontained/odmenu/odmenu.config.php"]);
 
         $properties = $this->getProperties();
         if ($properties['id'] != 'dummy') {
