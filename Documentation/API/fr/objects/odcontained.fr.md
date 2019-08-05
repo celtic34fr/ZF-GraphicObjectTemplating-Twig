@@ -1,6 +1,22 @@
 Les objets de type contenu - ODContained
 ========================================
 
+###Le bloc de paramétrage d'événement - bloc 'event'
+
+| Attribut | Explications |
+| :---  | --- |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+| class             | Suivant le type de bouton  |
+|                   |  - type lien (LINK) = la route Zend Framework du lien,                                      |
+|                   |  - autre type = le nom de la classe pour instancier l’objet dans lequel on exécutera une méthode. (avec son namespace Php). |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+| method            | Suivant le type de bouton  |
+|                   |  - type lien (LINK) = le tableau des paramètres permettant le calcul et génération de l’URL en fonction de la route Zend Framework, |
+|                   |  - autre type : nom de la méthode à exécuter dans l’objet instancié à partir du nom ce classe stocké dans class. |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+| stopEvent         | Booléen indiquant la propagation (true) ou la non propagation (false) de l’événement codé.  |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+
 Les objets de type contenu permettent le manipuler l'information tant en acquisition, qu'en restitution.
 
 Ils donnent aussi des éléments de contrôle, de dérivation, d'acccès à d'autres informations, d'autres pages.

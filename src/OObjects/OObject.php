@@ -116,6 +116,7 @@ namespace GraphicObjectTemplating\OObjects;
 
 use Exception;
 use GraphicObjectTemplating\Service\ZF3GotServices;
+use ReflectionException;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 
@@ -148,12 +149,6 @@ class OObject
     const IBTRIGGER_HOVER       = 'hover';
     const IBTRIGGER_FOCUS       = 'focus';
     const IBTRIGGER_MANUEL      = 'manuel';
-
-    private $const_display;
-    private $const_state;
-    private $const_IBtype;
-    private $const_IBplacement;
-    private $const_IBtrigger;
 
     const BOOLEAN_TRUE    = 'true';
     const BOOLEAN_FALSE   = 'false';
@@ -210,6 +205,14 @@ class OObject
     const COLOR_GRAYDARKER    = 'grayDarker';
     const COLOR_GRAYLIGHT     = 'grayLight';
     const COLOR_GRAYLIGHTER   = 'grayLighter';
+
+    private $constants = [];
+    private $const_display;
+    private $const_state;
+    private $const_IBtype;
+    private $const_IBplacement;
+    private $const_IBtrigger;
+    private $const_color;
 
     /**
      * OObject constructor.
@@ -335,7 +338,7 @@ class OObject
      */
     public static function buildObject($id, Container $sessionObj, $valeur = null)
     {
-        if (!empty($id)) {
+        if (!empty($id) && self::existObject($id, $sessionObj)) {
             $objects = $sessionObj->objects;
             $pObj    = $objects[$id];
             $properties = unserialize($pObj);
@@ -360,7 +363,7 @@ class OObject
     /**
      * @param OObject $object
      * @param Container $sessionObj
-     * @return OObject
+     * @return OObject|boolean
      * @throws Exception
      */
     public static function cloneObject(OObject $object, Container $sessionObj)
@@ -374,6 +377,7 @@ class OObject
             $tmpObj->saveProperties();
             return $tmpObj;
         }
+        return false;
     }
 
     /**
@@ -393,12 +397,6 @@ class OObject
 
             $tmpObjects             = [];
             $tmpResources           = [];
-//            if (is_array($persistantObjs)) {
-//                foreach ($persistantObjs as $id => $classe) {
-//                    $tmpObjects[$id]    = $objects[$id];
-//                    $tmpResources       = self::arrayMerge(ZF3GotServices::rscs($id), $tmpResources);
-//                }
-//            }
 
             if (is_array($persistantObjs)) {
                 $objIds = [];
@@ -480,15 +478,17 @@ class OObject
         $gotObjList = self::validateSession();
         unset($gotObjList->objects);
         $gotObjList->objects = [];
+        $gotObjList->persistObjs = [];
+        $gotObjList->resources  = [];
         $gotObjList->lastAccess = $now->format("Y-m-d H:i:s");
         return true;
     }
 
     /**
-     * @param $widthBT
+     * @param string $widthBT
      * @return bool|string
      */
-    public static function formatBootstrap($widthBT)
+    public static function formatBootstrap(string $widthBT)
     {
         if (!empty($widthBT)) {
             $ret = [];
@@ -745,7 +745,7 @@ class OObject
     /**
      * @param string $display
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
@@ -1617,7 +1617,7 @@ class OObject
     /**
      * @param string $IBtype
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setIBType($IBtype = self::IBTYPE_TOOLTIP)
     {
@@ -1775,12 +1775,11 @@ class OObject
     /**
      * @param string $IBplacement
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function setIBPlacement($IBplacement = self::IBPLACEMENT_TOP)
+    public function setIBPlacement(string $IBplacement = self::IBPLACEMENT_TOP)
     {
         $IBplacements = $this->getIBPlacementConstants();
-        $IBplacement  = (string) $IBplacement;
         if (!in_array($IBplacement, $IBplacements)) { $IBplacement = self::IBPLACEMENT_TOP; }
 
         $properties     = $this->getProperties();
@@ -1808,12 +1807,11 @@ class OObject
     }
 
     /**
-     * @param null $IBtitle
+     * @param string $IBtitle
      * @return $this
      */
-    public function setIBTitle($IBtitle = null)
+    public function setIBTitle(string $IBtitle = null)
     {
-        $IBtitle = (string) $IBtitle;
         $properties = $this->getProperties();
         if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
         $infoBulle  = $properties['infoBulle'];
@@ -1846,12 +1844,11 @@ class OObject
     }
 
     /**
-     * @param null $IBContent
+     * @param string $IBContent
      * @return $this
      */
-    public function setIBContent($IBContent = null)
+    public function setIBContent(string $IBContent = null)
     {
-        $IBContent = (string) $IBContent;
         $properties = $this->getProperties();
         if (!array_key_exists('infoBulle', $properties)) { $properties['infoBulle'] = []; }
         $infoBulle  = $properties['infoBulle'];
@@ -1886,12 +1883,11 @@ class OObject
     /**
      * @param string $IBtrigger
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function setIBTrigger($IBtrigger = self::IBTRIGGER_HOVER)
+    public function setIBTrigger(string $IBtrigger = self::IBTRIGGER_HOVER)
     {
         $IBtriggers = $this->getIBTriggerConstants();
-        $IBtrigger  = (string) $IBtrigger;
         if (!in_array($IBtrigger, $IBtriggers)) { $IBtrigger = self::IBTRIGGER_HOVER; }
         if ($this->getIBType() == self::IBTYPE_TOOLTIP && $IBtrigger == self::IBTRIGGER_MANUEL) {
             $IBtrigger = self::IBTRIGGER_HOVER;
@@ -1912,7 +1908,7 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected static function getConstants()
     {
@@ -1922,14 +1918,14 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getDisplayConstants()
     {
         $retour = [];
+        if (empty($this->constants)) { $this->constants = $this->getConstants(); }
         if (empty($this->const_display)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
+            foreach ($this->constants as $key => $constant) {
                 $pos = strpos($key, 'DISPLAY');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
@@ -1945,14 +1941,14 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getStateConstants()
     {
         $retour = [];
+        if (empty($this->constants)) { $this->constants = $this->getConstants(); }
         if (empty($this->const_state)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
+            foreach ($this->constants as $key => $constant) {
                 $pos = strpos($key, 'STATE');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
@@ -1968,15 +1964,15 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getIBTypeConstants()
     {
         $retour = [];
+        if (empty($this->constants)) { $this->constants = $this->getConstants(); }
         if (empty($this->const_IBtype)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
-                $pos = strpos($key, 'IBTYPE_');
+            foreach ($this->constants as $key => $constant) {
+                    $pos = strpos($key, 'IBTYPE_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
                 }
@@ -1991,14 +1987,14 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getIBPlacementConstants()
     {
         $retour = [];
+        if (empty($this->constants)) { $this->constants = $this->getConstants(); }
         if (empty($this->const_IBplacement)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
+            foreach ($this->constants as $key => $constant) {
                 $pos = strpos($key, 'IBPLACEMENT_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
@@ -2014,14 +2010,14 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getIBTriggerConstants()
     {
         $retour = [];
+        if (empty($this->constants)) { $this->constants = $this->getConstants(); }
         if (empty($this->const_IBtrigger)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
+            foreach ($this->constants as $key => $constant) {
                 $pos = strpos($key, 'IBTRIGGER_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
@@ -2037,14 +2033,14 @@ class OObject
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getColorConstants()
     {
         $retour = [];
+        if (empty($this->constants)) { $this->constants = $this->getConstants(); }
         if (empty($this->const_color)) {
-            $constants = $this->getConstants();
-            foreach ($constants as $key => $constant) {
+            foreach ($this->constants as $key => $constant) {
                 $pos = strpos($key, 'COLOR_');
                 if ($pos !== false) {
                     $retour[$key] = $constant;
