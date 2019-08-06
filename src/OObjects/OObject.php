@@ -119,6 +119,7 @@ use GraphicObjectTemplating\Service\ZF3GotServices;
 use ReflectionException;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
+use Zend\Validator\StringLength;
 
 class OObject
 {
@@ -652,6 +653,7 @@ class OObject
     /**
      * @param array $properties
      * @return $this|bool
+     * @throws Exception
      */
     public function setProperties(array $properties)
     {
@@ -672,11 +674,11 @@ class OObject
     }
 
     /**
-     * @param $id
+     * @param string $id
      * @return $this|bool
      * @throws Exception
      */
-    public function setId($id)
+    public function setId(string $id)
     {
         if (null !== $this->id) {
             $id                 = (string) $id;
@@ -715,19 +717,10 @@ class OObject
     public function setName(string $name)
     {
         if (null !== $this->id) {
-            $gotObjList         = self::validateSession();
-            $objects            = $gotObjList->objects;
-            $properties         = unserialize($objects[$this->id]);
-
+            $properties = $this->getProperties();
             $properties['name'] = $name;
-            $objects[$this->id] = serialize($properties);
-
-            $gotObjList->objects = $objects;
-            $gotObjList->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
-            $this->properties   = $properties;
-            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
             $this->name         = $name;
-
+            $this->setProperties($properties);
             return $this;
         }
         return false;
@@ -767,12 +760,12 @@ class OObject
     }
 
     /**
-     * @param $widthBT
+     * @param string $widthBT
      * @return $this|bool
+     * @throws Exception
      */
-    public function setWidthBT($widthBT)
+    public function setWidthBT(string $widthBT)
     {
-        $widthBT    = (string) $widthBT;
         if (!empty($widthBT)) {
             $retour = self::formatBootstrap($widthBT);
             $properties = $this->getProperties();
@@ -795,6 +788,7 @@ class OObject
     /**
      * @param string|null $className
      * @return $this|bool
+     * @throws Exception
      */
     public function setClassName(string $className = null)
     {
@@ -821,6 +815,7 @@ class OObject
     /**
      * @param string|null $template
      * @return $this|bool
+     * @throws Exception
      */
     public function setTemplate(string $template = null)
     {
@@ -847,6 +842,7 @@ class OObject
     /**
      * @param string|null $object
      * @return $this|bool
+     * @throws Exception
      */
     public function setObject(string $object = null)
     {
@@ -871,6 +867,7 @@ class OObject
     /**
      * @param string|null $typeObj
      * @return $this|bool
+     * @throws Exception
      */
     public function setTypeObj(string $typeObj = null)
     {
@@ -903,6 +900,7 @@ class OObject
     /**
      * @param null $classes
      * @return $this|bool
+     * @throws Exception
      */
     public function setClasses($classes = null)
     {
@@ -919,54 +917,53 @@ class OObject
     }
 
     /**
-     * @param null $class
+     * @param string $class
      * @return $this|bool
+     * @throws Exception
      */
-    public function addClass($class = null)
+    public function addClass(string $class = null)
     {
         if (!empty($class)) {
-            if (is_string($class)) {
-                $properties = $this->getProperties();
-                $classes    = $properties['classes'];
-                if (!strpos($classes, $class)) {
-                    $classes .= ' '.$class;
-                    $properties['classes'] = $classes;
-                    $this->setProperties($properties);
-                    return $this;
-                }
+            $properties = $this->getProperties();
+            $classes    = $properties['classes'];
+            if (!strpos($classes, $class)) {
+                $classes .= ' '.$class;
+                $properties['classes'] = $classes;
+                $this->setProperties($properties);
+                return $this;
             }
         }
         return false;
     }
 
     /**
-     * @param null $class
+     * @param string $class
      * @return $this|bool
+     * @throws Exception
      */
-    public function removeClass($class = null)
+    public function removeClass(string $class = null)
     {
         if (!empty($class)) {
-            if (is_string($class)) {
-                $properties = $this->getProperties();
-                $classes    = $properties['classes'];
-                if (in_array($class, $classes)) {
-                    $pos    = strpos($classes, $class);
-                    $classes = substr($classes, 0, $pos) . substr($classes, $pos + strlen($class));
-                    $properties['classes'] = $classes;
-                    $this->setProperties($properties);
-                    return $this;
-                }
+            $properties = $this->getProperties();
+            $classes    = $properties['classes'];
+            if (in_array($class, $classes)) {
+                $pos    = strpos($classes, $class);
+                $classes = substr($classes, 0, $pos) . substr($classes, $pos + strlen($class));
+                $properties['classes'] = $classes;
+                $this->setProperties($properties);
+                return $this;
             }
         }
         return false;
     }
 
     /**
-     * @param $nameFile
-     * @param $pathFile
+     * @param string $nameFile
+     * @param string $pathFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function addCssFile($nameFile, $pathFile)
+    public function addCssFile(string $nameFile, string $pathFile)
     {
         if (!empty($nameFile) && !empty($pathFile)) {
             if (file_exists($pathFile)) {
@@ -991,10 +988,11 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function removeCssFile($nameFile)
+    public function removeCssFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1019,10 +1017,10 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return bool
      */
-    public function getPathCssFile($nameFile)
+    public function getPathCssFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1040,10 +1038,11 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function enaCssFile($nameFile)
+    public function enaCssFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1067,10 +1066,11 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function disCssFile($nameFile)
+    public function disCssFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1094,10 +1094,10 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return bool|string
      */
-    public function getCssFileStatus($nameFile)
+    public function getCssFileStatus(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1120,11 +1120,12 @@ class OObject
     }
 
     /**
-     * @param $nameFile
-     * @param $pathFile
+     * @param string $nameFile
+     * @param string $pathFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function addJsFile($nameFile, $pathFile)
+    public function addJsFile(string $nameFile, string $pathFile)
     {
         if (!empty($nameFile) && !empty($pathFile)) {
             if (file_exists($pathFile)) {
@@ -1149,10 +1150,11 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function removeJsFile($nameFile)
+    public function removeJsFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1177,10 +1179,10 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return bool
      */
-    public function getPathJsFile($nameFile)
+    public function getPathJsFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1198,10 +1200,11 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function enaJsFile($nameFile)
+    public function enaJsFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1225,10 +1228,11 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return $this|bool
+     * @throws Exception
      */
-    public function disJsFile($nameFile)
+    public function disJsFile(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1252,10 +1256,10 @@ class OObject
     }
 
     /**
-     * @param $nameFile
+     * @param string $nameFile
      * @return bool|string
      */
-    public function getJsFileStatus($nameFile)
+    public function getJsFileStatus(string $nameFile)
     {
         if (!empty($nameFile)) {
             $properties = $this->getProperties();
@@ -1279,6 +1283,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function enable()
     {
@@ -1290,6 +1295,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function disable()
     {
@@ -1310,6 +1316,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function enaAutoCenter()
     {
@@ -1321,6 +1328,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function disAutoCenter()
     {
@@ -1349,12 +1357,12 @@ class OObject
     }
 
     /**
-     * @param $width
+     * @param string $width
      * @return $this
+     * @throws Exception
      */
-    public function setACWidth($width)
+    public function setACWidth(string $width)
     {
-        $width = (string) $width;
         $properties = $this->getProperties();
         $properties['acPx'] = $width;
         $this->setProperties($properties);
@@ -1371,12 +1379,12 @@ class OObject
     }
 
     /**
-     * @param $height
+     * @param string $height
      * @return $this
+     * @throws Exception
      */
-    public function setACHeight($height)
+    public function setACHeight(string $height)
     {
-        $height = (string) $height;
         $properties = $this->getProperties();
         $properties['acPy'] = $height;
         $this->setProperties($properties);
@@ -1395,11 +1403,12 @@ class OObject
     }
 
     /**
-     * @param $width
-     * @param $height
+     * @param string $width
+     * @param string $height
      * @return $this
+     * @throws Exception
      */
-    public function setACWidthHeight($width, $height)
+    public function setACWidthHeight(string $width, string $height)
     {
         $width = (string) $width;
         $height = (string) $height;
@@ -1411,10 +1420,10 @@ class OObject
     }
 
     /**
-     * @param null $event
+     * @param string $event
      * @return bool
      */
-    public function getEvent($event = null)
+    public function getEvent(string $event = null)
     {
         if (!empty($event)) {
             $properties = $this->getProperties();
@@ -1435,11 +1444,12 @@ class OObject
     }
 
     /**
-     * @param $event
-     * @param $class
-     * @param $method
+     * @param string $event
+     * @param string $class
+     * @param string $method
      * @param bool $stopEvent
      * @return $this|bool
+     * @throws Exception
      */
     public function setEvent(string $event, string $class, string $method, bool $stopEvent = false)
     {
@@ -1491,10 +1501,11 @@ class OObject
     }
 
     /**
-     * @param $event
+     * @param string $event
      * @return $this|bool
+     * @throws Exception
      */
-    public function disEvent($event)
+    public function disEvent(string $event)
     {
         if (!empty($event)) {
             $properties = $this->getProperties();
@@ -1525,7 +1536,7 @@ class OObject
         $sessionObj->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
         $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
 
-        return $sessionObj;
+        return $this;
     }
 
     /**
@@ -1540,6 +1551,7 @@ class OObject
     /**
      * @param string $width
      * @return $this
+     * @throws Exception
      */
     public function setWidth(string $width)
     {
@@ -1559,10 +1571,11 @@ class OObject
     }
 
     /**
-     * @param $height
+     * @param string $height
      * @return $this
+     * @throws Exception
      */
-    public function setHeight($height)
+    public function setHeight(string $height)
     {
         $height = (string) $height;
         $properties = $this->getProperties();
@@ -1619,7 +1632,7 @@ class OObject
      * @return $this
      * @throws ReflectionException
      */
-    public function setIBType($IBtype = self::IBTYPE_TOOLTIP)
+    public function setIBType(string $IBtype = self::IBTYPE_TOOLTIP)
     {
         $IBtypes    = $this->getIBTypeConstants();
         $IBtype     = (string) $IBtype;
@@ -1636,6 +1649,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function enaIBAnimation()
     {
@@ -1650,6 +1664,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function disIBAnimation()
     {
@@ -1695,6 +1710,7 @@ class OObject
     /**
      * @param array|null $delay
      * @return $this|bool
+     * @throws Exception
      */
     public function setIBDelay(array $delay = null)
     {
@@ -1716,6 +1732,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function enaIBHtml()
     {
@@ -1730,6 +1747,7 @@ class OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function disIBHtml()
     {
@@ -1809,6 +1827,7 @@ class OObject
     /**
      * @param string $IBtitle
      * @return $this
+     * @throws Exception
      */
     public function setIBTitle(string $IBtitle = null)
     {
@@ -1846,6 +1865,7 @@ class OObject
     /**
      * @param string $IBContent
      * @return $this
+     * @throws Exception
      */
     public function setIBContent(string $IBContent = null)
     {
