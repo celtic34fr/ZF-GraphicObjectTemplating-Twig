@@ -225,6 +225,8 @@ Méthode de génération de l’objet.
 * $id		: identifiant de l’objet,
 * $adrProperties	: tableau des noms et chemins d’accès du fichier de paramétrage de l’objet (spécifique).
 
+le tableau $adrProperties conteint l'ensemble des références de fichiers de configurations à intéghrer comme attributs de l'objet courant.
+
 ####Les méthodes générales
 
 | Méthode | Fonctionnalité |

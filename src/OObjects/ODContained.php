@@ -26,6 +26,7 @@ namespace GraphicObjectTemplating\OObjects;
 use Exception;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
+use ReflectionException;
 
 class ODContained extends OObject
 {
@@ -78,6 +79,7 @@ class ODContained extends OObject
     /**
      * @param string $form
      * @return $this|bool
+     * @throws Exception
      */
     public function setForm(string $form = null)
     {
@@ -102,6 +104,7 @@ class ODContained extends OObject
     /**
      * @param null $default
      * @return $this|bool
+     * @throws Exception
      */
     public function setDefault($default = null)
     {
@@ -126,7 +129,7 @@ class ODContained extends OObject
     /**
      * @param string $display
      * @return $this|bool|\GraphicObjectTemplating\OObjects\OObject
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
