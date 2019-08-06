@@ -57,7 +57,7 @@ Méthode de génération de l’objet.
 *	$id		: identifiant de l’objet,
 *	$pathObjArray	: tableau de noms et chemins du fichier de paramétrage de l’objet (spécifique).
 
-Le tableau $pathObjArray obteu de l’appel de la classe enfant est enrichi du fichier de configuration spécifique à la classe ODContained avant appel à la méthode parente dans OObject.
+Le tableau $pathObjArray obtenu de l’appel de la classe enfant est enrichi du fichier de configuration spécifique à la classe ODContained avant appel à la méthode parente dans OObject.
 
 ####Les méthodes générales
 

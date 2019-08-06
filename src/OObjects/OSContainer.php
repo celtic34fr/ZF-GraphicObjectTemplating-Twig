@@ -58,11 +58,11 @@ class OSContainer extends OObject
     }
 
     /**
-     * @param $nameChild
+     * @param string $nameChild
      * @return bool|mixed
      * @throws \Exception
      */
-    public function __get($nameChild)
+    public function __get(string $nameChild)
     {
         $sessionObj = OObject::validateSession();
         $objects    = $sessionObj->objects;
@@ -82,11 +82,11 @@ class OSContainer extends OObject
 
 
     /**
-     * @param $nameChild
+     * @param string $nameChild
      * @return bool
      * @throws \Exception
      */
-    public function __isset($nameChild)
+    public function __isset(string $nameChild)
     {
         $sessionObj = OObject::validateSession();
         $objects    = $sessionObj->objects;
@@ -113,10 +113,11 @@ class OSContainer extends OObject
     }
 
     /**
-     * @param null $form
+     * @param string $form
      * @return $this|bool
+     * @throws Exception
      */
-    public function setForm($form = null)
+    public function setForm(string $form = null)
     {
         if (!empty($form)) {
             $properties = $this->getProperties();
@@ -143,7 +144,7 @@ class OSContainer extends OObject
      * @return $this|bool
      * @throws \Exception
      */
-    public function addChild(OObject $child, $mode =self::MODE_LAST, $params=null)
+    public function addChild(OObject $child, string $mode =self::MODE_LAST, $params=null)
     {
         if (!empty($child)) {
             $properties     = $this->getProperties();
@@ -208,6 +209,7 @@ class OSContainer extends OObject
      * @param OObject $child
      * @param null $value
      * @return $this|bool
+     * @throws Exception
      */
     public function setChildValue(OObject $child, $value = null)
     {
@@ -224,6 +226,7 @@ class OSContainer extends OObject
     /**
      * @param OObject $child
      * @return $this|bool
+     * @throws Exception
      */
     public function removeChild(OObject $child)
     {
@@ -292,6 +295,7 @@ class OSContainer extends OObject
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function removeChildren()
     {
@@ -302,14 +306,13 @@ class OSContainer extends OObject
     }
 
     /**
-     * @param $selector
-     * @param $code
+     * @param string $selector
+     * @param string $code
      * @return $this|bool
+     * @throws Exception
      */
-    public function addCodeCss($selector, $code)
+    public function addCodeCss(string $selector, string $code)
     {
-        $selector = (string) $selector;
-        $code     = (string) $code;
         if (!empty($selector) && !empty($code)) {
             if ($selector == 'self') { $selector = ''; }
             $properties = $this->getProperties();
@@ -325,14 +328,13 @@ class OSContainer extends OObject
     }
 
     /**
-     * @param $selector
-     * @param $code
+     * @param string $selector
+     * @param string $code
      * @return $this|bool
+     * @throws Exception
      */
-    public function setCodeCss($selector, $code)
+    public function setCodeCss(string $selector, string $code)
     {
-        $selector = (string) $selector;
-        $code     = (string) $code;
         if (!empty($selector) && !empty($codeCss)) {
             $properties = $this->getProperties();
             $codeCss    = $properties['codeCss'];
@@ -347,12 +349,12 @@ class OSContainer extends OObject
     }
 
     /**
-     * @param $selector
+     * @param string $selector
      * @return $this|bool
+     * @throws Exception
      */
-    public function rmCodeCss($selector)
+    public function rmCodeCss(string $selector)
     {
-        $selector = (string) $selector;
         if (!empty($selector) && !empty($codeCss)) {
             $properties = $this->getProperties();
             $codeCss    = $properties['codeCss'];
@@ -367,12 +369,11 @@ class OSContainer extends OObject
     }
 
     /**
-     * @param $selector
+     * @param string $selector
      * @return bool
      */
-    public function getCodeCss($selector)
+    public function getCodeCss(string $selector)
     {
-        $selector = (string) $selector;
         if (!empty($selector) && !empty($codeCss)) {
             $properties = $this->getProperties();
             $codeCss    = $properties['codeCss'];
@@ -386,6 +387,7 @@ class OSContainer extends OObject
     /**
      * @param array $allCss
      * @return $this|bool
+     * @throws Exception
      */
     public function setAllCss(array $allCss)
     {
