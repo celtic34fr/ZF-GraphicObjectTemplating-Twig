@@ -16,7 +16,6 @@ return [
     'labelWidthBT'  => '',
     'inputWidthBT'  => '',
     'errMessage'    => '',
-    'icon'          => '',
     'autoFocus'     => false,
     'mask'          => '',
     'valMin'        => '',

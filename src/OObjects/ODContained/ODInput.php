@@ -2,9 +2,11 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
 use phpDocumentor\Reflection\Types\Self_;
+use ReflectionException;
 
 /**
  * Class ODInput
@@ -36,8 +38,6 @@ use phpDocumentor\Reflection\Types\Self_;
  * setErrMessage($errMessage)
  *                          affectation du message d'erreur à afficher
  * getErrMessage()
- * setIcon($icon)           affectation de la classe CSS pour affichage d'une icône à gauche du label (glyphicon, ...)
- * getIcon()
  * evtChange($class, $method, $stopEvent = false)
  *                          déclaration et paramétrage de l'évènement onChange sur la zone de saisie
  * getChange()              récupération des paramètres de l'évènement onChange sur la zone de saisie
@@ -76,6 +76,12 @@ class ODInput extends ODContained
 
     private $const_type;
 
+    /**
+     * ODInput constructor.
+     * @param string $id
+     * @param array $pathObjArray
+     * @throws ReflectionException
+     */
     public function __construct(string $id, $pathObjArray = [])
     {
         $pathObjArray[] = "oobjects/odcontained/odinput/odinput";
@@ -94,9 +100,13 @@ class ODInput extends ODContained
         return $this;
     }
 
-    public function setType($type = self::INPUTTYPE_TEXT)
+    /**
+     * @param string $type
+     * @return ODInput
+     * @throws Exception
+     */
+    public function setType(string $type = self::INPUTTYPE_TEXT)
     {
-        $type   = (string) $type;
         $types  = $this->getTypeConstants();
         if (!in_array($type, $types)) { $type = self::INPUTTYPE_TEXT; }
 
@@ -106,15 +116,22 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getType()
     {
         $properties = $this->getProperties();
         return array_key_exists('type', $properties) ? $properties['type'] : false;
     }
 
-    public function setSize($size)
+    /**
+     * @param int $size
+     * @return ODInput|bool
+     * @throws Exception
+     */
+    public function setSize(int $size)
     {
-        $size = (int) $size;
         if ($size > 0) {
             $properties = $this->getProperties();
             $properties['size'] = $size;
@@ -124,17 +141,24 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getSize()
     {
         $properties = $this->getProperties();
         return array_key_exists('size', $properties) ? $properties['size'] : false;
     }
 
-    public function setMinlength($minlength)
+    /**
+     * @param int $minlength
+     * @return ODInput|bool
+     * @throws Exception
+     */
+    public function setMinlength(int $minlength)
     {
         $properties = $this->getProperties();
-        $maxlength  = (int) $properties['maxlength'];
-        $minlength  = (int) $minlength;
+        $maxlength  = $properties['maxlength'];
         $type       = $properties['type'];
 
         if ($maxlength < $minlength || !in_array($type, [self::INPUTTYPE_TEXT, self::INPUTTYPE_PASSWORD])) { return false; }
@@ -144,6 +168,9 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getMinlength()
     {
         $properties = $this->getProperties();
@@ -152,11 +179,15 @@ class ODInput extends ODContained
         return $minLength;
     }
 
-    public function setMaxlength($maxlength)
+    /**
+     * @param $maxlength
+     * @return ODInput|bool
+     * @throws Exception
+     */
+    public function setMaxlength(int $maxlength)
     {
         $properties = $this->getProperties();
-        $minlength  = (int) $properties['minlength'];
-        $maxlength  = (int) $maxlength;
+        $minlength  = $properties['minlength'];
         $type       = $properties['type'];
 
         if ($maxlength < $minlength || !in_array($type, [self::INPUTTYPE_TEXT, self::INPUTTYPE_PASSWORD])) { return false; }
@@ -167,6 +198,9 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getMaxlength()
     {
         $properties = $this->getProperties();
@@ -175,37 +209,56 @@ class ODInput extends ODContained
         return $maxLength;
     }
 
-    public function setLabel($label)
+    /**
+     * @param string $label
+     * @return ODInput
+     * @throws Exception
+     */
+    public function setLabel(string $label)
     {
-        $label = (string) $label;
         $properties = $this->getProperties();
         $properties['label'] = $label;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabel()
     {
         $properties = $this->getProperties();
         return array_key_exists('label', $properties) ? $properties['label'] : false;
     }
 
-    public function setPlaceholder($placeholder)
+    /**
+     * @param string $placeholder
+     * @return ODInput
+     * @throws Exception
+     */
+    public function setPlaceholder(string $placeholder)
     {
-        $placeholder = (string) $placeholder;
         $properties = $this->getProperties();
         $properties['placeholder'] = $placeholder;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getPlaceholder()
     {
         $properties = $this->getProperties();
         return array_key_exists('placeholder', $properties) ? $properties['placeholder'] : false;
     }
 
-    public function setLabelWidthBT($labelWidthBT)
+    /**
+     * @param string $labelWidthBT
+     * @return ODInput|bool
+     * @throws Exception
+     */
+    public function setLabelWidthBT(string $labelWidthBT)
     {
         if (!empty($labelWidthBT)) {
             $widthLabChkBT  = self::formatLabelBT($labelWidthBT);
@@ -219,18 +272,28 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabelWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getInputWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('inputWidthBT', $properties) ? $properties['inputWidthBT'] : false;
     }
 
+    /**
+     * @return ODInput
+     * @throws Exception
+     */
     public function enaDispBySide()
     {
         $properties = $this->getProperties();
@@ -241,6 +304,10 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODInput
+     * @throws Exception
+     */
     public function enaDispUnder()
     {
         $properties = $this->getProperties();
@@ -252,37 +319,36 @@ class ODInput extends ODContained
         return $this;
     }
 
-    public function setErrMessage($errMessage)
+    /**
+     * @param string $errMessage
+     * @return ODInput
+     * @throws Exception
+     */
+    public function setErrMessage(string $errMessage)
     {
-        $errMessage     = (string) $errMessage;
         $properties     = $this->getProperties();
         $properties['errMessage'] = $errMessage;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getErrMessage()
     {
         $properties = $this->getProperties();
         return array_key_exists('errMessage', $properties) ? $properties['errMessage'] : false;
     }
 
-    public function setIcon($icon)
-    {
-        $icon = (string) $icon;
-        $properties = $this->getProperties();
-        $properties['icon'] = $icon;
-        $this->setProperties($properties);
-        return $this;
-    }
-
-    public function getIcon()
-    {
-        $properties = $this->getProperties();
-        return array_key_exists('icon', $properties) ? $properties['icon'] : false;
-    }
-
-    public function evtChange($class, $method, $stopEvent = false)
+    /**
+     * @param string $class
+     * @param string $method
+     * @param bool $stopEvent
+     * @return bool|ODInput
+     * @throws Exception
+     */
+    public function evtChange(string $class, string $method, bool $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
             return $this->setEvent('change', $class, $method, $stopEvent);
@@ -290,18 +356,32 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getChange()
     {
         return $this->getEvent('change');
     }
 
+    /**
+     * @return bool|ODInput
+     * @throws Exception
+     */
     public function disChange()
     {
         return $this->disEvent('change');
 
     }
 
-    public function evtKeyup($class, $method, $stopEvent = false)
+    /**
+     * @param string $class
+     * @param string $method
+     * @param bool $stopEvent
+     * @return bool|ODInput
+     * @throws Exception
+     */
+    public function evtKeyup(string $class, string $method, bool $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
             return $this->setEvent('keyup', $class, $method, $stopEvent);
@@ -309,17 +389,28 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getKeyup()
     {
         return $this->getEvent('keyup');
     }
 
+    /**
+     * @return bool|ODInput
+     * @throws Exception
+     */
     public function disKeyup()
     {
         return $this->disEvent('keyup');
 
     }
 
+    /**
+     * @return ODInput
+     * @throws Exception
+     */
     public function enaAutoFocus()
     {
         $properties = $this->getProperties();
@@ -328,6 +419,10 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODInput
+     * @throws Exception
+     */
     public function disAutoFocus()
     {
         $properties = $this->getProperties();
@@ -336,13 +431,21 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getAutoFocus()
     {
         $properties = $this->getProperties();
         return array_key_exists('autoFocus', $properties) ? $properties['autoFocus'] : false;
     }
 
-    public function enaMask($mask)
+    /**
+     * @param string $mask
+     * @return ODInput|bool
+     * @throws Exception
+     */
+    public function enaMask(string $mask)
     {
         $mask = (string) $mask;
         if (!empty($mask)) {
@@ -355,6 +458,10 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return ODInput
+     * @throws Exception
+     */
     public function disMask()
     {
         $properties = $this->getProperties();
@@ -363,17 +470,24 @@ class ODInput extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getMask()
     {
         $properties = $this->getProperties();
         return array_key_exists('mask', $properties) ? $properties['mask'] : false;
     }
 
-    public function setValMax($valMax = 0)
+    /**
+     * @param int $valMax
+     * @return ODInput|bool
+     * @throws Exception
+     */
+    public function setValMax(int $valMax = 0)
     {
-        $valMax = (int) $valMax;
         $properties = $this->getProperties();
-        $valMin     = (int) $properties['valMin'];
+        $valMin     = $properties['valMin'];
         $type       = $properties['type'];
 
         if ($valMax >= $valMin && $type == self::INPUTTYPE_NUMBER) {
@@ -384,6 +498,9 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getValMax()
     {
         $properties = $this->getProperties();
@@ -392,6 +509,11 @@ class ODInput extends ODContained
         return ($properties['type'] == self::INPUTTYPE_NUMBER) ? $valmax : false;
     }
 
+    /**
+     * @param int $valMin
+     * @return ODInput|bool
+     * @throws Exception
+     */
     public function setValMin($valMin = 0)
     {
         $valMin = (int) $valMin;
@@ -407,6 +529,9 @@ class ODInput extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|int
+     */
     public function getValMin()
     {
         $properties = $this->getProperties();
@@ -487,10 +612,13 @@ class ODInput extends ODContained
     }
 
     /** **************************************************************************************************
-     * méthodes de gestion de retour de callback                                                         *
+     * Méthodes de gestion de retour de callback                                                         *
      * ***************************************************************************************************
      */
 
+    /**
+     * @return array
+     */
     public function returnSetData()
     {
         $thisID        = $this->getId();
@@ -498,9 +626,13 @@ class ODInput extends ODContained
     }
 
     /** **************************************************************************************************
-     * méthodes privées de la classe                                                                     *
+     * Méthodes privées de la classe                                                                     *
      * ************************************************************************************************* */
 
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
     private function getTypeConstants()
     {
         $retour = [];
