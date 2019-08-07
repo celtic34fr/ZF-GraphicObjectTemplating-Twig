@@ -105,6 +105,7 @@ class ODButton extends ODContained
     /**
      * @param string $label
      * @return $this
+     * @throws Exception
      */
     public function setLabel(string $label)
     {
@@ -124,8 +125,9 @@ class ODButton extends ODContained
     }
 
     /**
-     * @param $icon
+     * @param string $icon
      * @return $this
+     * @throws Exception
      */
     public function setIcon(string $icon)
     {
@@ -138,6 +140,7 @@ class ODButton extends ODContained
     /**
      * @param string $pathFile chemin relatif à partir de $_SERVER["DOCUMENT_ROOT"]
      * @return ODButton|bool
+     * @throws Exception
      */
     public function setImage(string $pathFile)
     {
@@ -175,6 +178,7 @@ class ODButton extends ODContained
     /**
      * @param string $form
      * @return ODButton|bool
+     * @throws Exception
      */
     public function setForm(string $form = null)
     {
@@ -252,6 +256,7 @@ class ODButton extends ODContained
      * @param string $method
      * @param bool $stopEvent
      * @return bool|ODButton
+     * @throws Exception
      */
     public function evtClick(string $class, string $method, bool $stopEvent = false)
     {
@@ -272,6 +277,7 @@ class ODButton extends ODContained
 
     /**
      * @return bool|ODButton
+     * @throws Exception
      */
     public function disClick()
     {
@@ -306,6 +312,7 @@ class ODButton extends ODContained
 
     /**
      * @return ODButton
+     * @throws Exception
      */
     public function enaDefault()
     {
@@ -317,6 +324,7 @@ class ODButton extends ODContained
 
     /**
      * @return ODButton
+     * @throws Exception
      */
     public function disDefault()
     {
@@ -347,6 +355,7 @@ class ODButton extends ODContained
      * @param string $custom
      * @param string $customColor
      * @return ODButton|bool
+     * @throws Exception
      */
     public function setNatureCustom(string $custom, string $customColor)
     {
@@ -414,7 +423,8 @@ class ODButton extends ODContained
 
     /**
      * @param string $width
-     * @return $this
+     * @return ODButton
+     * @throws Exception
      */
     public function setWidth(string $width)
     {
@@ -430,6 +440,7 @@ class ODButton extends ODContained
     /**
      * @param string $left
      * @return ODButton
+     * @throws Exception
      */
     public function setLeft(string $left)
     {
@@ -451,6 +462,7 @@ class ODButton extends ODContained
     /**
      * @param string $top
      * @return ODButton
+     * @throws Exception
      */
     public function setTop(string $top)
     {
