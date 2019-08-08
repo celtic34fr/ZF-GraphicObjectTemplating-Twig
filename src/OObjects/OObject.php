@@ -123,9 +123,9 @@ use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 
 class OObject
 {
-    public $id;
-    public $name;
-    public $properties;
+    private $id;
+    private $name;
+    private $properties;
     private $lastAccess;
 
     const DISPLAY_NONE    = 'none';

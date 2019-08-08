@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true">
+<phpunit colors="true" testdox="true">
     <testsuites>
-        <testsuite name="OObjects Test Suite">
-            <directory>./test/OObjects</directory>
-        </testsuite>
-        <testsuite name="Album">
+        <testsuite name="OObjects">
             <directory>./test/OObjects</directory>
         </testsuite>
     </testsuites>

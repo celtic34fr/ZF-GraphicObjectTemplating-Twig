@@ -29,7 +29,8 @@
     "zendframework/zend-component-installer": "^1.0 || ^0.7 || ^1.0.0-dev@dev",
     "zendframework/zend-session": "^2.8.5",
     "kokspflanze/zfc-twig": "2.2.0",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
