@@ -123,8 +123,8 @@ use GraphicObjectTemplating\OObjects\ODContained\ODButton;
 
 class OObject
 {
-    private $id;
-    private $name;
+    public $id;
+    public $name;
     public $properties;
     private $lastAccess;
 
@@ -647,9 +647,10 @@ class OObject
      */
     public function getProperties()
     {
-        if (null !== $this->id) {
+        if (strlen($this->id) > 0 && $this->id != null) {
             return $this->properties;
         }
+
         return false;
     }
 
@@ -660,12 +661,17 @@ class OObject
      */
     public function setProperties(array $properties)
     {
-        if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
-            $this->properties   = $properties;
-            $this->lastAccess   = (new DateTime())->format('Y-m-d H:i:s');
-            return $this;
+        switch (true) {
+            case ($this->id == null):
+            case empty($properties):
+            case !array_key_exists('id', $properties):
+            case $this->id != $properties['id']:
+                return false;
         }
-        return false;
+
+        $this->properties   = $properties;
+        $this->lastAccess   = (new DateTime())->format('Y-m-d H:i:s');
+        return $this;
     }
 
     /**
