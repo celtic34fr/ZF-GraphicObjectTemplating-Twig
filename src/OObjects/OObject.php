@@ -114,12 +114,12 @@ namespace GraphicObjectTemplating\OObjects;
  *
  */
 
+use DateTime;
 use Exception;
 use GraphicObjectTemplating\Service\ZF3GotServices;
 use ReflectionException;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
-use Zend\Validator\StringLength;
 
 class OObject
 {
@@ -302,9 +302,9 @@ class OObject
      */
     public static function validateSession()
     {
-        $now        = new \DateTime();
+        $now        = new DateTime();
         $gotObjList = new Container('gotObjList');
-        $lastAccess = new \DateTime($gotObjList->lastAccess);
+        $lastAccess = new DateTime($gotObjList->lastAccess);
 
         if ($lastAccess) {
             $interval   = $lastAccess->diff($now);
@@ -392,7 +392,7 @@ class OObject
      */
     public static function destroyObject($id, $session = false)
     {
-        $now    = new \DateTime();
+        $now    = new DateTime();
         $sessionObj = self::validateSession();
 
         if ($session) {
@@ -478,7 +478,7 @@ class OObject
      */
     public static function clearObjects()
     {
-        $now        = new \DateTime();
+        $now        = new DateTime();
         $gotObjList = self::validateSession();
         unset($gotObjList->objects);
         $gotObjList->objects = [];
@@ -662,7 +662,7 @@ class OObject
     {
         if (null !== $this->id && !empty($properties) && array_key_exists('id', $properties)) {
             $this->properties   = $properties;
-            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+            $this->lastAccess   = (new DateTime())->format('Y-m-d H:i:s');
             return $this;
         }
         return false;
@@ -694,9 +694,9 @@ class OObject
             $objects[$id]       = serialize($properties);
 
             $gotObjList->objects = $objects;
-            $gotObjList->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
+            $gotObjList->lastAccess = (new DateTime())->format('Y-m-d H:i:s');
             $this->properties   = $properties;
-            $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+            $this->lastAccess   = (new DateTime())->format('Y-m-d H:i:s');
             $this->id           = $id;
 
             return $this;
@@ -746,7 +746,8 @@ class OObject
     public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
         $displays = $this->getDisplayConstants();
-        if (!in_array($display, $displays, true)) { $display = self::DISPLAY_BLOCK; }
+        if (in_array($display, $displays) === false) { $display = self::DISPLAY_BLOCK; }
+
         $properties = $this->getProperties();
         $properties['display'] = $display;
         $this->setProperties($properties);
@@ -1536,8 +1537,8 @@ class OObject
         $objects[$this->id] = serialize($this->properties);
         $sessionObj->objects = $objects;
 
-        $sessionObj->lastAccess = (new \DateTime())->format('Y-m-d H:i:s');
-        $this->lastAccess   = (new \DateTime())->format('Y-m-d H:i:s');
+        $sessionObj->lastAccess = (new DateTime())->format('Y-m-d H:i:s');
+        $this->lastAccess   = (new DateTime())->format('Y-m-d H:i:s');
 
         return $this;
     }
