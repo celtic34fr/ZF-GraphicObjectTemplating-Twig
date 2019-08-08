@@ -667,6 +667,7 @@ class OObject
             case !array_key_exists('id', $properties):
             case $this->id != $properties['id']:
                 return false;
+                break;
         }
 
         $this->properties   = $properties;

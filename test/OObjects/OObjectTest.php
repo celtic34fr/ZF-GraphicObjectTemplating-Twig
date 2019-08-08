@@ -90,7 +90,6 @@ class OObjectTest  extends TestCase
     public function testSetGetId()
     {
         $object     = new OObject('test', []);
-        $properties = $object->getProperties();
 
         $this->assertTrue($object->id == $object->getId());
 
@@ -105,7 +104,6 @@ class OObjectTest  extends TestCase
     public function testSetGetName()
     {
         $object     = new OObject('test', []);
-        $properties = $object->getProperties();
 
         $this->assertTrue($object->name == $object->getName());
 
