@@ -38,6 +38,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "GraphicObjectTemplatingTest\\": "test/"
     }
   },
   "extra": [],
@@ -52,6 +53,7 @@
   },
   "require-dev": {
     "zendframework/zend-developer-tools": "^1.1.0",
-    "san/san-session-toolbar": "^2.0.2"
+    "san/san-session-toolbar": "^2.0.2",
+    "zendframework/zend-test": "^3.3"
   }
 }

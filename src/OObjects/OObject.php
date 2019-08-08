@@ -125,7 +125,7 @@ class OObject
 {
     private $id;
     private $name;
-    private $properties;
+    public $properties;
     private $lastAccess;
 
     const DISPLAY_NONE    = 'none';
@@ -231,9 +231,11 @@ class OObject
         }
         $sessionObj = self::validateSession();
         $object = $sessionObj->objects;
+        $path = __DIR__;
+        $path .= '/../../view/zf3-graphic-object-templating/';
+        $pathObjArray[] = 'oobjects/oobject';
+
         if (!($object && array_key_exists($id, $object))) {
-            $path = __DIR__;
-            $path .= '/../../view/zf3-graphic-object-templating/';
             $objProperties = [];
             while ($name = array_pop($pathObjArray)) {
                 $path_properties = $path . $name . '.config.php';
@@ -279,6 +281,7 @@ class OObject
                 $objProperties['className'] = $objName;
             }
             $this->setProperties($objProperties);
+            $this->properties   = $objProperties;
         } else {
             $this->id = $id;
             $properties = unserialize($object[$id]);
