@@ -50,7 +50,7 @@ class ZF3GotServices
         }
 
         if (!empty($properties)) {
-            if ($properties['display'] == OObject::NO_DISPLAY) {
+            if (($properties['display'] ?? '') == OObject::NO_DISPLAY) {
                 return '';
             }
 

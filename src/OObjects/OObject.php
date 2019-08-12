@@ -936,8 +936,8 @@ class OObject
     {
         if (!empty($class)) {
             $properties = $this->getProperties();
-            $classes    = $properties['classes'];
-            if (!strpos($classes, $class)) {
+            $classes    = $properties['classes'] ?? '';
+            if (strpos($classes, $class) !== false) {
                 $classes .= ' '.$class;
                 $properties['classes'] = $classes;
                 $this->setProperties($properties);

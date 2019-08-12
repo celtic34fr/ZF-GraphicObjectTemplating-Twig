@@ -102,14 +102,15 @@ function addBtnActionsTV(idObj) {
     var selector = '#' + idObj + ' li > div.btnActions';
     var nodes    = $(selector);
     $.each(nodes, function () {
-        btnActions = $(this).data('btnactions');
+        let div = $(this);
+        let btnActions = div.data('btnactions');
         btnActions = btnActions.split('|');
-        liNode     = $(this).parent('li');
+        let liNode     = div.parent('li');
 
         if ($(this).is(':empty')) {
             if (btnActions.length > 0 && btnActions[0].length > 0) {
                 btnActions.forEach(function (btnName) {
-                    var button = $('#' + idObj + 'BtnsAction #' + btnName)[0].outerHTML;
+                    let button = $('#' + idObj + 'BtnsAction #' + btnName)[0].outerHTML;
                     button = button.replace(btnName, liNode.data('id') + btnName);
                     liNode.find('> div.btnActions').append(button);
                 });
