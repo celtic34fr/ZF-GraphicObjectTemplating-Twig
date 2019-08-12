@@ -254,8 +254,8 @@ class OObject
                             if (!array_key_exists($type, $rscsSession)) {
                                 $rscsSession[$type] = [];
                             }
-                            foreach ($filesInfo as $name => $path) {
-                                $rscsSession[$type][$name] = $prefix . $objProperties['typeObj'] . '/' . $objProperties['object'] . '/' . $path;
+                            foreach ($filesInfo as $name => $rsc_path) {
+                                $rscsSession[$type][$name] = $prefix . $objProperties['typeObj'] . '/' . $objProperties['object'] . '/' . $rsc_path;
                             }
                         }
                         $sessionObj->resources = $rscsSession;
@@ -937,7 +937,7 @@ class OObject
         if (!empty($class)) {
             $properties = $this->getProperties();
             $classes    = $properties['classes'] ?? '';
-            if (strpos($classes, $class) !== false) {
+            if (strpos($classes, $class) === false) {
                 $classes .= ' '.$class;
                 $properties['classes'] = $classes;
                 $this->setProperties($properties);
