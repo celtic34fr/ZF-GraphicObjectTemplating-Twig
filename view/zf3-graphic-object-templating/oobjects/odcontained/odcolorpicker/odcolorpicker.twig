@@ -20,6 +20,18 @@
         if ($.isFunction($.fn.colorpicker)) {
             $('#{{ objet.id }}Input').colorpicker({
                 color: "#{{ objet.colorRGB }}",
+                defaultPalette: '{{ objet.defaultPalette }}',
+                displayIndicator: {{ objet.displayIndicator }},
+                hideButton: {{ objet.hideButton }},
+                history: {{ objet.history }},
+            {% if objet.initialHistory|length > 0 %}
+                initialHistory: [ {% for color in object.initialHistory %}
+                    "{{ color }}" {% if not loop.last %} , {% endif %}
+                    {% endfor %}],
+            {% endif %}
+                showOn: "{{ objet.showOn }}",
+                strings: "{{ objet.strings }}",
+                transparentColor: {{ objet.transparentColor }}
             });
 
             {% if objet.labelWidthBT is not empty %}

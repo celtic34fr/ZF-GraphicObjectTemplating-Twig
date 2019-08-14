@@ -2,14 +2,18 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
+use phpDocumentor\Reflection\Types\Self_;
+use ReflectionException;
 
 /**
  * Class ODColorpicker
  * @package GraphicObjectTemplating\OObjects\ODContained
  *
- ** setTitle($title = null)
- ** getTitle()
+ * méthodes publiques
+ * ------------------
+ * __construct(string $id, array $pathObjArray = [])
  * setLabel($label)
  * getLabel()
  * setLabelWidthBT($labelWidthBT)
@@ -18,10 +22,45 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getChange()
  * disChange()
  * setColorRGB(string $red, string $green, string $blue)
+ * setColorDecRGB(int $red, int $green, int $blue)
  * getColorRGB()
+ * setPalette(string $palette = self::PALETTE_WEB)
+ * getPalette()
+ * enaIndicator()
+ * disIndicator()
+ * getIndication()
+ * showButton()
+ * hideButton()
+ * getButton()
+ * enaHistory()
+ * disHistory()
+ * getHistory()
+ * setInitialHistory(array $history = null)
+ * getInitialHistory()
+ * setShowOn(string $showOn = self::SHOWON_BOTH)
+ * getShowOn()
+ * setTranslation(string $translation = "")
+ * getTranslation()
+ * enaTransparentColor()
+ * disTransparentColor()
+ *
+ * méthodes privées
+ * ----------------
+ * isHex(string $val)
+ * getPaletteConstants()
  */
 class ODColorpicker extends ODContained
 {
+    const PALETTE_WEB   = "web";
+    const PALETTE_THEME = 'theme';
+
+    const SHOWON_BOTH   = "both";
+    const SHOWON_FOCUS  = "focus";
+    const SHOWON_BUTTON = "button";
+
+    private $const_palette;
+    private $const_showOn;
+
     /**
      * ODColorpicker constructor.
      * @param $id
@@ -43,27 +82,10 @@ class ODColorpicker extends ODContained
         return $this;
     }
 
-//    public function setTitle($title = null)
-//    {
-//        $title = (string) $title;
-//        if (!empty($title)) {
-//            $properties = $this->getProperties();
-//            $properties['title'] = $title;
-//            $this->setProperties($properties);
-//            return $this;
-//        }
-//        return false;
-//    }
-//
-//    public function getTitle()
-//    {
-//        $properties = $this->getProperties();
-//        return array_key_exists('title', $properties) ? $properties['title'] : false;
-//    }
-
     /**
      * @param $label
      * @return ODColorPicker
+     * @throws Exception
      */
     public function setLabel($label)
     {
@@ -85,7 +107,8 @@ class ODColorpicker extends ODContained
 
     /**
      * @param $labelWidthBT
-     * @return ODColorPicker|bool
+     * @return ODColorpicker|bool
+     * @throws Exception
      */
     public function setLabelWidthBT($labelWidthBT)
     {
@@ -178,7 +201,8 @@ class ODColorpicker extends ODContained
      * @param $class
      * @param $method
      * @param bool $stopEvent
-     * @return ODColorPicker|bool
+     * @return ODColorpicker|bool
+     * @throws Exception
      */
     public function evtChange($class, $method, $stopEvent = false)
     {
@@ -221,7 +245,8 @@ class ODColorpicker extends ODContained
     }
 
     /**
-     * @return ODColorPicker|bool
+     * @return ODColorpicker|bool
+     * @throws Exception
      */
     public function disChange()
     {
@@ -242,7 +267,8 @@ class ODColorpicker extends ODContained
      * @param string $red
      * @param string $green
      * @param string $blue
-     * @return ODColorPicker|bool
+     * @return ODColorpicker|bool
+     * @throws Exception
      */
     public function setColorRGB(string $red, string $green, string $blue)
     {
@@ -260,6 +286,31 @@ class ODColorpicker extends ODContained
         return false;
     }
 
+    /**
+     * @param int $red
+     * @param int $green
+     * @param int $blue
+     * @return bool|ODColorpicker
+     * @throws Exception
+     */
+    public function setColorDecRGB(int $red, int $green, int $blue)
+    {
+        $testRed    = (-1 < $red && $red < 256);
+        $testGreen  = (-1 < $green && $green < 256);
+        $testBlue   = (-1 < $blue && $blue < 256);
+
+        if ($testRed && $testGreen && $testBlue) {
+            $red    = dechex($red);
+            $green  = dechex($green);
+            $blue   = dechex($blue);
+            return $this->setColorRGB($red, $green, $blue);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|string
+     */
     public function getColorRGB()
     {
         $properties = $this->getProperties();
@@ -267,8 +318,253 @@ class ODColorpicker extends ODContained
     }
 
     /**
-     *  méthode(s) privée(s) de l'objet
+     * @param string $palette
+     * @return ODColorpicker
+     * @throws ReflectionException
      */
+    public function setPalette(string $palette = self::PALETTE_THEME)
+    {
+        $palettes = $this->getPaletteConstants();
+        if (!in_array($palette, $palettes)) { $palette = self::PALETTE_THEME; }
+        $properties = $this->getProperties();
+        $properties['defaultPalette'] = $palette;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getPalette()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('defaultPalette', $properties) ? $properties['defaultPalette'] : false;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function enaIndicator()
+    {
+        $properties = $this->getProperties();
+        $properties['displayIndicator'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function disIndicator()
+    {
+        $properties = $this->getProperties();
+        $properties['displayIndicator'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getIndication()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('displayIndicator', $properties) ? $properties['displayIndicator'] : false;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function showButton()
+    {
+        $properties = $this->getProperties();
+        $properties['hideButton'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function hideButton()
+    {
+        $properties = $this->getProperties();
+        $properties['hideButton'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getButton()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('hideButton', $properties) ? $properties['hideButton'] : false;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function enaHistory()
+    {
+        $properties = $this->getProperties();
+        $properties['history'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function disHistory()
+    {
+        $properties = $this->getProperties();
+        $properties['history'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getHistory()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('history', $properties) ? $properties['history'] : false;
+    }
+
+    /**
+     * @param array|null $history
+     * @return ODColorpicker|bool
+     * @throws Exception
+     */
+    public function setInitialHistory(array $history = null)
+    {
+        $top    = true;
+        if ($history != null || sizeof($history) > 0) {
+            foreach ($history as $color) {
+                if (substr($color, 0, 1) == "#") {
+                    $valHex = dechex(hexdec(substr($color, 1)));
+                } else {
+                    $valHex = dechex(hexdec($color, 1));
+                }
+                if ($valHex != substr($color, 1)) {
+                    $top = false;
+                    break;
+                }
+            }
+        }
+
+        if ($top) {
+            $initialHistory = [];
+            foreach ($history as $color) {
+                if (substr($color, 0, 1) != "#") {
+                    $color  = "#".$color;
+                }
+                $initialHistory[] = $color;
+            }
+            $properties = $this->getProperties();
+            $properties['initialHistory']   = $initialHistory;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getInitialHistory()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('initialHistory', $properties) ? $properties['initialHistory'] : false;
+    }
+
+    /**
+     * @param string $showOn
+     * @return ODColorpicker
+     * @throws ReflectionException
+     */
+    public function setShowOn(string $showOn = self::SHOWON_BOTH)
+    {
+        $showOns    = $this->getShowOnConstants();
+        if (!in_array($showOn, $showOns)) { $showOn = self::SHOWON_BOTH; }
+        $properties = $this->getProperties();
+        $properties['showOn'] = $showOn;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getShowOn()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('showOn', $properties) ? $properties['showOn'] : false;
+    }
+
+    /**
+     * @param string $translation
+     * @return ODColorpicker|bool
+     * @throws Exception
+     */
+    public function setTranslation(string $translation = "")
+    {
+        if (!empty($translation)) {
+            if (substr_count($translation, ',') == 6 ) {
+                $properties = $this->getProperties();
+                $properties['strings']  = $translation;
+                $this->setProperties($properties);
+                return $this;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getTranslation()
+    {
+        $properties = $this->getProperties();
+        return array_key_exists('strings', $properties) ? $properties['strings'] : false;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function enaTransparentColor()
+    {
+        $properties = $this->getProperties();
+        $properties['transparentColor'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /**
+     * @return ODColorpicker
+     * @throws Exception
+     */
+    public function disTransparentColor()
+    {
+        $properties = $this->getProperties();
+        $properties['transparentColor'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    /** ---------------------------------
+     *  méthode(s) privée(s) de l'objet -
+     ------------------------------------ */
 
     /**
      * @param string $val
@@ -282,5 +578,49 @@ class ODColorpicker extends ODContained
         }
         $val = sprintf('%02d', $val);
         return $val;
+    }
+
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
+    private function getPaletteConstants()
+    {
+        $retour = [];
+        if (empty($this->const_palette)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'PALETTE_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_palette = $retour;
+        } else {
+            $retour = $this->const_palette;
+        }
+        return $retour;
+    }
+
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
+    private function getShowOnConstants()
+    {
+        $retour = [];
+        if (empty($this->const_showOn)) {
+            $constants = $this->getConstants();
+            foreach ($constants as $key => $constant) {
+                $pos = strpos($key, 'SHOWON_');
+                if ($pos !== false) {
+                    $retour[$key] = $constant;
+                }
+            }
+            $this->const_showOn = $retour;
+        } else {
+            $retour = $this->const_showOn;
+        }
+        return $retour;
     }
 }
