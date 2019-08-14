@@ -19,7 +19,7 @@
     <script id="{{ objet.id }}Script">
         if ($.isFunction($.fn.colorpicker)) {
             $('#{{ objet.id }}Input').colorpicker({
-                color: "#{{ objet.colorRGB }}",
+                color: "{{ objet.colorRGB }}",
                 defaultPalette: '{{ objet.defaultPalette }}',
                 displayIndicator: {{ objet.displayIndicator }},
                 hideButton: {{ objet.hideButton }},
