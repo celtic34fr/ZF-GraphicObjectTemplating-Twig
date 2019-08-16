@@ -204,27 +204,10 @@ class ODColorpicker extends ODContained
      * @return ODColorpicker|bool
      * @throws Exception
      */
-    public function evtChange($class, $method, $stopEvent = false)
+    public function evtChange(string $class, $method, $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
-            $properties = $this->getProperties();
-            if (!array_key_exists('event', $properties)) { $properties['event'] = []; }
-            $event = $properties['event'];
-            if (!array_key_exists('change', $event)) { $event['change'] = []; }
-            $change = $event['change'];
-            if (class_exists($class)) {
-                $obj = new $class();
-                if (method_exists($obj, $method)) {
-                    $change['class'] = $class;
-                    $change['method'] = $method;
-                    $change['stopEvent'] = ($stopEvent) ? 'OUI' : 'NON';
-
-                    $event['change'] = $change;
-                    $properties['event'] = $event;
-                    $this->setProperties($properties);
-                    return $this;
-                }
-            }
+            return $this->setEvent('change', $class, $method, $stopEvent);
         }
         return false;
     }
@@ -234,14 +217,7 @@ class ODColorpicker extends ODContained
      */
     public function getChange()
     {
-        $properties = $this->getProperties();
-        if (array_key_exists('event', $properties)) {
-            $event = $properties['event'];
-            if (array_key_exists('change', $event)) {
-                return $event['change'];
-            }
-        }
-        return false;
+        return $this->getEvent('change');
     }
 
     /**
@@ -250,17 +226,7 @@ class ODColorpicker extends ODContained
      */
     public function disChange()
     {
-        $properties = $this->getProperties();
-        if (array_key_exists('event', $properties)) {
-            $event = $properties['event'];
-            if (array_key_exists('change', $event)) {
-                unset($event['change']);
-                $properties['event'] = $event;
-                $this->setProperties($properties);
-                return $this;
-            }
-        }
-        return false;
+        return $this->disEvent('change');
     }
 
     /**
@@ -572,11 +538,13 @@ class ODColorpicker extends ODContained
      */
     private function isHex(string $val)
     {
+        $val    = strtoupper($val);
         $hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $val);
         if (strlen($hexStr) > 2) {
             return false;
         }
-        $val = sprintf('%02d', $val);
+
+        $val = sprintf('%02x', hexdec($val));
         return $val;
     }
 

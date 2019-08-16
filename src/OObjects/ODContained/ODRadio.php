@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 
 /**
@@ -31,8 +32,15 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getLabel()
  * setLabelWidthBT($labelWidthBT)
  * getLabelWidthBT()
+ * evtClick(string $class, string $method, bool $stopEvent = false)
+ * getClick()
+ * disClick()
+ * evtChange(string $class, $method, $stopEvent = false)
+ * getChange()
+ * disChange()
  *
  * méthodes privées
+ * ----------------
  * getStateConstants()
  * getCheckConstants()
  */
@@ -475,6 +483,71 @@ class ODRadio extends ODContained
     {
         $properties = $this->getProperties();
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
+    }
+
+
+    /**
+     * @param string $class
+     * @param string $method
+     * @param bool $stopEvent
+     * @return bool|ODColorpicker
+     * @throws Exception
+     */
+    public function evtClick(string $class, string $method, bool $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('click', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getClick()
+    {
+        return $this->getEvent('click');
+    }
+
+    /**
+     * @return bool|ODButton
+     * @throws Exception
+     */
+    public function disClick()
+    {
+        return $this->disEvent('click');
+    }
+
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return ODColorpicker|bool
+     * @throws Exception
+     */
+    public function evtChange(string $class, $method, $stopEvent = false)
+    {
+        if (!empty($class) && !empty($method)) {
+            return $this->setEvent('change', $class, $method, $stopEvent);
+        }
+        return false;
+    }
+
+    /**
+     * @return bool|array
+     */
+    public function getChange()
+    {
+        return $this->getEvent('change');
+    }
+
+    /**
+     * @return ODColorpicker|bool
+     * @throws Exception
+     */
+    public function disChange()
+    {
+        return $this->disEvent('change');
     }
 
 
