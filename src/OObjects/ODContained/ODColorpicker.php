@@ -4,7 +4,6 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
-use phpDocumentor\Reflection\Types\Self_;
 use ReflectionException;
 
 /**
