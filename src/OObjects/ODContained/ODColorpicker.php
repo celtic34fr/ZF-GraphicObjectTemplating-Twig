@@ -196,6 +196,28 @@ class ODColorpicker extends ODContained
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
+    public function enaDispBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['labelWidthBT'] = '';
+        $properties['selectWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDispUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['selectWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+
     /**
      * @param $class
      * @param $method
@@ -237,13 +259,9 @@ class ODColorpicker extends ODContained
      */
     public function setColorRGB(string $red, string $green, string $blue)
     {
-        $testRed    = $this->isHex($red);
-        $testGreen  = $this->isHex($green);
-        $testBlue   = $this->isHex($blue);
-
-        if ($testRed == $red && $testGreen == $green && $testBlue == $blue) {
+        if ($this->isHex($red) && $this->isHex($green) && $this->isHex($blue)) {
             $properties = $this->getProperties();
-            $properties['colorRGB'] = '#'.$red.$green.$blue;
+            $properties['colorRGB'] = sprintf("#%'02s%'02s%'02s", $red, $green, $blue);
             $this->setProperties($properties);
             return $this;
         }
@@ -265,9 +283,9 @@ class ODColorpicker extends ODContained
         $testBlue   = (-1 < $blue && $blue < 256);
 
         if ($testRed && $testGreen && $testBlue) {
-            $red    = dechex($red);
-            $green  = dechex($green);
-            $blue   = dechex($blue);
+            $red    = sprintf("%02X",$red);
+            $green  = sprintf("%02X",$green);
+            $blue   = sprintf("%02X",$blue);
             return $this->setColorRGB($red, $green, $blue);
         }
         return false;
@@ -413,17 +431,21 @@ class ODColorpicker extends ODContained
     public function setInitialHistory(array $history = null)
     {
         $top    = true;
-        if ($history != null || sizeof($history) > 0) {
+        if ($history != null && sizeof($history) > 0) {
             foreach ($history as $color) {
                 if (substr($color, 0, 1) == "#") {
-                    $valHex = dechex(hexdec(substr($color, 1)));
+                    $valHex = substr($color, 1);
+                    $valLen = strlen($valHex);
+                    $top &= $valLen == 3 || $valLen == 6;
+                    ctype_xdigit($valHex);
                 } else {
+                    // ?????????
                     $valHex = dechex(hexdec($color, 1));
                 }
-                if ($valHex != substr($color, 1)) {
+                if (strcasecmp($valHex,substr($color, 1)) != 0) {
                     $top = false;
-                    break;
                 }
+                if (!$top) break;
             }
         }
 
@@ -532,19 +554,16 @@ class ODColorpicker extends ODContained
      ------------------------------------ */
 
     /**
-     * @param string $val
+     * @param string $r
+     * @param string $g
+     * @param string $b
      * @return bool|string
      */
-    private function isHex(string $val)
+    private function isHex(string $color)
     {
-        $val    = strtoupper($val);
-        $hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $val);
-        if (strlen($hexStr) > 2) {
-            return false;
-        }
-
-        $val = sprintf('%02x', hexdec($val));
-        return $val;
+        $rlen = strlen($color);
+        if (0 == $rlen || $rlen > 2 || !ctype_xdigit($color)) return false;
+        return true;
     }
 
     /**

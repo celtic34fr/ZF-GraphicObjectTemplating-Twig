@@ -31,12 +31,12 @@
         {% endif %}
     {% endif %}
 
-    <div class="gotObject formBody" {{ dataWidthBTbody }}>
+    <div class="gotObject formBody" {{ dataWidthBTbody }} data-display="{{ objet.display }}">
         {{ content | raw }}
     </div>
 
     {% if btnCtrls != 'none' %}
-    <div class="gotObject formCtrls" {{ dataWidthBTctrls }}>
+    <div class="gotObject formCtrls" {{ dataWidthBTctrls }} data-display="{{ objet.display }}">
         {{ gotRender(btnsCtrl) }}
     </div>
     {% endif %}
@@ -46,7 +46,7 @@
         ceci pour permettre la mise en place de l'étoile rouge à gauche du texte inclus pour indiquer l'ensemble
         des champs obligatoires pour valider la saisie du formulaire
     ########################################################################################################### #}
-    <script id="{{ object.id }}Script">
+    <script id="{{ objet.id }}Script">
     {% if objet.fields is not empty %}
         function {{ objet.id }}Script() {
             var require = '<span style="color:red;float:left;width:10px;";>*&nbsp;</span>';

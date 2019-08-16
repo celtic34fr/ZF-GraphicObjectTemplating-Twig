@@ -485,6 +485,28 @@ class ODRadio extends ODContained
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
+    public function enaDispBySide()
+    {
+        $properties = $this->getProperties();
+        $properties['labelWidthBT'] = '';
+        $properties['selectWidthBT'] = '';
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function enaDispUnder()
+    {
+        $properties = $this->getProperties();
+        $widthLabChkBT  = self::formatLabelBT(12);
+        $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['selectWidthBT'] = $widthLabChkBT['labelWidthBT'];
+
+        $this->setProperties($properties);
+        return $this;
+    }
+
+
 
     /**
      * @param string $class

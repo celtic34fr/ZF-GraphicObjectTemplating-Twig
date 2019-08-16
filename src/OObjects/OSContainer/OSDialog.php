@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating\OObjects\OSContainer;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained\ODContent;
 use GraphicObjectTemplating\OObjects\ODContained\ODSpan;
 use GraphicObjectTemplating\OObjects\OObject;
@@ -102,7 +103,7 @@ class OSDialog extends OSForm
      * @param $id
      * @param array $pathObjArray
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $id, array $pathObjArray = []) {
         $pathObjArray[] = "oobjects/oscontainer/osdialog/osdialog";
@@ -119,6 +120,21 @@ class OSDialog extends OSForm
         $this->saveProperties();
         return $this;
     }
+
+    /**
+     * @param $name
+     * @param $label
+     * @param $icon
+     * @param $value
+     * @param $type
+     * @param $nature
+     * @param $ord
+     * @param null $class
+     * @param null $method
+     * @param bool $stopEvent
+     * @return bool|OSForm|void
+     * @throws Exception
+     */
     public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
     {
         switch ($type) {
@@ -131,8 +147,9 @@ class OSDialog extends OSForm
     }
 
     /**
-     * @param $title
+     * @param string $title
      * @return OSDialog
+     * @throws Exception
      */
     public function setTitle(string $title)
     {
@@ -152,8 +169,9 @@ class OSDialog extends OSForm
     }
 
     /**
-     * @param $widthDialog
+     * @param string $widthDialog
      * @return OSDialog
+     * @throws Exception
      */
     public function setWidthDialog(string $widthDialog)
     {
@@ -173,8 +191,9 @@ class OSDialog extends OSForm
     }
 
     /**
-     * @param $minHeight
+     * @param string $minHeight
      * @return OSDialog
+     * @throws Exception
      */
     public function setMinHeight(string $minHeight)
     {
@@ -242,10 +261,11 @@ class OSDialog extends OSForm
     }
 
     /**
-     * @param $class
-     * @param $method
+     * @param string $class
+     * @param string $method
      * @param bool $stopEvent
      * @return OSDialog
+     * @throws Exception
      */
     public function evtClose(string $class, string $method, bool $stopEvent = true)
     {
@@ -281,6 +301,7 @@ class OSDialog extends OSForm
 
     /**
      * @return OSDialog
+     * @throws Exception
      */
     public function disClose()
     {
@@ -295,7 +316,7 @@ class OSDialog extends OSForm
     /**
      * @param $content : contenu proprement dit à ajouter
      * @return string : nom attribué au contenu (ID)
-     * @throws \Exception
+     * @throws Exception
      */
     public function addContent($content, $mode =self::MODE_LAST, $params=null)
     {
@@ -303,7 +324,7 @@ class OSDialog extends OSForm
         $properties     = $this->getProperties();
         if (!($content instanceof OObject)) {
             $name   = $properties['id'].'Content'.(sizeof($properties['contents']) + 1);
-            if (self::existObject($name, $sessionObjects)) { throw new \Exception("objet $name already exist"); }
+            if (self::existObject($name, $sessionObjects)) { throw new Exception("objet $name already exist"); }
             $contenu = new ODSpan($name);
             $contenu->setContent($content);
             $contenu->saveProperties();
@@ -322,7 +343,7 @@ class OSDialog extends OSForm
     /**
      * @param string $name
      * @return OSDialog|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function removeContent(string $name)
     {
@@ -342,7 +363,7 @@ class OSDialog extends OSForm
 
     /**
      * @return OSDialog
-     * @throws \Exception
+     * @throws Exception
      */
     public function clearContents()
     {
@@ -366,7 +387,7 @@ class OSDialog extends OSForm
     /**
      * @param $content
      * @return OSDialog
-     * @throws \Exception
+     * @throws Exception
      */
     public function setContent($content)
     {
@@ -387,7 +408,7 @@ class OSDialog extends OSForm
 
     /**
      * @return array|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function getContent()
     {
@@ -421,6 +442,7 @@ class OSDialog extends OSForm
 
     /**
      * @return OSDialog
+     * @throws Exception
      */
     public function enaCloseBtnOnly()
     {
@@ -432,6 +454,7 @@ class OSDialog extends OSForm
 
     /**
      * @return OSDialog
+     * @throws Exception
      */
     public function disCloseBtnOnly()
     {
@@ -443,6 +466,7 @@ class OSDialog extends OSForm
 
     /**
      * @return OSDialog
+     * @throws Exception
      */
     public function enaAnimation()
     {
@@ -454,6 +478,7 @@ class OSDialog extends OSForm
 
     /**
      * @return OSDialog
+     * @throws Exception
      */
     public function disAnimation()
     {

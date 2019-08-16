@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating\Controller;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained\ODDragNDrop;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
@@ -39,7 +40,7 @@ class MainController extends AbstractActionController
     /* méthode appelé pour l'exécution des demandes Ajax */
     /**
      * @return bool|Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function gotDispatchAction()
     {
@@ -162,7 +163,7 @@ class MainController extends AbstractActionController
 
     /**
      * @return Stream
-     * @throws \Exception
+     * @throws Exception
      */
     public function gotDownloadAction()
     {
@@ -204,7 +205,7 @@ class MainController extends AbstractActionController
      * @param Container $sessionObjects Objet Session contenant la déclarations des objets en cours de validité
      * @param array? $params            tableau des paramétres pour créatiion de l'objet à travailler
      * @return mixed                    un objet de type ZF3GraphicObjectTemplating ou à partir de $objClass
-     * @throws \Exception
+     * @throws Exception
      */
     private function buildObject($objClass, $sessionObjects, $params = null) {
         if (NULL === $params) {
