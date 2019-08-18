@@ -106,28 +106,34 @@ class MainController extends AbstractActionController
                 $updDatas   = [];
                 $operate    = true;
                 $update     = true;
+                $insert     = true;
                 foreach ($results as $rlst) {
                     $html       = "";
                     switch (true) {
                         case (in_array($rlst['mode'], self::ModeNoOperate)):
                             $operate    = false;
+                            $insert     = false;
                             break;
                         case (in_array($rlst['mode'], self::ModeGenHTML)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : $gs->render($rlst['idSource']);
                             $rscs       = $gs->rscs($rlst['idSource']);
+                            $insert     = true;
                             break;
                         case (in_array($rlst['mode'], self::ModeExecJS)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
+                            $insert     = true;
                             break;
                         case (in_array($rlst['mode'], self::ModeNoUpdate)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             $update     = false;
+                            $insert     = false;
                             break;
                         default:
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
+                            $insert     = true;
                             break;
                     }
-                    $updDatas[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];
+                    if ($insert) {$updDatas[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];}
                 }
                 if ($update) { $updDatas[] = ['id'=>'', 'mode'=>'execID', 'code'=>'layoutScripts']; }
 
