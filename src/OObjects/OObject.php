@@ -5,7 +5,7 @@ namespace GraphicObjectTemplating\OObjects;
 /**
  * classe initiale de création d'objet G.O.T.
  *
- * attributs
+ * attributs                                                                                        tests unitaires
  * ---------
  * id                                                                                                   ** **
  * name                                                                                                 ** **
