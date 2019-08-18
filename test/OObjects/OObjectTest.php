@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
  * testSetGetId()
  * testSetGetName()
  * testSetGetDisplay()
+ * testSetGetClassName()
  * testEnableDisable()
  *
  * méthodes privées
