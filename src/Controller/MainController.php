@@ -120,6 +120,7 @@ class MainController extends AbstractActionController
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             break;
                         case (in_array($rlst['mode'], self::ModeNoUpdate)):
+                            $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             $update     = false;
                             break;
                         default:
