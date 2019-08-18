@@ -21,6 +21,7 @@ class MainController extends AbstractActionController
     const ModeGenHTML   = ['append', 'appendAfter', 'appendBefore', 'update', 'innerUpdate'];
     const ModeExecJS    = ['exec', 'execID', 'redirect'];
     const ModeNoOperate = ['nop'];
+    const ModeNoUpdate  = ['noUpdate'];
 
     /** @var ServiceManager $serviceManager */
     private $serviceManager;
@@ -104,6 +105,7 @@ class MainController extends AbstractActionController
                 $rscs       = [];
                 $updDatas   = [];
                 $operate    = true;
+                $update     = true;
                 foreach ($results as $rlst) {
                     $html       = "";
                     switch (true) {
@@ -117,13 +119,16 @@ class MainController extends AbstractActionController
                         case (in_array($rlst['mode'], self::ModeExecJS)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             break;
+                        case (in_array($rlst['mode'], self::ModeNoUpdate)):
+                            $update     = false;
+                            break;
                         default:
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             break;
                     }
                     $updDatas[]  = ['id'=>$rlst['idCible'], 'mode'=>$rlst['mode'], 'code'=>$html];
                 }
-                $updDatas[] = ['id'=>'', 'mode'=>'execID', 'code'=>'layoutScripts'];
+                if ($update) { $updDatas[] = ['id'=>'', 'mode'=>'execID', 'code'=>'layoutScripts']; }
 
                 if ($operate) {
                     // traitement des ressources pour injection de fichiers sans doublons
