@@ -6,6 +6,26 @@ use Exception;
 use GraphicObjectTemplating\OObjects\OObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class OObjectTest
+ * @package GraphicObjectTemplatingTest\OObjects
+ *
+ * setUp() :void
+ *
+ * testContructor()
+ * testIdName()
+ * testClassNameTemplate()
+ * testDisplay()
+ * testSetGetId()
+ * testSetGetName()
+ * testSetGetDisplay()
+ * testEnableDisable()
+ *
+ * méthodes privées
+ * ****************
+ * arrays_are_similar(array $a, array $b)
+ * object_to_array($obj)
+ */
 class OObjectTest  extends TestCase
 {
     protected $traceError   = false;
@@ -33,20 +53,15 @@ class OObjectTest  extends TestCase
 
         $this->assertTrue($this->arrays_are_similar($attrbProperties, $properties));
 
-        /** test retour faux si id vide ou null */
-//        $this->objectArray['id']    = null;
-//        $this->object               = json_decode(json_encode($this->objectArray));
-//        $this->assertFalse($this->object->getProperties());
-//        $this->objectArray['id']   = '';
-//        $this->assertFalse(!empty($this->object->getProperties()));
-
         $this->objectArray['id']   = 'test';
         $properties['display']  = $this->object::DISPLAY_NONE;
         $this->object->setProperties($properties);
         $this->assertTrue($this->arrays_are_similar($this->object->getProperties(), $properties));
+        $this->assertTrue($this->object->getId() == $properties['id']);
 
         $properties['id']       = "suite";
         $this->assertFalse($this->object->setProperties($properties));
+        $this->assertFalse($this->object->getId() == $properties['id']);
     }
 
     /**
@@ -58,11 +73,11 @@ class OObjectTest  extends TestCase
         $properties = $this->objectArray['properties'];
 
         $this->assertTrue($properties['id'] == 'test');
-        $this->assertTrue($properties['name'] == 'test');
+        $this->assertTrue($properties['name'] == $properties['id'] );
         $this->assertTrue($this->object->getProperty('id') == 'test');
-        $this->assertTrue($this->object->getProperty('name') == 'test');
+        $this->assertTrue($this->object->getProperty('name') == $this->object->getProperty('id'));
         $this->assertTrue($this->object->getId() == 'test');
-        $this->assertTrue($this->object->getName() == 'test');
+        $this->assertTrue($this->object->getName() == $this->object->getId());
     }
 
     /**
@@ -100,7 +115,9 @@ class OObjectTest  extends TestCase
         $this->object->setId('suite');
         $properties = $this->object->getProperties();
         $this->assertTrue($properties['id'] == 'suite');
+        $this->assertFalse($properties['id'] == $properties['name']);
         $this->assertTrue($this->object->getId() == 'suite');
+        $this->assertFalse($this->object->getId() == $this->object->getName());
     }
 
     /**
@@ -114,6 +131,7 @@ class OObjectTest  extends TestCase
 
         $this->object->setName('suite');
         $properties = $this->object->getProperties();
+        $this->assertFalse($properties['id'] == 'suite');
         $this->assertTrue($properties['name'] == 'suite');
         $this->assertTrue($this->object->getId() != 'suite');
         $this->assertTrue($this->object->getName() == 'suite');
@@ -160,6 +178,23 @@ class OObjectTest  extends TestCase
 
     /**
      * @throws Exception
+     * @testdox Test setClassName(), getClassName()
+     */
+    public function testSetGetClassName()
+    {
+        $properties = $this->object->getProperties();
+        $this->assertTrue($properties['className'] == "GraphicObjectTemplating\OObjects".chr(92).chr(92));
+
+        $this->assertFalse($this->object->setClassName("MyNamespace\Application\Test"));
+        $this->assertTrue($this->object->setClassName("GraphicObjectTemplating\OObjects\OObject") !== false);
+        $properties = $this->object->getProperties();
+        $this->assertFalse($properties['className'] == "GraphicObjectTemplating\OObjects".chr(92).chr(92));
+        $this->assertTrue($properties['className'] != "MyNamespace\Application\Test");
+        $this->assertTrue($this->object->getClassName() == "GraphicObjectTemplating\OObjects\OObject");
+    }
+
+    /**
+     * @throws Exception
      * @testdox Test enable(), disable(), getState()
      */
     public function testEnableDisable()
@@ -168,14 +203,19 @@ class OObjectTest  extends TestCase
 
         $baseState  = $this->object->getState();
         $this->assertTrue($baseState);
+        $this->assertTrue($properties['state']);
 
         $this->object->disable();
         $baseState  = $this->object->getState();
+        $properties = $this->object->getProperties();
         $this->assertFalse($baseState);
+        $this->assertFalse($properties['state']);
 
         $this->object->enable();
         $baseState  = $this->object->getState();
+        $properties = $this->object->getProperties();
         $this->assertTrue($baseState);
+        $this->assertTrue($properties['state']);
     }
 
     /** **************************************************************************************************************

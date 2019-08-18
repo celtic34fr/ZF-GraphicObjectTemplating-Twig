@@ -7,14 +7,39 @@ namespace GraphicObjectTemplating\OObjects;
  *
  * attributs
  * ---------
- * id
- * name
- * properties
- * lastAcces
+ * id                                                                                                   ** **
+ * name                                                                                                 ** **
+ * className                                                                                            **
+ * display                                                                                              **
+ * object
+ * typObj
+ * template                                                                                             **
+ * widthBT
+ * lastAccess
+ * state                                                                                                **
+ * classes
+ * width
+ * height
+ * autoCenter
+ * acPx
+ * acPy
+ * infoBulle
+ *  setIB
+ *  type
+ *  animation
+ *  delay
+ *      show
+ *      hide
+ *  html
+ *  placement
+ *  title
+ *  content
+ *  trigger
+ * properties                                                                                           **
  *
  * méthodes
  * --------
- * __construct($id, $pathObjArray)
+ * __construct($id, $pathObjArray)                                                                      **
  * static function validateSession()
  * static function existObject($id, $sessionObj)
  * static function buildObject($id, $valeur = null)
@@ -25,19 +50,19 @@ namespace GraphicObjectTemplating\OObjects;
  * static function formatRetour($idSource, $idCible, $mode, $code = null)
  * static function getPersistantObjs()
  *
- * getProperty(string $name)
- * getProperties()
- * setProperties(array $properties)
- * getId()
- * setId(string $id)
- * getName()
- * setName(string $name)
- * setDisplay($display = OObject::DISPLAY_BLOCK)
- * getDisplay()
+ * getProperty(string $name)                                                                            **
+ * getProperties()                                                                                      **
+ * setProperties(array $properties)                                                                     **
+ * getId()                                                                                              **
+ * setId(string $id)                                                                                    **
+ * getName()                                                                                            **
+ * setName(string $name)                                                                                **
+ * setDisplay($display = OObject::DISPLAY_BLOCK)                                                        **
+ * getDisplay()                                                                                         **
  * setWidthBT(string $widthBT)
  * getWidthBT()
- * setClassName(string $className = null)
- * getClassName()
+ * setClassName(string $className = null)                                                               **
+ * getClassName()                                                                                       **
  * setTemplate(string $template = null)
  * getTemplate()
  * setObject(string $object = null)
@@ -61,9 +86,9 @@ namespace GraphicObjectTemplating\OObjects;
  * enaJsFile($nameFile)
  * disJsFile($nameFile)
  * getJsFileStatus($nameFile)
- * enable()
- * disable()
- * getState()
+ * enable()                                                                                             **
+ * disable()                                                                                            **
+ * getState()                                                                                           **
  * enaAutoCenter()
  * disAutoCenter()
  * getStateAC()
@@ -742,23 +767,29 @@ class OObject
     public function getDisplay()
     {
         $properties = $this->getProperties();
-        return array_key_exists('display', $properties) ? $properties['display'] : false;
+        if ($properties) {
+            return array_key_exists('display', $properties) ? $properties['display'] : false;
+        }
+        return false;
     }
 
     /**
      * @param string $display
-     * @return $this
+     * @return $this|bool
      * @throws ReflectionException
      */
     public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
-        $displays = $this->getDisplayConstants();
-        if (in_array($display, $displays) === false) { $display = self::DISPLAY_BLOCK; }
+        if (null !== $this->id) {
+            $displays = $this->getDisplayConstants();
+            if (in_array($display, $displays) === false) { $display = self::DISPLAY_BLOCK; }
 
-        $properties = $this->getProperties();
-        $properties['display'] = $display;
-        $this->setProperties($properties);
-        return $this;
+            $properties = $this->getProperties();
+            $properties['display'] = $display;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -793,7 +824,10 @@ class OObject
     public function getClassName()
     {
         $properties = $this->getProperties();
-        return array_key_exists('className', $properties) ? $properties['className'] : false;
+        if ($properties) {
+            return array_key_exists('className', $properties) ? $properties['className'] : false;
+        }
+        return false;
     }
 
     /**
@@ -803,7 +837,7 @@ class OObject
      */
     public function setClassName(string $className = null)
     {
-        if (!empty($className)) {
+        if (!empty($className) && $this->id != null) {
             if (class_exists($className)) {
                 $properties = $this->getProperties();
                 $properties['className'] = $className;
@@ -1293,27 +1327,33 @@ class OObject
     }
 
     /**
-     * @return $this
+     * @return $this|bool
      * @throws Exception
      */
     public function enable()
     {
-        $properties = $this->getProperties();
-        $properties['state'] = self::STATE_ENABLE;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->id != null) {
+            $properties = $this->getProperties();
+            $properties['state'] = self::STATE_ENABLE;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
-     * @return $this
+     * @return $this|bool
      * @throws Exception
      */
     public function disable()
     {
-        $properties = $this->getProperties();
-        $properties['state'] = self::STATE_DISABLE;
-        $this->setProperties($properties);
-        return $this;
+        if ($this->id != null) {
+            $properties = $this->getProperties();
+            $properties['state'] = self::STATE_DISABLE;
+            $this->setProperties($properties);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -1322,7 +1362,10 @@ class OObject
     public function getState()
     {
         $properties = $this->getProperties();
-        return array_key_exists('state', $properties) ? $properties['state'] : false;
+        if ($properties) {
+            return array_key_exists('state', $properties) ? $properties['state'] : false;
+        }
+        return false;
     }
 
     /**
