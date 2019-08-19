@@ -11,8 +11,8 @@
 
     <label for="{{ objet.id }}Input"
             {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
-    > {{ objet.label }} </label>
-    <input id="{{ objet.id }}Input" class="colorPicker evo-cp0" style="width:100px;"
+           style="float: left;"> {{ objet.label }} </label>
+    <input id="{{ objet.id }}Input" class="colorPicker evo-cp0" style="width:100px;float: left;"
         {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
     />
 
