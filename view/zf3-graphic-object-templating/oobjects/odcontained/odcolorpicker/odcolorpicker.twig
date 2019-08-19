@@ -9,10 +9,15 @@
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
 
+    <style>
+        #{ objet.id }} label { float: left; }
+        #{ objet.id }} input { float: left; width:100px; }
+    </style>
+
     <label for="{{ objet.id }}Input"
             {% if objet.labelWidthBT is not empty %} data-widthbt="{{ objet.labelWidthBT }}" {% endif %}
-           style="float: left;"> {{ objet.label }} </label>
-    <input id="{{ objet.id }}Input" class="colorPicker evo-cp0" style="width:100px;float: left;"
+    > {{ objet.label }} </label>
+    <input id="{{ objet.id }}Input" class="colorPicker evo-cp0"
         {% if objet.inputWidthBT is not empty %} data-widthbt="{{ objet.inputWidthBT }}" {% endif %}
     />
 
