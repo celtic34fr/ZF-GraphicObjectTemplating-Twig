@@ -199,9 +199,10 @@ class ODColorpicker extends ODContained
     public function enaDispBySide()
     {
         $properties = $this->getProperties();
-        $properties['labelWidthBT'] = '';
-        $properties['selectWidthBT'] = '';
-
+        if ($properties['labelWidthBT'] == self::formatLabelBT(12) ) {
+            $properties['labelWidthBT'] = '';
+            $properties['inputWidthBT'] = '';
+        }
         $this->setProperties($properties);
         return $this;
     }
@@ -211,7 +212,7 @@ class ODColorpicker extends ODContained
         $properties = $this->getProperties();
         $widthLabChkBT  = self::formatLabelBT(12);
         $properties['labelWidthBT'] = $widthLabChkBT['labelWidthBT'];
-        $properties['selectWidthBT'] = $widthLabChkBT['labelWidthBT'];
+        $properties['inputWidthBT'] = $widthLabChkBT['labelWidthBT'];
 
         $this->setProperties($properties);
         return $this;
