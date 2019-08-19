@@ -10,8 +10,17 @@
 >
 
     <style>
-        #{ objet.id }} label { float: left; }
-        #{ objet.id }} input { float: left; width:100px; }
+        #{{ objet.id }} label { float: left; margin: 0 0.1em; }
+        #{{ objet.id }} div  {
+            float: left;
+            margin: 0 0.1em;
+            {% if objet.hideInput == 'false' %}
+            width: 128px !important;
+            {% endif %}
+        }
+        {% if objet.hideInput == 'true' %}
+        #{{ objet.id }} div input  { display: none; }
+        {% endif %}
     </style>
 
     <label for="{{ objet.id }}Input"

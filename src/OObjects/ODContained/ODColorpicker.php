@@ -381,6 +381,22 @@ class ODColorpicker extends ODContained
         return $this;
     }
 
+    public function showInput()
+    {
+        $properties = $this->getProperties();
+        $properties['hideInput'] = self::BOOLEAN_FALSE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
+    public function hideInput()
+    {
+        $properties = $this->getProperties();
+        $properties['hideInput'] = self::BOOLEAN_TRUE;
+        $this->setProperties($properties);
+        return $this;
+    }
+
     /**
      * @return bool|string
      */

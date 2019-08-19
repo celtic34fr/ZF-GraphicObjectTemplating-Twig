@@ -14,6 +14,7 @@ return [
     'defaultPalette'    => 'theme',
     'displayIndicator'  => ODColorpicker::BOOLEAN_TRUE,
     'hideButton'        => ODColorpicker::BOOLEAN_FALSE,
+    'hideInput'         => ODColorpicker::BOOLEAN_FALSE,
     'history'           => ODColorpicker::BOOLEAN_TRUE,
     'initialHistory'    => null,
     'showOn'            => ODColorpicker::SHOWON_BOTH,
