@@ -1590,7 +1590,7 @@ class OObject
         $sessionObj->lastAccess = (new DateTime())->format('Y-m-d H:i:s');
         $this->lastAccess   = (new DateTime())->format('Y-m-d H:i:s');
 
-        return $this;
+        return $sessionObj;
     }
 
     /**

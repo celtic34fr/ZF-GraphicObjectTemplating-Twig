@@ -91,7 +91,9 @@ class MainController extends AbstractActionController
                                     /** @var OSForm $form */
                                     $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
                                     $hiddens        = $form->getHiddenValues();
-                                    $params['form'] = array_merge($params['form'], $hiddens);
+                                    if (is_array($params["form"])) {
+                                        $params['form'] = array_merge($params['form'], $hiddens);
+                                    }
                                 }
         
                                 $sessionObj->objects    = $objects;
