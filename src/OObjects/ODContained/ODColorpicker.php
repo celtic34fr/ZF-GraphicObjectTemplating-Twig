@@ -229,7 +229,7 @@ class ODColorpicker extends ODContained
     public function evtChange(string $class, $method, $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
-            return $this->setEvent('color.change', $class, $method, $stopEvent);
+            return $this->setEvent('change.color', $class, $method, $stopEvent);
         }
         return false;
     }
@@ -239,7 +239,7 @@ class ODColorpicker extends ODContained
      */
     public function getChange()
     {
-        return $this->getEvent('change');
+        return $this->getEvent('change.color');
     }
 
     /**
@@ -248,7 +248,7 @@ class ODColorpicker extends ODContained
      */
     public function disChange()
     {
-        return $this->disEvent('change');
+        return $this->disEvent('change.color');
     }
 
     /**

@@ -90,13 +90,13 @@
         {% if icoClass is not empty %}<i class="{{ icoClass }}"></i>{% endif %}{{ objet.label }}
     </button>
 
-{#    {% if objet.type != 'link' and objet.event is not empty %}#}
-{#    <script>#}
-{#        $(document).ready(function (e) {#}
-{#            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with {'events':objet.event} %}#}
-{#        });#}
-{#    </script>#}
-{#    {% endif %}#}
+    {% if objet.type != 'link' and objet.event is not empty and objet.form is empty %}
+    <script>
+        $(document).ready(function (e) {
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with {'events':objet.event} %}
+        });
+    </script>
+    {% endif %}
 
     {% include "zf3-graphic-object-templating/oobjects/infoBulle.js.twig" with {'infoBulle':objet.infoBulle, 'id':objet.id} %}
 </div>

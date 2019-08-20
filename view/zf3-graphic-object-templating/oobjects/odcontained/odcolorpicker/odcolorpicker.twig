@@ -55,6 +55,10 @@
             setBtClasses("#{{ objet.id }} .evo-cp-wrap", $("#{{ objet.id }} input").data("widthbt"));
             $("#{{ objet.id }} > div").css('width', '');
             {% endif %}
+
+            {% if objet.event is not empty %}
+            {% include "zf3-graphic-object-templating/oobjects/eventsJS.twig" with { events:objet.event } %}
+            {% endif %}
         }
     </script>
 </div>
