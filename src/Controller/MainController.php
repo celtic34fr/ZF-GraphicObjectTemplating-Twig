@@ -12,6 +12,7 @@ use Zend\Http\Response;
 use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\Service\ZF3GotServices;

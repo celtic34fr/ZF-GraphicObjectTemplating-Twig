@@ -4,10 +4,11 @@ namespace GraphicObjectTemplating\TwigExtensions;
 
 use Exception;
 use Traversable;
-use Twig_Error_Runtime;
-use Twig_Filter;
-use Twig_Function;
-use Twig_Test;
+use Twig\Error\RuntimeError as Twig_Error_Runtime;
+use Twig\TwigFunction as Twig_Function;
+use Twig\TwigTest as Twig_Test;
+use Twig\Extension\AbstractExtension as Twig_Extension;
+use Twig\TwigFilter as Twig_Filter;
 
 /**
  * Class LayoutExtension
@@ -17,7 +18,7 @@ use Twig_Test;
  * -----------
  * getclass         : retourne la classe associé à l'objet
  * gettype          : retourne le type de variable
- * arrayexception   : restitue le tableau d'exception Php gé,néré par une erreur
+ * arrayexception   : restitue le tableau d'exception Php généré par une erreur
  * substr           : sous découpage d'une chaîne de caractères
  * strpos           : restitue la position d'uncaractère ou sous chaîne dans chaîne de caractères
  * instring         : précise l'existance d'un caractère ou sous chaîne ou non dans une chaîne de caractères
@@ -34,7 +35,7 @@ use Twig_Test;
  * update           : met à jour ou complète un tableau
  * ksort            : réalise un ksort sur un tableau avant de le restituer
  */
-class LayoutExtension extends \Twig_Extension
+class LayoutExtension extends Twig_Extension
 {
 
     /**
@@ -123,8 +124,8 @@ class LayoutExtension extends \Twig_Extension
      */
     public function twigFunction_inString($var1, $var2)
     { // is var1 in var2
-        $var1 = (string)$var1;
-        $var2 = (string)$var2;
+        $var1 = (string) $var1;
+        $var2 = (string) $var2;
         return (strpos($var2, $var1) !== false) ? true : false;
     }
 
