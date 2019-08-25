@@ -28,13 +28,13 @@
             );
         </script>
         <input id="{{ objet.id }}ListLength" type="hidden" name="listLength" value="0"/>
-        <script id="{{ objet.id }}" type="text/javascript">
+        <script id="{{ objet.id }}Script" type="text/javascript">
         </script>
     </div>
 {% endif %}
 
 {% if objet.action == 'send' %}
-    <script id='{{ objet.id }}Send' type="text/javascript">
+    <script id='{{ objet.id }}Script' type="text/javascript">
         $(document).ready(function (e) {
             let messageBoxes = '';
         {% switch(objet.msgType) %}
