@@ -1,7 +1,7 @@
 {# template de l'objet ODNotification #}
 
 {% if objet.action == 'init' %}
-    <div id="{{ objet.id }}_div" class="gotObject hidden">
+    <div id="{{ objet.id }}" class="gotObject hidden">
         {# initialisation à mettre au niveau du header de la page #}
         <script>
             var {{ objet.id }}Lobibox = Lobibox;
@@ -36,7 +36,7 @@
 {% endif %}
 
 {% if objet.action == 'send' %}
-    <script id='{{ objet.id }}' type="text/javascript">
+    <script id='{{ objet.id }}Send' type="text/javascript">
         if ( {{ objet.id }}Lobibox.notify.list.length == 0) {
             {{ objet.id }}Lobibox.notify('{{ objet.type }}', {
                 showAfterPrevious: {{ objet.showAfterPrevious ? 'true' : 'false' }},
