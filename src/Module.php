@@ -18,6 +18,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface,
 {
     /**
      * @param MvcEvent $e
+     * @throws \Exception
      */
     public function onBootstrap(MvcEvent $e)
     {

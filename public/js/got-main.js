@@ -80,38 +80,50 @@ function invokeAjax(datas, idSource, event, e) {
                 loadResources(id, code);
                 break;
             case "append": // ajout à un objet DOM existant
-                objectDOM.append(code);
-                if (objectDOM.find("#" + id + "Script").length > 0) {
-                    $.globalEval($("#" + id + "Script").innerText);
+                if (objectDOM != undefined) {
+                    objectDOM.append(code);
+                    if (objectDOM.find("#" + id + "Script").length > 0) {
+                        $.globalEval($("#" + id + "Script").innerText);
+                    }
                 }
                 break;
             case "appendAfter": // ajout à un objet DOM existant
-                objectDOM.after(code);
-                if (objectDOM.find("#" + id + "Script").length > 0) {
-                    $.globalEval($("#" + id + "Script").innerText);
+                if (objectDOM != undefined) {
+                    objectDOM.after(code);
+                    if (objectDOM.find("#" + id + "Script").length > 0) {
+                        $.globalEval($("#" + id + "Script").innerText);
+                    }
                 }
                 break;
             case "appendBefore": // ajout à un objet DOM existant
-                objectDOM.before(code);
-                if (objectDOM.find("#" + id + "Script").length > 0) {
-                    $.globalEval($("#" + id + "Script").innerText);
+                if (objectDOM != undefined) {
+                    objectDOM.before(code);
+                    if (objectDOM.find("#" + id + "Script").length > 0) {
+                        $.globalEval($("#" + id + "Script").innerText);
+                    }
                 }
                 break;
             case "update": // mise à jour, remplacement d’un objet DOM existant
                 updId = "#" + id;
                 $(updId).replaceWith(code);
-                if (objectDOM.find("#" + id + "Script").length > 0) {
+                if (objectDOM != undefined && objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
                 }
                 break;
             case "innerUpdate": // remplacement du contenu d’un objet DOM
-                objectDOM.html(code);
+                if (objectDOM != undefined) {
+                    objectDOM.html(code);
+                }
                 break;
             case "raz": // vidage du contenu d’un objet DOM
-                objectDOM.html("");
+                if (objectDOM != undefined) {
+                    objectDOM.html("");
+                }
                 break;
             case "delete": // suppression d’un objet DOM
-                objectDOM.remove();
+                if (objectDOM != undefined) {
+                    objectDOM.remove();
+                }
                 break;
             case "exec": // exécution de code JavaScript contenu dans une chaîne de caracrtères
                 $.globalEval(code);
@@ -134,25 +146,31 @@ function invokeAjax(datas, idSource, event, e) {
                 }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
-                let evt = code.substring(0, strpos(code, '|'));
-                let flg = code.substring(strpos(code, '|') + 1);
-                objectDOM.attr('data-'+evt+'-stopevt', flg);
+                if (objectDOM != undefined) {
+                    let evt = code.substring(0, strpos(code, '|'));
+                    let flg = code.substring(strpos(code, '|') + 1);
+                    objectDOM.attr('data-' + evt + '-stopevt', flg);
+                }
                 break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
-                let objetJS     = objectDOM.data('objet');
-                jQryObj = new window[objetJS](objectDOM);
-                if (jQryObj) {
-                    jQryObj.setData(code);
+                if (objectDOM != undefined) {
+                    let objetJS = objectDOM.data('objet');
+                    jQryObj = new window[objetJS](objectDOM);
+                    if (jQryObj) {
+                        jQryObj.setData(code);
+                    }
                 }
                 break;
             default:
-                let cls = objectDOM.data("objet");
-                jQryObj = new window[cls](objectDOM);
-                if (mode in jQryObj && typeof jQryObj[mode] == "function") {
-                    jQryObj[mode](code); // TODO: Remove this check in production environment.
-                } else {
-                    console.log(mode + " is not a function of not in " + cls);
-                    console.log(jQryObj);
+                if (objectDOM != undefined) {
+                    let cls = objectDOM.data("objet");
+                    jQryObj = new window[cls](objectDOM);
+                    if (mode in jQryObj && typeof jQryObj[mode] == "function") {
+                        jQryObj[mode](code); // TODO: Remove this check in production environment.
+                    } else {
+                        console.log(mode + " is not a function of not in " + cls);
+                        console.log(jQryObj);
+                    }
                 }
         }
     });
