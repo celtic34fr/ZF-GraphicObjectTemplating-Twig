@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
+use ReflectionException;
 
 /**
  * Class ODMenu
@@ -53,9 +54,9 @@ class ODMenu extends ODContained
 
     /**
      * ODMenu constructor.
-     * @param $id
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @param string $id
+     * @param array $pathObjArray
+     * @throws ReflectionException
      */
     public function __construct(string $id, array $pathObjArray = []) {
         $pathObjArray[] = "oobjects/odcontained/odmenu/odmenu";
@@ -146,7 +147,7 @@ class ODMenu extends ODContained
      * @param string $pathParent : chemine d'accès à l'option parente
      * @return boolean|ODMenu : retourne l'objet lui-même afin, de pouvoir chaîner les appels de méthodes
      * retourne false : option de menu ($item) n'est pas cohérente ou chemin $pathParent n'existe pas dans optionsPath
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function addOptionByPath(string $ref, array $item, int $ord, string $pathParent = null)
@@ -187,7 +188,7 @@ class ODMenu extends ODContained
      * @return ODMenu|bool : retourne l'objet lui-même afin, de pouvoir chaîner les appels de méthodes
      * retourne false : option de menu ($item) n'est pas cohérente ou référence $parent n'existe pas dans optionsPath
      * ou la référence $ref n'existe pas dans optionsPath
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function setOption(string $ref, array $item, int $ord, string $parent = null)
@@ -236,7 +237,7 @@ class ODMenu extends ODContained
      * @return ODMenu|bool : retourne l'objet lui-même afin, de pouvoir chaîner les appels de méthodes
      * retourne false : option de menu ($item) n'est pas cohérente ou chemin $pathParent n'existe pas dans optionsPath
      * ou la référence $ref n'existe pas dans optionsPath
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function setOptionByPath(string $ref, array $item, int $ord, string $pathParent)
@@ -495,7 +496,7 @@ class ODMenu extends ODContained
      * méthode d'extraction et restitution des constantes de position d'option de menu
      *
      * @return array : tableau des valeurs autorisées de position d'option de menu
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getPositionConstants()
     {
@@ -519,7 +520,7 @@ class ODMenu extends ODContained
      * méthode d'extraction et restitution des constantes de type d'ouverture de lien d'option de menu
      *
      * @return array : tableau des valeurs autorisées de type d'ouverturede lien d'option de menu
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getTargetConstants()
     {
