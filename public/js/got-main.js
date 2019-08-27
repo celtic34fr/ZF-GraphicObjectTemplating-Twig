@@ -73,7 +73,7 @@ function invokeAjax(datas, idSource, event, e) {
         let table       = "";
         let treeview    = "";
         let objectDOM   = null;
-        if (id.length > 0) { let objectDOM   = $("#" + id); }
+        if (id.length > 0) { objectDOM   = $("#" + id); }
         let jQryObj     = "";
         switch (mode) {
             case 'rscs': //extraction des ressources CSS / Js avec injection
