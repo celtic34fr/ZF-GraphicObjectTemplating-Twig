@@ -13,8 +13,10 @@
     padding: 0 0.5em;
 }
 
+.radio input[type=radio] { margin-left: -0.8em !important; }
+
 .radio.radio-horizontal {
-    margin-right: 0.5em;
+    margin-right: 1.5em !important;
     margin-top: 10px !important;
 }
 
