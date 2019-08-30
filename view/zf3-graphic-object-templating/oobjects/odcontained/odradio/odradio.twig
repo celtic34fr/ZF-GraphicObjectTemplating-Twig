@@ -2,12 +2,11 @@
 
 {% set objClasses = 'gotObject hidden ' ~ objet.classes %}
 
-<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}
-    {% if objet.state == false %} radio disabled {% endif %}"
+<div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="radio {{ objClasses }}
+    {% if objet.state == false %} disabled {% endif %}"
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}
     {% if objet.widthBT is not empty %} data-widthbt="{{ objet.widthBT }}" {% endif %}
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
-    {% if objet.state == false %} disabled {% endif %}
     {% include "zf3-graphic-object-templating/oobjects/eventsHTML.twig" with {'events':objet.event} %}
 >
     <div class="radioLabel {{ objet.forme }}"
@@ -20,6 +19,7 @@
         {% for radio in objet.options %}
         <div class="{{ radio.type }} {{ objet.forme }}">
         <input type="radio" name="{{ objet.id }}Radio" value="{{ radio.value }}" class="radioBtn"
+            {% if objet.state == false %} disabled {% endif %}
             id="{{ objet.id ~ radio.value }}" {% if radio.check == 'check' %} checked="checked"{% endif %}>
         <label for="{{ objet.id ~ radio.value }}">{{ radio.libel }}</label>
         </div>
