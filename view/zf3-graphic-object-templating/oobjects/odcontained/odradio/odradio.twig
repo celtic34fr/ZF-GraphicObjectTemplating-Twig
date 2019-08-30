@@ -19,7 +19,7 @@
         {% for radio in objet.options %}
         <div class="{{ radio.type }} {{ objet.forme }}">
         <input type="radio" name="{{ objet.id }}Radio" value="{{ radio.value }}" class="radioBtn"
-            {% if objet.state == false %} disabled {% endif %}
+            {% if objet.state == false or item.state == false %} disabled {% endif %}
             id="{{ objet.id ~ radio.value }}" {% if radio.check == 'check' %} checked="checked"{% endif %}>
         <label for="{{ objet.id ~ radio.value }}">{{ radio.libel }}</label>
         </div>

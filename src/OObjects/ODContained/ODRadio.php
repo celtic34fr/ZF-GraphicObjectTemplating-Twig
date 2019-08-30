@@ -4,6 +4,7 @@ namespace GraphicObjectTemplating\OObjects\ODContained;
 
 use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
+use ReflectionException;
 
 /**
  * Class ODRadio
@@ -72,7 +73,7 @@ class ODRadio extends ODContained
     /**
      * ODRadio constructor.
      * @param $id
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function __construct(string $id, array $pathObjArray = []) {
         $pathObjArray[] = "oobjects/odcontained/odradio/odradio";
@@ -92,12 +93,13 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @param $value
-     * @param $libel
+     * @param string $value
+     * @param string $libel
      * @param string $type
      * @param bool $state
      * @param string $check
      * @return ODRadio|bool
+     * @throws Exception
      */
     public function addOption(string $value, string $libel, string $type = self::RADIOTYPE_DEFAULT,
                               bool $state = self::RADIOSTATE_ENABLE, string $check = self::RADIOCHECK_UNCHECK)
@@ -132,6 +134,7 @@ class ODRadio extends ODContained
     /**
      * @param string $value
      * @return ODRadio|bool
+     * @throws Exception
      */
     public function rmOption(string $value)
     {
@@ -171,6 +174,7 @@ class ODRadio extends ODContained
      * @param bool $state
      * @param string $check
      * @return ODRadio|bool
+     * @throws Exception
      */
     public function setOption(string $value, string $libel, string $type = self::RADIOTYPE_DEFAULT,
                               bool $state = self::RADIOSTATE_ENABLE, string $check = self::RADIOCHECK_UNCHECK)
@@ -205,6 +209,7 @@ class ODRadio extends ODContained
     /**
      * @param array|null $options
      * @return ODRadio|bool
+     * @throws Exception
      */
     public function setOptions(array $options = null)
     {
@@ -227,8 +232,9 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return ODRadio|bool
+     * @throws Exception
      */
     public function checkOption(string $value)
     {
@@ -247,6 +253,7 @@ class ODRadio extends ODContained
 
     /**
      * @return ODRadio
+     * @throws Exception
      */
     public function uncheckOption()
     {
@@ -273,8 +280,9 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this|bool
+     * @throws Exception
      */
     public function enaOption(string $value)
     {
@@ -294,6 +302,7 @@ class ODRadio extends ODContained
     /**
      * @param string $value
      * @return $this|bool
+     * @throws Exception
      */
     public function disOption(string $value)
     {
@@ -328,6 +337,7 @@ class ODRadio extends ODContained
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function enaAllOptions()
     {
@@ -344,6 +354,7 @@ class ODRadio extends ODContained
 
     /**
      * @return $this
+     * @throws Exception
      */
     public function disAllOptions()
     {
@@ -375,6 +386,7 @@ class ODRadio extends ODContained
     /**
      * @param $label
      * @return ODRadio
+     * @throws Exception
      */
     public function setLabel($label)
     {
@@ -397,6 +409,7 @@ class ODRadio extends ODContained
     /**
      * @param $labelWidthBT
      * @return ODRadio|bool
+     * @throws Exception
      */
     public function setLabelWidthBT($labelWidthBT)
     {
@@ -575,6 +588,10 @@ class ODRadio extends ODContained
 
     /** méthodes privées */
 
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
     public function getStateConstants()
     {
         $retour = [];
@@ -594,6 +611,10 @@ class ODRadio extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
     public function getCheckConstants()
     {
         $retour = [];
@@ -613,6 +634,10 @@ class ODRadio extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
     private function getTypeConstants()
     {
         $retour = [];
