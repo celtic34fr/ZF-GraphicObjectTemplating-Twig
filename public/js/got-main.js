@@ -20,6 +20,11 @@ function invokeAjax(datas, idSource, event, e) {
     // récupération de l’URL d’appel Ajax
     let urlGotCallback = $("#gotcallback").text();
     let tabDatas       = [];
+
+    // récupération et ajout si lieu de la zone de communication
+    let zonComm        = getZoneComm();
+    if (zonComm.length > 0 ) { _.merge(datas , {'zoneComm': zonComm}); }
+
     $.ajax({
         url:        urlGotCallback,
         type:       'POST',
@@ -161,6 +166,9 @@ function invokeAjax(datas, idSource, event, e) {
                     }
                 }
                 break;
+            case 'updZoneComm':
+                setZoneComm(code);
+                break;
             default:
                 if (objectDOM != undefined) {
                     let cls = objectDOM.data("objet");
@@ -266,4 +274,12 @@ function showHideTableNodata(id, nbrLines) {
 
 function getDPI(){
     return jQuery('#dpi').height();
+}
+
+function getZoneComm() {
+    return $("#comm-zone").html();
+}
+
+function setZoneComm(code) {
+    return $("#comm-zone").html(code);
 }

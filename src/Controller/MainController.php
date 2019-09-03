@@ -13,7 +13,6 @@ use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\Service\ZF3GotServices;
 
@@ -33,7 +32,7 @@ class MainController extends AbstractActionController
      * @param ServiceManager $serviceManager
      * @param ZF3GotServices $gotServices
      */
-    public function __construct($serviceManager, $gotServices)
+    public function __construct(ServiceManager $serviceManager, ZF3GotServices $gotServices)
     {
         $this->serviceManager   = $serviceManager;
         $this->gotServices      = $gotServices;
@@ -61,13 +60,16 @@ class MainController extends AbstractActionController
                 $sessionObj = OObject::validateSession();
                 /** @var OObject $callingObj */
                 $callingObj = OObject::buildObject($params['id'], $sessionObj);
-                $objects    = $sessionObj->objects;
-                $resources  = $sessionObj->resources;
 
                 if (!$callingObj) {
                     // si retour false de la création d'objet => redirection sur la route home de l'application
                     $results = [OObject::formatRetour($params['id'], $params['id'], 'redirect', '/')];
                 } else {
+                    if (array_key_exists('zoneComm', $params)) {
+                        $callingObj->setZoneComm($params['zoneComm']);
+                        unset($params['zoneComm']);
+                    }
+
                     if ($callingObj->getProperty('dispatchEvents')) {
                         $results = call_user_func_array([$callingObj, 'dispatchEvents'], [$this->serviceManager, $params]);
                     } else {
@@ -84,9 +86,6 @@ class MainController extends AbstractActionController
     
                             // traitement en cas de formulaire
                             if (array_key_exists('form', $params)) {
-                                /** reformatage et mise à jour des données du formulaire niveau objets de la page */
-                                // list($params['form'], $objects) = $this->buildFormDatas($params['form'], $objects);
-        
                                 if ($callingObj instanceof ODContained && !empty($callingObj->getForm())) {
                                     /** @var OSForm $form */
                                     $form           =  OObject::buildObject($callingObj->getForm(), $sessionObj);
@@ -95,8 +94,6 @@ class MainController extends AbstractActionController
                                         $params['form'] = array_merge($params['form'], $hiddens);
                                     }
                                 }
-        
-                                $sessionObj->objects    = $objects;
                             }
                             // appel de la méthode de l'objet passée en paramètre
                             $results = call_user_func_array([$object, $objMethod], [$this->serviceManager, $params]);
@@ -164,6 +161,19 @@ class MainController extends AbstractActionController
                             break;
                     }
                     $result = $updDatas;
+                }
+
+                // traitement et ajout de la zone de communication aux données à retourner
+                $zoneComm   = $callingObj::getZoneComm();
+                if ($zoneComm !== null) {
+                    switch (true) {
+                        case (is_array($zoneComm) && sizeof($zoneComm) == 0):
+                            $result[]   = ['id'=>$params['id'], 'mode'=>'updZoneComm', 'code'=> ''];
+                            break;
+                        case (!is_array($zoneComm) && strlen($zoneComm) > 0):
+                            $result[]   = ['id'=>$params['id'], 'mode'=>'updZoneComm', 'code'=> $zoneComm];
+                            break;
+                    }
                 }
 
                 $response->getHeaders()->addHeaders([

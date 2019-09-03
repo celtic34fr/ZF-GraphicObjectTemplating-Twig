@@ -49,6 +49,10 @@ namespace GraphicObjectTemplating\OObjects;
  * static function formatBootstrap($widthBT)
  * static function formatRetour($idSource, $idCible, $mode, $code = null)
  * static function getPersistantObjs()
+ * static function putInComm(OObject $object, bool $crypt= false)
+ * static function cryptComm()
+ * static function decryptComm()
+ * static function pullOutComm(bool $crypt = false)
  *
  * getProperty(string $name)                                                                            **
  * getProperties()                                                                                      **
@@ -142,6 +146,10 @@ namespace GraphicObjectTemplating\OObjects;
 use DateTime;
 use Exception;
 use GraphicObjectTemplating\Service\ZF3GotServices;
+use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\Self_;
+use phpDocumentor\Reflection\Types\This;
+use phpDocumentor\Reflection\Types\Void_;
 use ReflectionException;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
@@ -152,6 +160,7 @@ class OObject
     private $name;
     private $properties;
     private $lastAccess;
+    private static $zoneComm = null;
 
     const DISPLAY_NONE    = 'none';
     const DISPLAY_BLOCK   = 'block';
@@ -654,13 +663,71 @@ class OObject
         return $persistantObjs;
     }
 
+    /**
+     * @param OObject $object
+     * @param bool $crypt
+     */
+    public static function putInComm(OObject $object = null, bool $crypt = false) : void
+    {
+        $zoneComm = self::$zoneComm;
+        if (is_string($zoneComm)) {
+            self::decryptComm();
+            $zoneComm = self::$zoneComm;
+        }
+        if ($object === null) {
+            $zoneComm   = [];
+            $crypt      = false;
+        } else {
+            if (array_key_exists($object->getId(), $zoneComm)) { unset($zoneComm[$object->getId()]); }
+
+            $zoneComm[$object->getId()] = self::buildDataArray($object);
+            self::$zoneComm = $zoneComm;
+        }
+
+        if ($crypt) { self::cryptComm(); }
+    }
+
+    /**
+     *
+     */
+    public static function cryptComm() : void
+    {
+        $zoneComm = self::$zoneComm;
+        if (!is_string($zoneComm) && null !== $zoneComm) {
+            $zoneComm   = json_encode($zoneComm);
+            self::$zoneComm = $zoneComm;
+        }
+   }
+
+    /**
+     *
+     */
+    public static function decryptComm() : void
+    {
+        $zoneComm = self::$zoneComm;
+        if (!is_array($zoneComm) && null !== $zoneComm) {
+            $zoneComm   = json_decode($zoneComm);
+            self::$zoneComm = $zoneComm;
+        }
+    }
+
+    /**
+     * @param bool $crypt
+     * @return array|string
+     */
+    public static function pullOutComm(bool $crypt = false)
+    {
+        if ($crypt) { self::decryptComm(); }
+        return self::getZoneComm();
+    }
+
     /** **************************************************************************************************
      * méthodes de l'objet proprement dites                                                              *
      * *************************************************************************************************** */
 
     /**
      * @param string $name
-     * @return bool
+     * @return mixed|bool
      */
     public function getProperty(string $name)
     {
@@ -1975,6 +2042,24 @@ class OObject
         $this->setProperties($properties);
         return $this;
     }
+
+    /**
+     * @return array|string
+     */
+    public function getZoneComm()
+    {
+        return $this->zoneComm;
+    }
+
+    /**
+     * @param array|string $zoneComm
+     */
+    public function setZoneComm($zoneComm): void
+    {
+        $this->zoneComm = $zoneComm;
+    }
+
+
 
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
