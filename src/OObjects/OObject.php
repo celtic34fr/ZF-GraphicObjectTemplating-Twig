@@ -146,10 +146,7 @@ namespace GraphicObjectTemplating\OObjects;
 use DateTime;
 use Exception;
 use GraphicObjectTemplating\Service\ZF3GotServices;
-use phpDocumentor\Reflection\Types\Boolean;
-use phpDocumentor\Reflection\Types\Self_;
-use phpDocumentor\Reflection\Types\This;
-use phpDocumentor\Reflection\Types\Void_;
+use ReflectionClass;
 use ReflectionException;
 use Zend\Session\Container;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
@@ -401,7 +398,7 @@ class OObject
     /**
      * @param OObject $object
      * @param Container $sessionObj
-     * @return OObject|boolean
+     * @return OObject|bool
      * @throws Exception
      */
     public static function cloneObject(OObject $object, Container $sessionObj)
@@ -718,7 +715,7 @@ class OObject
     public static function pullOutComm(bool $crypt = false)
     {
         if ($crypt) { self::decryptComm(); }
-        return self::getZoneComm();
+        return self::$zoneComm;
     }
 
     /** **************************************************************************************************
@@ -844,6 +841,7 @@ class OObject
      * @param string $display
      * @return $this|bool
      * @throws ReflectionException
+     * @throws Exception
      */
     public function setDisplay(string $display = self::DISPLAY_BLOCK)
     {
@@ -1325,7 +1323,7 @@ class OObject
                 if (!array_key_exists('js', $resources)) {
                     $js        = $resources['js'];
                     if (array_key_exists($nameFile, $js)) {
-                        if (!in_array($nameFile, js['enable'])) {
+                        if (!in_array($nameFile, $js['enable'])) {
                             $js['enable'][] = $nameFile;
                             $resources['js'] = $js;
                             $properties['resources'] = $resources;
@@ -1752,6 +1750,7 @@ class OObject
      * @param string $IBtype
      * @return $this
      * @throws ReflectionException
+     * @throws Exception
      */
     public function setIBType(string $IBtype = self::IBTYPE_TOOLTIP)
     {
@@ -2048,7 +2047,7 @@ class OObject
      */
     public function getZoneComm()
     {
-        return $this->zoneComm;
+        return self::$zoneComm;
     }
 
     /**
@@ -2056,7 +2055,7 @@ class OObject
      */
     public function setZoneComm($zoneComm): void
     {
-        $this->zoneComm = $zoneComm;
+        self::$zoneComm = $zoneComm;
     }
 
 
@@ -2071,7 +2070,7 @@ class OObject
      */
     protected static function getConstants()
     {
-        $ref = new \ReflectionClass(static::class);
+        $ref = new ReflectionClass(static::class);
         return $ref->getConstants();
     }
 
