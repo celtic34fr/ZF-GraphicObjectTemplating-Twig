@@ -164,7 +164,7 @@ class MainController extends AbstractActionController
                 }
 
                 // traitement et ajout de la zone de communication aux données à retourner
-                $zoneComm   = $callingObj::getZoneComm();
+                $zoneComm   = $callingObj->getZoneComm();
                 if ($zoneComm !== null) {
                     switch (true) {
                         case (is_array($zoneComm) && sizeof($zoneComm) == 0):
