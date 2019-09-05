@@ -58,21 +58,6 @@ odtreeview.prototype = {
     }
 };
 
-function parcoursLis(liItem, arrayTree) {
-    var LIs = $('#'+liItem.attr('id')+' > ul > li');
-    var arrayItrem  = Array();
-    if (LIs.length > 0) {
-        LIs.each(function () {
-            arrayItrem.push($(this).attr("id"));
-            if ($(this.selector+' > ul')) {
-                var ret = parcoursLis($(this), arrayItrem)
-            }
-        });
-        arrayTree.push(arrayItrem);
-    }
-    return arrayTree;
-}
-
 function initTreeview(idObject) {
     sortable('#'+idObject+' .t-sortable.sortable', {
         forcePlaceholderSize: true,
@@ -121,22 +106,6 @@ function addBtnActionsTV(idObj) {
 
 $(document).ready(function (evt) {
 
-    $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable.sortable' , function(evt) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        var treeObj = Array();
-        treeObj = parcoursLis($(".gotObject[data-objet='odtreeview']"), treeObj);
-        // invokeAjax(treeObj, $(".gotObject[data-objet='odtreeview']").attr('id'), 'update', evt);
-    });
-
-    $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable-inner.sortable' , function(evt) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        var treeObj = Array();
-        treeObj = parcoursLis($(".gotObject[data-objet='odtreeview']"), treeObj);
-        // invokeAjax(treeObj, $('[data-objet=odtreeview]').attr('id'), 'update', evt);
-    });
-
     $(document).on("click", '.gotObject.selectable[data-objet="odtreeview"] li:not(.unselect)' , function(evt) {
         evt.preventDefault();
         evt.stopPropagation();
@@ -158,3 +127,34 @@ $(document).ready(function (evt) {
         invokeAjax(object.getData('click'), idObject, 'click', evt);
     });
 });
+
+// function parcoursLis(liItem, arrayTree) {
+//     var LIs = $('#'+liItem.attr('id')+' > ul > li');
+//     var arrayItrem  = Array();
+//     if (LIs.length > 0) {
+//         LIs.each(function () {
+//             arrayItrem.push($(this).attr("id"));
+//             if ($(this.selector+' > ul')) {
+//                 var ret = parcoursLis($(this), arrayItrem)
+//             }
+//         });
+//         arrayTree.push(arrayItrem);
+//     }
+//     return arrayTree;
+// }
+//
+// $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable.sortable' , function(evt) {
+//     evt.preventDefault();
+//     evt.stopPropagation();
+//     var treeObj = Array();
+//     treeObj = parcoursLis($(".gotObject[data-objet='odtreeview']"), treeObj);
+//     invokeAjax(treeObj, $(".gotObject[data-objet='odtreeview']").attr('id'), 'update', evt);
+// });
+//
+// $(document).on("sortupdate", '.gotObject[data-objet="odtreeview"] .t-sortable-inner.sortable' , function(evt) {
+//     evt.preventDefault();
+//     evt.stopPropagation();
+//     var treeObj = Array();
+//     treeObj = parcoursLis($(".gotObject[data-objet='odtreeview']"), treeObj);
+//     invokeAjax(treeObj, $('[data-objet=odtreeview]').attr('id'), 'update', evt);
+// });
