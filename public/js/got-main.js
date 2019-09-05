@@ -1,3 +1,21 @@
+
+Storage.prototype.setObject = function (key, value) {
+    this.setItem(key, JSON.stringify(value));
+    console.log("setObject ",key, value);
+}
+Storage.prototype.getObject = function (key) {
+    var value = this.getItem(key);
+    console.log("getObject ",key, value);
+    return value && JSON.parse(value);
+}
+
+function setZoneComm(key, value) {
+    sessionStorage.setObject(key, value);
+}
+
+function getZoneComm(key) {
+    return sessionStorage.getObject(key);
+}
 /**
  * méthode invokeAjax
  * @param datas     -> ensemble des données à communiquer à la callback appelé
@@ -11,19 +29,21 @@
 function invokeAjax(datas, idSource, event, e) {
     // vérification propagation événement
     if (event !== undefined && e !== undefined) {
-        let dataKey   = event+'-stopevt';
-        let stopEvent = $('#'+idSource).data(dataKey);
+        let dataKey     = event+'-stopevt';
+        let stopEvent   = $('#'+idSource).data(dataKey);
         if (stopEvent === 'OUI' || stopEvent === undefined) {
             e.stopImmediatePropagation();
         }
     }
     // récupération de l’URL d’appel Ajax
-    let urlGotCallback = $("#gotcallback").text();
-    let tabDatas       = [];
+    let urlGotCallback  = $("#gotcallback").text();
+    let tabDatas        = [];
 
     // récupération et ajout si lieu de la zone de communication
-    let zonComm        = getZoneComm();
-    if (zonComm.length > 0 ) { _.merge(datas , {'zoneComm': zonComm}); }
+    let obj             = $("#"+idSource);
+    let form            = obj.data('form') ? obj.data('form') : idSource;
+    let zonComm         = getZoneComm(form);
+    if (zonComm.length > 0 ) { datas['zoneComm'] = zonComm; }
 
     $.ajax({
         url:        urlGotCallback,
@@ -167,7 +187,7 @@ function invokeAjax(datas, idSource, event, e) {
                 }
                 break;
             case 'updZoneComm':
-                setZoneComm(code);
+                setZoneComm(id, code);
                 break;
             default:
                 if (objectDOM != undefined) {
@@ -274,12 +294,4 @@ function showHideTableNodata(id, nbrLines) {
 
 function getDPI(){
     return jQuery('#dpi').height();
-}
-
-function getZoneComm() {
-    return $("#comm-zone").html();
-}
-
-function setZoneComm(code) {
-    return $("#comm-zone").html(code);
 }

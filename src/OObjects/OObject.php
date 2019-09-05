@@ -685,6 +685,29 @@ class OObject
     }
 
     /**
+     * @param OObject $object
+     * @param bool $crypt
+     * @return bool
+     */
+    public function pullInComm(OObject $object, bool $crypt = false)
+    {
+        $zoneComm = self::$zoneComm;
+        if ($crypt) {
+            self::decryptComm();
+            $zoneComm = self::$zoneComm;
+        }
+        if (!empty($zoneComm) && is_array($zoneComm)) {
+            if (array_key_exists($object->getId(), $zoneComm)) {
+                unset($zoneComm[$object->getId()]);
+                self::$zoneComm = $zoneComm;
+                if ($crypt) { self::cryptComm(); }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      *
      */
     public static function cryptComm() : void

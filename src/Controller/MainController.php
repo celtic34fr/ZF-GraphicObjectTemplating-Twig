@@ -19,7 +19,8 @@ use GraphicObjectTemplating\Service\ZF3GotServices;
 class MainController extends AbstractActionController
 {
     const ModeGenHTML   = ['append', 'appendAfter', 'appendBefore', 'update', 'innerUpdate'];
-    const ModeExecJS    = ['exec', 'execID', 'redirect'];
+    const ModeExecJS    = ['exec', 'execID'];
+    const ModeRedirect  = ['redirect'];
     const ModeNoOperate = ['nop'];
     const ModeNoUpdate  = ['noUpdate'];
 
@@ -60,6 +61,7 @@ class MainController extends AbstractActionController
                 $sessionObj = OObject::validateSession();
                 /** @var OObject $callingObj */
                 $callingObj = OObject::buildObject($params['id'], $sessionObj);
+                $object     = $callingObj;
 
                 if (!$callingObj) {
                     // si retour false de la création d'objet => redirection sur la route home de l'application
@@ -79,8 +81,6 @@ class MainController extends AbstractActionController
                             $event      = $callingObj->getEvent($params['event']);
                             if ($event['class'] != $callingObj->getClassName()) {
                                 $object     = $this->buildObject($event['class'], $sessionObj);
-                            } else {
-                                $object     = $callingObj;
                             }
                             $objMethod  = $event['method'];
     
@@ -123,6 +123,11 @@ class MainController extends AbstractActionController
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             $insert     = true;
                             break;
+                        case (in_array($rlst['mode'], self::ModeRedirect)):
+                            $html       = !empty($rlst['code']) ? $rlst['code'] : '';
+                            $insert     = true;
+                            $update     = false;
+                            break;
                         case (in_array($rlst['mode'], self::ModeNoUpdate)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             $update     = false;
@@ -164,16 +169,17 @@ class MainController extends AbstractActionController
                 }
 
                 // traitement et ajout de la zone de communication aux données à retourner
-                $zoneComm   = $callingObj->getZoneComm();
+                $zoneComm   = $object->getZoneComm();
                 if ($zoneComm !== null) {
                     switch (true) {
                         case (is_array($zoneComm) && sizeof($zoneComm) == 0):
-                            $result[]   = ['id'=>$params['id'], 'mode'=>'updZoneComm', 'code'=> ''];
+                            $item   = ['id'=>$object->getId(), 'mode'=>'updZoneComm', 'code'=> ''];
                             break;
                         case (!is_array($zoneComm) && strlen($zoneComm) > 0):
-                            $result[]   = ['id'=>$params['id'], 'mode'=>'updZoneComm', 'code'=> $zoneComm];
+                            $item   = ['id'=>$object->getId(), 'mode'=>'updZoneComm', 'code'=> $zoneComm];
                             break;
                     }
+                    array_unshift($result, $item);
                 }
 
                 $response->getHeaders()->addHeaders([

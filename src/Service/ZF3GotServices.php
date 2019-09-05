@@ -39,7 +39,9 @@ class ZF3GotServices
     {
         if (empty($sessionObjects)) { $sessionObjects = OObject::validateSession(); }
         $properties     = [];
+        $zoneComm       = null;
         if ($object instanceof OObject) {
+            $zoneComm   = $object->getZoneComm();
             $properties = $object->getProperties();
             $object = $object->getId();
         } else {
@@ -79,6 +81,17 @@ class ZF3GotServices
                     break;
             }
             $renduHtml = $this->_twigRender->render($html);
+
+            if ($zoneComm !== null) {
+                $zoneComm   = json_encode($zoneComm);
+                $code       = "<script>";
+                $code      .= '$(document).ready(function() {';
+                $code      .= 'setZoneComm("'.$object.'", '.$zoneComm.');';
+                $code      .= "});";
+                $code      .= "</script>";
+                $renduHtml .= $code;
+            }
+
             $renduHtml = preg_replace('/(\s)\s+/', '$1', $renduHtml);
             $renduHtml =  str_replace(array("\r\n", "\r", "\n"), "", $renduHtml);
             return $renduHtml;
