@@ -16,6 +16,12 @@ function setZoneComm(key, value) {
 function getZoneComm(key) {
     return sessionStorage.getObject(key);
 }
+
+function updateZoneComm(key, value) {
+    setZoneComm(key, value);
+    $("#zone-comm").html(key);
+}
+
 /**
  * méthode invokeAjax
  * @param datas     -> ensemble des données à communiquer à la callback appelé
@@ -41,9 +47,15 @@ function invokeAjax(datas, idSource, event, e) {
 
     // récupération et ajout si lieu de la zone de communication
     let obj             = $("#"+idSource);
-    let form            = obj.data('form') ? obj.data('form') : idSource;
+    let form            = $("#zone-comm").html();
+    if (form.length == 0) {
+        form            = obj.data('form') ? obj.data('form') : idSource;
+    }
     let zonComm         = getZoneComm(form);
-    if (zonComm.length > 0 ) { datas['zoneComm'] = zonComm; }
+    if (zonComm.length > 0 ) {
+        datas['zoneCommName'] = form;
+        datas['zoneCommData'] = zonComm;
+    }
 
     $.ajax({
         url:        urlGotCallback,
@@ -187,7 +199,7 @@ function invokeAjax(datas, idSource, event, e) {
                 }
                 break;
             case 'updZoneComm':
-                setZoneComm(id, code);
+                updateZoneComm(id, code);
                 break;
             default:
                 if (objectDOM != undefined) {

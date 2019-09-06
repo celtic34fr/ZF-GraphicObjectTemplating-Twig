@@ -50,6 +50,7 @@ namespace GraphicObjectTemplating\OObjects;
  * static function formatRetour($idSource, $idCible, $mode, $code = null)
  * static function getPersistantObjs()
  * static function putInComm(OObject $object, bool $crypt= false)
+ * static function pullInComm(OObject $object, bool $crypt= false)
  * static function cryptComm()
  * static function decryptComm()
  * static function pullOutComm(bool $crypt = false)
@@ -157,7 +158,8 @@ class OObject
     private $name;
     private $properties;
     private $lastAccess;
-    private static $zoneComm = null;
+    private static $zoneCommName = null;
+    private static $zoneCommData = null;
 
     const DISPLAY_NONE    = 'none';
     const DISPLAY_BLOCK   = 'block';
@@ -666,20 +668,22 @@ class OObject
      */
     public static function putInComm(OObject $object = null, bool $crypt = false) : void
     {
-        $zoneComm = self::$zoneComm;
-        if (is_string($zoneComm)) {
+        $zoneComm   = self::getZoneComm();
+        $data       = $zoneComm['data'];
+
+        if (is_string($data)) {
             self::decryptComm();
-            $zoneComm = self::$zoneComm;
+            $zoneComm = self::getZoneComm();
+            $data       = $zoneComm['data'];
         }
         if ($object === null) {
-            $zoneComm   = [];
+            $data       = [];
             $crypt      = false;
         } else {
-            if (array_key_exists($object->getId(), $zoneComm)) { unset($zoneComm[$object->getId()]); }
-
-            $zoneComm[$object->getId()] = self::buildDataArray($object);
-            self::$zoneComm = $zoneComm;
+            if (array_key_exists($object->getId(), $data)) { unset($data[$object->getId()]); }
+            $data[$object->getId()] = self::buildDataArray($object);
         }
+        self::setZoneComm($zoneComm['name'], $data);
 
         if ($crypt) { self::cryptComm(); }
     }
@@ -691,15 +695,16 @@ class OObject
      */
     public function pullInComm(OObject $object, bool $crypt = false)
     {
-        $zoneComm = self::$zoneComm;
+        $zoneComm   = self::getZoneComm();
         if ($crypt) {
             self::decryptComm();
-            $zoneComm = self::$zoneComm;
+            $zoneComm   = self::getZoneComm();
         }
-        if (!empty($zoneComm) && is_array($zoneComm)) {
-            if (array_key_exists($object->getId(), $zoneComm)) {
-                unset($zoneComm[$object->getId()]);
-                self::$zoneComm = $zoneComm;
+        $data       = $zoneComm['data'];
+        if (!empty($data) && is_array($data)) {
+            if (array_key_exists($object->getId(), $data)) {
+                unset($data[$object->getId()]);
+                self::setZoneComm($zoneComm['name'], $data);
                 if ($crypt) { self::cryptComm(); }
                 return true;
             }
@@ -712,10 +717,11 @@ class OObject
      */
     public static function cryptComm() : void
     {
-        $zoneComm = self::$zoneComm;
-        if (!is_string($zoneComm) && null !== $zoneComm) {
-            $zoneComm   = json_encode($zoneComm);
-            self::$zoneComm = $zoneComm;
+        $zoneComm = self::getZoneComm();
+        $data       = $zoneComm['data'];
+        if (!is_string($data) && null !== $data) {
+            $data   = json_encode($data);
+            self::setZoneComm($zoneComm['name'], $data);
         }
    }
 
@@ -724,10 +730,11 @@ class OObject
      */
     public static function decryptComm() : void
     {
-        $zoneComm = self::$zoneComm;
-        if (!is_array($zoneComm) && null !== $zoneComm) {
-            $zoneComm   = json_decode($zoneComm);
-            self::$zoneComm = $zoneComm;
+        $zoneComm   = self::getZoneComm();
+        $data       = $zoneComm['data'];
+        if (!is_array($data) && null !== $data) {
+            $data   = json_decode($data);
+            self::setZoneComm($zoneComm['name'], $data);
         }
     }
 
@@ -738,7 +745,28 @@ class OObject
     public static function pullOutComm(bool $crypt = false)
     {
         if ($crypt) { self::decryptComm(); }
-        return self::$zoneComm;
+        return self::getZoneComm();
+    }
+
+    /**
+     * @return array|string
+     */
+    public static function getZoneComm()
+    {
+        $zoneComm   = [];
+        $zoneComm['name'] = self::$zoneCommName;
+        $zoneComm['data'] = self::$zoneCommData;
+        return $zoneComm;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $data
+     */
+    public static function setZoneComm(string $name = null, $data = null): void
+    {
+        self::$zoneCommName = $name;
+        self::$zoneCommData = $data;
     }
 
     /** **************************************************************************************************
@@ -2064,23 +2092,6 @@ class OObject
         $this->setProperties($properties);
         return $this;
     }
-
-    /**
-     * @return array|string
-     */
-    public function getZoneComm()
-    {
-        return self::$zoneComm;
-    }
-
-    /**
-     * @param array|string $zoneComm
-     */
-    public function setZoneComm($zoneComm): void
-    {
-        self::$zoneComm = $zoneComm;
-    }
-
 
 
     /** **************************************************************************************************

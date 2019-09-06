@@ -68,8 +68,9 @@ class MainController extends AbstractActionController
                     $results = [OObject::formatRetour($params['id'], $params['id'], 'redirect', '/')];
                 } else {
                     if (array_key_exists('zoneComm', $params)) {
-                        $callingObj->setZoneComm($params['zoneComm']);
-                        unset($params['zoneComm']);
+                        $callingObj::setZoneComm($params['zoneCommName'], $params['zoneCommData']);
+                        unset($params['zoneCommName']);
+                        unset($params['zoneCommData']);
                     }
 
                     if ($callingObj->getProperty('dispatchEvents')) {
@@ -169,14 +170,16 @@ class MainController extends AbstractActionController
                 }
 
                 // traitement et ajout de la zone de communication aux données à retourner
-                $zoneComm   = $object->getZoneComm();
-                if ($zoneComm !== null) {
+                $zoneComm   = $object::getZoneComm();
+                $name       = $zoneComm['name'];
+                $data       = $zoneComm['data'];
+                if ($data !== null) {
                     switch (true) {
-                        case (is_array($zoneComm) && sizeof($zoneComm) == 0):
-                            $item   = ['id'=>$object->getId(), 'mode'=>'updZoneComm', 'code'=> ''];
+                        case (is_array($data) && sizeof($data) == 0):
+                            $item   = ['id'=>$name, 'mode'=>'updZoneComm', 'code'=> ''];
                             break;
                         case (!is_array($zoneComm) && strlen($zoneComm) > 0):
-                            $item   = ['id'=>$object->getId(), 'mode'=>'updZoneComm', 'code'=> $zoneComm];
+                            $item   = ['id'=>$name, 'mode'=>'updZoneComm', 'code'=> $data];
                             break;
                     }
                     array_unshift($result, $item);

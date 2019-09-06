@@ -41,7 +41,7 @@ class ZF3GotServices
         $properties     = [];
         $zoneComm       = null;
         if ($object instanceof OObject) {
-            $zoneComm   = $object->getZoneComm();
+            $zoneComm   = $object::getZoneComm();
             $properties = $object->getProperties();
             $object = $object->getId();
         } else {
@@ -82,11 +82,12 @@ class ZF3GotServices
             }
             $renduHtml = $this->_twigRender->render($html);
 
-            if ($zoneComm !== null) {
-                $zoneComm   = json_encode($zoneComm);
+            $name       = $zoneComm['name'];
+            $data       = json_encode($zoneComm['data']);
+            if ($data !== null) {
                 $code       = "<script>";
                 $code      .= '$(document).ready(function() {';
-                $code      .= 'setZoneComm("'.$object.'", '.$zoneComm.');';
+                $code      .= 'updateZoneComm("'.$name.'", '.$data.');';
                 $code      .= "});";
                 $code      .= "</script>";
                 $renduHtml .= $code;
