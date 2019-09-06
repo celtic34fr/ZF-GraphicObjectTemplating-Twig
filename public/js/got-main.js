@@ -22,6 +22,15 @@ function updateZoneComm(key, value) {
     $("#zone-comm").html(key);
 }
 
+function addZoneComm(code) {
+    let key     = $("#zone-comm").html();
+    let data    = getZoneComm(key);
+    if (data.length > 0) {
+        code = code + "?zoneComm="+key;
+    }
+    return code;
+}
+
 /**
  * méthode invokeAjax
  * @param datas     -> ensemble des données à communiquer à la callback appelé
@@ -172,6 +181,7 @@ function invokeAjax(datas, idSource, event, e) {
                 break;
             case "redirect": // redirection HTML
                 id = parseInt(id); // delay d'attente pour exécution de la redirection
+                code    = addZoneComm(code);
                 setTimeout(function () {
                     $(location).attr('href', code);
                 }, id );

@@ -102,6 +102,11 @@ class MainController extends AbstractActionController
                     }
                 }
 
+                /** acquisition information zone de communication */
+                $zoneComm   = $object::getZoneComm();
+                $nameZC     = $zoneComm['name'];
+                $dataZC     = $zoneComm['data'];
+
                 $result     = [];
                 $rscs       = [];
                 $updDatas   = [];
@@ -128,6 +133,11 @@ class MainController extends AbstractActionController
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
                             $insert     = true;
                             $update     = false;
+                            // Stockage temporaire en session de la zone de communication si existe
+                            if (!empty($dataZC)) {
+                                $sessionStorageSession = new Container('sessionStorage');
+                                $sessionStorageSession->offsetSet($nameZC, $dataZC);
+                            }
                             break;
                         case (in_array($rlst['mode'], self::ModeNoUpdate)):
                             $html       = !empty($rlst['code']) ? $rlst['code'] : '';
@@ -170,16 +180,13 @@ class MainController extends AbstractActionController
                 }
 
                 // traitement et ajout de la zone de communication aux données à retourner
-                $zoneComm   = $object::getZoneComm();
-                $name       = $zoneComm['name'];
-                $data       = $zoneComm['data'];
-                if ($data !== null) {
+                if ($dataZC !== null) {
                     switch (true) {
-                        case (is_array($data) && sizeof($data) == 0):
-                            $item   = ['id'=>$name, 'mode'=>'updZoneComm', 'code'=> ''];
+                        case (is_array($dataZC) && sizeof($dataZC) == 0):
+                            $item   = ['id'=>$nameZC, 'mode'=>'updZoneComm', 'code'=> ''];
                             break;
-                        case (!is_array($zoneComm) && strlen($zoneComm) > 0):
-                            $item   = ['id'=>$name, 'mode'=>'updZoneComm', 'code'=> $data];
+                        case (!is_array($dataZC) && strlen($dataZC) > 0):
+                            $item   = ['id'=>$nameZC, 'mode'=>'updZoneComm', 'code'=> $dataZC];
                             break;
                     }
                     array_unshift($result, $item);
