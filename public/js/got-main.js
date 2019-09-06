@@ -28,7 +28,7 @@ function addZoneComm(code) {
     if (data.length > 0) {
         var url = new URL(code, window.location);
         url.searchParams.set("zoneComm", key);
-        code = code + "?zoneComm="+key;
+        code = url.toString();
     }
     return code;
 }
