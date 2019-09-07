@@ -1591,7 +1591,7 @@ class OObject
 
     /**
      * @param string $event
-     * @return bool
+     * @return bool|array
      */
     public function getEvent(string $event = null)
     {

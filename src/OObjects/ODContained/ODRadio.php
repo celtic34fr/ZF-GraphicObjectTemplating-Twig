@@ -39,6 +39,7 @@ use ReflectionException;
  * evtChange(string $class, $method, $stopEvent = false)
  * getChange()
  * disChange()
+ * getValue()
  *
  * méthodes privées
  * ----------------
@@ -281,7 +282,7 @@ class ODRadio extends ODContained
 
     /**
      * @param string $value
-     * @return $this|bool
+     * @return ODRadio|bool
      * @throws Exception
      */
     public function enaOption(string $value)
@@ -301,7 +302,7 @@ class ODRadio extends ODContained
 
     /**
      * @param string $value
-     * @return $this|bool
+     * @return ODRadio|bool
      * @throws Exception
      */
     public function disOption(string $value)
@@ -336,7 +337,7 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODRadio
      * @throws Exception
      */
     public function enaAllOptions()
@@ -353,7 +354,7 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @return $this
+     * @return ODRadio
      * @throws Exception
      */
     public function disAllOptions()
@@ -436,7 +437,7 @@ class ODRadio extends ODContained
                             $lmd = (int) substr($key, 2);
                             $imd = 12 - $lmd;
                             break;
-                        case 'WX' :
+                        case 'WL' :
                             $llg = (int) substr($key, 2);
                             $ilg = 12 - $llg;
                             break;
@@ -498,6 +499,10 @@ class ODRadio extends ODContained
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
+    /**
+     * @return ODRadio
+     * @throws Exception
+     */
     public function enaDispBySide()
     {
         $properties = $this->getProperties();
@@ -508,6 +513,10 @@ class ODRadio extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODRadio
+     * @throws Exception
+     */
     public function enaDispUnder()
     {
         $properties = $this->getProperties();
@@ -518,8 +527,6 @@ class ODRadio extends ODContained
         $this->setProperties($properties);
         return $this;
     }
-
-
 
     /**
      * @param string $class
@@ -537,7 +544,7 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @return bool
+     * @return bool|array
      */
     public function getClick()
     {
@@ -545,7 +552,7 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @return bool|ODButton
+     * @return bool|ODRadio
      * @throws Exception
      */
     public function disClick()
@@ -557,7 +564,7 @@ class ODRadio extends ODContained
      * @param $class
      * @param $method
      * @param bool $stopEvent
-     * @return ODColorpicker|bool
+     * @return ODRadio|bool
      * @throws Exception
      */
     public function evtChange(string $class, $method, $stopEvent = false)
@@ -577,12 +584,20 @@ class ODRadio extends ODContained
     }
 
     /**
-     * @return ODColorpicker|bool
+     * @return ODRadio|bool
      * @throws Exception
      */
     public function disChange()
     {
         return $this->disEvent('change');
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getValue()
+    {
+        return $this->getCheckedOption();
     }
 
 

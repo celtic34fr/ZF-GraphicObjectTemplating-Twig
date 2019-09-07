@@ -2,7 +2,9 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
+use ReflectionException;
 
 /**
  * Class ODSelect
@@ -46,6 +48,7 @@ use GraphicObjectTemplating\OObjects\ODContained;
  * getBgColor()
  * setFgColor($fgColor = self::ODSELECTCOLOR_BLACK)
  * getFgColor()
+ * getValue()
  *
  * méthodes privées de la classe
  * -----------------------------
@@ -115,6 +118,12 @@ class ODSelect extends ODContained
     protected $const_format;
     protected $const_color;
 
+    /**
+     * ODSelect constructor.
+     * @param string $id
+     * @param array $pathObjArray
+     * @throws ReflectionException
+     */
     public function __construct(string $id, array $pathObjArray = []) {
         $pathObjArray[] = "oobjects/odcontained/odselect/odselect";
 		parent::__construct($id, $pathObjArray);
@@ -127,6 +136,14 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @param $value
+     * @param $libel
+     * @param bool $selected
+     * @param bool $enable
+     * @return $this|bool
+     * @throws Exception
+     */
     public function addOption($value, $libel, $selected = false, $enable = true)
     {
         $value      = (string) $value;
@@ -151,6 +168,14 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @param $libel
+     * @param bool $selected
+     * @param bool $enable
+     * @return $this|bool
+     * @throws Exception
+     */
     public function setOption($value, $libel, $selected = false, $enable = true)
     {
         $value      = (string) $value;
@@ -174,6 +199,11 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @return $this|bool
+     * @throws Exception
+     */
     public function rmOption($value)
     {
         $value      = (string) $value;
@@ -190,6 +220,11 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param array $options
+     * @return $this|bool
+     * @throws Exception
+     */
     public function setOptions(array $options)
     {
         /**
@@ -214,12 +249,19 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getOptions()
     {
         $properties = $this->getProperties();
         return array_key_exists('options', $properties) ? $properties['options'] : false;
     }
 
+    /**
+     * @param null $valeur
+     * @return bool|int|string
+     */
     public function getOption($valeur = null)
     {
         if (!empty($valeur)) {
@@ -232,6 +274,10 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return ODSelect
+     * @throws Exception
+     */
     public function clearOptions()
     {
         $properties = $this->getProperties();
@@ -240,6 +286,11 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @param $value
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function enaOption($value)
     {
         $value      = (string) $value;
@@ -256,6 +307,11 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function disOption($value)
     {
         $value      = (string) $value;
@@ -272,6 +328,10 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @return bool|string
+     */
     public function getStateOption($value)
     {
         $value      = (string) $value;
@@ -286,6 +346,11 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function setSelectedOption($value)
     {
         $value      = (string) $value;
@@ -303,6 +368,11 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function unsetSelectedOption($value)
     {
         $value      = (string) $value;
@@ -319,6 +389,10 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function unselectAll()
     {
         $properties = $this->getProperties();
@@ -334,6 +408,9 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return array|bool
+     */
     public function getSelectedOption()
     {
         $properties = $this->getProperties();
@@ -350,6 +427,10 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $value
+     * @return bool|string
+     */
     public function isSelectedOption($value)
     {
         $value      = (string) $value;
@@ -364,16 +445,24 @@ class ODSelect extends ODContained
         return false;
     }
 
-    public function enaMultiple($number)
+    /**
+     * @param int $number
+     * @return ODSelect
+     * @throws Exception
+     */
+    public function enaMultiple(int $number)
     {
         /** $number nombre de sélection valable pour mode select2 */
-        $number = (int) $number;
         $properties = $this->getProperties();
         $properties['multiple'] = ($number == 0) ? true : $number;
         $this->setProperties($properties);
         return $this;
     }
 
+    /**
+     * @return ODSelect
+     * @throws Exception
+     */
     public function disMultiple()
     {
         $properties = $this->getProperties();
@@ -382,6 +471,9 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function isMultiple()
     {
         if (!empty($value)) {
@@ -395,6 +487,11 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @param $label
+     * @return ODSelect
+     * @throws Exception
+     */
     public function setLabel($label)
     {
         $label = (string) $label;
@@ -404,12 +501,20 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabel()
     {
         $properties = $this->getProperties();
         return array_key_exists('label', $properties) ? $properties['label'] : false;
     }
 
+    /**
+     * @param $labelWidthBT
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function setLabelWidthBT($labelWidthBT)
     {
         if (!empty($labelWidthBT)) {
@@ -424,18 +529,28 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getLabelWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('labelWidthBT', $properties) ? $properties['labelWidthBT'] : false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getSelectWidthBT()
     {
         $properties = $this->getProperties();
         return array_key_exists('selectWidthBT', $properties) ? $properties['selectWidthBT'] : false;
     }
 
+    /**
+     * @return ODSelect
+     * @throws Exception
+     */
     public function enaDispBySide()
     {
         $properties = $this->getProperties();
@@ -446,6 +561,10 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return ODSelect
+     * @throws Exception
+     */
     public function enaDispUnder()
     {
         $properties = $this->getProperties();
@@ -457,6 +576,11 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @param $placeholder
+     * @return ODSelect
+     * @throws Exception
+     */
     public function setPlaceholder($placeholder)
     {
         $placeholder = (string) $placeholder;
@@ -466,12 +590,22 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getPlaceholder()
     {
         $properties = $this->getProperties();
         return array_key_exists('placeholder', $properties) ? $properties['placeholder'] : false;
     }
 
+    /**
+     * @param $class
+     * @param $method
+     * @param bool $stopEvent
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function evtChange($class, $method, $stopEvent = false)
     {
         if (!empty($class) && !empty($method)) {
@@ -497,6 +631,9 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return bool|array
+     */
     public function getChange()
     {
         $properties = $this->getProperties();
@@ -509,6 +646,10 @@ class ODSelect extends ODContained
         return false;
     }
 
+    /**
+     * @return ODSelect|bool
+     * @throws Exception
+     */
     public function disChange()
     {
         $properties = $this->getProperties();
@@ -524,9 +665,13 @@ class ODSelect extends ODContained
         return false;
     }
 
-    public function setFormat($format = self::ODSELECTFORMAT_NORMAL)
+    /**
+     * @param string $format
+     * @return ODSelect
+     * @throws Exception
+     */
+    public function setFormat(string $format = self::ODSELECTFORMAT_NORMAL)
     {
-        $format = (string) $format;
         $formats = $this->getFormatConstants();
         if (!in_array($format, $formats)) { $format = self::ODSELECTFORMAT_NORMAL; }
         $properties = $this->getProperties();
@@ -535,15 +680,22 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getFormat()
     {
         $properties = $this->getProperties();
         return array_key_exists('format', $properties) ? $properties['format'] : false;
     }
 
-    public function setBgColor($bgcolor = self::ODSELECTCOLOR_WHITE)
+    /**
+     * @param string $bgcolor
+     * @return ODSelect
+     * @throws ReflectionException
+     */
+    public function setBgColor(string $bgcolor = self::ODSELECTCOLOR_WHITE)
     {
-        $bgcolor = (string) $bgcolor;
         $bgcolors = $this->getColorConstants();
         if (!in_array($bgcolor, $bgcolors)) { $bgcolor = self::ODSELECTCOLOR_WHITE; }
 
@@ -553,15 +705,22 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getBgColor()
     {
         $properties = $this->getProperties();
         return array_key_exists('bgColor', $properties) ? $properties['bgColor'] : false;
     }
 
-    public function setFgColor($fgcolor = self::ODSELECTCOLOR_BLACK)
+    /**
+     * @param string $fgcolor
+     * @return ODSelect
+     * @throws ReflectionException
+     */
+    public function setFgColor(string $fgcolor = self::ODSELECTCOLOR_BLACK)
     {
-        $fgcolor = (string) $fgcolor;
         $fgcolors = $this->getColorConstants();
         if (!in_array($fgcolor, $fgcolors)) { $fgcolor = self::ODSELECTCOLOR_WHITE; }
 
@@ -571,16 +730,31 @@ class ODSelect extends ODContained
         return $this;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getFgColor()
     {
         $properties = $this->getProperties();
         return array_key_exists('fgColor', $properties) ? $properties['fgColor'] : false;
     }
 
+    /**
+     * @return array|bool
+     */
+    public function getValue()
+    {
+        return $this->getSelectedOption();
+    }
+
     /** **************************************************************************************************
      * méthodes privées de la classe                                                                     *
      * *************************************************************************************************** */
 
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
     private function getFormatConstants()
     {
         $retour = [];
@@ -599,6 +773,10 @@ class ODSelect extends ODContained
         return $retour;
     }
 
+    /**
+     * @return array
+     * @throws ReflectionException
+     */
     public function getColorConstants()
     {
         $retour = [];
