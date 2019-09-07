@@ -25,7 +25,7 @@ function updateZoneComm(key, value) {
 function addZoneComm(code) {
     let key     = $("#zone-comm").html();
     let data    = getZoneComm(key);
-    if (data.length > 0) {
+    if (data != null && data.length > 0) {
         var url = new URL(code, window.location);
         url.searchParams.set("zoneComm", key);
         code = url.toString();
@@ -63,7 +63,7 @@ function invokeAjax(datas, idSource, event, e) {
         form            = obj.data('form') ? obj.data('form') : idSource;
     }
     let zonComm         = getZoneComm(form);
-    if (zonComm.length > 0 ) {
+    if (zonComm != null && zonComm.length > 0 ) {
         datas['zoneCommName'] = form;
         datas['zoneCommData'] = zonComm;
     }
