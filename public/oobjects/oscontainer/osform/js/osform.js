@@ -4,15 +4,15 @@ function osform(obj) {
 
 osform.prototype = {
     getData: function (evt) {
-        var formData = {};
-        var eltSelection = $("*[data-form~='" + this.id + "']");
+        let formData = {};
+        let eltSelection = $("*[data-form~='" + this.id + "']");
 
         $.each(eltSelection, function (i, selection) {
-            var object     = selection.getAttribute('data-objet');
+            let object     = selection.getAttribute('data-objet');
             if (object != null && object.substring(object.length - 6, object.length) !== 'button') {
-                var instance = new window[object]($(selection));
-                var datas = instance.getData('');
-                id = datas["id"];
+                let instance = new window[object]($(selection));
+                let datas = instance.getData('');
+                let id = datas["id"];
                 delete datas["id"];
                 formData[id] = datas["value"];
             }
@@ -20,16 +20,16 @@ osform.prototype = {
         return formData;
     },
     setData: function (data) {
-        var arrayData = datas.split("|");
+        let arrayData = datas.split("|");
         arrayData.each(function () {
-            var id    = "";
-            var value = "";
-            var type  = "";
+            let id    = "";
+            let value = "";
+            let type  = "";
 
-            dataObj = $(this).split("§");
+            let dataObj = $(this).split("§");
             dataObj.each(function () {
-                var pos = $(this).indexOf("=");
-                var attr = $(this).substring(0, pos);
+                let pos = $(this).indexOf("=");
+                let attr = $(this).substring(0, pos);
 
                 switch (attr) {
                     case "id":
@@ -44,10 +44,10 @@ osform.prototype = {
                 }
             });
 
-            var obj = $('#'+id);
-            var evalString = "new "+obj.attr('data-objet')+'($("#'+obj.attr('id')+'#));';
-            var instance = eval(evalString);
-            var datas = instance.setData(value);
+            let obj = $('#'+id);
+            let evalString = "new "+obj.attr('data-objet')+'($("#'+obj.attr('id')+'#));';
+            let instance = eval(evalString);
+            let datas = instance.setData(value);
         })
     },
 };

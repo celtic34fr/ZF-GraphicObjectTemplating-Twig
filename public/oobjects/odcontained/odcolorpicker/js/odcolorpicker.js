@@ -6,7 +6,7 @@ function odcolorpicker(obj) {
 
 odcolorpicker.prototype = {
     getData: function (evt) {
-        var val = $("#"+this.id+"Input").colorpicker("val");
+        let val = $("#"+this.id+"Input").colorpicker("val");
         return {id: this.id, value : val, event : evt, object : this.objet, form: this.form};
     },
     setData: function (data) {

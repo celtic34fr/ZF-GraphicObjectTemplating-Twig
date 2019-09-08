@@ -7,7 +7,7 @@ function odtextarea(obj) {
 
 odtextarea.prototype = {
     getData: function (evt) {
-        var content = "";
+        let content = "";
         if (this.data['wysiwyg']) {
             content = tinyMCE.activeEditor.getContent();
         } else {

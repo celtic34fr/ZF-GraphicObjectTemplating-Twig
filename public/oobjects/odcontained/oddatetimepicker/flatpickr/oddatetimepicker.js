@@ -8,7 +8,7 @@ function oddatetimepicker(obj) {
 
 oddatetimepicker.prototype = {
     getData: function (evt) {
-        var valeur = (this.value != undefined) ? this.value : '';
+        let valeur = (this.value !== undefined) ? this.value : '';
         return {id: this.id, value : valeur, event : evt, object : this.objet};
     },
     setData: function (data) {

@@ -32,17 +32,17 @@ odtreeview.prototype = {
 
     },
     appendTreeNode: function(params) {
-        var html        = params['html'];
-        var selector    = params['selector'];
+        let html        = params['html'];
+        let selector    = params['selector'];
         $('#'+this.id+' '+selector).append(html);
     },
     updateNodeState: function(currentInput) {
-        var currentLi       = currentInput.parent('label').parent('li');
-        var currentParent   = currentLi.parent('ul').parent('li');
+        let currentLi       = currentInput.parent('label').parent('li');
+        let currentParent   = currentLi.parent('ul').parent('li');
 
-        var nbreLi_Alls = 'rien';
-        var nbreLiSelec = 'rien';
-        var nbreLiIndet = 'rien';
+        let nbreLi_Alls = 'rien';
+        let nbreLiSelec = 'rien';
+        let nbreLiIndet = 'rien';
 
 //        updateStatusNode(currentParent);
     },
@@ -84,8 +84,8 @@ function initTreeview(idObject) {
 }
 
 function addBtnActionsTV(idObj) {
-    var selector = '#' + idObj + ' li > div.btnActions';
-    var nodes    = $(selector);
+    let selector = '#' + idObj + ' li > div.btnActions';
+    let nodes    = $(selector);
     $.each(nodes, function () {
         let div = $(this);
         let btnActions = div.data('btnactions');
@@ -110,9 +110,9 @@ $(document).ready(function (evt) {
         evt.preventDefault();
         evt.stopPropagation();
 
-        var idObject    = $(this).attr('id');
+        let idObject    = $(this).attr('id');
         idObject        = idObject.substr(0, idObject.indexOf('Li-'));
-        var objectDOM   = $('#'+idObject);
+        let objectDOM   = $('#'+idObject);
 
         if ($(this).find('> label > span.odtcheck').hasClass('check')) {
             $(this).find('> label > span.odtcheck').removeClass('check');
@@ -123,7 +123,7 @@ $(document).ready(function (evt) {
             $(this).find('> label > span.odtcheck').addClass('check');
         }
 
-        var object          = new odtreeview(objectDOM);
+        let object          = new odtreeview(objectDOM);
         invokeAjax(object.getData('click'), idObject, 'click', evt);
     });
 });

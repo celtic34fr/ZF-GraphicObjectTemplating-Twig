@@ -9,7 +9,7 @@ function odinput(obj) {
 
 odinput.prototype = {
     getData: function (evt) {
-        var valeur = (this.value != undefined) ? this.value : '';
+        let valeur = (this.value !== undefined) ? this.value : '';
         return {id: this.id, value : valeur, event : evt, object : this.objet};
     },
     setData: function (data) {
@@ -37,16 +37,18 @@ odinput.prototype = {
             case 'hidden':
                 break;
             case 'text':
-                var mask = '';
+                let mask = '';
                 for (key in this.data) {
-                    if (key == 'mask') { var mask = this.data('mask'); }
+                    if (key === 'mask') {
+                        mask = this.data('mask');
+                    }
                 }
-                if (mask != undefined && mask.length > 0) { break; }
+                if (mask !== undefined && mask.length > 0) { break; }
             case 'password':
-                var minlength = (input.attr('minlength') != undefined) ? input.attr('minlength'): -1;
-                var maxlength = (input.attr('maxlength') != undefined) ? input.attr('maxlength'): -1;
-                if (minlength != -1 || maxlength != -1 ) { // si tous 2 = -1 rien à faire, sinon test
-                    var valueLength = this.value.length;
+                let minlength = (input.attr('minlength') !== undefined) ? input.attr('minlength'): -1;
+                let maxlength = (input.attr('maxlength') !== undefined) ? input.attr('maxlength'): -1;
+                if (minlength !== -1 || maxlength !== -1 ) { // si tous 2 = -1 rien à faire, sinon test
+                    let valueLength = this.value.length;
                     if (!(minlength <= valueLength && valueLength <= maxlength)) {
                         if (minlength >= valueLength) {
                             retour = 'Le champs doit comprendre '+minlength+' caractères minimum';
@@ -59,19 +61,19 @@ odinput.prototype = {
             case 'number':
                 if (!$.isNumeric(this.value)) { retour = 'Le champs doit être numérique seulement'; }
                 else {
-                    var valMin = (this.data('valMin') != undefined) ? this.data('valMin') : '';
-                    var valMax = (this.data('valMax') != undefined) ? this.data('valMax') : '';
+                    let valMin = (this.data('valMin') !== undefined) ? this.data('valMin') : '';
+                    let valMax = (this.data('valMax') !== undefined) ? this.data('valMax') : '';
                     if ($.isNumeric(valMin) && this.value < valMin) {
                         retour = 'La valeur doit être au moins égale à '+valMin;
                     }
-                    if (retour.length == 0 && $.isNumeric(valMax) && this.value > valMax) {
+                    if (retour.length === 0 && $.isNumeric(valMax) && this.value > valMax) {
                         retour = 'La valeur doit être au maximum égale à '+valMax;
                     }
                 }
                 break;
             case 'email':
-                var email = this.value;
-                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                let email = this.value;
+                let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!re.test(String(email).toLowerCase())) {
                     retour = 'Veuillez saisir une adresse courriel (email) valide';
                 }
@@ -95,9 +97,9 @@ jQuery(document).ready(function (evt) {
 
     $(document).on("change", ".gotObject.inputChg[data-objet='odinput']", function (evt) {
         let objet = new odinput($(this));
-        var invalid = "";
+        let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-        if (invalid.length == 0) {
+        if (invalid.length === 0) {
             $(this).remove("has-error");
             $(this).find("span").removeClass("hidden").addClass("hidden");
             invokeAjax(objet.getData("change"), $(this).attr("id"), "change", evt);
@@ -109,9 +111,9 @@ jQuery(document).ready(function (evt) {
 
     $(document).on("keyup", ".gotObject.inputKup[data-objet='odinput']", function (evt) {
         let objet = new odinput($(this));
-        var invalid = "";
+        let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-        if (invalid.length == 0) {
+        if (invalid.length === 0) {
             $(this).remove("has-error");
             $(this).find("span").removeClass("hidden").addClass("hidden");
             invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", evt);
@@ -120,5 +122,4 @@ jQuery(document).ready(function (evt) {
             $(this).find("span").removeClass("hidden").html(invalid);
         }
     });
-
 });

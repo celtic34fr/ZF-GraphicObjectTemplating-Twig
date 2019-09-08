@@ -45,9 +45,9 @@ jQuery(document).ready(function (evt) {
 
     $(document).on("change", ".gotObject.checkboxCback[data-objet='odcheckbox']", function (evt) {
         let objet = new odcheckbox($(this));
-        var invalid = "";
+        let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-        if (invalid.length == 0) {
+        if (invalid.length === 0) {
             $(this).remove("has-error");
             $(this).find("span").removeClass("hidden").addClass("hidden");
             invokeAjax(objet.getData("click"), $(this).attr("id"), "click", evt);
