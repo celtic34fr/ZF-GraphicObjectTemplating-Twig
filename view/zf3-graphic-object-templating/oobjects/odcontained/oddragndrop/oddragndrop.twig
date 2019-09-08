@@ -1,6 +1,6 @@
 {# template objet ODDropzone #}
 
-{% set objClass = "gotObject "~gotBootstrap(objet.widthBT)~' '~objet.classes %}
+{% set objClass = "gotObject hidden " ~ objet.id ~ " " ~ gotBootstrap(objet.widthBT) ~ ' ' ~ objet.classes %}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}"
     {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}

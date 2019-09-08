@@ -1,7 +1,8 @@
 {# template de l'objet ODInput #}
 
 {# traitement de la génération des classes pour event #}
-{% set objClasses = 'gotObject hidden form-group ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden form-group ' ~ objet.id ~ " " ~ objet.classes %}
+
 {% set events = objet.event %}
 {%  for evt, event in events %}
     {% switch(evt) %}

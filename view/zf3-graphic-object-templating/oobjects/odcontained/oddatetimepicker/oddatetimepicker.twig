@@ -1,6 +1,6 @@
 {# template de l'objet ODDatetimepicker #}
 
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 {% if objet.state == false %} {% objClasses = objClasses ~ ' checkbox disabled' %} {% endif %}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"

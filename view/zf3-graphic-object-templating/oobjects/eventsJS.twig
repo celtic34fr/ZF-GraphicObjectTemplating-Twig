@@ -4,27 +4,27 @@
 {% for evt, event in events %}
     {% if event is not empty %}
         {% if event.class != "dummy" %}
-            $('#{{ objet.id }}').on('{{ evt }}',
+            $('.{{ objet.id }}').on('{{ evt }}',
             {% if tag is defined and tag is not empty %} '{{ tag }}', {% endif %}
             function (e) {
             {% switch(event.class) %}
             {% case 'javascript:' %}
                 {{ event.method | raw }};
             {% default %}
-                let objetDOM = $('#{{ objet.id }}');
+                let objetDOM = $(this);
                 let objet = new {{ objet.object }}(objetDOM);
                 var invalid = '';
                 if (typeof objet.invalidate === 'function') {
                     invalid = objet.invalidate();
                 }
                 if (invalid.length == 0) {
-                    $('#{{ objet.id }}').remove('has-error');
-                    $('#{{ objet.id }} span').removeClass('hidden').addClass('hidden');
+                    $(this).remove('has-error');
+                    $(this).find('span').removeClass('hidden').addClass('hidden');
                     invokeAjax(objet.getData('{{ evt }}'), '{{ objet.id }}', '{{ evt }}', e);
                 } else {
-                    $('#{{ objet.id }}').remove('has-error').addClass('has-error');
-                    $('#{{ objet.id }} span').removeClass('hidden');
-                    $('#{{ objet.id }} span').html(invalid);
+                    $(this).remove('has-error').addClass('has-error');
+                    $(this).find('span').removeClass('hidden');
+                    $(this).find('span').html(invalid);
                 }
             {% endswitch %}
             });

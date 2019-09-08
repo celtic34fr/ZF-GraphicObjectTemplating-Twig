@@ -1,6 +1,6 @@
 {# template de l'objet ODTable  #}
 
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 {% set btnActions = false %}
 {% if objet.btnActions is not empty %} {% set btnActions = true %} {% endif %}
 

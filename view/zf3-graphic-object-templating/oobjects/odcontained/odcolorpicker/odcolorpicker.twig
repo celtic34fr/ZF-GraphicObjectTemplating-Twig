@@ -1,6 +1,6 @@
 {# template de l'objet ODColorpicker#}
 
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="{{ objClasses }}"
     {% if objet.display is not empty %} data-display="{{ objet.display }}" {% endif %}

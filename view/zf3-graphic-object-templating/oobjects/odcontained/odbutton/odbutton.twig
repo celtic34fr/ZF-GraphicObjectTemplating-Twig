@@ -3,7 +3,7 @@
 {% set btnClasses = '' %}
 {% set widthBT = '' %}
 {% if objet.width is empty and objet.height is empty %} {% set widthBT = objet.widthBT %} {% endif %}
-{% set objClasses = 'gotObject hidden ' ~ objet.id ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 {% if objet.event is not empty and objet.type != 'link' %}{% set objClasses = objClasses ~ ' btnCback ' %}{% endif %}
 
 <style>

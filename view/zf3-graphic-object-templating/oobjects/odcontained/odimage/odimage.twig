@@ -1,7 +1,7 @@
 {# template objet ODImage #}
 
 {#{ dump(objet.classes) }#}
-{% set objClass = "gotObject hidden " ~ gotBootstrap(objet.widthBT) ~ " " ~ objet.classes %}
+{% set objClass = "gotObject hidden " ~ objet.id ~ " " ~ gotBootstrap(objet.widthBT) ~ " " ~ objet.classes %}
 
 <div id="{{ objet.id }}" class="{{ objClass }}" >
     <style>

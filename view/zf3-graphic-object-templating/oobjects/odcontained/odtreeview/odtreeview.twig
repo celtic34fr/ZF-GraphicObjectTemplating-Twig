@@ -56,7 +56,7 @@
     </li>
 {% endmacro %}
 
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 {% if objet.selection != false %} {% set objClasses = objClasses ~ ' selectable' %} {% endif %}
 
 <div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-role="{{ objet.type }}"

@@ -5,7 +5,7 @@
 
 {% set labelClass = labelClass ~ gotBootstrap(substr(labelWidth, 0, labelWidth|length - 1)) %}
 {% set textareaClass = textareaClass ~ gotBootstrap(textareaWidth) %}
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 
 <div id="{{ objet.id }}" class="{{ objClasses }}" data-objet="{{ objet.object }}" data-display="{{ objet.display }}"
 data-widthbt="{{ objet.widthBT }}" {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}

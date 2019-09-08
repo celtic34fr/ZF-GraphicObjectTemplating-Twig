@@ -1,6 +1,6 @@
 {# template de l'objet ODRadio #}
 
-{% set objClasses = 'gotObject hidden ' ~ objet.classes %}
+{% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 
 <div id="{{ objet.id }}" data-objet="{{ objet.object }}" class="radio {{ objClasses }}
     {% if objet.state == false %} disabled {% endif %}"
