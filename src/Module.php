@@ -2,6 +2,7 @@
 
 namespace GraphicObjectTemplating;
 
+use DateTime;
 use GraphicObjectTemplating\Interfaces\PersistObjectInterface;
 use GraphicObjectTemplating\OObjects\OObject;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
@@ -40,6 +41,19 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface,
             $this->initSession($paramsSession);
             if (!empty($persistantObjects)) {
                 $this->initPersistantObjs($serviceManager, $persistantObjects);
+            }
+
+            /* récupération de date et heure du moment */
+            $datenew    = new DateTime('now');
+            $zoneComms  = new Container('sessionStorage');
+            foreach ($zoneComms as $idZoneCom => $zoneComm) {
+                $dateZC = DateTime::createFromFormat('YmdHis', $zoneComm['lastAccess']);
+                $diff   = $datenew->diff($dateZC);
+                if ($diff && $diff->format('i') > 30) {
+                    /* suppression de la zone de communication inutilisée depuis plus de 30 minutes */
+                    $zoneComms->offsetUnset($idZoneCom);
+                }
+                /* pas de mise à jour de lastAccess ici, pour une pas fausser la validité du contrôle */
             }
         }
     }

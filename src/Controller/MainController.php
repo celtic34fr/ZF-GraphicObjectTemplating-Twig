@@ -136,7 +136,10 @@ class MainController extends AbstractActionController
                             // Stockage temporaire en session de la zone de communication si existe
                             if (!empty($dataZC)) {
                                 $sessionStorageSession = new Container('sessionStorage');
-                                $sessionStorageSession->offsetSet($nameZC, $dataZC);
+                                $datas  = [];
+                                $datas['data']          = $dataZC;
+                                $datas['lastAccess']    = (new \DateTime('now'))->format("YmdHis");
+                                $sessionStorageSession->offsetSet($nameZC, $datas);
                             }
                             break;
                         case (in_array($rlst['mode'], self::ModeNoUpdate)):
