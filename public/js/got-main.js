@@ -63,7 +63,7 @@ function invokeAjax(datas, idSource, event, e) {
         form            = obj.data('form') ? obj.data('form') : idSource;
     }
     let zonComm         = getZoneComm(form);
-    if (zonComm != null && zonComm.length > 0 ) {
+    if (zonComm != null && !$.isEmptyObject(zonComm) ) {
         datas['zoneCommName'] = form;
         datas['zoneCommData'] = zonComm;
     }
@@ -121,7 +121,7 @@ function invokeAjax(datas, idSource, event, e) {
         let table       = "";
         let treeview    = "";
         let objectDOM   = null;
-        if (id.length > 0) { objectDOM   = $("#" + id); }
+        if (id !== null && id.length > 0) { objectDOM   = $("#" + id); }
         let jQryObj     = "";
         switch (mode) {
             case 'rscs': //extraction des ressources CSS / Js avec injection

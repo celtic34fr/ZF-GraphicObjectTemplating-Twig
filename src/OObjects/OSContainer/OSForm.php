@@ -3,6 +3,8 @@
 namespace GraphicObjectTemplating\OObjects\OSContainer;
 
 use Exception;
+use GraphicObjectTemplating\OObjects\ODContained\ODTable;
+use GraphicObjectTemplating\OObjects\ODContained\ODTreeview;
 use ReflectionException;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\ODContained\ODButton;
@@ -760,6 +762,16 @@ class OSForm extends OSDiv
 //                $localChild->saveProperties();
             }
         } else { // if ($child instanceof ODContained)
+            if ($child instanceof ODTreeview || $child instanceof ODTable) {
+                $btnsAction = $child->getBtnsAction();
+                if ($btnsAction !== false && sizeof($btnsAction) > 0) {
+                    $sessionObjects     = self::validateSession();
+                    foreach ($btnsAction as $id => $btnAction) {
+                        $object         = self::buildObject($id, $sessionObjects);
+                        $object->setForm($formID)->saveProperties();
+                    }
+                }
+            }
             /** @var ODContained $child */
             $child->setForm($formID);
             $this->addField($child->getId(), $sourceID,  $require);

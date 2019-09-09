@@ -185,6 +185,10 @@ class MainController extends AbstractActionController
                         case (is_array($dataZC) && sizeof($dataZC) == 0):
                             $item   = ['id'=>$nameZC, 'mode'=>'updZoneComm', 'code'=> ''];
                             break;
+                        case (is_array($dataZC) && sizeof($dataZC) > 0):
+                            $dataZC = json_encode($dataZC);
+                            $item   = ['id'=>$nameZC, 'mode'=>'updZoneComm', 'code'=> $dataZC];
+                            break;
                         case (!is_array($dataZC) && strlen($dataZC) > 0):
                             $item   = ['id'=>$nameZC, 'mode'=>'updZoneComm', 'code'=> $dataZC];
                             break;

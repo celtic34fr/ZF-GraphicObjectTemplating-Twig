@@ -55,6 +55,7 @@ use Zend\ServiceManager\ServiceManager;
  * addBtnAction(string $idBtn, array $optionsBtn)
  * setBtnAction(string $idBtn, array $optionsBtn)
  * getBtnAction(string $idBtn)
+ * getBtnsAction()
  * isBtnAction(string $btnId)
  * addBtnsNode(string $refNode, array $btnActions)
  * setBtnsNode(string $refNode, array $btnActions)
@@ -1048,6 +1049,15 @@ class ODTreeview extends ODContained
         $btnActions     = $properties['btnActions'];
         if (!array_key_exists($idBtn, $btnActions)) { return false; }
         else                                        { return $btnActions[$idBtn]; }
+    }
+
+    /**
+     * @return bool|array
+     */
+    public function getBtnsAction()
+    {
+        $properties             = $this->getProperties();
+        return (array_key_exists('btnActions', $properties)) ? $properties['btnActions'] : false ;
     }
 
     /**
