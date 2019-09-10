@@ -1,13 +1,12 @@
-
 Storage.prototype.setObject = function (key, value) {
     this.setItem(key, JSON.stringify(value));
     console.log("setObject ",key, value);
-}
+};
 Storage.prototype.getObject = function (key) {
     var value = this.getItem(key);
     console.log("getObject ",key, value);
     return value && JSON.parse(value);
-}
+};
 
 function setZoneComm(key, value) {
     sessionStorage.setObject(key, value);
@@ -45,23 +44,24 @@ function addZoneComm(code) {
 
 function invokeAjax(datas, idSource, event, e) {
     // vérification propagation événement
+    let obj             = $("#"+idSource);
     if (event !== undefined && e !== undefined) {
         let dataKey     = event+'-stopevt';
-        let stopEvent   = $('#'+idSource).data(dataKey);
+        let stopEvent   = obj.data(dataKey);
         if (stopEvent === 'OUI' || stopEvent === undefined) {
             e.stopImmediatePropagation();
         }
     }
     // récupération de l’URL d’appel Ajax
     let urlGotCallback  = $("#gotcallback").text();
-    let tabDatas        = [];
 
-    // récupération et ajout si lieu de la zone de communication
-    let obj             = $("#"+idSource);
+    let tabDatas        = [];
     let form            = $("#zone-comm").html();
-    if (form.length == 0) {
+    if (form.length === 0) {
         form            = obj.data('form') ? obj.data('form') : idSource;
     }
+    // récupération et ajout si lieu de la zone de communication
+
     let zonComm         = getZoneComm(form);
     if (zonComm != null && !$.isEmptyObject(zonComm) ) {
         datas['zoneCommName'] = form;
@@ -120,7 +120,7 @@ function invokeAjax(datas, idSource, event, e) {
         let updId       = "";
         let table       = "";
         let treeview    = "";
-        let objectDOM   = null;
+        let objectDOM   = undefined;
         if (id !== null && id.length > 0) { objectDOM   = $("#" + id); }
         let jQryObj     = "";
         switch (mode) {
@@ -128,7 +128,7 @@ function invokeAjax(datas, idSource, event, e) {
                 loadResources(id, code);
                 break;
             case "append": // ajout à un objet DOM existant
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     objectDOM.append(code);
                     if (objectDOM.find("#" + id + "Script").length > 0) {
                         $.globalEval($("#" + id + "Script").innerText);
@@ -136,7 +136,7 @@ function invokeAjax(datas, idSource, event, e) {
                 }
                 break;
             case "appendAfter": // ajout à un objet DOM existant
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     objectDOM.after(code);
                     if (objectDOM.find("#" + id + "Script").length > 0) {
                         $.globalEval($("#" + id + "Script").innerText);
@@ -144,7 +144,7 @@ function invokeAjax(datas, idSource, event, e) {
                 }
                 break;
             case "appendBefore": // ajout à un objet DOM existant
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     objectDOM.before(code);
                     if (objectDOM.find("#" + id + "Script").length > 0) {
                         $.globalEval($("#" + id + "Script").innerText);
@@ -154,22 +154,22 @@ function invokeAjax(datas, idSource, event, e) {
             case "update": // mise à jour, remplacement d’un objet DOM existant
                 updId = "#" + id;
                 $(updId).replaceWith(code);
-                if (objectDOM != undefined && objectDOM.find("#" + id + "Script").length > 0) {
+                if (objectDOM !== undefined && objectDOM.find("#" + id + "Script").length > 0) {
                     $.globalEval($("#" + id + "Script").innerText);
                 }
                 break;
             case "innerUpdate": // remplacement du contenu d’un objet DOM
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     objectDOM.html(code);
                 }
                 break;
             case "raz": // vidage du contenu d’un objet DOM
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     objectDOM.html("");
                 }
                 break;
             case "delete": // suppression d’un objet DOM
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     objectDOM.remove();
                 }
                 break;
@@ -195,14 +195,14 @@ function invokeAjax(datas, idSource, event, e) {
                 }, id );
                 break;
             case 'event': // format code : nomEvt|[OUI/NON]
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     let evt = code.substring(0, strpos(code, '|'));
                     let flg = code.substring(strpos(code, '|') + 1);
                     objectDOM.attr('data-' + evt + '-stopevt', flg);
                 }
                 break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
-                if (objectDOM != undefined) {
+                if (objectDOM !== undefined) {
                     let objetJS = objectDOM.data('objet');
                     jQryObj = new window[objetJS](objectDOM);
                     if (jQryObj) {
@@ -255,7 +255,7 @@ function loadResources(type, url) {
 
 function buildBootstrapClasses(widthbt) {
     let btClasses = '';
-    if (widthbt != undefined) {
+    if (widthbt !== undefined) {
         widthbt = widthbt.split(':');
         $.each(widthbt, function (idx, val) {
             let typs = val.substring(0,2);
@@ -302,9 +302,10 @@ function updateForm(formId) {
     let topRequire = false;
     $('#'+formId+" .gotObject").each(function () {
         let id = $(this).attr('id');
-        let htmlCode = $("#"+id+" label:first").html();
+        let obj = $("#"+id+" label:first");
+        let htmlCode = obj.html();
         htmlCode = require + htmlCode;
-        $("#"+id+" label:first").html(htmlCode);
+        obj.html(htmlCode);
     })
 }
 

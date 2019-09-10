@@ -64,8 +64,10 @@ odtreeview.prototype = {
             let domChildren = obj.children("ul").children("li");
             children = domChildren.get().map(this.getNodeData, this);
         }
-        let retour = {id: id, libel: libel, btnActions: btnActions, children: children, check: check,
-            selectable: selectable, sortable: sortable};
+        let retour = {id: id, libel: libel, btnActions: btnActions,
+            check: check, selectable: selectable, sortable: sortable};
+        if (children) {retour["children"] = children}
+
         if (widthbt !== 'undefined') { retour['widthbt'] = widthbt; }
         return retour;
     }
