@@ -49,12 +49,15 @@ odtreeview.prototype = {
     getNodeData: function (domObj) {
         let obj = $(domObj);
         let id = String(obj.data("id"));
+        let btnActions  = Array(obj.find('> .btnActions').data('btnActions'));
+        let libel       = String(obj.find('label').text());
+        let widthbt     = String(obj.data('widthbt'));
         let children = [];
         if (obj.hasClass("node")) {
             let domChildren = obj.children("ul").children("li");
             children = domChildren.get().map(this.getNodeData, this);
         }
-        return {id: id, children: children};
+        return {id: id, libel: libel, btnActions: btnActions, widthbt: widthbt, children: children};
     }
 };
 
