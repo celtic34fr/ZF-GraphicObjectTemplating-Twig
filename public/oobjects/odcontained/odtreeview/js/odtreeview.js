@@ -49,15 +49,25 @@ odtreeview.prototype = {
     getNodeData: function (domObj) {
         let obj = $(domObj);
         let id = String(obj.data("id"));
-        let btnActions  = Array(obj.find('> .btnActions').data('btnActions'));
+        let btnActions  = String(obj.find('.btnActions:first-child').data('btnactions'));
         let libel       = String(obj.find('label').text());
         let widthbt     = String(obj.data('widthbt'));
+        let sortable    = !!(obj.parent('ul').hasClass('sortable'));
+        let selectable  = !!(!obj.hasClass('unselect'));
+        let span        = obj.find(' > label > span');
+        let check       = false;
+        if (span.length > 0) {
+            check   = !!(span.hasClass('check'));
+        }
         let children = [];
         if (obj.hasClass("node")) {
             let domChildren = obj.children("ul").children("li");
             children = domChildren.get().map(this.getNodeData, this);
         }
-        return {id: id, libel: libel, btnActions: btnActions, widthbt: widthbt, children: children};
+        let retour = {id: id, libel: libel, btnActions: btnActions, children: children, check: check,
+            selectable: selectable, sortable: sortable};
+        if (widthbt !== 'undefined') { retour['widthbt'] = widthbt; }
+        return retour;
     }
 };
 
