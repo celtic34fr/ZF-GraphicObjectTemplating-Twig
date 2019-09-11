@@ -15,7 +15,7 @@
     {% if btnActions|length > 0 %} {% set btnActions = substr(btnActions, 1) %} {% endif %}
 
     {% if item.children|length == 0 %}
-        {% set type = 'leaf' %}
+        {% set type = ' leaf ' %}
         {% if icon %}
             {% switch(item.icon) %}
             {% case 'none' %}
@@ -25,14 +25,15 @@
             {% endswitch %}
         {% endif %}
     {% else %}
-        {% set type = 'node' %}
+        {% set type = ' node ' %}
         {% set iconClasses = objet.nodeClosedIco %}
     {% endif %}
-    {% if item.widthbt is defined and item.widthbt is not empty %} {% set type = type ~ " border" %} {% endif %}
+    {% if item.widthbt is defined and item.widthbt is not empty %} {% set type = type ~ " border " %} {% endif %}
 
     <li id="{{ objet.id }}Li-{{ path[item.ref] }}" data-id = "{{ path[item.ref] }}"
-        class="{{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }} p1 mb1
-                {% if item.selectable == false %} unselect{% endif %} {{ type }}"
+        class="p1 mb1 {{ type }}
+            {{ colorClasses[level].normal['fg-color'] }} bg-{{ colorClasses[level].normal['bg-color'] }}
+            {% if item.selectable == false %} unselect{% endif %}"
         {% if item.widthbt is defined and item.widthbt is not empty %}data-widthbt="{{ item.widthbt }}"
             {% else %}style="width:100%; float:left;"{% endif %}
     >
