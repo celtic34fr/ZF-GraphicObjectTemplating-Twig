@@ -753,10 +753,7 @@ class OObject
      */
     public static function getZoneComm()
     {
-        $zoneComm   = [];
-        $zoneComm['name'] = self::$zoneCommName;
-        $zoneComm['data'] = self::$zoneCommData;
-        return $zoneComm;
+        return ['name' => self::$zoneCommName, 'data' => self::$zoneCommData];
     }
 
     /**

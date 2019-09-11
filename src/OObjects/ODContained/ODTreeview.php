@@ -1223,7 +1223,7 @@ class ODTreeview extends ODContained
             $realPath           = implode('-', $pathChild);
             $dataPath[$ref]     = $realPath;
             if (array_key_exists('children', $node)) {
-                $dataPath       = $this->buildDataPath($node, $pathChild, $dataPath);
+                $dataPath       = $this->buildDataPath($node['children'], $pathChild, $dataPath);
             }
         }
         return $dataPath;

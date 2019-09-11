@@ -68,7 +68,7 @@ class MainController extends AbstractActionController
                     $results = [OObject::formatRetour($params['id'], $params['id'], 'redirect', '/')];
                 } else {
                     if (array_key_exists('zoneComm', $params)) {
-                        $callingObj::setZoneComm($params['zoneCommName'], $params['zoneCommData']);
+                        OObject::setZoneComm($params['zoneCommName'], $params['zoneCommData']);
                         unset($params['zoneCommName']);
                         unset($params['zoneCommData']);
                     }
@@ -101,9 +101,8 @@ class MainController extends AbstractActionController
                         }
                     }
                 }
-
                 /** acquisition information zone de communication */
-                $zoneComm   = $object::getZoneComm();
+                $zoneComm   = OObject::getZoneComm();
                 $nameZC     = $zoneComm['name'];
                 $dataZC     = $zoneComm['data'];
 
