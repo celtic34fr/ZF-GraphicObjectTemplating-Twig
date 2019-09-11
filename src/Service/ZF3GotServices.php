@@ -40,10 +40,23 @@ class ZF3GotServices
         if (empty($sessionObjects)) { $sessionObjects = OObject::validateSession(); }
         $properties     = [];
         $zoneComm       = null;
+        $renduHtml      = '';
+
         if ($object instanceof OObject) {
             $zoneComm   = $object::getZoneComm();
             $properties = $object->getProperties();
             $object = $object->getId();
+
+            $name       = $zoneComm['name'];
+            $data       = json_encode($zoneComm['data']);
+            if ($data !== null) {
+                $code       = "<script>";
+                $code      .= '$(document).ready(function() {';
+                $code      .= 'updateZoneComm("'.$name.'", '.$data.');';
+                $code      .= "});";
+                $code      .= "</script>";
+                $renduHtml  = $code;
+            }
         } else {
             $objects    = $sessionObjects->objects;
             if (array_key_exists($object, $objects)) {
@@ -80,18 +93,7 @@ class ZF3GotServices
                     $html->setVariable('content', $content);
                     break;
             }
-            $renduHtml = $this->_twigRender->render($html);
-
-            $name       = $zoneComm['name'];
-            $data       = json_encode($zoneComm['data']);
-            if ($data !== null) {
-                $code       = "<script>";
-                $code      .= '$(document).ready(function() {';
-                $code      .= 'updateZoneComm("'.$name.'", '.$data.');';
-                $code      .= "});";
-                $code      .= "</script>";
-                $renduHtml .= $code;
-            }
+            $renduHtml .= $this->_twigRender->render($html);
 
             $renduHtml = preg_replace('/(\s)\s+/', '$1', $renduHtml);
             $renduHtml =  str_replace(array("\r\n", "\r", "\n"), "", $renduHtml);
