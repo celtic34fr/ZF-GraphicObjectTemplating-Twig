@@ -1360,9 +1360,7 @@ class ODTreeview extends ODContained
         $leaf     = $this->getLeaf($leafPath);
         $selector = $this->getId().'Li-'.$leaf['parent'].'-'.$leaf['ord'];
 
-        $ret[] = self::formatRetour($this->getId(), $selector, 'delete');
-
-        return $ret ;
+        return self::formatRetour($this->getId(), $selector, 'delete');
     }
 
     /** **************************************************************************************************

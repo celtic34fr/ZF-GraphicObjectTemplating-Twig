@@ -52,16 +52,9 @@ function setAutoColsWidth(idObj) {
         }
     }
 
-    console.log( 'Width par CSS : '+cssWidth );
-    console.log( 'cols avec CSS : '+colsRule );
-
     let elmnt       = document.getElementById(idObj);
-    console.log(elmnt);
 
     table       = elmnt.getElementsByTagName('table');
-    console.log(table[0]);
-    // console.log(table[0].clientWidth);
-    console.log(table[0].width);
 
     let tableWidth  = table[0].clientWidth + 1;
     let restWidth   = tableWidth - ths.length - 1 - cssWidth;
