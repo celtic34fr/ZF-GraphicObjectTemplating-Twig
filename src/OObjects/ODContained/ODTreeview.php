@@ -246,24 +246,26 @@ class ODTreeview extends ODContained
     public function setLeaf(string $libel, string $path)
     {
         $properties = $this->getProperties();
-        $refs       = explode('.', $path);
+        $refs       = explode('-', $path);
         $leaf       = $properties['dataTree'];
         $dataTree   = $properties['dataTree'];
         $found      = true;
+        $lastRef    = array_pop($refs);
+
         foreach ($refs as $ref) {
-            if (array_key_exists('children', $leaf)) {
-                if (isset($leaf['children'][$ref])) {
-                    $leaf = $leaf['children'][$ref];
-                } else {
-                    $found = false;
-                    break;
+            if (isset($leaf[(int) $ref])) {
+                $leaf   = $leaf[(int) $ref];
+                if (array_key_exists('children', $leaf)) {
+                    $leaf   = $leaf['children'];
+                    continue;
                 }
-            } else {
-                $found = false;
-                break;
             }
+            $found = false;
+            break;
         }
-        if ($found) {
+
+        if ($found && isset($leaf[(int) $lastRef])) {
+            $leaf                   = $leaf[(int) $lastRef];
             $leaf['libel']          = $libel;
             $dataTree               = $this->updateTree($dataTree, $path, $leaf);
             $properties['dataTree'] = $dataTree;
