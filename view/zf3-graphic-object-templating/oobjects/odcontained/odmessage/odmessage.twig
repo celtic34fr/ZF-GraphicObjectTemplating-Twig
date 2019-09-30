@@ -3,7 +3,9 @@
 {% set objClasses = 'gotObject hidden ' ~ objet.id ~ " " ~ objet.classes %}
 
 {% if objet.action == 'init' %}
-    <div id="{{ objet.id }}Div" class="{{ objClasses }}">
+    <div id="{{ objet.id }}Div" class="{{ objClasses }}"
+        {% if objet.form is not empty %} data-form="{{ objet.form }}" {% endif %}
+    >
         {# initialisation à mettre au niveau du header de la page #}
         <script>
             let {{ objet.id }}Lobibox = Lobibox;
