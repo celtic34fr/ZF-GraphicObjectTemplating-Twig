@@ -2,9 +2,10 @@
 
 namespace GraphicObjectTemplating\OObjects\ODContained;
 
-
+use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
+use ReflectionException;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -164,8 +165,8 @@ class ODMessage extends ODContained
      * ODMessage constructor.
      * @param string $id
      * @param array|null $pathObjArray
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function __construct(string $id, array $pathObjArray = []) {
         $pathObjArray[] = 'oobjects/odcontained/odmessage/odmessage';
@@ -185,7 +186,7 @@ class ODMessage extends ODContained
      * méthode de positionnement de l'action à réaliser en focntion de celles autorisées
      * @param string $action
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setAction($action = self::ODMESSAGEACTION_INIT)
     {
@@ -211,6 +212,7 @@ class ODMessage extends ODContained
     /**
      * @param int $offset
      * @return ODMessage
+     * @throws Exception
      */
     public function setHorizontalOffset($offset = 5)
     {
@@ -234,6 +236,7 @@ class ODMessage extends ODContained
     /**
      * @param int $offset
      * @return ODMessage
+     * @throws Exception
      */
     public function setVerticalOffset($offset = 5)
     {
@@ -257,6 +260,7 @@ class ODMessage extends ODContained
     /**
      * @param $width
      * @return ODMessage
+     * @throws Exception
      */
     public function setWidth($width)
     {
@@ -279,6 +283,7 @@ class ODMessage extends ODContained
     /**
      * @param $height
      * @return ODMessage
+     * @throws Exception
      */
     public function setHeight($height)
     {
@@ -300,6 +305,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaCloseButton()
     {
@@ -311,6 +317,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disCloseButton()
     {
@@ -332,7 +339,7 @@ class ODMessage extends ODContained
     /**
      * @param string $buttonAlign
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setButtonAlign($buttonAlign = self::ODMESSAGEBTNALIGN_CENTER)
     {
@@ -357,6 +364,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaCloseOnEsc()
     {
@@ -368,6 +376,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disCloseOnEsc()
     {
@@ -389,6 +398,7 @@ class ODMessage extends ODContained
     /**
      * @param int $delayToRemove
      * @return ODMessage
+     * @throws Exception
      */
     public function setDelayToRemove($delayToRemove = 200)
     {
@@ -412,6 +422,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaDelay()
     {
@@ -423,6 +434,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disDelay()
     {
@@ -444,7 +456,7 @@ class ODMessage extends ODContained
     /**
      * @param string $iconSource
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setIconSource($iconSource = self::ODMESSAGEICON_BOOTSTRAP)
     {
@@ -470,7 +482,7 @@ class ODMessage extends ODContained
     /**
      * @param string $msgType
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setMsgType($msgType = self::ODMESSAGETYPE_CONFIRM)
     {
@@ -500,6 +512,7 @@ class ODMessage extends ODContained
     /**
      * @param $title
      * @return ODMessage
+     * @throws Exception
      */
     public function setTitle($title)
     {
@@ -522,6 +535,7 @@ class ODMessage extends ODContained
     /**
      * @param $body
      * @return ODMessage
+     * @throws Exception
      */
     public function setBody($body)
     {
@@ -544,7 +558,7 @@ class ODMessage extends ODContained
     /**
      * @param string $nature
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setNature($nature = self::ODMESSAGEMSGNATURE_INFO)
     {
@@ -573,6 +587,7 @@ class ODMessage extends ODContained
      * @param $method
      * @param bool $stopEvent
      * @return ODMessage|bool
+     * @throws Exception
      */
     public function evtCallback($type, $class, $method, $stopEvent = false)
     {
@@ -599,6 +614,7 @@ class ODMessage extends ODContained
     /**
      * @param $type
      * @return ODMessage|bool
+     * @throws Exception
      */
     public function disCallback($type)
     {
@@ -616,6 +632,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disCallbacks()
     {
@@ -632,7 +649,7 @@ class ODMessage extends ODContained
     /**
      * @param string $type
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setType($type = self::ODMESSAGEPROMPT_TEXT)
     {
@@ -657,6 +674,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaMultiline()
     {
@@ -668,6 +686,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disMultiline()
     {
@@ -689,6 +708,7 @@ class ODMessage extends ODContained
     /**
      * @param int $lineNumber
      * @return ODMessage|bool
+     * @throws Exception
      */
     public function setLineNumber($lineNumber = 1)
     {
@@ -717,6 +737,7 @@ class ODMessage extends ODContained
     /**
      * @param $label
      * @return ODMessage
+     * @throws Exception
      */
     public function setLabel($label)
     {
@@ -738,6 +759,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaRequired()
     {
@@ -749,6 +771,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disRequired()
     {
@@ -770,6 +793,7 @@ class ODMessage extends ODContained
     /**
      * @param string $errorMessage
      * @return ODMessage
+     * @throws Exception
      */
     public function setErrorMessage($errorMessage = '')
     {
@@ -792,6 +816,7 @@ class ODMessage extends ODContained
     /**
      * @param array $attrs
      * @return ODMessage
+     * @throws Exception
      */
     public function setAttrs(array $attrs)
     {
@@ -822,6 +847,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaProgressLabel()
     {
@@ -833,6 +859,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disProgressLabel()
     {
@@ -858,6 +885,7 @@ class ODMessage extends ODContained
     /**
      * @param null $content
      * @return ODMessage
+     * @throws Exception
      */
     public function setContent($content = null)
     {
@@ -881,6 +909,7 @@ class ODMessage extends ODContained
     /**
      * @param null $url
      * @return ODMessage
+     * @throws Exception
      */
     public function setUrl($url = null)
     {
@@ -903,6 +932,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaAutoload()
     {
@@ -914,6 +944,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disAutoload()
     {
@@ -935,7 +966,7 @@ class ODMessage extends ODContained
     /**
      * @param string $method
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setLoadMethod($method = self::ODMESSAGEWINDOWLOAD_GET)
     {
@@ -960,6 +991,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function enaShowAfterLoad()
     {
@@ -971,6 +1003,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function disShowAfterLoad()
     {
@@ -998,7 +1031,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setOkButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1027,7 +1060,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setCancelButton($label, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1057,7 +1090,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setYesButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1087,7 +1120,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setNoButton($label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1118,7 +1151,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setCustomButton(string $label, $value, string $type = 'custom',
                                     string $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, bool $closeOnClick = true)
@@ -1161,7 +1194,7 @@ class ODMessage extends ODContained
      * @param string $classView
      * @param bool $closeOnClick
      * @return ODMessage
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function setButton($type, $label, $value = null, $classView = self::ODMESSAGEBTNCLASSES_DEFAULT, $closeOnClick = true)
     {
@@ -1188,6 +1221,7 @@ class ODMessage extends ODContained
 
     /**
      * @return ODMessage
+     * @throws Exception
      */
     public function clearButton()
     {
@@ -1205,7 +1239,7 @@ class ODMessage extends ODContained
      * @param ServiceManager $serviceManager
      * @param array $params
      * @return array|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function dispatchEvents(ServiceManager $serviceManager, array $params)
     {
@@ -1242,7 +1276,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getActionsContants()
     {
@@ -1262,7 +1296,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getTypesContants()
     {
@@ -1282,7 +1316,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getPromptsContants()
     {
@@ -1302,7 +1336,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getBtnAlignsContants()
     {
@@ -1322,7 +1356,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getWindowLoadsContants()
     {
@@ -1342,7 +1376,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getIconsContants()
     {
@@ -1362,7 +1396,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getBtnClassesContants()
     {
@@ -1382,7 +1416,7 @@ class ODMessage extends ODContained
 
     /**
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getMsgNatureContants()
     {
