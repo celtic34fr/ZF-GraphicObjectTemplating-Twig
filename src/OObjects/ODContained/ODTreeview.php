@@ -172,7 +172,7 @@ class ODTreeview extends ODContained
         if ($this->validRefUnique($ref)) {
             if ($this->validArrayOptions($options, self::LEAF_OPTIONS)) {
                 $libel      = $options['libel'];
-                $ord        = (int) ($options['ord']??null);
+                $ord        = (int) ($options['ord'] ?? 0);
                 $widthbt    = $options['widthbt'] ?? "";
                 if (!empty($widthbt)) { $widthbt    = self::formatBootstrap($widthbt); }
                 $parent     = $options['parent'] ?? "0";
