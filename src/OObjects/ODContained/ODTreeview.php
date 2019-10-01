@@ -163,7 +163,6 @@ class ODTreeview extends ODContained
     public function addLeaf(string $ref, array $options)
     {
         $properties = $this->getProperties();
-        if (empty($parent)) { $parent = '0'; }
 
         $dataTree   = $properties['dataTree'];
         $dataPath   = $properties['dataPath'];
