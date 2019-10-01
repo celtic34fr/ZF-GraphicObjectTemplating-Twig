@@ -107,7 +107,7 @@ class OSForm extends OSDiv
      * @param bool $require
      * @param string|null $mode
      * @param null $params
-     * @return $this|bool|OSDiv
+     * @return OSForm|bool
      * @throws Exception
      */
     public function addChild(OObject $child, $require = false, $mode = self::MODE_LAST, $params = null)
@@ -125,7 +125,7 @@ class OSForm extends OSDiv
     /**
      * @param OObject $child
      * @param bool $require
-     * @return $this|bool
+     * @return OSForm|bool
      * @throws Exception
      */
     public function setChild(OObject $child, $require = false)
@@ -142,7 +142,7 @@ class OSForm extends OSDiv
     /**
      * @param ODContained $field
      * @param bool $require
-     * @return $this
+     * @return OSForm
      * @throws Exception
      */
     public function addExtField(ODContained $field, $require = false)
@@ -158,7 +158,8 @@ class OSForm extends OSDiv
     /**
      * @param OObject $field
      * @param bool $require
-     * @return $this|bool
+     * @return OSForm|bool
+     * @throws Exception
      */
     public function setExtField(OObject $field, $require = false)
     {
@@ -175,7 +176,8 @@ class OSForm extends OSDiv
 
     /**
      * @param ODContained $field
-     * @return $this|bool
+     * @return OSForm|bool
+     * @throws Exception
      */
     public function removeExtField(ODContained $field)
     {
@@ -191,7 +193,7 @@ class OSForm extends OSDiv
 
     /**
      * @param OObject $child
-     * @return $this|bool|OSDiv
+     * @return OSForm|bool
      * @throws Exception
      */
     public function removeChild(OObject $child)
@@ -205,7 +207,8 @@ class OSForm extends OSDiv
     }
 
     /**
-     * @return $this|bool|OSDiv
+     * @return OSForm|bool
+     * @throws Exception
      */
     public function removeChildren()
     {
@@ -221,7 +224,7 @@ class OSForm extends OSDiv
 
     /**
      * @param OObject $field
-     * @return $this|bool
+     * @return OSForm|bool
      * @throws Exception
      */
     public function removeField(OObject $field)
@@ -354,7 +357,7 @@ class OSForm extends OSDiv
      * @param null $class
      * @param null $method
      * @param bool $stopEvent
-     * @return $this|bool
+     * @return OSForm|bool
      * @throws Exception
      */
     public function addBtn($name, $label, $icon, $value, $type, $nature, $ord, $class = null, $method = null, $stopEvent = false)
@@ -481,7 +484,7 @@ class OSForm extends OSDiv
 
     /**
      * @param $name
-     * @return $this|bool
+     * @return OSForm|bool
      * @throws Exception
      */
     public function rmBtn($name)
@@ -539,7 +542,7 @@ class OSForm extends OSDiv
     }
 
     /**
-     * @return $this
+     * @return OSForm
      * @throws Exception
      */
     public function rmBtns()
@@ -583,7 +586,8 @@ class OSForm extends OSDiv
     }
 
     /**
-     * @return $this
+     * @return OSForm
+     * @throws Exception
      */
     public function enaSubmitEnter()
     {
@@ -594,7 +598,8 @@ class OSForm extends OSDiv
     }
 
     /**
-     * @return $this
+     * @return OSForm
+     * @throws Exception
      */
     public function disSubmitEnter()
     {
@@ -607,7 +612,8 @@ class OSForm extends OSDiv
     /**
      * @param $key
      * @param $val
-     * @return $this|bool
+     * @return OSForm|bool
+     * @throws Exception
      */
     public function addHiddenValue($key, $val)
     {
@@ -626,7 +632,8 @@ class OSForm extends OSDiv
     /**
      * @param $key
      * @param $val
-     * @return $this|bool
+     * @return OSForm|bool
+     * @throws Exception
      */
     public function setHiddenValue($key, $val)
     {
@@ -644,7 +651,8 @@ class OSForm extends OSDiv
 
     /**
      * @param $key
-     * @return $this|bool
+     * @return OSForm|bool
+     * @throws Exception
      */
     public function rmHiddenValue($key)
     {
@@ -687,6 +695,7 @@ class OSForm extends OSDiv
     /**
      * @param string $title
      * @return OSForm
+     * @throws Exception
      */
     public function setTitle(string $title)
     {
@@ -707,6 +716,7 @@ class OSForm extends OSDiv
 
     /**
      * @return OSForm
+     * @throws Exception
      */
     public function enaBtnsCtrlH()
     {
@@ -719,6 +729,7 @@ class OSForm extends OSDiv
     /**
      * @param int $widthBT
      * @return OSForm
+     * @throws Exception
      */
     public function enaBtnsCtrlV(int $widthBT = 2)
     {
@@ -782,7 +793,7 @@ class OSForm extends OSDiv
 
     /**
      * @param OObject $child
-     * @return $this
+     * @return OSForm
      * @throws Exception
      */
     private function removeFormParams(OObject $child)
@@ -804,7 +815,8 @@ class OSForm extends OSDiv
      * @param $fieldID
      * @param $sourceId
      * @param bool $require
-     * @return $this
+     * @return OSForm
+     * @throws Exception
      */
     private function addField($fieldID, $sourceId, $require = false)
     {
